@@ -1,0 +1,35 @@
+{
+  "name": "af_project",
+  "version": "1.0.0",
+  "description": "This project is related to the module called Application Frameworks 2020",
+  "main": "index.js",
+  "scripts": {
+    "client-install":"npm install --prefix client",
+    "start" : "node server",
+    "server":"nodemon server.js",
+    "client":"npm start --prefix client",
+    "dev":"concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DInuwan97/AF_Project_2020_Team_Bionics.git"
+  },
+  "keywords": [
+    "AF"
+  ],
+  "author": "Dinuka Perera,Dinuwan Kalubowila,Sachin Athukorala and Pawan Piumal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DInuwan97/AF_Project_2020_Team_Bionics/issues"
+  },
+  "homepage": "https://github.com/DInuwan97/AF_Project_2020_Team_Bionics#readme",
+  "dependencies": {
+    "concurrently": "^5.1.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
