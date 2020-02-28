@@ -4,7 +4,7 @@
   "description": "Application Framework Group Project",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "nodemon": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/DInuwan97/AF_Project_2020_Team_Bionics/issues"
   },
-  "homepage": "https://github.com/DInuwan97/AF_Project_2020_Team_Bionics#readme"
+  "homepage": "https://github.com/DInuwan97/AF_Project_2020_Team_Bionics#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.2",
+    "nodemon": "^2.0.2"
+  }
 }
