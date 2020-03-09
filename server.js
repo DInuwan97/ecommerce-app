@@ -1,15 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 
 //Import routes
-//const Users = require('./Routes/api/users');
-
+const Users = require('./Routes/api/Users');
 
 //middlewear
 const app = express();
 
+//body parser middlewwear
+app.use(bodyParser.json());
 
+app.get('/api/users',(req,res)=>{
+    res.json({
+        message:"Welcome to the API"
+    })
+});
 
 //get the mongodb url
 const db = require('./config/keys').mongoURI;
@@ -20,5 +27,9 @@ mongoose
     .then(() => console.log('Mongo DB Connected.'))
     .catch(err => console.log(err));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT,()=>console.log('Server started on ' +PORT));
+app.use('/api/users',Users);
+
+
+
+
+app.listen(5000,()=>console.log('Server started on 5000'));
