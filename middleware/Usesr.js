@@ -60,17 +60,17 @@ module.exports={
         jwt.verify(req.token,'secretkey',(err,authData)=>{
 
             if(err){
-                res.sendStatus(403);
+                res.json({message:"You are not an Admin"}) 
             }else{
 
-                if(authData.user.secureKeyVerifyStatus == false && authData.user.isSalaseManager == false){
+                if(authData.user.secureKeyVerifyStatus == true && authData.user.isSalaseManager == false){
                     res.json({message:"Not a sales manager"})
                 }else{
                     next();
                 }
             }
         })
-    },
+    }
 
      
 }

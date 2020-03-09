@@ -50,6 +50,7 @@ router.post('/register',(req,res)=>{
             break;     
          default:
             isCustomer = true;
+            break;
     }       
 
 
@@ -253,17 +254,6 @@ router.post('/confirmSalesManager',authenticateUser,onlyAdminAccess,(req,res)=>{
             res.json({status:"User login token was timed up.."})
         }else{
 
-//////////////////////////////// aulak thibe /////////////////////////////////
-            let result =null;
-            //select the user
-            async function getUserDetails(email){
-                 result = await User
-                .find({email:email})
-                console.log(result[0].isSalesManager)
-            }
-//////////////////////////////// aulak thibe /////////////////////////////////
- 
-            
                 //update query in mongodb
             async function updateUserSecureCode(email){
                 const result = await User.update({email:email},{
@@ -285,21 +275,31 @@ router.post('/confirmSalesManager',authenticateUser,onlyAdminAccess,(req,res)=>{
                 }else{
 
                     if(user){
+           
+                            User.find({email: email})
+                                .then((result) => {
+                                 console.log(result[0])
 
-                        
-                        let result = getUserDetails(email);
-                        console.log("The result is :" +result)
-                        if(result == true){
-                            
-                            updateUserSecureCode(email);
-                            res.json({status:"Admin aproved the Sales Manager"});
+                                 if(result[0].isSalesManager == true){
+
+                                    if(result[0].secureKeyVerifyStatus == true){
+                                        updateUserSecureCode(email);
+                                        res.json({status:"Admin aproved the Sales Manager"});
+                                    } else{
+                                        res.json({status:"Evenif this user registered as a SalesManager,did not verfy secure code"});
+                                    }                                   
+                                   
+                                 
+                                 }else{ //not a Sales Manager
+                                    res.json({status:"Entered email was not belongs to a Sales Manager"})
+                                 }
+                           
+                            }).catch(err=>{
+                                console.log(err);
+                            })
+                           
                             /////email sending t the sales manager abou the approval
 
-                        }else{ //not a Sales Manager
-                            res.json({status:"Entered email was not belongs to a Sales Manager"})
-                        }
-
-                   
                    }else{
                        res.json({status:"Invalid Email address"})
                    }
