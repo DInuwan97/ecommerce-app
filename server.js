@@ -1,35 +1,33 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
+const express = require("express");
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
 
 //Import routes
-const Users = require('./Routes/api/Users');
-
+const Users = require("./Routes/api/Users");
+const Items = require("./Routes/api/items");
 //middlewear
 const app = express();
 
 //body parser middlewwear
 app.use(bodyParser.json());
 
-app.get('/api/users',(req,res)=>{
-    res.json({
-        message:"Welcome to the API"
-    })
+app.get("/api/users", (req, res) => {
+  res.json({
+    message: "Welcome to the API"
+  });
 });
 
 //get the mongodb url
-const db = require('./config/keys').mongoURI;
+const db = require("./config/keys").mongoURI;
 
 //Connet to mongo
 mongoose
-    .connect(db,{useNewUrlParser:true ,useUnifiedTopology:true})
-    .then(() => console.log('Mongo DB Connected.'))
-    .catch(err => console.log(err));
+  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Mongo DB Connected."))
+  .catch(err => console.log(err));
 
-app.use('/api/users',Users);
+app.use("/api/users", Users);
+app.use("/api/items", Items);
 
-
-
-
-app.listen(5000,()=>console.log('Server started on 5000'));
+app.listen(5000, () => console.log("Server started on 5000"));
