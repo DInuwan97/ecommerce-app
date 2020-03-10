@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 const Item = require("../../models/Item");
 
 //getting all the items
@@ -40,27 +41,63 @@ router.get("/:id", async (req, res) => {
 // update other values
 //access private
 //Here the authorization has to implemented
-router.post("/", async (req, res) => {
-  let {
-    itemName,
-    price,
-    category,
-    size,
-    color,
-    Brand,
-    stockQuantity,
-    rating
-  } = req.body;
-  const checkItemExist = await Item.findOne({ itemName });
-  let result = null;
-  let newItem = null;
-  try {
-    if (checkItemExist) {
-      stockQuantity =
-        parseInt(checkItemExist.stockQuantity) + parseInt(stockQuantity);
-      newItem = await Item.findOneAndUpdate(
-        { itemName },
-        {
+router.post(
+  "/",
+  [
+    check("itemName", "Item Name is required")
+      .not()
+      .notEmpty(),
+    check("price", "Price is requried")
+      .not()
+      .notEmpty(),
+    check("price", "Price should a Number").isNumeric(),
+    check("category", "Category is required")
+      .not()
+      .isEmpty(),
+    check("stockQuantity", "Quantity is required")
+      .not()
+      .isEmpty(),
+    check("stockQuantity", "Quantity is Number").isInt()
+  ],
+  async (req, res) => {
+    //checking for errors
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(400).json({ error: error.array() });
+    }
+
+    let {
+      itemName,
+      price,
+      category,
+      size,
+      color,
+      Brand,
+      stockQuantity,
+      rating
+    } = req.body;
+    const checkItemExist = await Item.findOne({ itemName });
+    let result = null;
+    let newItem = null;
+    try {
+      if (checkItemExist) {
+        stockQuantity =
+          parseInt(checkItemExist.stockQuantity) + parseInt(stockQuantity);
+        newItem = await Item.findOneAndUpdate(
+          { itemName },
+          {
+            itemName,
+            price,
+            category,
+            size,
+            color,
+            Brand,
+            stockQuantity,
+            rating
+          }
+        );
+      } else {
+        newItem = await new Item({
           itemName,
           price,
           category,
@@ -68,11 +105,53 @@ router.post("/", async (req, res) => {
           color,
           Brand,
           stockQuantity,
+
           rating
-        }
-      );
-    } else {
-      newItem = await new Item({
+        });
+      }
+
+      result = await newItem.save();
+      console.log(result);
+      res.json(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+//update and item
+//access private
+//put request
+router.patch(
+  "/updateItem/:id",
+  [
+    check("itemName", "Item Name is required")
+      .not()
+      .notEmpty(),
+    check("price", "Price is requried")
+      .not()
+      .notEmpty(),
+    check("price", "Price should a Number").isNumeric(),
+    check("category", "Category is required")
+      .not()
+      .isEmpty(),
+    check("stockQuantity", "Quantity is required")
+      .not()
+      .isEmpty(),
+    check("stockQuantity", "Quantity is Number").isInt()
+  ],
+  async (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(400).json({ error: error.array() });
+    }
+
+    try {
+      const checkItemExist = await Item.findOne({ _id: req.params.id });
+      if (!checkItemExist) {
+        return res.status(400).json({ msg: "No item Exist" });
+      }
+      let {
         itemName,
         price,
         category,
@@ -80,58 +159,29 @@ router.post("/", async (req, res) => {
         color,
         Brand,
         stockQuantity,
-        
+        rating
+      } = req.body;
+
+      checkItemExist.set({
+        itemName,
+        price,
+        category,
+        size,
+        color,
+        Brand,
+        stockQuantity,
         rating
       });
+
+      const result = await checkItemExist.save();
+      res.send(result);
+      console.log(result);
+    } catch (error) {
+      res.status(500).json({ msg: "Server error" });
+      console.error(error);
     }
-
-    result = await newItem.save();
-    console.log(result);
-    res.json(result);
-  } catch (error) {
-    console.error(error);
   }
-});
-
-//update and item
-//access private
-//put request
-router.patch("/updateItem/:id", async (req, res) => {
-try {
-  const checkItemExist = await Item.findOne({ _id: req.params.id });
-  if (!checkItemExist) {
-    return res.status(400).json({ msg: "No item Exist" });
-  }
-  let {
-    itemName,
-    price,
-    category,
-    size,
-    color,
-    Brand,
-    stockQuantity,
-    rating
-  } = req.body;
-
-  checkItemExist.set({
-    itemName,
-    price,
-    category,
-    size,
-    color,
-    Brand,
-    stockQuantity,
-    rating
-  })
-
-  const result = await checkItemExist.save();
-  res.send(result);
-  console.log(result);
-} catch (error) {
-  res.status(500).json({msg : 'Server error'});
-  console.error(error)
-}
-});
+);
 
 //delete a specifi Item
 //private access
@@ -164,25 +214,43 @@ router.delete("/:id", async (req, res) => {
 //authentication required
 //private access
 
-router.patch("/addDiscount", async (req, res) => {
-  //check whetaher the item exist
-  try {
-    const checkItemExits = await Item.findOne({ itemName: req.body.itemName });
-    if (!checkItemExits) {
-      return res.status(400).json({ msg: "Item does not exist" });
+router.patch(
+  "/addDiscount",
+  [
+    check("itemName", "Item Name is required")
+      .not()
+      .notEmpty(),
+    check("discount", "Discount is required")
+      .not()
+      .isEmpty(),
+    check("discount", "Discount is Number").isNumeric()
+  ],
+  async (req, res) => {
+    //check whetaher the item exist
+    try {
+      const error = validationResult(req);
+      if (!error.isEmpty()) {
+        return res.status(400).json({ error: error.array() });
+      }
+      const checkItemExits = await Item.findOne({
+        itemName: req.body.itemName
+      });
+      if (!checkItemExits) {
+        return res.status(400).json({ msg: "Item does not exist" });
+      }
+
+      checkItemExits.set({
+        discount: req.body.discount
+      });
+      const result = await checkItemExits.save();
+
+      res.json(result);
+      console.log(result);
+    } catch (error) {
+      res.status(500).json({ msg: "Server Error" });
+      console.error(error);
     }
-
-    checkItemExits.set({
-      discount: req.body.discount
-    });
-    const result =  await checkItemExits.save();
-
-    res.json(result);
-    console.log(result);
-  } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
-    console.error(error);
   }
-});
+);
 
 module.exports = router;
