@@ -49,7 +49,6 @@ router.post("/", async (req, res) => {
     color,
     Brand,
     stockQuantity,
-    discount,
     rating
   } = req.body;
   const checkItemExist = await Item.findOne({ itemName });
@@ -69,7 +68,6 @@ router.post("/", async (req, res) => {
           color,
           Brand,
           stockQuantity,
-          discount,
           rating
         }
       );
@@ -82,7 +80,7 @@ router.post("/", async (req, res) => {
         color,
         Brand,
         stockQuantity,
-        discount,
+        
         rating
       });
     }
@@ -98,31 +96,93 @@ router.post("/", async (req, res) => {
 //update and item
 //access private
 //put request
-router.put("/updateItem/:id", async (req, res) => {
+router.patch("/updateItem/:id", async (req, res) => {
+try {
   const checkItemExist = await Item.findOne({ _id: req.params.id });
   if (!checkItemExist) {
     return res.status(400).json({ msg: "No item Exist" });
   }
+  let {
+    itemName,
+    price,
+    category,
+    size,
+    color,
+    Brand,
+    stockQuantity,
+    rating
+  } = req.body;
 
-  const updateItem = await findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      itemName,
-      price,
-      category,
-      size,
-      color,
-      Brand,
-      stockQuantity,
-      discount,
-      rating
+  checkItemExist.set({
+    itemName,
+    price,
+    category,
+    size,
+    color,
+    Brand,
+    stockQuantity,
+    rating
+  })
+
+  const result = await checkItemExist.save();
+  res.send(result);
+  console.log(result);
+} catch (error) {
+  res.status(500).json({msg : 'Server error'});
+  console.error(error)
+}
+});
+
+//delete a specifi Item
+//private access
+//delete request
+router.delete("/:id", async (req, res) => {
+  //check if item exist
+  try {
+    const checkItemExits = await Item.findOne({ _id: req.params.id });
+    if (!checkItemExits) {
+      return res.status(400).json({ msg: "Item does not exist" });
     }
-  );
+    res.status(200).json(checkItemExits);
+    await checkItemExits.remove();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
 
-    const result = await updateItem.save();
-    res.send(result);
+//delete a aspecfic item by a user
+//authentication is required
+//private access
+//delete request
+/*
+  Implementation required here
+*/
+
+//adding a discount to a item
+//patch request
+//authentication required
+//private access
+
+router.patch("/addDiscount", async (req, res) => {
+  //check whetaher the item exist
+  try {
+    const checkItemExits = await Item.findOne({ itemName: req.body.itemName });
+    if (!checkItemExits) {
+      return res.status(400).json({ msg: "Item does not exist" });
+    }
+
+    checkItemExits.set({
+      discount: req.body.discount
+    });
+    const result =  await checkItemExits.save();
+
+    res.json(result);
     console.log(result);
-    
+  } catch (error) {
+    res.status(500).json({ msg: "Server Error" });
+    console.error(error);
+  }
 });
 
 module.exports = router;

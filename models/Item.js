@@ -13,7 +13,10 @@ const itemSchema = mongoose.Schema({
       type : [String],
       required : true
   },
-  size: {
+  itemImage : {
+    type : String
+  }
+  ,size: {
     type: [String]
   },
   color: {
@@ -27,7 +30,12 @@ const itemSchema = mongoose.Schema({
     default: 0
   },
   discount: {
-    type: Number
+    type: Number,
+    default : 0
+  },
+  addedBy : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "users" 
   },
   addedDate: {
     type: Date,
