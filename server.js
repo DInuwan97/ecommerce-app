@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 //Import routes
 const Users = require("./Routes/api/Users");
 const Items = require("./Routes/api/items");
+const Packages = require("./Routes/api/package");
 //middlewear
 const app = express();
 
@@ -29,5 +30,6 @@ mongoose
 
 app.use("/api/users", Users);
 app.use("/api/items", Items);
+app.use("/api/packages", Packages);
 
 app.listen(5000, () => console.log("Server started on 5000"));
