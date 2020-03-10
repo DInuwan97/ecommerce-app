@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const packageSchema = mongoose.Schema({
-  packageType: {
+  packageName: {
     type: String,
     required: true,
     unique: true
