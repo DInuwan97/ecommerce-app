@@ -42,31 +42,41 @@ router.get("/:packageName", async (req, res) => {
 //admin access only
 //post request
 
-router.post("/", async (req, res) => {
-  try {
-    const { packageName, noOfUsers, tags, description } = req.body;
-    const checkPackageExist = await Package.findOne({
-      packageName
-    });
-    if (checkPackageExist) {
-      return res.status(400).json({ msg: "package already exists" });
+router.post(
+  "/",
+  [
+    check("packageName", "Package Name is required")
+      .not()
+      .isEmpty(),
+    check("noOfUsers", "No of User should be a Value").isNumeric(),
+    check("noOfUsers", "No of User Should be a Integer").isInt()
+  ],
+  async (req, res) => {
+    try {
+      const { packageName, noOfUsers, tags, description } = req.body;
+      const checkPackageExist = await Package.findOne({
+        packageName
+      });
+      if (checkPackageExist) {
+        return res.status(400).json({ msg: "package already exists" });
+      }
+
+      const newPackage = await new Package({
+        packageName,
+        noOfUsers,
+        tags,
+        description
+      });
+
+      const result = await newPackage.save();
+      res.status(200).json(result);
+      console.log(result);
+    } catch (error) {
+      res.status(500).json({ msg: "Server Error" });
+      console.error(error);
     }
-
-    const newPackage = await new Package({
-      packageName,
-      noOfUsers,
-      tags,
-      description
-    });
-
-    const result = await newPackage.save();
-    res.status(200).json(result);
-    console.log(result);
-  } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
-    console.error(error);
   }
-});
+);
 
 //delete a package
 //privaet access
@@ -88,31 +98,40 @@ router.delete("/", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
+router.put(
+  "/",
+  [
+    check("packageName", "Package Name is required")
+      .not()
+      .isEmpty(),
+    check("noOfUsers", "No of User should be a Value").isNumeric(),
+    check("noOfUsers", "No of User Should be a Integer").isInt()
+  ],
+  async (req, res) => {
     const { packageName, noOfUsers, tags, description } = req.body;
-  try {
-    const checkPackageExist = await Package.findOne({
-      packageName: req.body.packageName
-    });
-    if (!checkPackageExist) {
-      return res.status(400).json({ msg: "package does not exist" });
-    }
+    try {
+      const checkPackageExist = await Package.findOne({
+        packageName: req.body.packageName
+      });
+      if (!checkPackageExist) {
+        return res.status(400).json({ msg: "package does not exist" });
+      }
 
-    checkPackageExist.set({
-        packageName, 
-        noOfUsers, 
-        tags, 
+      checkPackageExist.set({
+        packageName,
+        noOfUsers,
+        tags,
         description
-    });
+      });
 
-    const result = await checkPackageExist.save();
-    res.status(200).json(result);
-    console.log(result);
-
-  } catch (error) {
-      res.status(500).json({msg : 'Server Error'});
-      console.error(error)
+      const result = await checkPackageExist.save();
+      res.status(200).json(result);
+      console.log(result);
+    } catch (error) {
+      res.status(500).json({ msg: "Server Error" });
+      console.error(error);
+    }
   }
-});
+);
 
 module.exports = router;
