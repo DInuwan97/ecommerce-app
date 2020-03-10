@@ -35,50 +35,94 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
-//adding a new item to the store
+//adding a new item to the store &  checking whether the
+//item exist from the name if exist update the stock quantity and other details
+// update other values
 //access private
-router.post('/',async (req,res) => {
-    let {itemName,price,category,size,color,Brand,stockQuantity,discount,rating} = req.body
-    const checkItemExist = await Item.findOne({itemName});
-    let result = null;
-    let newItem = null;
-    try {
-
-    if(checkItemExist){
-        stockQuantity = parseInt(checkItemExist.stockQuantity) + parseInt(stockQuantity);
-         newItem = await  Item.findOneAndUpdate({itemName},{
-            itemName,
-            price,
-            category,
-            size,
-            color,
-            Brand,
-            stockQuantity,
-            discount,
-            rating
-        });
-
-    }else{
-         newItem = await new Item({
-            itemName,
-            price,
-            category,
-            size,
-            color,
-            Brand,
-            stockQuantity,
-            discount,
-            rating
-        });
+//Here the authorization has to implemented
+router.post("/", async (req, res) => {
+  let {
+    itemName,
+    price,
+    category,
+    size,
+    color,
+    Brand,
+    stockQuantity,
+    discount,
+    rating
+  } = req.body;
+  const checkItemExist = await Item.findOne({ itemName });
+  let result = null;
+  let newItem = null;
+  try {
+    if (checkItemExist) {
+      stockQuantity =
+        parseInt(checkItemExist.stockQuantity) + parseInt(stockQuantity);
+      newItem = await Item.findOneAndUpdate(
+        { itemName },
+        {
+          itemName,
+          price,
+          category,
+          size,
+          color,
+          Brand,
+          stockQuantity,
+          discount,
+          rating
+        }
+      );
+    } else {
+      newItem = await new Item({
+        itemName,
+        price,
+        category,
+        size,
+        color,
+        Brand,
+        stockQuantity,
+        discount,
+        rating
+      });
     }
-   
-        result = await newItem.save();
-        console.log(result);
-        res.json(result)
-    } catch (error) {
-        console.error(error)
+
+    result = await newItem.save();
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+//update and item
+//access private
+//put request
+router.put("/updateItem/:id", async (req, res) => {
+  const checkItemExist = await Item.findOne({ _id: req.params.id });
+  if (!checkItemExist) {
+    return res.status(400).json({ msg: "No item Exist" });
+  }
+
+  const updateItem = await findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      itemName,
+      price,
+      category,
+      size,
+      color,
+      Brand,
+      stockQuantity,
+      discount,
+      rating
     }
-})
+  );
+
+    const result = await updateItem.save();
+    res.send(result);
+    console.log(result);
+    
+});
 
 module.exports = router;
