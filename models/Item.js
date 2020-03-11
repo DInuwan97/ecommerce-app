@@ -9,14 +9,14 @@ const itemSchema = mongoose.Schema({
     type: Number,
     required: true
   },
-  category : {
-      type : mongoose.Schema.Types.ObjectId,
-      ref : "package" 
+  category: {
+    type: mongoose.Schema.Types.String,
+    ref: "package"
   },
-  itemImage : {
-    type : String
-  }
-  ,size: {
+  itemImage: {
+    type: String
+  },
+  size: {
     type: [String]
   },
   color: {
@@ -31,11 +31,11 @@ const itemSchema = mongoose.Schema({
   },
   discount: {
     type: Number,
-    default : 0
+    default: 0
   },
-  addedBy : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "users" 
+  addedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
   },
   addedDate: {
     type: Date,
@@ -47,4 +47,4 @@ const itemSchema = mongoose.Schema({
   }
 });
 
-module.exports = Item = mongoose.model("item",itemSchema);
+module.exports = Item = mongoose.model("item", itemSchema);
