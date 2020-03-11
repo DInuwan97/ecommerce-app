@@ -70,7 +70,25 @@ module.exports={
                 }
             }
         })
+    },
+
+     //dinuka
+    //middleware to get access for admin,salesmanager and anith eka
+    cheackAdminManager:(req,res,next)=>{
+        jwt.verify(req.token,'secretkey',(err,authData)=>{
+
+            if(err){
+                res.json({status:"You cannot perform this action"})
+            }else{
+
+                if(authData.user.isAdmin == true || authData.user.isSalaseManager == true || authData.user.isSalesServicer){
+                    next();        
+                }else{
+                    res.json({status:"You cannot perform this action"})
+                }
+            }
+        })
     }
 
-     
+
 }
