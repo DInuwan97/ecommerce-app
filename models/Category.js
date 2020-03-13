@@ -6,7 +6,7 @@ const categorySchema = mongoose.Schema({
         required : true,
         unique : true
     },
-    GenderType : {
+    genderType : {
         type : String,
         required : true
     },
