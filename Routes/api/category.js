@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { check, validatorResult } = require("express-validator");
-const authAdmin = require('../../middleware/Usesr').onlyAdminAccess;
+const authAdmin = require("../../middleware/Usesr").onlyAdminAccess;
 const authAdminManager = require("../../middleware/Usesr").checkAdminManager;
 const Category = require("../../models/Category");
 
@@ -22,6 +22,9 @@ router.get("/", authAdminManager, async (req, res) => {
   }
 });
 
+//add new category
+//private access
+//post request
 router.post("/", async (req, res) => {
   const { categoryName, genderType, code } = req.body;
 
@@ -29,7 +32,7 @@ router.post("/", async (req, res) => {
     const checkCategoryExist = await Category.findOne({
       categoryName
     });
-    console.log(checkCategoryExist)
+    console.log(checkCategoryExist);
     if (checkCategoryExist != null) {
       return res.status(400).json({ msg: "Category already exist" });
     }
@@ -44,9 +47,62 @@ router.post("/", async (req, res) => {
     res.status(200).json({ msg: "Category added sucessfully" });
     console.log(newCategory);
   } catch (error) {
-    return res.status(500).json({ msg: "Server Error" });
+    res.status(500).json({ msg: "Server Error" });
     console.error(error);
   }
 });
+
+//update a existing category
+//private access
+//put request
+router.put("/", async (req, res) => {
+  const { categoryName, genderType, code } = req.body;
+  try {
+    const checkCategoryExist = await Category.findOne({
+      categoryName
+    });
+    console.log(checkCategoryExist);
+    if (!checkCategoryExist) {
+      return res.status(400).json({ msg: "Category not found" });
+    }
+
+    checkCategoryExist.set({
+      categoryName,
+      genderType,
+      code
+    });
+
+    const result = await checkCategoryExist.save();
+    res.status(200).json(result);
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
+
+//delete request
+//private access
+//deleting a category
+router.delete('/',async(req,res) => {
+  try {
+    const checkCategoryExist = await Category.findOne({
+      categoryName : req.body.categoryName
+    });
+    console.log(checkCategoryExist);
+    if (!checkCategoryExist) {
+      return res.status(400).json({ msg: "Category not found" });
+    }
+
+    await checkCategoryExist.remove();
+    res.status(200).json("Item Deleted Sucessfully");
+
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+})
 
 module.exports = router;
