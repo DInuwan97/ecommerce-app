@@ -4,7 +4,7 @@ const { check, validationResult } = require("express-validator");
 const auth = require("../../middleware/Usesr").checkAdminManager;
 const adminAuth = require("../../middleware/Usesr").onlyAdminAccess;
 const Item = require("../../models/Item");
-const Package = require("../../models/Packages");
+
 
 //getting all the items
 //public access
@@ -71,7 +71,6 @@ router.post(
     if (!error.isEmpty()) {
       return res.status(400).json({ error: error.array() });
     }
-
     let {
       itemName,
       price,
@@ -83,10 +82,9 @@ router.post(
       rating
     } = req.body;
 
-    if (!checkCategory) {
-      return res
-        .status(400)
-        .json({ msg: "Requested category is Not available" });
+
+    if(!(category == "BRONZE" || category == "SILVER" || category == "GOLD" || category == "PLATINUM" )){
+      return res.status(400).json({ msg : "Not a Valid Category" });
     }
 
     const checkItemExist = await Item.findOne({ itemName });
@@ -217,17 +215,10 @@ router.delete("/:id", adminAuth, async (req, res) => {
   }
 });
 
-//delete a aspecfic item by a user
-//authentication is required
-//private access
-//delete request
-
-
 //adding a discount to a item
 //patch request
 //authentication required
 //private access
-
 router.patch(
   "/addDiscount",
   [
