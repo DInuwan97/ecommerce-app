@@ -108,7 +108,7 @@ router.post(
           }
         );
       } else {
-        newItem = await new Item({
+        newItem = new Item({
           itemName,
           price,
           category,
@@ -116,7 +116,6 @@ router.post(
           color,
           Brand,
           stockQuantity,
-
           rating
         });
       }

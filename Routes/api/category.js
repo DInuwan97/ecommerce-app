@@ -35,6 +35,10 @@ router.post(
     check("genderType", "Gender type is required").isEmpty()
   ],
   async (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(400).json({ error: error.array() });
+    }
     const { categoryName, genderType, code } = req.body;
 
     try {
@@ -46,13 +50,13 @@ router.post(
         return res.status(400).json({ msg: "Category already exist" });
       }
 
-      const newCategory = await new Category({
+      const newCategory = new Category({
         categoryName,
         genderType,
         code
       });
 
-      const result = await newCategory.save();
+      await newCategory.save();
       res.status(200).json({ msg: "Category added sucessfully" });
       console.log(newCategory);
     } catch (error) {
@@ -77,6 +81,10 @@ router.put(
   async (req, res) => {
     const { categoryName, genderType, code } = req.body;
     try {
+      const error = validationResult(req);
+      if (!error.isEmpty()) {
+        return res.status(400).json({ error: error.array() });
+      }
       const checkCategoryExist = await Category.findOne({
         categoryName
       });
