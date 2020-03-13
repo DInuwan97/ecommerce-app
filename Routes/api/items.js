@@ -221,9 +221,7 @@ router.delete("/:id", adminAuth, async (req, res) => {
 //authentication is required
 //private access
 //delete request
-/*
-  Implementation required here
-*/
+
 
 //adding a discount to a item
 //patch request
