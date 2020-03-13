@@ -6,7 +6,7 @@ const authAdminManager = require("../../middleware/Usesr").checkAdminManager;
 const Category = require("../../models/Category");
 
 //get all categories in the store
-//private access
+//private access, only for admin
 router.get("/", authAdminManager, async (req, res) => {
   try {
     const categories = await Category.find();
@@ -23,72 +23,91 @@ router.get("/", authAdminManager, async (req, res) => {
 });
 
 //add new category
-//private access
+//private access, only for admin
 //post request
-router.post("/", async (req, res) => {
-  const { categoryName, genderType, code } = req.body;
+router.post(
+  "/",
+  [
+    check("categoryName", "Category Name is required")
+      .not()
+      .isEmpty(),
+    check("categoryName", "Should not have Numeric values").isString(),
+    check("genderType", "Gender type is required").isEmpty()
+  ],
+  async (req, res) => {
+    const { categoryName, genderType, code } = req.body;
 
-  try {
-    const checkCategoryExist = await Category.findOne({
-      categoryName
-    });
-    console.log(checkCategoryExist);
-    if (checkCategoryExist != null) {
-      return res.status(400).json({ msg: "Category already exist" });
+    try {
+      const checkCategoryExist = await Category.findOne({
+        categoryName
+      });
+      console.log(checkCategoryExist);
+      if (checkCategoryExist != null) {
+        return res.status(400).json({ msg: "Category already exist" });
+      }
+
+      const newCategory = await new Category({
+        categoryName,
+        genderType,
+        code
+      });
+
+      const result = await newCategory.save();
+      res.status(200).json({ msg: "Category added sucessfully" });
+      console.log(newCategory);
+    } catch (error) {
+      res.status(500).json({ msg: "Server Error" });
+      console.error(error);
     }
-
-    const newCategory = await new Category({
-      categoryName,
-      genderType,
-      code
-    });
-
-    const result = await newCategory.save();
-    res.status(200).json({ msg: "Category added sucessfully" });
-    console.log(newCategory);
-  } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
-    console.error(error);
   }
-});
+);
 
 //update a existing category
-//private access
+//private access, only for admin
 //put request
-router.put("/", async (req, res) => {
-  const { categoryName, genderType, code } = req.body;
-  try {
-    const checkCategoryExist = await Category.findOne({
-      categoryName
-    });
-    console.log(checkCategoryExist);
-    if (!checkCategoryExist) {
-      return res.status(400).json({ msg: "Category not found" });
+router.put(
+  "/",
+  [
+    check("categoryName", "Category Name is required")
+      .not()
+      .isEmpty(),
+    check("categoryName", "Should not have Numeric values").isString(),
+    check("genderType", "Gender type is required").isEmpty()
+  ],
+  async (req, res) => {
+    const { categoryName, genderType, code } = req.body;
+    try {
+      const checkCategoryExist = await Category.findOne({
+        categoryName
+      });
+      console.log(checkCategoryExist);
+      if (!checkCategoryExist) {
+        return res.status(400).json({ msg: "Category not found" });
+      }
+
+      checkCategoryExist.set({
+        categoryName,
+        genderType,
+        code
+      });
+
+      const result = await checkCategoryExist.save();
+      res.status(200).json(result);
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ msg: "Server Error" });
     }
-
-    checkCategoryExist.set({
-      categoryName,
-      genderType,
-      code
-    });
-
-    const result = await checkCategoryExist.save();
-    res.status(200).json(result);
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Server Error" });
   }
-});
-
+);
 
 //delete request
 //private access
 //deleting a category
-router.delete('/',async(req,res) => {
+router.delete("/", async (req, res) => {
   try {
     const checkCategoryExist = await Category.findOne({
-      categoryName : req.body.categoryName
+      categoryName: req.body.categoryName
     });
     console.log(checkCategoryExist);
     if (!checkCategoryExist) {
@@ -97,12 +116,10 @@ router.delete('/',async(req,res) => {
 
     await checkCategoryExist.remove();
     res.status(200).json("Item Deleted Sucessfully");
-
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Server Error" });
   }
-})
+});
 
 module.exports = router;
