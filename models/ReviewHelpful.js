@@ -8,7 +8,7 @@ const ReviewHelpfulSchema = mongoose.Schema({
     },
     reviewID:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"review",
+        ref:"reviewComment",
         required:true
     },
     reviewWasHelpful:{
