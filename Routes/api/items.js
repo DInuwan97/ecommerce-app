@@ -46,8 +46,7 @@ router.get("/:id", async (req, res) => {
 //Here the authorization has to implemented
 router.post(
   "/",
-  [
-    auth,
+  
     [
       check("itemName", "Item Name is required")
         .not()
@@ -64,7 +63,7 @@ router.post(
         .isEmpty(),
       check("stockQuantity", "Quantity is Number").isInt()
     ]
-  ],
+  ,
   async (req, res) => {
     //checking for errors
     const error = validationResult(req);

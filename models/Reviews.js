@@ -6,30 +6,18 @@ const ReviewSchema = mongoose.Schema({
         ref: "users",
         required: true
     },
-    startRating: {
-        type: int,
-        required: true
-    },
-    reviewMessage: {
-        type: String,
-    },
-    hasAParentReview: {
-        type: Boolean,
-        default: false,
-        required:true
-    },
-    parentReview: {
+    item: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "review",
-        required: function () {
-            if (hasAParentReview) {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
+        ref: "item",
+        required: true,
+        
+    },
 
+    starRating: {
+        type: Number,
+        required: true,
+        
+    }
 });
 
 module.exports = Review = mongoose.model('review', ReviewSchema);

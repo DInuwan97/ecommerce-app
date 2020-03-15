@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ReviewHelpful = mongoose.Schema({
+const ReviewHelpfulSchema = mongoose.Schema({
     reviewViewesUser:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"users",
@@ -12,15 +12,15 @@ const ReviewHelpful = mongoose.Schema({
         required:true
     },
     reviewWasHelpful:{
-        type:boolean,
+        type:Boolean,
         default:false
 
     },
     reviewWasNotHelpful:{
-        type:boolean,
+        type:Boolean,
         default:false
     }
 
 });
 
-module.exports = ReviewHelpful = mongoose.model('reviewHelpful',ReviewHelpful);
+module.exports = ReviewHelpful = mongoose.model('reviewHelpful',ReviewHelpfulSchema);

@@ -92,7 +92,7 @@ router.post("/register", (req, res) => {
               jwt.sign(
                 { user },
                 "secretkey",
-                { expiresIn: "100s" },
+                { expiresIn: "2h" },
                 (err, token) => {
                   res.json({
                     status:
@@ -182,7 +182,7 @@ router.post("/resendEmail", (req, res) => {
       if (!user) {
         res.json({ message: "User Email is invalid" });
       } else {
-        jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
+        jwt.sign({ user }, "secretkey", { expiresIn: "2h" }, (err, token) => {
           res.json({ token });
           //res.json({token});
         });
@@ -207,7 +207,7 @@ router.post("/login", (req, res) => {
             jwt.sign(
               { user },
               "secretkey",
-              { expiresIn: "100s" },
+              { expiresIn: "2h" },
               (err, token) => {
                 res.json({ token });
               }
