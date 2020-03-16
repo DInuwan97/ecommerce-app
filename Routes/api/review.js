@@ -9,8 +9,25 @@ const Item = require("../../models/Item");
 
 const authenticateUser = require("../../middleware/Usesr").authenticateUser;
 
+//middleware to check item id is valid
+function verifyItem(req, res, next) {
+    var itemID = req.params.id;
+    Item.find({ _id: itemID }, function (err, itemDocuments) {
+        if (err) {
+            return res.status(400).send({ msg: err });
+        } else {
+            if (itemDocuments.length != 0) {
+                next();
+            } else {
+                return res.status(400).send({ msg: "Invalid Item ID" });
+            }
+        }
+    });
+}
+
 //new review
-router.post("/newReviewComment/:id", authenticateUser, function (req, res) {
+//user can have multiple reviews
+router.post("/newReviewComment/:id", authenticateUser, verifyItem, function (req, res) {
     var itemID = req.params.id;
 
     jwt.verify(req.token, "secretkey", function (err, authData) {
@@ -20,25 +37,17 @@ router.post("/newReviewComment/:id", authenticateUser, function (req, res) {
             if (authData.user.secureKeyVerifyStatus == true) {
                 if (req.body.reviewMessage) {
                     reviewMessageFromBody = req.body.reviewMessage;
-                    if (req.body.hasAParentReview) {
-                        var ReviewDetails = {
-                            reviewedUser: authData.user._id,
-                            item: itemID,
-                            hasAParentReview: req.body.hasAParentReview,
-                            reviewMessage: reviewMessageFromBody,
-                            parentReview: req.body.parentReview
-                        };
-                    } else {
-                        var ReviewDetails = {
-                            reviewedUser: authData.user._id,
-                            item: reviewID,
-                            reviewMessage: reviewMessageFromBody,
-                            hasAParentReview: false,
 
-                        };
-                    }
 
-                    console.log(ReviewDetails);
+                    var ReviewDetails = {
+                        reviewedUser: authData.user._id,
+                        item: reviewID,
+                        reviewMessage: reviewMessageFromBody,
+                        reviewUserFirstNamr: authData.user.firstName,
+                        reviewUserLastName: authData.user.lastName
+
+                    };
+
                     ReviewComments.create(ReviewDetails, function (err) {
                         if (err) {
                             return res.status(400).send({ msg: err });
@@ -60,7 +69,9 @@ router.post("/newReviewComment/:id", authenticateUser, function (req, res) {
 });
 
 //new Rating
-router.post("/newRating/:id", authenticateUser, function (req, res) {
+//each user get only 1 chance to rate a item
+// the second time the previous rating gets updated
+router.post("/newRating/:id", authenticateUser, verifyItem, function (req, res) {
     var itemID = req.params.id;
     if (0 <= req.body.starRating && req.body.starRating <= 5) {
         jwt.verify(req.token, "secretkey", function (err, authData) {
@@ -135,8 +146,11 @@ function verifyReview(req, res, next) {
     });
 
 };
-
-router.post("/newHelpfulReview/:id", authenticateUser, verifyReview, function (req, res) {
+//liking and unliking a comment by other user. only one time for a comment per a user.
+//need to add a method to delete useless data from the DB
+//reviewhelpful and reviewnothelful both false data are useless and therefor no need to keep them inside
+//the DB
+router.post("/newHelpfulReview/:id", authenticateUser, verifyItem, verifyReview, function (req, res) {
     var itemId = req.params.id;
     var reviewWasHelpful = false;
     var reviewWasNotHelpful = false;
@@ -145,10 +159,14 @@ router.post("/newHelpfulReview/:id", authenticateUser, verifyReview, function (r
             return res.status(400).send({ msg: err });
         } else {
             if (authData.user.secureKeyVerifyStatus == true) {
-                if (req.body.reviewWasHelpful == "true" || req.body.reviewWasNotHelpful == "false") {
+                if (req.body.reviewWasHelpful == "true") {
                     reviewWasHelpful = true;
-                } else if (req.body.reviewWasNotHelpful == "true" || req.body.reviewWasHelpful == "false") {
+                } else if (req.body.reviewWasHelpful == "false") {
+                    reviewWasHelpful = false;
+                } else if (req.body.reviewWasNotHelpful == "true") {
                     reviewWasNotHelpful = true;
+                } else if (req.body.reviewWasNotHelpful == "false") {
+                    reviewWasNotHelpful = false;
                 } else {
                     return res.status(400).send({ msg: "Invalid details" });
                 }
@@ -188,13 +206,71 @@ router.post("/newHelpfulReview/:id", authenticateUser, verifyReview, function (r
 
     });
 });
+//middleware to update like count of reviews
+function helpfulCount(req, res, next) {
+    verifyItem(req, res, function () {
+        var itemId = req.params.id;
+        ReviewComments.find({ item: itemId }, function (err, data) {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                data.forEach(element => {
+                    ReviewHelpful.find({ reviewID: element._id, reviewWasHelpful: true }, function (err, helpfulData) {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            ReviewComments.update({ _id: element._id }, { reviewHelpfulCount: helpfulData.length }, function (err) {
+                                if (err) {
+                                    return res.status(400).send({ msg: err });
+                                }
+                            })
+                        }
+                    });
+                });
+                next();
 
-router.get("/:id", function (req, res) {
+            }
+        });
+    });
+}
+
+function helpfulNotCount(req, res, next) {
+    verifyItem(req, res, function () {
+        var itemId = req.params.id;
+        ReviewComments.find({ item: itemId }, function (err, data) {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                data.forEach(element => {
+                    ReviewHelpful.find({ reviewID: element._id, reviewWasNotHelpful: true }, function (err, helpfulNotData) {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            ReviewComments.update({ _id: element._id }, { reviewNotHelpfulCount: helpfulNotData.length }, function (err) {
+                                if (err) {
+                                    return res.status(400).send({ msg: err });
+                                }
+                            })
+                        }
+                    });
+                });
+
+                next();
+            }
+        });
+    });
+}
+
+//publicaly accessible 
+//can see all the ratings 
+
+
+router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, function (req, res) {
     var itemId = req.params.id;
     var response;
     ReviewRating.find({ item: itemId }, function (err, data) {
         if (err) {
-            return res.status(500).send({ msg: err });
+            return res.status(400).send({ msg: err });
         } else {
             if (data) {
                 totalStarRating = 0;
@@ -202,39 +278,16 @@ router.get("/:id", function (req, res) {
                     totalStarRating += element.starRating;
                 });
                 AverageStarRating = totalStarRating / data.length;
-                response = { "RatingDocuments": data, "AverageStarRating": AverageStarRating }
+                response = { "AverageStarRating": AverageStarRating }
 
                 ReviewComments.find({ item: itemId }, function (err, commentData) {
                     if (err) {
-                        res.status(500).send({ msg: err });
+                        res.status(400).send({ msg: err });
                     } else {
                         if (commentData) {
                             response.CommentDocuments = commentData;
+
                             return res.send(response);
-                            // commentData.forEach(function (element) {
-                            //     ReviewHelpful.find({ reviewID: element._id, reviewWasHelpful: true },
-                            //         function (err, helpfulDocuments) {
-                            //             if (err) {
-                            //                 return res.status(400).send({ msg: err });
-                            //             } else {
-                            //                 helpfulCount = helpfulDocuments.length;
-                            //                 comment.helpfulCount = helpfulCount;
-                            //                 ReviewHelpful.find({ reviewID: element._id, reviewWasNotHelpful: true },
-                            //                     function (err, helpfulNotDocuments) {
-                            //                         if (err) {
-                            //                             return res.status(400).send({ msg: err });
-                            //                         } else {
-                            //                             notHelpfulCount = helpfulNotDocuments.length;
-
-                            //                         }
-            
-                            //                     });
-                            //             }
-
-                            //         });
-                                
-
-                            // });
 
                         } else {
                             return res.status(200).send({ msg: "No Comments to Display" });
@@ -247,10 +300,91 @@ router.get("/:id", function (req, res) {
             }
         }
     });
-
-
-
 });
+
+router.get("/:id",)
+//middleware to verify the review is posted by the same person
+function verifyUserIsTheReviewPoster(req, res, next) {
+    authenticateUser(req, res, function () {
+        jwt.verify(req.token, "secretkey", function (err, authData) {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                ReviewComments.findOne({ _id: req.body.reviewID }, function (err, data) {
+                    if (err) {
+                        return res.status(400).send({ msg: err });
+                    } else {
+                        if (authData.user._id == data.reviewedUser) {
+                            next();
+                        } else {
+                            return res.status(400).send({ msg: "This client didn't posted the review" });
+                        }
+                    }
+                });
+            }
+        });
+    })
+}
+
+router.post("/updateReviceComment/:id", authenticateUser, verifyItem, verifyReview, verifyUserIsTheReviewPoster, function (req, res) {
+    var itemId = req.params.id;
+    jwt.verify(req.token, "secretkey", function (err, authData) {
+        if (err) {
+            return res.status(400).send({ msg: err })
+        } else {
+            if (authData.user.secureKeyVerifyStatus == true) {
+                if (req.body.reviewMessage) {
+                    ReviewComments.update({ _id: req.body.reviewID, reviewedUser: authData.user._id, item: itemId },
+                        { reviewMessage: req.body.reviewMessage }, function (err) {
+                            if (err) {
+                                return res.status(400).send({ msg: err })
+                            } else {
+                                return res.status(200).send({ msg: "Updated Successfully" })
+                            }
+                        })
+                } else {
+                    return res.status(400).send({ msg: "Review Message is not defined" })
+                }
+            } else {
+                return res.status(401).send({ msg: "Verify Secure code first" });
+            }
+        }
+    })
+});
+
+router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyReview, verifyUserIsTheReviewPoster, function (req, res) {
+    var itemId = req.params.id;
+    jwt.verify(req.token, "secretkey", function (err, authData) {
+        if (err) {
+            return res.status(400).send({ msg: err })
+        } else {
+            if (authData.user.secureKeyVerifyStatus == true) {
+                ReviewComments.deleteOne({ _id: req.body.reviewID, item: itemId, reviewedUser: authData.user._id },
+                    function (err) {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            ReviewHelpful.deleteMany({ reviewID: req.body.reviewID }, function (err) {
+                                if (err) {
+                                    return res.status(400).send({ msg: err });
+                                } else {
+
+                                    return res.status(200).send({ msg: "Deleted" });
+
+
+                                }
+                            });
+                        }
+                    });
+
+
+            } else {
+                return res.status(401).send({ msg: "Verify Secure code first" });
+            }
+        }
+    });
+});
+
 
 
 module.exports = router;

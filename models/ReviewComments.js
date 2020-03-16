@@ -6,6 +6,14 @@ const ReviewCommentSchema = mongoose.Schema({
         ref: "users",
         required: true
     },
+    reviewUserFirstName:{
+        type:String,
+        required:true
+    },
+    reviewUserLastName:{
+        type:String,
+        required:true
+    },
     item: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "item",
@@ -14,24 +22,20 @@ const ReviewCommentSchema = mongoose.Schema({
     reviewMessage: {
         type: String,
     },
-    hasAParentReview: {
-        type: Boolean,
-        default: false
-    },
-    parentReview: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "review",
-        required: function () {
-            if (this.hasAParentReview==true) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    },
+    
     AddedTime:{
         type:Date,
         default:Date.now
+    },
+    reviewHelpfulCount:{
+        type:Number,
+        default:0,
+        required:true
+    },
+    reviewNotHelpfulCount:{
+        type:Number,
+        default:0,
+        required:true
     }
 
 });
