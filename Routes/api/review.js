@@ -71,7 +71,7 @@ router.post("/newReviewComment/:id", authenticateUser, verifyItem, function (req
 //new Rating
 //each user get only 1 chance to rate a item
 // the second time the previous rating gets updated
-router.post("/newRating/:id", authenticateUser, verifyItem, function (req, res) {
+router.patch("/newRating/:id", authenticateUser, verifyItem, function (req, res) {
     var itemID = req.params.id;
     if (0 <= req.body.starRating && req.body.starRating <= 5) {
         jwt.verify(req.token, "secretkey", function (err, authData) {
@@ -150,7 +150,7 @@ function verifyReview(req, res, next) {
 //need to add a method to delete useless data from the DB
 //reviewhelpful and reviewnothelful both false data are useless and therefor no need to keep them inside
 //the DB
-router.post("/newHelpfulReview/:id", authenticateUser, verifyItem, verifyReview, function (req, res) {
+router.patch("/newHelpfulReview/:id", authenticateUser, verifyItem, verifyReview, function (req, res) {
     var itemId = req.params.id;
     var reviewWasHelpful = false;
     var reviewWasNotHelpful = false;
@@ -266,43 +266,125 @@ function helpfulNotCount(req, res, next) {
 
 
 router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, function (req, res) {
+    const userHeader = req.headers["authorization"];
     var itemId = req.params.id;
-    var response;
-    ReviewRating.find({ item: itemId }, function (err, data) {
-        if (err) {
-            return res.status(400).send({ msg: err });
-        } else {
-            if (data) {
-                totalStarRating = 0;
-                data.forEach(element => {
-                    totalStarRating += element.starRating;
-                });
-                AverageStarRating = totalStarRating / data.length;
-                response = { "AverageStarRating": AverageStarRating }
-
-                ReviewComments.find({ item: itemId }, function (err, commentData) {
-                    if (err) {
-                        res.status(400).send({ msg: err });
-                    } else {
-                        if (commentData) {
-                            response.CommentDocuments = commentData;
-
-                            return res.send(response);
-
-                        } else {
-                            return res.status(200).send({ msg: "No Comments to Display" });
-                        }
-                    }
-                });
-
+    if (typeof userHeader == "undefined") {
+        var response;
+        ReviewRating.find({ item: itemId }, function (err, data) {
+            if (err) {
+                return res.status(400).send({ msg: err });
             } else {
-                return res.status(200).send({ msg: "No Rating" });
+                if (data) {
+                    totalStarRating = 0;
+                    data.forEach(element => {
+                        totalStarRating += element.starRating;
+                    });
+                    if(totalStarRating == 0){
+                        AverageStarRating = 0;
+                    }else{
+                        AverageStarRating = totalStarRating / data.length;
+                    }
+                    response = { "AverageStarRating": AverageStarRating }
+
+                    ReviewComments.find({ item: itemId }, function (err, commentData) {
+                        if (err) {
+                            res.status(400).send({ msg: err });
+                        } else {
+                            if (commentData) {
+                                response.CommentDocuments = commentData;
+
+                                return res.send(response);
+
+                            } else {
+                                return res.status(200).send({ msg: "No Comments to Display" });
+                            }
+                        }
+                    });
+
+                } else {
+                    return res.status(200).send({ msg: "No Rating" });
+                }
             }
-        }
-    });
+        });
+    }else{
+        req.token = (userHeader.split(" "))[1];
+        jwt.verify(req.token,"secretkey",function(err,authData){
+            if(err){
+                res.status(400).send({ msg: err });
+            }else{
+                if(authData.user.secureKeyVerifyStatus==true){
+                    var response;
+                    ReviewRating.find({ item: itemId }, function (err, data) {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            if (data) {
+                                response ={}
+                                totalStarRating = 0;
+                                data.forEach(element => {
+                                    totalStarRating += element.starRating;
+                                    if(element.reviewedUser == authData.user._id){
+                                        response.myStarRating = element.starRating;
+                                    }
+                                });
+                                if(totalStarRating == 0){
+                                    AverageStarRating = 0;
+                                }else{
+                                    AverageStarRating = totalStarRating / data.length;
+                                }
+                                response.AverageStarRating= AverageStarRating ;
+            
+                                ReviewComments.find({ item: itemId }, function (err, commentData) {
+                                    if (err) {
+                                        res.status(400).send({ msg: err });
+                                    } else {
+                                        if (commentData) {
+                                            var myCommentID=[];
+                                            commentData.forEach(element => {
+                                               if(element.reviewedUser == authData.user._id){
+                                                   myCommentID.push(element._id);
+                                               }
+                                               
+                                            });
+                                            if(myCommentID.length>0){
+                                                response.myCommentID = myCommentID;
+                                            }
+                                            response.CommentDocuments = commentData;
+                                            if(authData.user.isAdmin){
+                                                response.userType ="Admin";
+                                            }else if(authData.user.isCustomer){
+                                                response.userType ="Customer";
+                                            }else if(authData.user.isSalesManager){
+                                                response.userType ="SalesManager";
+                                            }else if(authData.user.isSalesServicer){
+                                                response.userType ="SalesServicer";
+                                            }else{
+                                                response.userType ="Customer"
+                                            }
+
+                                            
+                                            return res.send(response);
+            
+                                        } else {
+                                            return res.status(200).send({ msg: "No Comments to Display" });
+                                        }
+                                    }
+                                });
+            
+                            } else {
+                                return res.status(200).send({ msg: "No Rating" });
+                            }
+                        }
+                    });
+                }else{
+                    res.status(401).send({ msg: "Verify Secure code first" });
+                }
+            }
+        });
+        
+    }
 });
 
-router.get("/:id",)
 //middleware to verify the review is posted by the same person
 function verifyUserIsTheReviewPoster(req, res, next) {
     authenticateUser(req, res, function () {
@@ -326,7 +408,7 @@ function verifyUserIsTheReviewPoster(req, res, next) {
     })
 }
 
-router.post("/updateReviceComment/:id", authenticateUser, verifyItem, verifyReview, verifyUserIsTheReviewPoster, function (req, res) {
+router.patch("/updateReviceComment/:id", authenticateUser, verifyItem, verifyReview, verifyUserIsTheReviewPoster, function (req, res) {
     var itemId = req.params.id;
     jwt.verify(req.token, "secretkey", function (err, authData) {
         if (err) {
