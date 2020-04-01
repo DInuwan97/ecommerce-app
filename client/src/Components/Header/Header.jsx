@@ -15,8 +15,8 @@ export class Header extends Component {
 
 		<div className="col-md-6 phone-w3l">
 			<ul>
-                <li><a href="login.html" class="hyper"><span>Login</span></a></li>
-                <li><a href="login.html" class="hyper" style={{marginLeft:"20px"}}><span>Register</span></a></li>
+                <li><Link to ='/login'class="hyper"><span>Login</span></Link></li>
+                <li><Link to ='/register'class="hyper" style={{marginLeft:"20px"}}><span>Register</span></Link></li>
 			</ul>
 
             

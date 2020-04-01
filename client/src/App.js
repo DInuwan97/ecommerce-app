@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
 
 import Header from './Components/Header/Header';
 import Newsletter from './Components/Newsletter/Newsletter';
 import Footer from './Components/Footer/Footer';
+import Login from './Components/Login&RegisterComponent/Login'
+import Register from './Components/Login&RegisterComponent/Register'
+
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Header/>
+        <Route path = "/register" component = {Register}/>
+        <Route path = "/login" component = {Login}/>
         <Newsletter/>
         <Footer/>
 
