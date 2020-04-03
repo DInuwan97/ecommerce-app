@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-
+import axios from 'axios';
+import swal from 'sweetalert';
 export default class Register extends Component {
 
 
   constructor(props){
     super(props);
     this.state = {
-      userrType : ''
+      userType : ''
     }
   }
 
@@ -21,9 +22,47 @@ export default class Register extends Component {
   onSubmitHandler = e =>{
     e.preventDefault();
 
-    const frmData = new FormData();
+    // const frmData = new FormData();
 
-        frmData.set("userType", this.state.userType);
+    //     frmData.set("firstName",'Dinuwan');
+    //     frmData.set("lastName",this.state.lastName);
+    //     frmData.set("email",this.state.email);
+    //     frmData.set("mobile",this.state.mobile);
+    //     frmData.set("userType", this.state.userType);
+    //     frmData.set("company",this.state.company);
+    //     frmData.set("package",this.state.package);
+    //     frmData.set("password",this.state.password);
+
+    const frmData = {
+      firstName:this.state.firstName,
+      lastName:this.state.lastName,
+      email:this.state.email,
+      mobile:this.state.mobile,
+      userType:this.state.userType,
+      company:this.state.company,
+      package:this.state.package,
+      password:this.state.password
+    }
+
+
+        console.log(frmData);
+
+        axios({
+          method:'post',
+          url:'api/users/register',
+          headers: {},
+          data: frmData
+        })
+          .then(
+            swal({
+            title: "Congratulations!",
+            text: "Registered Successfully!",
+            icon: "success",
+            button: "Back to Login",
+        })
+          
+          );
+
   }
   
   render(){
@@ -44,6 +83,8 @@ export default class Register extends Component {
                 name="firstName"
                 required=""
                 placeholder="First Name"
+                value={this.state.firstName}
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
             </div>
@@ -55,6 +96,7 @@ export default class Register extends Component {
                 name="lastName"
                 required=""
                 placeholder="Last Name"
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
             </div>
@@ -68,6 +110,7 @@ export default class Register extends Component {
                 name="email"
                 required=""
                 placeholder="Email"
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
             </div>
@@ -80,6 +123,7 @@ export default class Register extends Component {
                 name="mobile"
                 required=""
                 placeholder="Mobile"
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
             </div>
@@ -113,15 +157,16 @@ export default class Register extends Component {
             <i className="fa fa-university" style={{paddingLeft:8}}aria-hidden="true"></i>
                   <input
                     type="text"
-                    name="Company"
+                    name="company"
                     required=""
                     placeholder="Company"
+                    onChange={this.onChangeHandler}
                   />
                     <div className="clearfix"></div>
             </div>
 
 
-            <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="compantType" required="" >
+            <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="package" required="" onChange={this.onChangeHandler}>
 
                 <option value="">Select the Package</option>
                 <option value="Platinum">Platinum</option>  
@@ -138,7 +183,7 @@ export default class Register extends Component {
 
             {
               (this.state.userType === 'SalesServicer') &&
-              <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="compantType" required="" >
+              <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="company" required="" onChange={this.onChangeHandler}>
 
                 <option value="">Select the Company</option>
                 <option value="ODEL">ODEL</option>  
@@ -155,9 +200,10 @@ export default class Register extends Component {
               <i className="fa fa-lock" aria-hidden="true"></i>
               <input
                 type="password"
-                name="Password"
+                name="password"
                 required=""
                 placeholder="Password"
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
             </div>

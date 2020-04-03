@@ -7,8 +7,7 @@ const User = require("../../models/User");
 const mongoose = require("mongoose");
 
 //getting the auth middlewears
-const authUserSecureCode = require("../../middleware/Usesr")
-  .authenticateUserSecureCode;
+const authUserSecureCode = require("../../middleware/Usesr").authenticateUserSecureCode;
 const authenticateUser = require("../../middleware/Usesr").authenticateUser;
 //const checkSalesManager = require('../../middleware/Usesr').checkSalesManager;
 const onlyAdminAccess = require("../../middleware/Usesr").onlyAdminAccess;
