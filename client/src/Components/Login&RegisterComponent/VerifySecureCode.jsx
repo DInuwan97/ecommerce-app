@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
 import swal from 'sweetalert';
 import jwt_decode from 'jwt-decode'
+
+
 
 export default class VerifySecureCode extends Component {
 
@@ -10,29 +12,22 @@ export default class VerifySecureCode extends Component {
         this.state = {
             isLoading: false,
             reloaded : false,
-            secureCode:'',
-            token: '',
-            email:''
+            email:'',
+            secureCode:''
         }
 
+        console.log("Localstoragetoken : " +localStorage.getItem('usertoken'));
         const redirectForm = this.props.location.redirectForm;
         if(redirectForm == 'verifysecurecode'){
             window.location.reload();
         }
 
-        //console.log("User Token is : " +localStorage)
+        this.setState({
+            secureCode:localStorage.getItem('usertoken')
+        })
+
+
     }
-
-    componentDidMount() {
-        const token= localStorage.usertoken
-        //const decoded = jwt_decode(token);
-
-        // this.setState({
-        //     email:decoded.email,
-        //     toek:this.state.token
-        // })
-    }
-
 
     onChangeHandler = e => {
         this.setState({
@@ -44,22 +39,44 @@ export default class VerifySecureCode extends Component {
     onSubmitHandler = e =>{
       
         e.preventDefault()
-        this.setState({
-            isLoading: true
-        });
-        // axios({
-        //     method: 'post',
-        //     url: '/api/users/verify',
-        //     headers: { headers: {"Authorization" : `Bearer ${this.state.token}`} },
-        //     data:
-        //         {
-        //             "securecode": this.state.securecode    
-        //         }
 
-        // })
+        const frmData = {
+            secureCode : this.state.secureCode
+        }
+
+        console.log("Verify Token is : " +localStorage.getItem('usertoken'))
+        console.log("Form data is : "+this.state.secureCode);
+
+     
+        axios({
+            method: 'post',
+            url: '/api/users/verify',
+            headers: {
+                "Authorization" : "Bearer "+localStorage.getItem('usertoken')
+            },
+            data:{
+                "secureCode":this.state.secureCode
+            }
+        })
+        .then(res =>{
+            swal({
+                title: "Congratulations!",
+                text: "Verified Successfully!",
+                icon: "success",
+                button: "Back to Login",
+            })
+        })
+        .catch(err=>{
+            swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Incorrect Secure Code',
+                footer: '<a href>Chekc again your mobile</a>'
+              })
+        })
 
         const user = {
-            securecode:this.state.securecode
+            secureCode:this.state.secureCode
         }
 
      

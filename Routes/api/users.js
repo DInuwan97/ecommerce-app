@@ -122,6 +122,9 @@ router.post("/register", (req, res) => {
 
 //////////////////////////////Secure code verification when registering///////////////////////////////////////////////////////////////////
 router.post("/verify", authUserSecureCode, (req, res) => {
+
+
+
   jwt.verify(req.token, "secretkey", (err, authData) => {
     if (err) {
       res.sendStatus(403);
@@ -153,6 +156,8 @@ router.post("/verify", authUserSecureCode, (req, res) => {
         } else {
           res.json({ status: "Secure code is not correct." });
         }
+
+        console.log(currentSecureKey);
       }
 
       //method calling
