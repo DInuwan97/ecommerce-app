@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from 'axios';
-import swal from 'sweetalert';
+import {register} from './UserFunctions';
+
 export default class Register extends Component {
 
 
@@ -20,18 +20,8 @@ export default class Register extends Component {
 
 
   onSubmitHandler = e =>{
+    
     e.preventDefault();
-
-    // const frmData = new FormData();
-
-    //     frmData.set("firstName",'Dinuwan');
-    //     frmData.set("lastName",this.state.lastName);
-    //     frmData.set("email",this.state.email);
-    //     frmData.set("mobile",this.state.mobile);
-    //     frmData.set("userType", this.state.userType);
-    //     frmData.set("company",this.state.company);
-    //     frmData.set("package",this.state.package);
-    //     frmData.set("password",this.state.password);
 
     const frmData = {
       firstName:this.state.firstName,
@@ -43,25 +33,12 @@ export default class Register extends Component {
       package:this.state.package,
       password:this.state.password
     }
-
-
-        console.log(frmData);
-
-        axios({
-          method:'post',
-          url:'api/users/register',
-          headers: {},
-          data: frmData
-        })
-          .then(
-            swal({
-            title: "Congratulations!",
-            text: "Registered Successfully!",
-            icon: "success",
-            button: "Back to Login",
-        })
-          
-          );
+    register(frmData)
+    .then(res =>{
+        if(res){
+            this.props.history.push(`/verifysecurecode`)
+        }
+    })
 
   }
   
