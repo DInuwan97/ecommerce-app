@@ -91,7 +91,7 @@ router.post("/register", (req, res) => {
               jwt.sign(
                 { user },
                 "secretkey",
-                { expiresIn: "100s" },
+                { expiresIn: "1000s" },
                 (err, token) => {
                   res.json({
                     status:
