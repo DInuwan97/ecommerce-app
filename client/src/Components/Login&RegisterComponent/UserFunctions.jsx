@@ -1,6 +1,8 @@
 import axios from 'axios';
 import swal from 'sweetalert';
 
+import VerifySecureCode from './VerifySecureCode';
+
 export const register = newUser =>{
     return axios
     .post('api/users/register',{
@@ -17,7 +19,7 @@ export const register = newUser =>{
          if(res.data != null){
             localStorage.setItem('usertoken',res.data.token); //create the session
             console.log("Data :" +res.data.token);
-            return res.data
+            return res.data.token
         }
     })
     .then(res =>{
@@ -33,5 +35,23 @@ export const register = newUser =>{
         console.log(err)
     });
 }
+
+
+export const verify = userVerification =>{
+    return axios
+    .post('/api/users/verify',{
+        securecode:userVerification.securecode
+    })
+    .then(res=>{
+        swal({
+            title: "Congratulations!",
+            text: "Verified Successfully!",
+            icon: "success",
+            button: "Back to Login",
+        })
+    })
+}
+
+
 
 

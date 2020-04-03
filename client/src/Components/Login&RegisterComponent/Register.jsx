@@ -33,11 +33,12 @@ export default class Register extends Component {
       package:this.state.package,
       password:this.state.password
     }
-    register(frmData)
+    const token = register(frmData)
     .then(res =>{
         if(res){
             this.props.history.push(`/verifysecurecode`)
         }
+       
     })
 
   }
