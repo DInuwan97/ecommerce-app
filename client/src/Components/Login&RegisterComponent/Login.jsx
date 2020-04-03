@@ -2,37 +2,48 @@ import React from "react";
 
 export default function Login() {
   return (
-    <div class="login">
-      <div class="main-agileits">
-        <div class="form-w3agile">
+    <div className="login">
+      <div className="main-agileits">
+        <div className="form-w3agile">
           <h3>Login</h3>
           <form action="#" method="post">
-            <div class="key">
-              <i class="fa fa-envelope" aria-hidden="true"></i>
-              <input type="text" name="Email" required="" placeholder="Email" />
-              <div class="clearfix"></div>
-            </div>
-            <div class="key">
-              <i class="fa fa-lock" aria-hidden="true"></i>
+
+          <div className="key">
+              <i className="fa fa-user" aria-hidden="true"></i>
+              <input
+                type="text"
+                name="email"
+                required=""
+                placeholder="Email"
+              />
+              <div className="clearfix"></div>
+          </div>
+
+          <div className="key">
+              <i className="fa fa-lock" aria-hidden="true"></i>
               <input
                 type="password"
                 name="Password"
                 required=""
                 placeholder="Password"
               />
-              <div class="clearfix"></div>
-            </div>
+              <div className="clearfix"></div>
+          </div>
+
+        
+
             <input type="submit" value="Login" />
+
           </form>
         </div>
-        <div class="forg">
-          <a href="#" class="forg-left">
+        <div className="forg">
+          <a href="#" className="forg-left">
             Forgot Password
           </a>
-          <a href="register.html" class="forg-right">
+          <a href="register.html" className="forg-right">
             Register
           </a>
-          <div class="clearfix"></div>
+          <div className="clearfix"></div>
         </div>
       </div>
     </div>
