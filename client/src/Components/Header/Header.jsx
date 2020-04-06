@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Link,withRouter} from 'react-router-dom';
 
-import jwt_decode from 'jwt-decode'
-import { decode } from 'punycode';
+//import jwt_decode from 'jwt-decode'
+//import { decode } from 'punycode';
 
 
 export class Header extends Component {
