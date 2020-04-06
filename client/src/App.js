@@ -10,6 +10,8 @@ import VerifySecureCode from './Components/Login&RegisterComponent/VerifySecureC
 
 import Home from './Components/HomePageComponent/HomePage'
 
+import SingleProduct from './Components/SingleProductComponent/SingleProduct';
+
 function App() {
   return (
     <Router>
@@ -20,6 +22,8 @@ function App() {
         <Route path = "/login" component = {Login}/>
 
         <Route path = "/verifysecurecode" component={VerifySecureCode} />
+
+        <Route path = "/single" component={SingleProduct}/>
 
         <Newsletter/>
         <Footer/>
