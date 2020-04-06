@@ -10,14 +10,14 @@ export default function SingleProduct() {
 					<div className="col-md-6 single-top-left">	
 						<div className="flexslider">
 							<ul className="slides">
-								<li data-thumb="/assets/images/s1.jpg">
-									<div className="thumb-image detail_images"> <img src="/assets/images/s1.jpg" data-imagezoom="true" className="img-responsive" alt="" /> </div>
+								<li data-thumb={require("./assets/images/s1.jpg")}>
+									<div className="thumb-image detail_images"> <img src={require("./assets/images/s1.jpg")} data-imagezoom="true" className="img-responsive" alt="" /> </div>
 								</li>
-								<li data-thumb="/assets/images/s2.jpg">
-									 <div className="thumb-image"> <img src="/assets/images/s2.jpg" data-imagezoom="true" className="img-responsive" alt="" /> </div>
+								<li data-thumb={require("./assets/images/s2.jpg")}>
+									 <div className="thumb-image"> <img src={require("./assets/images/s2.jpg")} data-imagezoom="true" className="img-responsive" alt="" /> </div>
 								</li>
-								<li data-thumb="/assets/images/s3.jpg">
-								   <div className="thumb-image"> <img src="/assets/images/s3.jpg" data-imagezoom="true" className="img-responsive" alt="" /> </div>
+								<li data-thumb={require("./assets/images/s3.jpg")}>
+								   <div className="thumb-image"> <img src={require("./assets/images/s3.jpg")} data-imagezoom="true" className="img-responsive" alt="" /> </div>
 								</li> 
 							</ul>
 						</div>

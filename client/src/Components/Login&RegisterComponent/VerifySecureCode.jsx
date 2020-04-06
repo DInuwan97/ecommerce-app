@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
-import jwt_decode from 'jwt-decode'
+//import jwt_decode from 'jwt-decode'
 
 
 
