@@ -37,20 +37,43 @@ export const register = newUser =>{
 }
 
 
-export const verify = userVerification =>{
+export const login = loggedUser =>{
     return axios
-    .post('/api/users/verify',{
-        securecode:userVerification.securecode
+    .post('api/users/login',{
+        email:loggedUser.email,
+        password:loggedUser.password
     })
-    .then(res=>{
-        swal({
-            title: "Congratulations!",
-            text: "Verified Successfully!",
-            icon: "success",
-            button: "Back to Login",
-        })
+    .then(res =>{
+        localStorage.setItem('userLoginToken',res.data.token); //create the login session
+        localStorage.setItem('loggedUserFirstName',res.data.firstName);
+
+        console.log("Fisrt Name :" +res.data.firstName)
+        console.log("Login Token :" +res.data.token);
+        console.log("SecurtyKeyStatus :" +res.data.secureKeyVerifyStatus);
+
+       
+        return res.data.token
+    })
+    .catch(err =>{
+        console.log(err)
     })
 }
+
+
+// export const verify = userVerification =>{
+//     return axios
+//     .post('/api/users/verify',{
+//         securecode:userVerification.securecode
+//     })
+//     .then(res=>{
+//         swal({
+//             title: "Congratulations!",
+//             text: "Verified Successfully!",
+//             icon: "success",
+//             button: "Back to Login",
+//         })
+//     })
+// }
 
 
 

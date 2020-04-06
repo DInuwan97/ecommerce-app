@@ -1,14 +1,62 @@
-import React from "react";
+import React, { Component } from "react";
+import {login} from './UserFunctions';
 
-export default function Login() {
+export default class Login extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      isLoading: false,
+      reloaded : false,
+    }
+  }
+
+  
+  componentWillMount() {
+    localStorage.removeItem('usertoken');
+  }
+
+
+  onChangeHandler = e =>{
+    this.setState({
+      [e.target.name] : e.target.value
+    })
+  }
+
+
+  
+  onSubmitHandler = e =>{
+    
+    e.preventDefault()
+    this.setState({
+        isLoading: true
+    });
+
+    const frmData = {
+      email:this.state.email,
+      password:this.state.password
+    }
+
+
+    login(frmData)
+    .then(res =>{
+        if(res){
+            this.props.history.push(`/`)
+        }
+    })
+
+  }
+
+
+
+  render(){
   return (
-
 
     <div className="login">
       <div className="main-agileits">
         <div className="form-w3agile">
           <h3>Login</h3>
-          <form action="#" method="post">
+          <form onSubmit={this.onSubmitHandler}>
 
           <div className="key">
               <i className="fa fa-user" aria-hidden="true"></i>
@@ -17,6 +65,7 @@ export default function Login() {
                 name="email"
                 required=""
                 placeholder="Email"
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
           </div>
@@ -25,16 +74,17 @@ export default function Login() {
               <i className="fa fa-lock" aria-hidden="true"></i>
               <input
                 type="password"
-                name="Password"
+                name="password"
                 required=""
                 placeholder="Password"
+                onChange={this.onChangeHandler}
               />
               <div className="clearfix"></div>
           </div>
 
         
 
-            <input type="submit" value="Login" />
+        <input type="submit" value="Login" />
 
           </form>
         </div>
@@ -52,4 +102,7 @@ export default function Login() {
 
     
   );
+
+
+  }
 }

@@ -201,6 +201,7 @@ router.post("/resendEmail", (req, res) => {
 
 ////////////////////////////////////User Login//////////////////////////////////////////////////////////////////
 router.post("/login", (req, res) => {
+  console.log(req.body.email+ ' : ' +req.body.password);
   User.findOne({
     email: req.body.email
   })
@@ -208,16 +209,23 @@ router.post("/login", (req, res) => {
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           if (user.secureKeyVerifyStatus == true) {
+            
+
             jwt.sign(
               { user },
-              "secretkey",
+              "secretkey",  
               { expiresIn: "100s" },
               (err, token) => {
-                res.json({ token });
+                res.json({ 
+                'token' : token,
+                'secureKeyVerifyStatus':user.secureKeyVerifyStatus,
+                'email':user.email,
+                'firstName':user.firstName,
+                'lastName':user.lastName});
               }
             );
           } else {
-            res.json({ status: "Update your Security key first..." });
+            res.status(400).json({ status: "Update your Security key first..." });
           }
         } else {
           res.json({ message: "User Password is Incorrect" });

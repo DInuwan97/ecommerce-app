@@ -1,8 +1,82 @@
 import React, { Component } from 'react';
 import {Link,withRouter} from 'react-router-dom';
 
+import jwt_decode from 'jwt-decode'
+import { decode } from 'punycode';
+
+
 export class Header extends Component {
-    render(){
+
+	constructor(){
+		super()
+		this.state ={
+			 firstName: '',
+			 lastName: ''
+		}
+		this.setState({
+			firstName:localStorage.loggedUserFirstName,
+		})
+	
+	}
+
+ 
+
+	logOut(e){
+		e.preventDefault()
+		localStorage.removeItem('userLoginToken');
+
+		localStorage.removeItem('loggedUserFirstName');
+		this.props.history.push('/login')
+	}
+
+	render(){
+
+			
+  const loginRegLink = (
+	<div className="collapse navbar-collapse" id="bs-megadropdown-tabs" style={{float:"right"}}>
+	<ul className="nav navbar-nav ">
+
+		<li ><Link to ='/login'className="hyper"><span>Login</span></Link></li>
+		<li><Link to ='/register'className="hyper" style={{marginLeft:"15px"}}><span>Register</span></Link></li>
+	</ul>
+	</div>
+  )
+
+  const userLink = (
+	<div className="collapse navbar-collapse" id="bs-megadropdown-tabs" style={{float:"right"}}>
+		<ul className="nav navbar-nav ">
+		<li className="dropdown ">
+                        <a href="#" className="dropdown-toggle  hyper" data-toggle="dropdown" ><span><i className="fa fa-user" aria-hidden="true" style={{marginRight:10}}></i>Hello {this.state.firstName}<b className="caret"></b></span></a>
+
+                            <ul className="dropdown-menu multi">
+								<div className="row">
+
+                                    <div className="col-sm-4">
+										<ul className="multi-column-dropdown">
+
+                                        <li><a href=""><i className="fa fa-angle-right" aria-hidden="true"></i>My Profile</a></li>
+										<li><a href=""><i className="fa fa-angle-right" aria-hidden="true"></i>Settings</a></li>
+										<li><a href="" onClick={this.logOut.bind(this)}><i className="fa fa-angle-right" aria-hidden="true"></i>Logout</a></li>
+
+                                        </ul>
+                                    </div>
+
+									<div className="clearfix"></div>
+
+                                </div>
+                            </ul>
+                        </li>
+		</ul>
+	</div>
+			
+						
+  )
+
+
+
+
+
+
   return (
     <div>
 
@@ -155,15 +229,13 @@ export class Header extends Component {
             </nav>
         </div>
 
-		
 
-		<div className="collapse navbar-collapse" id="bs-megadropdown-tabs" style={{float:"right"}}>
-					<ul className="nav navbar-nav ">
-						<li ><Link to ='/login'className="hyper"><span>Login</span></Link></li>
-                		<li><Link to ='/register'className="hyper" style={{marginLeft:"15px"}}><span>Register</span></Link></li>	
-					</ul>
-		</div>
-        
+
+
+		{localStorage.userLoginToken ? userLink: loginRegLink}
+
+
+
 
 
 
@@ -173,7 +245,12 @@ export class Header extends Component {
 
     </div>
    
-  )
-    }
+  );
+
+
+
+
+	}
+	
 }
 export default withRouter(Header);
