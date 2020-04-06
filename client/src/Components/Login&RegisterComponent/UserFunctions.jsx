@@ -44,6 +44,7 @@ export const login = loggedUser =>{
         password:loggedUser.password
     })
     .then(res =>{
+        
         localStorage.setItem('userLoginToken',res.data.token); //create the login session
         localStorage.setItem('loggedUserFirstName',res.data.firstName);
 
@@ -51,7 +52,6 @@ export const login = loggedUser =>{
         console.log("Login Token :" +res.data.token);
         console.log("SecurtyKeyStatus :" +res.data.secureKeyVerifyStatus);
 
-       
         return res.data.token
     })
     .catch(err =>{
