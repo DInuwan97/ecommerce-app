@@ -14,6 +14,8 @@ import SingleProduct from './Components/SingleProductComponent/SingleProduct';
 
 import TestB from './Components/testRes/TestB';
 
+import ProductCardList from './Components/ProductsListCard/ProductListCard';
+
 function App() {
   return (
     <Router>
@@ -28,6 +30,8 @@ function App() {
         <Route path = "/single" component={SingleProduct}/>
 
         <Route path = "/testb" component={TestB}/>
+
+        <Route path = "/ProductCardList" component={ProductCardList}/>
 
         <Newsletter/>
         <Footer/>
