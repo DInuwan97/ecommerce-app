@@ -1,7 +1,8 @@
 import React from 'react'
-
+import './assets/js/topproducts';
 export default function TopProducts() {
     return (
+		
         <div class="top-products">
 	<div class="container">
 		<h3>Top Products</h3>
@@ -102,90 +103,8 @@ export default function TopProducts() {
 						</div>
 						<div class="clearfix"></div>
 						<div class="top-products-set2">
-						<div class="col-md-3 top-product-grids tp5">
-							<a href="single.html"><div class="product-img">
-								<img src="images/ip2.jpg" alt="" />
-								<div class="p-mask">
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls1_item" value="Inner wear" /> 
-									<input type="hidden" name="amount" value="50.00" /> 
-									<button type="submit" class="w3ls-cart pw3ls-cart"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart</button>
-								</form>
-								</div>
-							</div></a>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<h4>Inner wear</h4>
-							<h5>$50.00</h5>						
-						</div>
-						<div class="col-md-3 top-product-grids tp6">
-							<a href="single.html"><div class="product-img">
-								<img src="images/shp8.jpg" alt="" />
-								<div class="p-mask">
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls1_item" value="Shoes" /> 
-									<input type="hidden" name="amount" value="150.00" /> 
-									<button type="submit" class="w3ls-cart pw3ls-cart"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart</button>
-								</form>
-								</div>
-							</div></a>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<h4>Shoes</h4>
-							<h5>$150.00</h5>						
-						</div>
-						<div class="col-md-3 top-product-grids tp7">
-							<a href="single.html"><div class="product-img">
-								<img src="images/cap1.jpg" alt="" />
-								<div class="p-mask">
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls1_item" value="Formal shirt" /> 
-									<input type="hidden" name="amount" value="100.00" /> 
-									<button type="submit" class="w3ls-cart pw3ls-cart"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart</button>
-								</form>
-								</div>
-							</div></a>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<h4>Formal shirt</h4>
-							<h5>$100.00</h5>						
-						</div>
-						<div class="col-md-3 top-product-grids tp4">
-							<a href="single.html"><div class="product-img">
-								<img src="images/wap3.jpg" alt="" />
-								<div class="p-mask">
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls1_item" value="Watch" /> 
-									<input type="hidden" name="amount" value="200.00" /> 
-									<button type="submit" class="w3ls-cart pw3ls-cart"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart</button>
-								</form>
-								</div>
-							</div></a>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star yellow-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<i class="fa fa-star gray-star" aria-hidden="true"></i>
-							<h4>Watch</h4>
-							<h5>$200.00</h5>						
-						</div>
+						
+			
 						<div class="clearfix"></div>
 						</div>
 					</div>
@@ -715,6 +634,7 @@ export default function TopProducts() {
 			</div>
 		</div>	
 	</div>
+	
 </div>
 	
     )

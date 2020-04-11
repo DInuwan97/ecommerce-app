@@ -92,8 +92,7 @@ export default function Services() {
         </div>
         <div class="clearfix"></div>
       </div>
-      <script src="js/jquery.wmuSlider.js"></script>
-      <script>$('.example1').wmuSlider();</script>
+
     </div>
   );
 }
