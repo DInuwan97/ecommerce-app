@@ -46,7 +46,7 @@ export class Header extends Component {
 	<div className="collapse navbar-collapse" id="bs-megadropdown-tabs" style={{float:"right"}}>
 		<ul className="nav navbar-nav ">
 		<div class="dropdown">
-  <button className="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button style={{backgroundColor:'0',textDecoration:'none',marginTop:8,fontSize:16}} className="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
   <i className="fa fa-user" aria-hidden="true" style={{marginRight:5}}></i>
     Hello Username
     <span style={{marginLeft:5}} className="caret"></span>
@@ -236,6 +236,11 @@ export class Header extends Component {
 		<div className="clearfix"></div>
 	</div>
 </div>
+
+
+
+<script src="js/minicart.js"></script>
+
 
     </div>
    
