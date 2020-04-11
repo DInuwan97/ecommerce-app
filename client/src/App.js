@@ -12,6 +12,8 @@ import Home from './Components/HomePageComponent/HomePage'
 
 import SingleProduct from './Components/SingleProductComponent/SingleProduct';
 
+import TestB from './Components/testRes/TestB';
+
 function App() {
   return (
     <Router>
@@ -24,6 +26,8 @@ function App() {
         <Route path = "/verifysecurecode" component={VerifySecureCode} />
 
         <Route path = "/single" component={SingleProduct}/>
+
+        <Route path = "/testb" component={TestB}/>
 
         <Newsletter/>
         <Footer/>

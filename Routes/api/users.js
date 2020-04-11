@@ -334,4 +334,13 @@ router.get("/profile", authenticateUser, (req, res) => {
     }
   });
 });
+
+
+router.get('/dinith',(req,res)=>{
+  res.json({'username':'ssdsdsdsdsd','password':'1233'})
+})
+
+
+
+
 module.exports = router;
