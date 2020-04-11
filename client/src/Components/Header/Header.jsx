@@ -45,27 +45,21 @@ export class Header extends Component {
   const userLink = (
 	<div className="collapse navbar-collapse" id="bs-megadropdown-tabs" style={{float:"right"}}>
 		<ul className="nav navbar-nav ">
-		<li className="dropdown ">
-                        <a href="#" className="dropdown-toggle  hyper" data-toggle="dropdown" ><span><i className="fa fa-user" aria-hidden="true" style={{marginRight:10}}></i>Hello {this.state.firstName}<b className="caret"></b></span></a>
-
-                            <ul className="dropdown-menu multi">
-								<div className="row">
-
-                                    <div className="col-sm-4">
-										<ul className="multi-column-dropdown">
-
-                                        <li><a href=""><i className="fa fa-angle-right" aria-hidden="true"></i>My Profile</a></li>
-										<li><a href=""><i className="fa fa-angle-right" aria-hidden="true"></i>Settings</a></li>
-										<li><a href="" onClick={this.logOut.bind(this)}><i className="fa fa-angle-right" aria-hidden="true"></i>Logout</a></li>
-
-                                        </ul>
-                                    </div>
-
-									<div className="clearfix"></div>
-
-                                </div>
-                            </ul>
-                        </li>
+		<div class="dropdown">
+  <button className="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <i className="fa fa-user" aria-hidden="true" style={{marginRight:5}}></i>
+    Hello Username
+    <span style={{marginLeft:5}} className="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a 
+ onClick={this.logOut.bind(this)} href="#">Logout</a></li>
+  </ul>
+</div>
 		</ul>
 	</div>
 			

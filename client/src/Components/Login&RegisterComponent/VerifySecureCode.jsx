@@ -67,7 +67,7 @@ export default class VerifySecureCode extends Component {
             })
         })
         .catch(err=>{
-            swal.fire({
+            swal({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Incorrect Secure Code',
