@@ -44,33 +44,35 @@ router.get("/:id", async (req, res) => {
 // update other values
 //access private
 //Here the authorization has to implemented
+
+
 router.post(
   "/",
   [
-    auth,
-    [
-      check("itemName", "Item Name is required")
-        .not()
-        .notEmpty(),
-      check("price", "Price is requried")
-        .not()
-        .notEmpty(),
-      check("price", "Price should a Number").isNumeric(),
-      check("category", "Category is required")
-        .not()
-        .isEmpty(),
-      check("stockQuantity", "Quantity is required")
-        .not()
-        .isEmpty(),
-      check("stockQuantity", "Quantity is Number").isInt()
-    ]
-  ],
+   // auth,
+     [
+       check("itemName", "Item Name is required")
+         .not()
+         .notEmpty(),
+       check("price", "Price is requried")
+         .not()
+         .notEmpty(),
+       check("price", "Price should a Number").isNumeric(),
+       check("category", "Category is required")
+         .not()
+         .isEmpty(),
+       check("stockQuantity", "Quantity is required")
+         .not()
+         .isEmpty(),
+       check("stockQuantity", "Quantity is Number").isInt()
+     ]
+ ],
   async (req, res) => {
     //checking for errors
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(400).json({ error: error.array() });
-    }
+    // const error = validationResult(req);
+    // if (!error.isEmpty()) {
+    //   return res.status(400).json({ error: error.array() });
+    // }
     let {
       itemName,
       price,
@@ -135,7 +137,7 @@ router.post(
 router.patch(
   "/updateItem/:id",
   [
-    auth,
+    // auth,
     [
       check("itemName", "Item Name is required")
         .not()
