@@ -4,31 +4,39 @@ export default class addNewItemComponent extends Component {
   constructor() {
     super();
     this.state = {
-        name: "",
-        price: "",
-        brand: "",
-        category: "",
-      };
-      this.onChange = this.onChange.bind(this)
+      itemName: "",
+      price: 0,
+      brand: "",
+      category: "",
+      stockQuantity: 0,
+    };
+    this.onChange = this.onChange.bind(this);
   }
-  
 
   onChange = (e) => {
-    this.setState( { 
-        [e.target.name] : e.target.value
+    this.setState({
+      [e.target.name]: e.target.value,
     });
   };
 
   onSubmitHandler = (e) => {
     e.preventDefault();
-    const newItem = this.state
-    console.log("new item is " + newItem);
 
-    axios.post('/api/items', { newItem })
-      .then(res => {
+    axios
+      .post("/api/items", {
+        itemName: this.state.itemName,
+        price: this.state.price,
+        brand: this.state.brand,
+        category: this.state.category,
+        stockQuantity: this.state.stockQuantity,
+      })
+      .then((res) => {
         console.log(res);
         console.log(res.data);
       })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   render() {
@@ -40,10 +48,10 @@ export default class addNewItemComponent extends Component {
             <input
               type="text"
               class="form-control"
-              name = "name"
+              name="itemName"
               placeholder="Item Name"
               value={this.state.name}
-              onChange={ this.onChange}
+              onChange={this.onChange}
             />
           </div>
           <div class="form-group">
@@ -51,35 +59,55 @@ export default class addNewItemComponent extends Component {
             <input
               type="text"
               class="form-control"
-              name = "price"
+              name="price"
               placeholder="Price"
               value={this.state.price}
-              onChange={ this.onChange}
+              onChange={this.onChange}
             />
           </div>
-          <div class="form-group">
-            <label>Category</label>
-            <input
-              type="text"
-              class="form-control"
-              name = "category"
-              placeholder="Category"
-              value={this.state.category}
-              onChange={ this.onChange}
-            />
+          <div
+            className="input-group mb-3"
+            style={{ width: "100%", height: 30, marginBottom: 20 }}
+          >
+            <select
+              className="form-control form-control-lg"
+              style={{ height: 40 }}
+              name="category"
+              required=""
+              onChange={this.onChange}
+            >
+              <option value="">Category Type</option>
+              <option value="BRONZE">BRONZE</option>
+              <option value="SILVER">SILVER</option>
+              <option value="GOLD">GOLD</option>
+              <option value="PLATINUM">PLATINUM</option>
+            </select>
+
+            <div className="clearfix"></div>
           </div>
+
           <div class="form-group">
             <label>Brand</label>
             <input
               type="text"
               class="form-control"
-              name = "brand"
+              name="brand"
               placeholder="Brand"
               value={this.state.brand}
-              onChange={ this.onChange}
+              onChange={this.onChange}
             />
           </div>
-
+          <div class="form-group">
+            <label>Stock Quantity</label>
+            <input
+              type="text"
+              class="form-control"
+              name="stockQuantity"
+              placeholder="Stock Quantity"
+              value={this.state.stockQuantity}
+              onChange={this.onChange}
+            />
+          </div>
           <button type="submit" class="btn btn-primary">
             Submit
           </button>
