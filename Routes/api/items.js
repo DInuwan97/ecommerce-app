@@ -46,8 +46,8 @@ router.get("/:id", async (req, res) => {
 //Here the authorization has to implemented
 router.post(
   "/",
-  [
-    auth,
+ [
+   auth,
     [
       check("itemName", "Item Name is required")
         .not()
