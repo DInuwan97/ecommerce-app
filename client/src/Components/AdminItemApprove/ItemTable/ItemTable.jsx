@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TableRow from './itemTableRow'
 export default class ItemTable extends Component {
   render() {
+    const {declineItem} = this.props
     return (
       <table class="table">
         <thead>
@@ -18,7 +19,7 @@ export default class ItemTable extends Component {
         </thead>
         <tbody>
           {this.props.items.map(({_id,itemName,price,Brand,category}) => (
-            <TableRow id = {_id} itemName = {itemName} price = {price} Brand = {Brand} category = {category}/>
+            <TableRow declineItem = {declineItem} id = {_id} itemName = {itemName} price = {price} Brand = {Brand} category = {category} />
           ))}
         </tbody>
       </table>

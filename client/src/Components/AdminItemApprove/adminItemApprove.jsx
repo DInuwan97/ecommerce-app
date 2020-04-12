@@ -17,10 +17,23 @@ export default class adminItemApprove extends Component {
     });
   }
 
+  declineItem = id => {
+    console.log(id)
+    this.setState({
+      items : [...this.state.items.filter(item => item._id !== id)]
+    });
+
+    axios.delete(`/api/items/${id}`)
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    })    
+  }
+
   render() {
     return (
       <div className = 'container'>
-        <Table items = {this.state.items}/>
+        <Table items = {this.state.items} declineItem = {this.declineItem}/>
       </div>
     );
   }

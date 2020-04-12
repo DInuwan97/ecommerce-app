@@ -44,6 +44,10 @@ const itemSchema = mongoose.Schema({
   rating: {
     type: Number,
     default: 0
+  },
+  isApproved : {
+    type : Boolean,
+    default : false
   }
 });
 
