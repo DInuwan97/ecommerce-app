@@ -201,7 +201,9 @@ router.patch(
 //delete a specifi Item
 //private access
 //delete request
-router.delete("/:id", adminAuth, async (req, res) => {
+
+//authorization  adminAuth,
+router.delete("/:id",  async (req, res) => {
   //check if item exist
   try {
     const checkItemExits = await Item.findOne({ _id: req.params.id });

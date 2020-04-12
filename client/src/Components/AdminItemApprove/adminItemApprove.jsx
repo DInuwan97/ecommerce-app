@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Table from './ItemTable/ItemTable'
 export default class adminItemApprove extends Component {
   constructor() {
     super();
@@ -16,25 +17,23 @@ export default class adminItemApprove extends Component {
     });
   }
 
+  declineItem = id => {
+    console.log(id)
+    this.setState({
+      items : [...this.state.items.filter(item => item._id !== id)]
+    });
+
+    axios.delete(`/api/items/${id}`)
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    })    
+  }
+
   render() {
     return (
       <div className = 'container'>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">id</th>
-              <th scope="col">Item Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Brand</th>
-              <th scope="col">Category</th>  
-            </tr>
-          </thead>
-          <tbody>
-                {this.state.items.map(item => (
-                    <tr>{item.itemName}</tr>
-                ))}
-          </tbody>
-        </table>
+        <Table items = {this.state.items} declineItem = {this.declineItem}/>
       </div>
     );
   }

@@ -6,7 +6,7 @@ export default class addNewItemComponent extends Component {
     this.state = {
       itemName: "",
       price: 0,
-      brand: "",
+      Brand: "",
       category: "",
       stockQuantity: 0,
     };
@@ -26,7 +26,7 @@ export default class addNewItemComponent extends Component {
       .post("/api/items", {
         itemName: this.state.itemName,
         price: this.state.price,
-        brand: this.state.brand,
+        Brand: this.state.Brand,
         category: this.state.category,
         stockQuantity: this.state.stockQuantity,
       })
@@ -91,9 +91,9 @@ export default class addNewItemComponent extends Component {
             <input
               type="text"
               class="form-control"
-              name="brand"
+              name="Brand"
               placeholder="Brand"
-              value={this.state.brand}
+              value={this.state.Brand}
               onChange={this.onChange}
             />
           </div>
