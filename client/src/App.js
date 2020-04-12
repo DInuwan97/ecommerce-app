@@ -7,7 +7,8 @@ import Footer from './Components/Footer/Footer';
 import Login from './Components/Login&RegisterComponent/Login'
 import Register from './Components/Login&RegisterComponent/Register'
 import VerifySecureCode from './Components/Login&RegisterComponent/VerifySecureCode';
-
+import SalesManager from './Components/SalesManagerComponent/addNewItemComponent';
+import itemApprove from './Components/AdminItemApprove/adminItemApprove'
 import Home from './Components/HomePageComponent/HomePage'
 
 import SingleProduct from './Components/SingleProductComponent/SingleProduct';
@@ -28,7 +29,9 @@ function App() {
         <Route path = "/verifysecurecode" component={VerifySecureCode} />
 
         <Route path = "/single" component={SingleProduct}/>
-
+        <Route path = "/salesManager" component={SalesManager}/>
+        <Route path = "/itemApprove" component={itemApprove}/>
+        
         <Route path = "/testb" component={TestB}/>
 
         <Route path = "/ProductCardList" component={ProductCardList}/>
