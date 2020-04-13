@@ -5,7 +5,6 @@ const auth = require("../../middleware/Usesr").checkAdminManager;
 const adminAuth = require("../../middleware/Usesr").onlyAdminAccess;
 const Item = require("../../models/Item");
 
-
 //getting all the items
 //public access
 router.get("/", async (req, res) => {
@@ -45,28 +44,19 @@ router.get("/:id", async (req, res) => {
 //access private
 //Here the authorization has to implemented
 
-
 router.post(
   "/",
   [
-   // auth,
-     [
-       check("itemName", "Item Name is required")
-         .not()
-         .notEmpty(),
-       check("price", "Price is requried")
-         .not()
-         .notEmpty(),
-       check("price", "Price should a Number").isNumeric(),
-       check("category", "Category is required")
-         .not()
-         .isEmpty(),
-       check("stockQuantity", "Quantity is required")
-         .not()
-         .isEmpty(),
-       check("stockQuantity", "Quantity is Number").isInt()
-     ]
- ],
+    // auth,
+    [
+      check("itemName", "Item Name is required").not().notEmpty(),
+      check("price", "Price is requried").not().notEmpty(),
+      check("price", "Price should a Number").isNumeric(),
+      check("category", "Category is required").not().isEmpty(),
+      check("stockQuantity", "Quantity is required").not().isEmpty(),
+      check("stockQuantity", "Quantity is Number").isInt(),
+    ],
+  ],
   async (req, res) => {
     //checking for errors
     // const error = validationResult(req);
@@ -81,12 +71,18 @@ router.post(
       color,
       Brand,
       stockQuantity,
-      rating
+      rating,
     } = req.body;
 
-
-    if(!(category == "BRONZE" || category == "SILVER" || category == "GOLD" || category == "PLATINUM" )){
-      return res.status(400).json({ msg : "Not a Valid Category" });
+    if (
+      !(
+        category == "BRONZE" ||
+        category == "SILVER" ||
+        category == "GOLD" ||
+        category == "PLATINUM"
+      )
+    ) {
+      return res.status(400).json({ msg: "Not a Valid Category" });
     }
 
     const checkItemExist = await Item.findOne({ itemName });
@@ -106,7 +102,7 @@ router.post(
             color,
             Brand,
             stockQuantity,
-            rating
+            rating,
           }
         );
       } else {
@@ -118,7 +114,7 @@ router.post(
           color,
           Brand,
           stockQuantity,
-          rating
+          rating,
         });
       }
 
@@ -139,21 +135,13 @@ router.patch(
   [
     // auth,
     [
-      check("itemName", "Item Name is required")
-        .not()
-        .notEmpty(),
-      check("price", "Price is requried")
-        .not()
-        .notEmpty(),
+      check("itemName", "Item Name is required").not().notEmpty(),
+      check("price", "Price is requried").not().notEmpty(),
       check("price", "Price should a Number").isNumeric(),
-      check("category", "Category is required")
-        .not()
-        .isEmpty(),
-      check("stockQuantity", "Quantity is required")
-        .not()
-        .isEmpty(),
-      check("stockQuantity", "Quantity is Number").isInt()
-    ]
+      check("category", "Category is required").not().isEmpty(),
+      check("stockQuantity", "Quantity is required").not().isEmpty(),
+      check("stockQuantity", "Quantity is Number").isInt(),
+    ],
   ],
   async (req, res) => {
     const error = validationResult(req);
@@ -174,7 +162,7 @@ router.patch(
         color,
         Brand,
         stockQuantity,
-        rating
+        rating,
       } = req.body;
 
       checkItemExist.set({
@@ -185,7 +173,7 @@ router.patch(
         color,
         Brand,
         stockQuantity,
-        rating
+        rating,
       });
 
       const result = await checkItemExist.save();
@@ -203,7 +191,7 @@ router.patch(
 //delete request
 
 //authorization  adminAuth,
-router.delete("/:id",  async (req, res) => {
+router.delete("/:id", async (req, res) => {
   //check if item exist
   try {
     const checkItemExits = await Item.findOne({ _id: req.params.id });
@@ -227,14 +215,10 @@ router.patch(
   [
     auth,
     [
-      check("itemName", "Item Name is required")
-        .not()
-        .notEmpty(),
-      check("discount", "Discount is required")
-        .not()
-        .isEmpty(),
-      check("discount", "Discount is Number").isNumeric()
-    ]
+      check("itemName", "Item Name is required").not().notEmpty(),
+      check("discount", "Discount is required").not().isEmpty(),
+      check("discount", "Discount is Number").isNumeric(),
+    ],
   ],
   async (req, res) => {
     //check whetaher the item exist
@@ -244,14 +228,14 @@ router.patch(
         return res.status(400).json({ error: error.array() });
       }
       const checkItemExits = await Item.findOne({
-        itemName: req.body.itemName
+        itemName: req.body.itemName,
       });
       if (!checkItemExits) {
         return res.status(400).json({ msg: "Item does not exist" });
       }
 
       checkItemExits.set({
-        discount: req.body.discount
+        discount: req.body.discount,
       });
       const result = await checkItemExits.save();
 
@@ -263,5 +247,17 @@ router.patch(
     }
   }
 );
+
+router.patch("/:id", async (req, res) => {
+  try {
+    const checkItemExits = await Item.findOne({ _id: req.params.id });
+    if (!checkItemExits) {
+      return res.status(400).json({ msg: "Item does not exist" });
+    }
+
+    checkItemExits.isApproved = true;
+    await checkItemExits.save();
+  } catch (error) {}
+});
 
 module.exports = router;

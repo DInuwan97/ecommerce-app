@@ -9,6 +9,7 @@ export default class addNewItemComponent extends Component {
       price: 0,
       Brand: "",
       category: "",
+      size : "",
       stockQuantity: 0,
     };
     this.onChange = this.onChange.bind(this);
@@ -29,6 +30,7 @@ export default class addNewItemComponent extends Component {
         price: this.state.price,
         Brand: this.state.Brand,
         category: this.state.category,
+        size : this.state.size,
         stockQuantity: this.state.stockQuantity,
       })
       .then((res) => {
@@ -44,6 +46,7 @@ export default class addNewItemComponent extends Component {
       price: 0,
       Brand: "",
       category: "",
+      size : "",
       stockQuantity: 0,
     });
   };
@@ -78,6 +81,7 @@ export default class addNewItemComponent extends Component {
             className="input-group mb-3"
             style={{ width: "100%", height: 30, marginBottom: 20 }}
           >
+             <label>Category</label>
             <select
               className="form-control form-control-lg"
               style={{ height: 40 }}
@@ -90,6 +94,30 @@ export default class addNewItemComponent extends Component {
               <option value="SILVER">SILVER</option>
               <option value="GOLD">GOLD</option>
               <option value="PLATINUM">PLATINUM</option>
+            </select>
+
+            <div className="clearfix"></div>
+          </div>
+
+          <div
+            className="input-group mb-3"
+            style={{ width: "100%", height: 30, marginBottom: 20 }}
+          >
+             <label>Size</label>
+            <select
+              className="form-control form-control-lg"
+              style={{ height: 40 }}
+              name="size"
+              required=""
+              onChange={this.onChange}
+            >
+              <option value="">SIZE</option>
+              <option value="Extra Small">Extra Small</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
+              <option value="Extra Large">Extra Large</option>
+              <option value="No-Size">No-Size</option>
             </select>
 
             <div className="clearfix"></div>
