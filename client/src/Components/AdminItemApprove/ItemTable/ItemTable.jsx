@@ -11,6 +11,7 @@ export default class ItemTable extends Component {
             <th scope="col">Item Name</th>
             <th scope="col">Price</th>
             <th scope="col">Brand</th>
+            <th scope="col">Size</th>
             <th scope="col">Category</th>
             <th scope="col">Approve</th>
             <th scope="col">Decline</th>
@@ -18,7 +19,7 @@ export default class ItemTable extends Component {
         </thead>
         <tbody>
           {this.props.items.map(
-            ({ _id, itemName, price, Brand, category, isApproved }) => {
+            ({ _id, itemName, price, Brand, category, isApproved ,size}) => {
               if (!isApproved)
                 return (
                   <TableRow
@@ -28,6 +29,7 @@ export default class ItemTable extends Component {
                     itemName={itemName}
                     price={price}
                     Brand={Brand}
+                    size = {size}
                     category={category}
                   />
                 );
