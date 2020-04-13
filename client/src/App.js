@@ -9,6 +9,7 @@ import Register from './Components/Login&RegisterComponent/Register'
 import VerifySecureCode from './Components/Login&RegisterComponent/VerifySecureCode';
 import SalesManager from './Components/SalesManagerComponent/addNewItemComponent';
 import itemApprove from './Components/AdminItemApprove/adminItemApprove'
+import Category from './Components/AdminAddCategory/Category'
 import Home from './Components/HomePageComponent/HomePage'
 
 import SingleProduct from './Components/SingleProductComponent/SingleProduct';
@@ -31,6 +32,8 @@ function App() {
         <Route path = "/single" component={SingleProduct}/>
         <Route path = "/salesManager" component={SalesManager}/>
         <Route path = "/itemApprove" component={itemApprove}/>
+        <Route path = "/category" component={Category}/>
+
         
         <Route path = "/testb" component={TestB}/>
 
