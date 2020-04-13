@@ -10,7 +10,7 @@ module.exports = {
       req.token = bearerToken;
       next();
     } else {
-      res.sendStatus(403);
+      res.status(403).json({statuc:"Token Expired"});
     }
   },
 

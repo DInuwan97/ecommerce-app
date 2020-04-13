@@ -16,6 +16,8 @@ import TestB from './Components/testRes/TestB';
 
 import ProductCardList from './Components/ProductsListCard/ProductListCard';
 
+import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
+
 function App() {
   return (
     <Router>
@@ -32,6 +34,8 @@ function App() {
         <Route path = "/testb" component={TestB}/>
 
         <Route path = "/ProductCardList" component={ProductCardList}/>
+
+        <Route path = "/ResendEmail" component={ResendEmail}/>
 
         <Newsletter/>
         <Footer/>

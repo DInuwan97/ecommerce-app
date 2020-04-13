@@ -123,11 +123,9 @@ router.post("/register", (req, res) => {
 //////////////////////////////Secure code verification when registering///////////////////////////////////////////////////////////////////
 router.post("/verify", authUserSecureCode, (req, res) => {
 
-
-
   jwt.verify(req.token, "secretkey", (err, authData) => {
     if (err) {
-      res.sendStatus(403);
+      res.status(403).json({statuc:"Token Expired"});
     } else {
       //update query in mongodb
       async function updateUserSecureVerification(id) {
@@ -154,7 +152,7 @@ router.post("/verify", authUserSecureCode, (req, res) => {
           updateUserSecureVerification(verifyInfo.id);
           res.json({ status: verifyInfo.email + " is verified." });
         } else {
-          res.json({ status: "Secure code is not correct." });
+          res.status(404).json({ status: "Secure code is not correct." });
         }
 
         console.log(currentSecureKey);
@@ -225,13 +223,13 @@ router.post("/login", (req, res) => {
               }
             );
           } else {
-            res.status(400).json({ status: "Update your Security key first..." });
+            res.status(403).json({ status: "Update your Security key first..." });
           }
         } else {
-          res.json({ message: "User Password is Incorrect" });
+          res.status(400).json({ message: "User Password is Incorrect" });
         }
       } else {
-        res.json({ message: "User does ot exist in the system" });
+        res.status(404).json({ message: "User does ot exist in the system" });
       }
     })
     .catch(err => {

@@ -17,19 +17,11 @@ export const register = newUser =>{
     })
     .then(res =>{
          if(res.data != null){
+
             localStorage.setItem('usertoken',res.data.token); //create the session
             console.log("Data :" +res.data.token);
             return res.data.token
         }
-    })
-    .then(res =>{
-        swal({
-            title: "Congratulations!",
-            text: "Registered Successfully!",
-            icon: "success",
-            button: "Back to Login",
-        })
-
     })
     .catch(err =>{
         console.log(err)
@@ -55,7 +47,30 @@ export const login = loggedUser =>{
         return res.data.token
     })
     .catch(err =>{
-        console.log(err)
+        if(err.response.status === 400){
+            swal({
+                title: "Oops!!!",
+                text: "Your Password is Incorrect",
+                icon: "error",
+                button: "Back to Login",
+            })
+        }
+        else if(err.response.status === 403){
+            swal({
+                title: "Oops!!!",
+                text: "Verify your Security Key First",
+                icon: "error",
+                button: "Back to Login",
+            })
+        }
+        else if(err.response.status === 404){
+            swal({
+                title: "Oops!!!",
+                text: "User Does not Exist in the System",
+                icon: "error",
+                button: "Back to Login",
+            })
+        }
     })
 }
 

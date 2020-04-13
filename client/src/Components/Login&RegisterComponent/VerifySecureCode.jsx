@@ -67,12 +67,21 @@ export default class VerifySecureCode extends Component {
             })
         })
         .catch(err=>{
-            swal({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Incorrect Secure Code',
-                footer: '<a href>Chekc again your mobile</a>'
-              })
+            if(err.response.status === 403){
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Re-activate Security Key...',
+                    footer: 'OK'
+                  })
+            }else if(err.response.status === 404){
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Incorrect Secure Code!!!',
+                    footer: 'OK'
+                  })
+            }
         })
 
         const user = {
@@ -92,7 +101,7 @@ export default class VerifySecureCode extends Component {
             <h3>Check Your Mobile</h3>
   
   
-          <form onSubmit={this.onSubmitHandler}>
+          
   
             <div className="key">
                 <i className="fa fa-shield" aria-hidden="true"></i>
@@ -106,10 +115,18 @@ export default class VerifySecureCode extends Component {
                 <div className="clearfix"></div>
             </div>
   
-            <input type="submit" value="Verifty" />
-            <input type="submit" style={{float:'right'}}value="Resend" />
+            <input type="submit" value="Verifty" onClick={this.onSubmitHandler}/>
+
   
-            </form>
+            <input type="submit" style={{float:'right'}}value="Resend" onClick='/login'/>
+ 
+     
+            <div className="forg">
+                <a href="/ResendEmail" className="forg-left" style={{float:'right'}}>
+                   Resend Email
+                </a>
+            </div>
+           
   
           </div>
          </div>
