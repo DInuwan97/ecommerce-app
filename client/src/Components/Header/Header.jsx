@@ -48,13 +48,13 @@ export class Header extends Component {
 		<div class="dropdown">
   <button style={{backgroundColor:'0',textDecoration:'none',marginTop:8,fontSize:16}} className="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
   <i className="fa fa-user" aria-hidden="true" style={{marginRight:5}}></i>
-    Hello Username
+    Hello Dinuwan
     <span style={{marginLeft:5}} className="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
+    <li><a href="#">My Profile</a></li>
+    <li><a href="#">Security Policies</a></li>
+    <li><a href="#">Privacy Change</a></li>
     <li role="separator" class="divider"></li>
     <li><a 
  onClick={this.logOut.bind(this)} href="#">Logout</a></li>
