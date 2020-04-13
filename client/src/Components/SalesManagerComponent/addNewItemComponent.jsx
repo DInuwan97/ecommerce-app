@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import swal from "sweetalert";
 import axios from "axios";
 export default class addNewItemComponent extends Component {
   constructor() {
@@ -37,6 +38,14 @@ export default class addNewItemComponent extends Component {
       .catch(function (error) {
         console.log(error);
       });
+
+    this.setState({
+      itemName: "",
+      price: 0,
+      Brand: "",
+      category: "",
+      stockQuantity: 0,
+    });
   };
 
   render() {
@@ -108,7 +117,18 @@ export default class addNewItemComponent extends Component {
               onChange={this.onChange}
             />
           </div>
-          <button type="submit" class="btn btn-primary">
+          <button
+            type="submit"
+            class="btn btn-primary btn-block btn-lg "
+            onClick={() =>
+              swal({
+                title: "THANK YOU",
+                text: "ITEM ADDED SUCESSFULLY",
+                icon: "success",
+                button: "OKAY",
+              })
+            }
+          >
             Submit
           </button>
         </form>
