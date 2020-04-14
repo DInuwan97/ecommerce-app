@@ -11,7 +11,6 @@ export default class categoryForm extends Component {
 
     this.onChange = this.onChange.bind(this);
   }
-
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -22,7 +21,7 @@ export default class categoryForm extends Component {
         axios.post('/api/category',{
             categoryName : this.state.categoryName,
             genderType : this.state.genderType,
-            code : this.state.genderType
+            code : this.state.code
         }).then((res) => {
             console.log(res);
             console.log(res.data);
@@ -37,7 +36,7 @@ export default class categoryForm extends Component {
       <div className="container">
         <form onSubmit={this.onSubmitHandler}>
           <div class="form-group">
-            <label>Item Name</label>
+            <label>Category Name</label>
             <input
               type="text"
               class="form-control"
@@ -48,7 +47,7 @@ export default class categoryForm extends Component {
             />
           </div>
           <div class="form-group">
-            <label>Price</label>
+            <label>Gender</label>
             <input
               type="text"
               class="form-control"
