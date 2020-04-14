@@ -38,10 +38,10 @@ export const login = loggedUser =>{
     .then(res =>{
         
         localStorage.setItem('userLoginToken',res.data.token); //create the login session
-        localStorage.setItem('loggedUserFirstName',res.data.firstName);
+      //  localStorage.setItem('loggedUserFirstName',res.data.firstName);
 
         console.log("Fisrt Name :" +res.data.firstName)
-        console.log("Login Token :" +res.data.token);
+        console.log("Login Token :" +localStorage.userLoginToken);
         console.log("SecurtyKeyStatus :" +res.data.secureKeyVerifyStatus);
 
         return res.data.token
