@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
+
 import DashbordCardPanel from '../DashbordCardPannel/DashobordCardPanel'
+import FlaotAreaChart from '../FloatDataSet/AreaChart';
+import PieChart from '../ChartJSDataset/PieChart';
+import DiectChat from '../DirectChat/DirectChat';
+import SalesGraph from '../SalesGraph/SalesGraph'
+
 export default class HeaderSideMenuFooter extends Component {
   render() {
     return (
@@ -690,13 +696,33 @@ export default class HeaderSideMenuFooter extends Component {
             
             <section className="content-header">
               <div className="container-fluid">
-
-
-
                     <DashbordCardPanel/>
-
+                    <FlaotAreaChart/> 
               </div>
             </section>
+
+            <section className="content">
+                <div className="container-fluid">
+                    <PieChart/>
+                </div>
+            </section>
+
+            <section className="content">
+                <div className="container-fluid">
+                    <DiectChat/>
+                </div>
+            </section>
+
+            
+            <section className="content">
+                <div className="container-fluid">
+                <SalesGraph/>
+                </div>
+            </section>
+
+
+           
+        
         
             
             <section className="content">
