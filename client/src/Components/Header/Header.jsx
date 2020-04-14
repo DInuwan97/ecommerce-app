@@ -191,7 +191,7 @@ export class Header extends Component {
 
                                     <div className="col-sm-4 w3l">
 										<a href="women.html">
-                                            <img src="assets/images/menu1.jpg" className="img-responsive" alt="" />
+                                            <img src={require('./assets/images/menu1.jpg')} className="img-responsive" alt="" />
                                         </a>
 									</div>
 
@@ -236,7 +236,7 @@ export class Header extends Component {
 
                                     <div className="col-sm-4 w3l">
                                         <a href="jewellery.html">
-                                            <img src="images/menu2.jpg" className="img-responsive" alt=""/>
+                                            <img src={require('./assets/images/menu2.jpg')} className="img-responsive" alt=""/>
                                         </a>
 									</div>
 
