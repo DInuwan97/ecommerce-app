@@ -74,6 +74,30 @@ export const login = loggedUser =>{
     })
 }
 
+export const resendEmail = resendEmail =>{
+    return axios
+    .post('api/users/resendEmail',{
+        email:resendEmail.email,
+    })
+    .then(res =>{
+
+            localStorage.setItem('usertoken',res.data.token); //create the session
+            console.log("Resend Email Data :" +res.data.token);
+            return res.data.token
+
+    })
+    .catch(err=>{
+        if(err.response.status === 404){
+            swal({
+                title: "Oops!!!",
+                text: "Invalid Email",
+                icon: "error",
+                button: "Back to Login",
+            })
+        }
+     
+    })
+}
 
 // export const verify = userVerification =>{
 //     return axios

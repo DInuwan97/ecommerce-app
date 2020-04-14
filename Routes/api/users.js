@@ -182,7 +182,7 @@ router.post("/resendEmail", (req, res) => {
   })
     .then(user => {
       if (!user) {
-        res.json({ message: "User Email is invalid" });
+        res.status(404).json({ message: "User Email is invalid" });
       } else {
         jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
           res.json({ token });
@@ -344,8 +344,8 @@ router.get("/profile", authenticateUser, (req, res) => {
 });
 
 
-router.get('/dinith',(req,res)=>{
-  res.json({'username':'ssdsdsdsdsd','password':'1233'})
+router.post('/confirmSalesServicer', authenticateUser,(req,res)=>{
+  
 })
 
 
