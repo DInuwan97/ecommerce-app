@@ -7,7 +7,8 @@ const Category = require("../../models/Category");
 
 //get all categories in the store
 //private access, only for admin
-router.get("/", authAdminManager, async (req, res) => {
+//authAdminManager,
+router.get("/",  async (req, res) => {
   try {
     const categories = await Category.find();
     if (!categories) {
