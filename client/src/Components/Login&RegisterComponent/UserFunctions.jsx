@@ -25,6 +25,14 @@ export const register = newUser =>{
     })
     .catch(err =>{
         console.log(err)
+        if(err.response.status === 400){
+            swal({
+                title: "Oops!!!",
+                text: "User Email Already Exists",
+                icon: "error",
+                button: "Back to Login",
+            })
+        }
     });
 }
 
