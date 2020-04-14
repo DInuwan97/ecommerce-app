@@ -56,9 +56,6 @@ export class Header extends Component {
 		   console.log('Decoded token is : ' ,decoded)
 		}
 		
-			
-		
-
 	}
 
 	render(){

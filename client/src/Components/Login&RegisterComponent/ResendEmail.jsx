@@ -1,15 +1,45 @@
 import React, { Component } from 'react'
+import {resendEmail} from './UserFunctions';
 
 export default class ResendEmail extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            email:''
+        }
+    }
+
+    onChangeHandler = e => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    onSubmitHandler = e =>{
+        e.preventDefault()
+
+        const frmData = {
+            email : this.state.email
+        }
+
+        resendEmail(frmData)
+        .then(res =>{
+            if(res){
+              window.location.replace('/verifysecurecode');
+            }
+        })
+
+    }
+
+
     render() {
         return (
             <div className="login">
         <div className="main-agileits">
           <div className="form-w3agile">
             <h3>Enter Your Email</h3>
-  
-  
-          <form onSubmit={this.onSubmitHandler}>
+
   
             <div className="key">
                 <i className="fa fa-shield" aria-hidden="true"></i>
@@ -23,7 +53,7 @@ export default class ResendEmail extends Component {
                 <div className="clearfix"></div>
             </div>
   
-            <input type="submit" value="Resned" />
+            <input type="submit" value="Resned" onClick={this.onSubmitHandler} />
 
             <div className="forg">
                 <a href="/login" className="forg-left" style={{float:'right'}}>
@@ -31,7 +61,7 @@ export default class ResendEmail extends Component {
                 </a>
             </div>
   
-            </form>
+         
   
           </div>
          </div>
