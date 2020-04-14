@@ -1,32 +1,49 @@
 import React, { Component } from 'react';
 import {Link,withRouter} from 'react-router-dom';
 
-//import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode'
 //import { decode } from 'punycode';
 
 
 export class Header extends Component {
 
-	constructor(){
-		super()
+	constructor(props){
+		super(props)
 		this.state ={
 			 firstName: '',
-			 lastName: ''
+			 lastName: '',
+			 email:''
 		}
-		this.setState({
-			firstName:localStorage.loggedUserFirstName,
-		})
+
+		console.log('localstorage login token :' ,localStorage.userLoginToken);
+
+		const redirectForm = this.props.location.redirectForm;
+		if(redirectForm == 'login'){
+			window.location.reload();
+		}
+		
 	
 	}
-
- 
 
 	logOut(e){
 		e.preventDefault()
 		localStorage.removeItem('userLoginToken');
-
-		localStorage.removeItem('loggedUserFirstName');
 		this.props.history.push('/login')
+	}
+
+	componentDidMount(){
+
+		if(localStorage.getItem("userLoginToken") !== null){
+			const token = localStorage.userLoginToken;
+			const decoded = jwt_decode(token);
+			this.setState({
+				firstName:decoded.firstName,
+				email:decoded.email
+			})
+
+			console.log('Decoded token is : ' ,decoded.firstName)
+		}
+
 	}
 
 	render(){
@@ -48,7 +65,7 @@ export class Header extends Component {
 		<div class="dropdown">
   <button style={{backgroundColor:'0',textDecoration:'none',marginTop:8,fontSize:16}} className="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
   <i className="fa fa-user" aria-hidden="true" style={{marginRight:5}}></i>
-    Hello Dinuwan
+    Hello {this.state.firstName}
     <span style={{marginLeft:5}} className="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
