@@ -1,12 +1,74 @@
 import React, { Component } from 'react';
 
-import DashbordCardPanel from '../DashbordCardPannel/DashobordCardPanel'
-import FlaotAreaChart from '../FloatDataSet/AreaChart';
-import PieChart from '../ChartJSDataset/PieChart';
-import DiectChat from '../DirectChat/DirectChat';
-import SalesGraph from '../SalesGraph/SalesGraph'
+import jwt_decode from 'jwt-decode'
+import HomePage from '../AdminOrientation/HomePage';
 
 export default class HeaderSideMenuFooter extends Component {
+
+  constructor(props){
+    super(props)
+
+    if(localStorage.getItem("userLoginToken") === null){
+      window.location.replace('/login');
+    }
+
+		this.state ={
+			 firstName: '',
+			 lastName: '',
+			 email:'',
+			 mobile:'',
+			 isAdmin:false,
+			 isCustomer:false,
+			 isSalesManager:false,
+			 isSalesServicer:false
+		}
+
+    console.log('localstorage login token :' ,localStorage.userLoginToken);
+    
+ 
+		const redirectForm = this.props.location.redirectForm;
+		if(redirectForm == '/'){
+			window.location.reload(true); 
+		}
+
+		
+		///window.location.reload(true); 
+	
+	}
+
+	logOut(e){
+		e.preventDefault()
+		localStorage.removeItem('userLoginToken');
+		this.props.history.push('/login')
+	}
+
+	componentDidMount(){
+
+		if(localStorage.getItem("userLoginToken") !== null){
+			const token = localStorage.userLoginToken;
+			const decoded = jwt_decode(token);
+			this.setState({
+				firstName:decoded.firstName,
+				lastName:decoded.lastName,
+				email:decoded.email,
+				mobile:decoded.mobile,
+				isAdmin:decoded.isAdmin,
+				isCustomer:decoded.isCustomer,
+				isSalesManager:decoded.isSalesManager,
+				isSalesServicer:decoded.isSalesServicer
+		   })
+		   console.log('Decoded token is : ' ,decoded)
+    }
+    
+    if(this.state.isCustomer === true){
+      window.location.replace('/login');
+    }
+		
+	}
+
+
+
+
   render() {
     return (
 
@@ -42,57 +104,27 @@ export default class HeaderSideMenuFooter extends Component {
             <ul className="navbar-nav ml-auto">
              
               <li className="nav-item dropdown">
-                <a className="nav-link" data-toggle="dropdown" href="#">
-                  <i className="far fa-comments"></i>
+                {/* <a className="nav-link" data-toggle="dropdown" href="#">
+                    <i className="far fa-comments"></i>
                   <span className="badge badge-danger navbar-badge">3</span>
+                </a> */}
+
+                <a className="nav-link" data-toggle="dropdown" href="#">
+                  <span style={{fontStyle:'bold',marginRight:5}}>Welcome {this.state.firstName}</span><i className="far fa-user"></i>
+                  
                 </a>
+
                 <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                   <a href="#" className="dropdown-item">
-                    
-                    <div className="media">
-                      <img src="./dist/img/user1-128x128.jpg" alt="User Avatar" className="img-size-50 mr-3 img-circle"/>
-                      <div className="media-body">
-                        <h3 className="dropdown-item-title">
-                          Brad Diesel
-                          <span className="float-right text-sm text-danger"><i className="fas fa-star"></i></span>
-                        </h3>
-                        <p className="text-sm">Call me whenever you can...</p>
-                        <p className="text-sm text-muted"><i className="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                      </div>
-                    </div>
-                   
+                        <i className="fas fa-envelope mr-2"></i> My Profile
                   </a>
                   <div className="dropdown-divider"></div>
                   <a href="#" className="dropdown-item">
-                   
-                    <div className="media">
-                      <img src="./dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3"/>
-                      <div className="media-body">
-                        <h3 className="dropdown-item-title">
-                          John Pierce
-                          <span className="float-right text-sm text-muted"><i className="fas fa-star"></i></span>
-                        </h3>
-                        <p className="text-sm">I got your message bro</p>
-                        <p className="text-sm text-muted"><i className="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                      </div>
-                    </div>
-                  
+                        <i className="fas fa-settings"></i> Settings
                   </a>
                   <div className="dropdown-divider"></div>
-                  <a href="#" className="dropdown-item">
-                   
-                    <div className="media">
-                      <img src="./dist/img/user3-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3"/>
-                      <div className="media-body">
-                        <h3 className="dropdown-item-title">
-                          Nora Silvester
-                          <span className="float-right text-sm text-warning"><i className="fas fa-star"></i></span>
-                        </h3>
-                        <p className="text-sm">The subject goes here</p>
-                        <p className="text-sm text-muted"><i className="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                      </div>
-                    </div>
-                   
+                  <a href="#" className="dropdown-item"  onClick={this.logOut.bind(this)}>
+                        <i className="fas fa-settings"></i> Logout
                   </a>
                   <div className="dropdown-divider"></div>
                   <a href="#" className="dropdown-item dropdown-footer">See All Messages</a>
@@ -152,7 +184,7 @@ export default class HeaderSideMenuFooter extends Component {
                   <img src="./dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image"/>
                 </div>
                 <div className="info">
-                  <a href="#" className="d-block">Alexander Pierce</a>
+                  <a href="#" className="d-block">{this.state.firstName}{' '}{this.state.lastName}</a>
                 </div>
               </div>
         
@@ -694,38 +726,14 @@ export default class HeaderSideMenuFooter extends Component {
         
           <div className="content-wrapper">
             
-            <section className="content-header">
-              <div className="container-fluid">
-                    <DashbordCardPanel/>
-                    <FlaotAreaChart/> 
-              </div>
-            </section>
-
-            <section className="content">
-                <div className="container-fluid">
-                    <PieChart/>
-                </div>
-            </section>
-
-            <section className="content">
-                <div className="container-fluid">
-                    <DiectChat/>
-                </div>
-            </section>
-
-            
-            <section className="content">
-                <div className="container-fluid">
-                <SalesGraph/>
-                </div>
-            </section>
+ 
 
 
-           
+           <HomePage/>
         
         
             
-            <section className="content">
+            {/* <section className="content">
         
               
               <div className="card">
@@ -749,12 +757,10 @@ export default class HeaderSideMenuFooter extends Component {
                 
               </div>
 
-
-
-              
-             
-            </section>
+            </section> */}
             
+
+
           </div>
         
         

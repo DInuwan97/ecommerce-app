@@ -21,6 +21,8 @@ import ProductCardList from './Components/ProductsListCard/ProductListCard';
 import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 
 function App() {
+
+  console.log('Client Token : ' ,localStorage.userLoginToken)
   return (
     <Router>
       <div className="App">

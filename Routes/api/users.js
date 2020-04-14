@@ -111,7 +111,7 @@ router.post("/register", (req, res) => {
             });
         });
       } else {
-        res.json({ message: "User already registered" });
+        res.status(400).json({ message: "User already registered" });
       }
     })
     .catch(err => {
