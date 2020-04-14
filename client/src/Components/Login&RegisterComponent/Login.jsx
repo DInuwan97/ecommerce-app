@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {login} from './UserFunctions';
+import { browserHistory } from 'react-router';
 
 export default class Login extends Component {
 
@@ -41,7 +42,7 @@ export default class Login extends Component {
     login(frmData)
     .then(res =>{
         if(res){
-            this.props.history.push(`/`)
+          window.location.replace('/');
         }
     })
 
