@@ -211,7 +211,12 @@ router.post("/login", (req, res) => {
               _id:user._id,
               firstName:user.firstName,
               lastName:user.lastName,
-              email:user.email
+              email:user.email,
+              mobile:user.mobile,
+              isAdmin:user.isAdmin,
+              isCustomer:user.isCustomer,
+              isSalesManager:user.isSalesManager,
+              isSalesServicer:user.isSalesServicer
           }
 
             jwt.sign(

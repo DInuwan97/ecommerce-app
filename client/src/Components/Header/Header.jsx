@@ -12,16 +12,23 @@ export class Header extends Component {
 		this.state ={
 			 firstName: '',
 			 lastName: '',
-			 email:''
+			 email:'',
+			 mobile:'',
+			 isAdmin:false,
+			 isCustomer:false,
+			 isSalesManager:false,
+			 isSalesServicer:false
 		}
 
 		console.log('localstorage login token :' ,localStorage.userLoginToken);
 
 		const redirectForm = this.props.location.redirectForm;
-		if(redirectForm == 'login'){
-			window.location.reload();
+		if(redirectForm == '/'){
+			window.location.reload(true); 
 		}
+
 		
+		///window.location.reload(true); 
 	
 	}
 
@@ -38,11 +45,19 @@ export class Header extends Component {
 			const decoded = jwt_decode(token);
 			this.setState({
 				firstName:decoded.firstName,
-				email:decoded.email
-			})
-
-			console.log('Decoded token is : ' ,decoded.firstName)
+				lastName:decoded.lastName,
+				email:decoded.email,
+				mobile:decoded.mobile,
+				isAdmin:decoded.isAdmin,
+				isCustomer:decoded.isCustomer,
+				isSalesManager:decoded.isSalesManager,
+				isSalesServicer:decoded.isSalesServicer
+		   })
+		   console.log('Decoded token is : ' ,decoded)
 		}
+		
+			
+		
 
 	}
 
