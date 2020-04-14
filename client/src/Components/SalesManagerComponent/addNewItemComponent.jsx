@@ -20,7 +20,7 @@ export default class addNewItemComponent extends Component {
       [e.target.name]: e.target.value,
     });
   };
-
+  
   onSubmitHandler = (e) => {
     e.preventDefault();
 

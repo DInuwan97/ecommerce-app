@@ -32,12 +32,13 @@ router.post(
       .not()
       .isEmpty(),
     check("categoryName", "Should not have Numeric values").isString(),
-    check("genderType", "Gender type is required").isEmpty()
+    check("genderType", "Gender type is required").not()
+    .isEmpty()
   ],
   async (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      return res.status(400).json({ error: error.array() });
+     return res.status(400).json({ error: error.array() });
     }
     const { categoryName, genderType, code } = req.body;
 
@@ -47,7 +48,7 @@ router.post(
       });
       console.log(checkCategoryExist);
       if (checkCategoryExist != null) {
-        return res.status(400).json({ msg: "Category already exist" });
+       return res.status(400).json({ msg: "Category already exist" });
       }
 
       const newCategory = new Category({
@@ -76,7 +77,8 @@ router.put(
       .not()
       .isEmpty(),
     check("categoryName", "Should not have Numeric values").isString(),
-    check("genderType", "Gender type is required").isEmpty()
+    check("genderType", "Gender type is required").not()
+    .isEmpty()
   ],
   async (req, res) => {
     const { categoryName, genderType, code } = req.body;

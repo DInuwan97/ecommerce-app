@@ -1,3 +1,3 @@
 module.exports = {
-    mongoURI : 'mongodb://localhost:27017/af_project'
+    mongoURI : 'mongodb+srv://afBionics:af123@applicationframeworkcluster-emqau.mongodb.net/test?retryWrites=true&w=majority'
 };
