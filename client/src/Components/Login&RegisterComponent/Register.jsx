@@ -129,7 +129,7 @@ export default class Register extends Component {
 
 
 
-            { (this.state.userType === 'SalesManager') &&
+            { ((this.state.userType === 'SalesManager') || (this.state.userType === 'Admin') ) &&
 
             <div>         
             <div className="key">
