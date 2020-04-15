@@ -9,9 +9,7 @@ export default class HeaderSideMenuFooter extends Component {
   constructor(props){
     super(props)
 
-    if(localStorage.getItem("userLoginToken") === null){
-      window.location.replace('/login');
-    }
+
 
 		this.state ={
 			 firstName: '',
@@ -25,14 +23,7 @@ export default class HeaderSideMenuFooter extends Component {
 		}
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
-    
- 
-		const redirectForm = this.props.location.redirectForm;
-		if(redirectForm == '/'){
-			window.location.reload(true); 
-		}
 
-		
 		///window.location.reload(true); 
 	
 	}
@@ -62,7 +53,7 @@ export default class HeaderSideMenuFooter extends Component {
     }
     
     if(this.state.isCustomer === true){
-      window.location.replace('/login');
+      //window.location.replace('/login');
     }
 		
 	}
@@ -724,19 +715,22 @@ export default class HeaderSideMenuFooter extends Component {
           
           </aside>
         
-          {/* <Router> */}
-          <div className="content-wrapper">
+            <Router> 
+           <div className="content-wrapper">
             
-            {/* <Route path = "/"  exact component={HeaderSideMenuFooter}/>
-            <Route path = "/UserList" component={UserListpage}/> */}
             <section className="content-header">
               <div className="container-fluid">
-                  <UserListpage/>
-                  </div>
+
+
+               <Route path = '/users' component = {UserListpage}/>
+               <Route path ='/home' component= {HomePage}/>
+               
+
+              </div>
             </section>
 
-          </div>
-          {/* </Router> */}
+           </div>
+          </Router>  
         
           <footer className="main-footer">
             <div className="float-right d-none d-sm-block">
@@ -746,10 +740,7 @@ export default class HeaderSideMenuFooter extends Component {
             reserved.
           </footer>
         
-         
-          <aside className="control-sidebar control-sidebar-dark">
-          
-          </aside>
+       
          
         </div>
         

@@ -12,7 +12,7 @@ export default class Header extends Component {
         super(props)
     
         if(localStorage.getItem("userLoginToken") === null){
-          window.location.replace('/login');
+         // window.location.replace('/login');
         }
     
             this.state ={
@@ -27,8 +27,8 @@ export default class Header extends Component {
             }
     
         console.log('localstorage login token :' ,localStorage.userLoginToken);
-        
-     
+    
+    
             
             ///window.location.reload(true); 
         

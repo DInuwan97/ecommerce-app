@@ -3,9 +3,6 @@ import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
 import Login from './components/LoginRegister/Login';
 import HeaderSideMenuFooter from './components/HeaderSideMenuFooter/HeaderSideMenuFooter';
 
-import Header from './components/HeaderSideMenuFooter/Header';
-import Footer from './components/HeaderSideMenuFooter/Footer';
-
 function App() {
 
   console.log('Admin Token : ' ,localStorage.userLoginToken)
@@ -13,14 +10,13 @@ function App() {
     <Router>
     <div className="App">
 
-        <Header/>
-        
-        <Route path = "/login" component={Login}/>
-        
+ 
 
-        <Footer/>
-      
+
+      <HeaderSideMenuFooter/>  
+     <Route path = "/login" component={Login} />
   
+
     </div>
     </Router>
   );
