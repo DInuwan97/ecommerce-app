@@ -9,9 +9,14 @@ function App() {
   return (
     <Router>
     <div className="App">
-      
-        <Route path = "/"  exact component={HeaderSideMenuFooter}/>
-        <Route path = "/login" component={Login}/>
+
+ 
+
+
+      <HeaderSideMenuFooter/>  
+     <Route path = "/login" component={Login} />
+  
+
     </div>
     </Router>
   );

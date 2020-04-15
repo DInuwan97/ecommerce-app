@@ -29,6 +29,10 @@
     <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+    <!-- data tables -->
+    <link rel="stylesheet" href="./plugins/datatables-bs4/css/dataTables.bootstrap4.css">
     
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -599,6 +603,25 @@
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 
+
+<!-- data tables -->
+<script src="./plugins/datatables/jquery.dataTables.js"></script>
+<script src="./plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable();
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+    });
+  });
+</script>
 
   </body>
 </html>

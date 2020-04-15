@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-
+import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
+import UserListpage from '../AdminOrientation/UserListPage';
 
 export default class HeaderSideMenuFooter extends Component {
 
   constructor(props){
     super(props)
 
-    if(localStorage.getItem("userLoginToken") === null){
-      window.location.replace('/login');
-    }
+
 
 		this.state ={
 			 firstName: '',
@@ -24,14 +23,7 @@ export default class HeaderSideMenuFooter extends Component {
 		}
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
-    
- 
-		const redirectForm = this.props.location.redirectForm;
-		if(redirectForm == '/'){
-			window.location.reload(true); 
-		}
 
-		
 		///window.location.reload(true); 
 	
 	}
@@ -61,7 +53,7 @@ export default class HeaderSideMenuFooter extends Component {
     }
     
     if(this.state.isCustomer === true){
-      window.location.replace('/login');
+      //window.location.replace('/login');
     }
 		
 	}
@@ -723,46 +715,22 @@ export default class HeaderSideMenuFooter extends Component {
           
           </aside>
         
-        
-          <div className="content-wrapper">
+            <Router> 
+           <div className="content-wrapper">
             
- 
+            <section className="content-header">
+              <div className="container-fluid">
 
 
-           <HomePage/>
-        
-        
-            
-            {/* <section className="content">
-        
-              
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Title</h3>
-        
-                  <div className="card-tools">
-                    <button type="button" className="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                      <i className="fas fa-minus"></i></button>
-                    <button type="button" className="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
-                      <i className="fas fa-times"></i></button>
-                  </div>
-                </div>
-                <div className="card-body">
-                  Start creating your amazing application!
-                </div>
+               <Route path = '/users' component = {UserListpage}/>
+               <Route path ='/home' component= {HomePage}/>
                
-                <div className="card-footer">
-                  Footer
-                </div>
-                
+
               </div>
+            </section>
 
-            </section> */}
-            
-
-
-          </div>
-        
+           </div>
+          </Router>  
         
           <footer className="main-footer">
             <div className="float-right d-none d-sm-block">
@@ -772,10 +740,7 @@ export default class HeaderSideMenuFooter extends Component {
             reserved.
           </footer>
         
-         
-          <aside className="control-sidebar control-sidebar-dark">
-          
-          </aside>
+       
          
         </div>
         
