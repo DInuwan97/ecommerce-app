@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import swal from "sweetalert";
-export default function CategoryForm({ addCategory }) {
+export default function CategoryForm({ addCategory,updatingCategory }) {
   const [category, setCategory] = useState({});
 
   const onChange = (e) => {
     setCategory({ ...category, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(category);
     addCategory(category);
   };
+
+  
   return (
     <div className="container">
       <h1 className="text-center">ADD NEW CATEGORY</h1>
