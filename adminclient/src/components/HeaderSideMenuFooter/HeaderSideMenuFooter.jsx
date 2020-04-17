@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
+import AdminItemApprove from '../AdminItemApprove/AdminItemApprove'
 import UserListpage from '../AdminOrientation/UserListPage';
 
 export default class HeaderSideMenuFooter extends Component {
@@ -724,6 +725,8 @@ export default class HeaderSideMenuFooter extends Component {
 
                <Route path = '/users' component = {UserListpage}/>
                <Route path ='/home' component= {HomePage}/>
+               <Route path ='/itemApprove' component= {AdminItemApprove}/>
+
                
 
               </div>
