@@ -115,10 +115,10 @@ router.put(
 //delete request
 //private access
 //deleting a category
-router.delete("/", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const checkCategoryExist = await Category.findOne({
-      categoryName: req.body.categoryName
+      _id: req.params.id
     });
     console.log(checkCategoryExist);
     if (!checkCategoryExist) {

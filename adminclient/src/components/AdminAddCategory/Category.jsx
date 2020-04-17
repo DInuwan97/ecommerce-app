@@ -7,6 +7,7 @@ export default class Category extends Component {
     super(props);
     this.state = {
       category: [],
+      updatingCategory: {},
     };
   }
 
@@ -21,6 +22,7 @@ export default class Category extends Component {
     console.log(this.state.category);
   }
 
+  //adding a new category
   addCategory = (category) => {
     this.setState({ category: [...this.state.category, category] });
     axios
@@ -38,11 +40,42 @@ export default class Category extends Component {
       });
   };
 
+  //deleting a category
+  deleteCategory = (id) => {
+    this.setState({
+      category: [...this.state.category.filter((cat) => cat._id !== id)],
+    });
+    axios.delete(`/api/category/${id}`).then((res) => {
+      console.log(res);
+      console.log(res.data);
+    });
+  };
+
+  //updating
+  updateCategory = (id) => {
+    this.setState({
+      updatingCategory: {
+        categoryName: "newCategory",
+        genderType: "Male",
+        code: "NM19",
+      },
+    });
+  };
+
   render() {
     return (
       <div className="container">
-        <CategoryForm addCategory={this.addCategory} />
-        <CategoryTable categories={this.state.category} />
+        <CategoryForm
+          addCategory={this.addCategory}
+          updateCategory={this.updateCategory}
+          updatingCategory = {this.state.updatingCategory}
+        
+        />
+        <CategoryTable
+          categories={this.state.category}
+          deleteCategory={this.deleteCategory}
+          updateCategory={this.updateCategory}
+        />
       </div>
     );
   }
