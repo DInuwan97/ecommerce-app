@@ -5,6 +5,7 @@ import HomePage from '../AdminOrientation/HomePage';
 import AdminItemApprove from '../AdminItemApprove/AdminItemApprove'
 import Category from '../AdminAddCategory/Category'
 import UserListpage from '../AdminOrientation/UserListPage';
+import SalesServicersList from '../AdminOrientation/SalesServicersApproveList';
 
 export default class HeaderSideMenuFooter extends Component {
 
@@ -731,10 +732,13 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
+
                <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company}/>} />
                <Route path ='/home' component= {HomePage}/>
                <Route path ='/itemApprove' component= {AdminItemApprove}/>
                <Route path ='/addCategory' component= {Category}/>
+               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
+
 
               </div>
             </section>

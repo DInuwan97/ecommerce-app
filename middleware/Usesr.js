@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const User = require('../models/User');
 module.exports = {
   //middlewear 01
   authenticateUserSecureCode: (req, res, next) => {
@@ -60,6 +60,10 @@ module.exports = {
     });
   },
 
+
+
+
+  
   ///////////////////////////////////////////
 
   //dinuka
