@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ItemTable from "./ItemsTable/ItemTable";
-import CardList from './ItemApproveCardList/CardList'
+import CardList from "./ItemApproveCardList/CardList";
 import axios from "axios";
 export default class AdminItemApprove extends Component {
   constructor() {
@@ -48,7 +48,7 @@ export default class AdminItemApprove extends Component {
   render() {
     return (
       <div>
-        <CardList/>
+        <CardList />
         <ItemTable
           items={this.state.items}
           declineItem={this.declineItem}

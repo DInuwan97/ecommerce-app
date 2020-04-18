@@ -2,7 +2,33 @@ import React, { Component } from "react";
 import ItemTableRow from "./ItemTableRow";
 
 export default class ItemTable extends Component {
-  
+  getRow() {
+    return this.props.items.map(({
+      _id,
+      itemName,
+      price,
+      Brand,
+      category,
+      isApproved,
+      size,
+    }) => {
+      if (!isApproved)
+        return (
+          <ItemTableRow
+            
+            id={_id}
+            itemName={itemName}
+            price={price}
+            Brand={Brand}
+            size={size}
+            category={category}
+            declineItem = {this.props.declineItem}
+            approveItem = {this.props.approveItem}
+          />
+        );
+    });
+  }
+
   render() {
     const { declineItem, approveItem } = this.props;
     return (
@@ -26,36 +52,41 @@ export default class ItemTable extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.items.map(
-                ({
-                  _id,
-                  itemName,
-                  price,
-                  Brand,
-                  category,
-                  isApproved,
-                  size,
-                 
-                }) => {
-                  if (!isApproved)
-                    return (
-                      <ItemTableRow
-                        declineItem={declineItem}
-                        approveItem = {approveItem}
-                        id={_id}
-                        itemName={itemName}
-                        price={price}
-                        Brand={Brand}
-                        size={size}
-                        category={category}
-                      />
-                    );
-                }
-              )}
+              {this.getRow()}
+
             </tbody>
+            
           </table>
         </div>
       </div>
     );
   }
 }
+
+
+
+// {this.props.items.map(
+//   ({
+//     _id,
+//     itemName,
+//     price,
+//     Brand,
+//     category,
+//     isApproved,
+//     size,
+//   }) => {
+//     if (!isApproved)
+//       return (
+//         <ItemTableRow
+//           declineItem={declineItem}
+//           approveItem={approveItem}
+//           id={_id}
+//           itemName={itemName}
+//           price={price}
+//           Brand={Brand}
+//           size={size}
+//           category={category}
+//         />
+//       );
+//   }
+// )}

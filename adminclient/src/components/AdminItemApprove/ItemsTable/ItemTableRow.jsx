@@ -19,7 +19,7 @@ export default function ItemTableRow({
       <td>{size}</td>
       <td>{category}</td>
       <td>
-        <button
+       <button
           onClick={() =>
             swal({
               title: "Are you sure?",
@@ -37,9 +37,9 @@ export default function ItemTableRow({
               }
             })
           }
-          className="btn btn-warning"
+          className="btn btn-warning btn-md font-weight-bold"
         >
-          Approve This
+          <i class="fas fa-check-circle"></i> Approve
         </button>
       </td>
       <td>
@@ -61,9 +61,9 @@ export default function ItemTableRow({
               }
             })
           }
-          className="btn btn-danger"
+          className="btn btn-danger btn-md font-weight-bold"
         >
-          Decline This
+          <i class="fas fa-trash-alt"></i> Decline
         </button>
       </td>
     </tr>
