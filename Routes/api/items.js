@@ -294,52 +294,5 @@ router.patch("/:id", async (req, res) => {
   } catch (error) {}
 });
 
-/*TEST PURPOSEE */
-// router.post("/testEmail", async (req, res) => {
-//   try {
-//     console.log("hello world");
-//     //sending the email
-//     // let transporter = nodemailer.createTransport({
-//     //   host: "smtp.mailtrap.io",
-//     //   port: 2525,
-//     //   secure: false, // true for 465, false for other ports
-//     //   auth: {
-//     //     user: "	cd1d2b8d863288", // generated ethereal user
-//     //     pass: "41ff48f6db0ffa", // generated ethereal password
-//     //   },
-//     // });
-
-//     let transporter = nodemailer.createTransport({
-//       host: "smtp.mailtrap.io",
-//       port: 2525,
-//       auth: {
-//         user: "cd1d2b8d863288",
-//         pass: "41ff48f6db0ffa"
-//       }
-//     });
-
-//     // send mail with defined transport object
-//     let info = await transporter.sendMail({
-//       from: "dinukashameera0657@gmail.com", // sender address
-//       to: "dinukashameera0657@gmail.com", // list of receivers
-//       subject: "Hello ✔", // Subject line
-//       text: "Hello world?", // plain text body
-//       html: "<b>Hello world?</b>", // html body
-//     });
-
-//     transporter.sendMail(info, function (err, info) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log(info);
-//       }
-//     });
-
-//     res.send("send");
-//   } catch (error) {
-//     res.json(error)
-//     console.log(error)
-//   }
-// });
 
 module.exports = router;
