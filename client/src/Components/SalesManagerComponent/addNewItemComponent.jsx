@@ -9,6 +9,7 @@ export default class addNewItemComponent extends Component {
       price: 0,
       Brand: "",
       category: [],
+      selectedCategory : "",
       size: "",
       stockQuantity: 0,
     };
@@ -20,36 +21,40 @@ export default class addNewItemComponent extends Component {
       [e.target.name]: e.target.value,
     });
   };
-
+  // this.setState({ category: [...this.state.category, category] });
   componentDidMount() {
     axios.get(`/api/category`).then((res) => {
       const items = res.data;
-     console.log(items[0].categoryName)
-     this.setState({
-       category : items
-     });
-     console.log(this.state.category)
-      
+      console.log(items);
+      let categoryInfo = items.map(item => {
+        console.log(item)
+        return {categoryName : item.categoryName}
+      })
+      this.setState({
+        category: categoryInfo,
+      });
+     
     });
+    // this.displayCategory();
   }
 
-
-  displayCategory(){
-    return this.state.category.map(cat => {
-    return <option value={cat.categoryName}>{cat.categoryName}</option>
-    })
-  }
-
+  // displayCategory() {
+  //   return this.state.category.map((cat) => {
+  //     return <option value={cat.categoryName}>{cat.categoryName}</option>;
+  //   });
+  // }
 
   onSubmitHandler = (e) => {
     e.preventDefault();
+    console.log(this.state.selectedCategory)
+    console.log(this.state)
 
     axios
       .post("/api/items", {
         itemName: this.state.itemName,
         price: this.state.price,
         Brand: this.state.Brand,
-        category: this.state.category,
+        category: this.state.selectedCategory,
         size: this.state.size,
         stockQuantity: this.state.stockQuantity,
       })
@@ -65,7 +70,7 @@ export default class addNewItemComponent extends Component {
       itemName: "",
       price: 0,
       Brand: "",
-      category: "",
+
       size: "",
       stockQuantity: 0,
     });
@@ -110,13 +115,11 @@ export default class addNewItemComponent extends Component {
                   style={{ height: 40 }}
                   name="category"
                   required=""
-                  onChange={this.onChange}
-                >{this.displayCategory()}
-                   {/* <option value="">Category Type</option>
-                  <option value="BRONZE">BRONZE</option>
-                  <option value="SILVER">SILVER</option>
-                  <option value="GOLD">GOLD</option>
-                  <option value="PLATINUM">PLATINUM</option> */}
+                  onChange={e => this.setState({selectedCategory : e.target.value})}
+                >
+                 {this.state.category.map(cat => (
+                   <option value = {cat.categoryName}>{cat.categoryName}</option>
+                 ))}
                 </select>
 
                 <div className="clearfix"></div>

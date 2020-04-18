@@ -75,17 +75,7 @@ router.post(
       rating,
     } = req.body;
 
-    if (
-      !(
-        category == "BRONZE" ||
-        category == "SILVER" ||
-        category == "GOLD" ||
-        category == "PLATINUM"
-      )
-    ) {
-      return res.status(400).json({ msg: "Not a Valid Category" });
-    }
-
+   
     const checkItemExist = await Item.findOne({ itemName });
     let result = null;
     let newItem = null;
@@ -290,9 +280,8 @@ router.patch("/:id", async (req, res) => {
       }
     });
 
-    res.json(checkItemExits)
+    res.json(checkItemExits);
   } catch (error) {}
 });
-
 
 module.exports = router;
