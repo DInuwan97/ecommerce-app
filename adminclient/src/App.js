@@ -10,11 +10,17 @@ function App() {
     <Router>
     <div className="App">
 
- 
+
+    <Route path = "/login" component={Login} />
+    <HeaderSideMenuFooter/>  
+    
 
 
-      <HeaderSideMenuFooter/>  
-     <Route path = "/login" component={Login} />
+
+
+    
+     
+     
   
 
     </div>
