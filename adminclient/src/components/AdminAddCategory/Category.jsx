@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CardList from './CategoryCardList'
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
 import axios from "axios";
@@ -65,6 +66,7 @@ export default class Category extends Component {
   render() {
     return (
       <div className="container">
+        <CardList categoryList = {this.state.category}/>
         <CategoryForm
           addCategory={this.addCategory}
           updateCategory={this.updateCategory}
