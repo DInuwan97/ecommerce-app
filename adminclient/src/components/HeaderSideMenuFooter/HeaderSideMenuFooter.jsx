@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
+import AdminItemApprove from '../AdminItemApprove/AdminItemApprove'
+import Category from '../AdminAddCategory/Category'
 import UserListpage from '../AdminOrientation/UserListPage';
 
 export default class HeaderSideMenuFooter extends Component {
@@ -721,10 +723,19 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-                <Switch>
-                  <Route path = '/users' component = {UserListpage}/>
-                 <Route path ="/home" component= {HomePage}/>
-               </Switch>
+
+         
+        
+
+
+               <Route path = '/users' component = {UserListpage}/>
+               <Route path ='/home' component= {HomePage}/>
+               <Route path ='/itemApprove' component= {AdminItemApprove}/>
+               <Route path ='/addCategory' component= {Category}/>
+
+
+               
+
 
               </div>
             </section>
