@@ -5,7 +5,6 @@ import swal from 'sweetalert';
 export default class UserListFunctions extends Component {
 
 
-
     constructor(props) {
         super(props);
         this.state = {
@@ -55,8 +54,11 @@ export default class UserListFunctions extends Component {
       };
       
     render() {
+
+        const { companyName } = this.props;
+        console.log('Logged user Company is : ',companyName);
         return (
-           <UserList users={this.state.userList} approveSalesManagerRequest = {this.approveSalesManagerRequest}/>
+           <UserList users={this.state.userList} approveSalesManagerRequest = {this.approveSalesManagerRequest} companyName={companyName}/>
         )
     }
 }

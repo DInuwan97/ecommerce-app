@@ -731,19 +731,10 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-
-         
-      
-
-
-               <Route path = '/salesManagerapprove' component = {UserListpage}/>
+               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company}/>} />
                <Route path ='/home' component= {HomePage}/>
                <Route path ='/itemApprove' component= {AdminItemApprove}/>
                <Route path ='/addCategory' component= {Category}/>
-
-
-               
-
 
               </div>
             </section>

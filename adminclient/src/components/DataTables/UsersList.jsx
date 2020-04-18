@@ -6,7 +6,7 @@ export default class UsersList extends Component {
 
 
     render() {
-      const { approveSalesManagerRequest } = this.props;
+      const { approveSalesManagerRequest,companyName } = this.props;
         return (
             <div className="card">
             <div className="card-header">
@@ -46,7 +46,7 @@ export default class UsersList extends Component {
                   packageName
                  }) => {
                    if((isSalesManager) && (secureKeyVerifyStatus) && (!adminVerification)){
-                
+                          //  if(company === companyName){
                    return(
                     <UserListDataRow
                       id={_id}
@@ -67,6 +67,7 @@ export default class UsersList extends Component {
                       approveSalesManagerRequest = {approveSalesManagerRequest}
                     />
                    )
+                            //}
                    }
                  }
               )}
