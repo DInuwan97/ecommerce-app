@@ -22,7 +22,10 @@ export default class HeaderSideMenuFooter extends Component {
 			 isCustomer:false,
 			 isSalesManager:false,
 			 isSalesServicer:false
-		}
+    }
+    
+ 
+		
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
 
@@ -57,7 +60,8 @@ export default class HeaderSideMenuFooter extends Component {
     if(this.state.isCustomer === true){
       //window.location.replace('/login');
     }
-		
+
+
 	}
 
 
@@ -725,7 +729,7 @@ export default class HeaderSideMenuFooter extends Component {
 
 
          
-        
+      
 
 
                <Route path = '/users' component = {UserListpage}/>

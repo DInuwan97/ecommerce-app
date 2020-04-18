@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 
+import UserListDataRow from './UserListDataRow';
+
 export default class UsersList extends Component {
     render() {
+
+      
+
         return (
             <div className="card">
             <div className="card-header">
@@ -12,59 +17,59 @@ export default class UsersList extends Component {
               <table id="example1" className="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Rendering engine</th>
-                  <th>Browser</th>
-                  <th>Platform(s)</th>
-                  <th>Engine version</th>
-                  <th>CSS grade</th>
+                  <th>Username</th>
+                  <th>Company</th>
+                  <th>email</th>
+                  <th>Mobile</th>
+                  <th>Package</th>
+                  <th>Verification</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 6
-                  </td>
-                  <td>Win 98+</td>
-                  <td>6</td>
-                  <td>A</td>
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Firefox 2.0</td>
-                  <td>Win 98+ / OSX.2+</td>
-                  <td>1.8</td>
-                  <td>A</td>
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Firefox 3.0</td>
-                  <td>Win 2k+ / OSX.3+</td>
-                  <td>1.9</td>
-                  <td>A</td>
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Mozilla 1.1</td>
-                  <td>Win 95+ / OSX.1+</td>
-                  <td>1.1</td>
-                  <td>A</td>
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Mozilla 1.2</td>
-                  <td>Win 95+ / OSX.1+</td>
-                  <td>1.2</td>
-                  <td>A</td>
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Mozilla 1.3</td>
-                  <td>Win 95+ / OSX.1+</td>
-                  <td>1.3</td>
-                  <td>A</td>
-                </tr>
-    
+               
+                {this.props.users.map(
+                ({ 
+                  _id,
+                  firstName,
+                  lastName,
+                  email,
+                  mobile,
+                  isAdmin,
+                  isSalesManager,
+                  isSalesServicer,
+                  isCustomer,
+                  salasManagerVerification,
+                  adminVerification,
+                  secureKeyVerifyStatus,
+                  company,
+                  packageName
+                 }) => {
+                   if((isSalesManager) && (secureKeyVerifyStatus))
+                   return(
+                    <UserListDataRow
+                      id={_id}
+                      firstName={firstName}
+                      lastName={lastName}
+                      email={email}
+                      mobile={mobile}
+                      key={_id}
+                      isAdmin = {isAdmin}
+                      isSalesManager= {isSalesManager}
+                      isSalesServicer = {isSalesServicer}
+                      isCustomer = {isCustomer}
+                      salasManagerVerification = {salasManagerVerification}
+                      secureKeyVerifyStatus = {secureKeyVerifyStatus}
+                      adminVerification = {adminVerification}
+                      company = {company}
+                      packageName = {packageName}
+                    />
+                   )
+                 }
+              )}
+
+
+                      
 
                 </tbody>
 

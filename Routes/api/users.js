@@ -344,8 +344,20 @@ router.get("/profile", authenticateUser, (req, res) => {
 });
 
 
-router.post('/confirmSalesServicer', authenticateUser,(req,res)=>{
-  
+//have to authorixation middleweare
+
+router.get('/viewusers', authenticateUser,async (req,res)=>{
+  try {
+    const users = await User.find();
+    if (!users) {
+      return res.status(400).json({ msg: "No Users Available" });
+    }
+    res.status(200).json(users);
+    console.log(res.user);
+  } catch (error) {
+    res.status(500).json({ msg: "viewusers route error" });
+    console.error(error);
+  }
 })
 
 
