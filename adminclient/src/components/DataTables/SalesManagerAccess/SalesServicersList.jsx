@@ -4,7 +4,7 @@ import SalesServicersDataRow from './SalesServicersDataRow';
 export default class SalesServicersList extends Component {
   render() {
 
-    const {  approveSalesServicer,companyName } = this.props;
+    const { approveSalesServicer,companyName } = this.props;
 
     return (
         <div className="card">
