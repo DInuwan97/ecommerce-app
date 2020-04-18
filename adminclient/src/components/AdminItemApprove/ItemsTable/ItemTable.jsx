@@ -11,12 +11,14 @@ export default class ItemTable extends Component {
       category,
       isApproved,
       size,
+      addedBy
     }) => {
       if (!isApproved)
         return (
           <ItemTableRow
             
             id={_id}
+            addedBy={addedBy}
             itemName={itemName}
             price={price}
             Brand={Brand}
@@ -30,7 +32,7 @@ export default class ItemTable extends Component {
   }
 
   render() {
-    const { declineItem, approveItem } = this.props;
+   
     return (
       <div className="card">
         <div className="card-header">
@@ -41,7 +43,7 @@ export default class ItemTable extends Component {
           <table id="example1" className="table table-bordered table-striped">
             <thead>
               <tr>
-                <th>id</th>
+                <th>Added By</th>
                 <th>Item Name</th>
                 <th>Price</th>
                 <th>Brand</th>

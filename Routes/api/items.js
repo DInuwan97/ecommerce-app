@@ -73,6 +73,7 @@ router.post(
       Brand,
       stockQuantity,
       rating,
+      addedBy
     } = req.body;
 
    
@@ -94,6 +95,7 @@ router.post(
             Brand,
             stockQuantity,
             rating,
+            addedBy
           }
         );
       } else {
@@ -106,6 +108,7 @@ router.post(
           Brand,
           stockQuantity,
           rating,
+          addedBy
         });
       }
 
@@ -259,16 +262,16 @@ router.patch("/:id", async (req, res) => {
       },
     });
 
-    console.log(req.body.clientEmail);
+    console.log(req.body.addedBy);
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: "dinuka@gmail.com", // sender address
-      to: req.body.clientEmail, // list of receivers
+      to: req.body.addedBy, // list of receivers
       subject: "Item Approved", // Subject line
       text: "Hello world?", // plain text body
       html: `
               <h2>Thank You</h2><br/>
-              <span>The Item ${req.body.item}</span> has been Approved  
+              <span>The Item ${req.body.itemName}</span> has been Approved  
               `, // html body
     });
 

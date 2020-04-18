@@ -34,7 +34,7 @@ const itemSchema = mongoose.Schema({
     default: 0,
   },
   addedBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.String,
     ref: "users",
   },
   addedDate: {

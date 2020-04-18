@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import swal from "sweetalert";
 import axios from "axios";
+import jwt_decode from 'jwt-decode'
 export default class addNewItemComponent extends Component {
   constructor() {
     super();
@@ -12,9 +13,13 @@ export default class addNewItemComponent extends Component {
       selectedCategory : "",
       size: "",
       stockQuantity: 0,
+      addedBy : ''
     };
     this.onChange = this.onChange.bind(this);
+    console.log('localstorage login token :' ,localStorage.userLoginToken);
+
   }
+  
 
   onChange = (e) => {
     this.setState({
@@ -23,6 +28,9 @@ export default class addNewItemComponent extends Component {
   };
   // this.setState({ category: [...this.state.category, category] });
   componentDidMount() {
+
+
+
     axios.get(`/api/category`).then((res) => {
       const items = res.data;
       console.log(items);
@@ -45,6 +53,8 @@ export default class addNewItemComponent extends Component {
   // }
 
   onSubmitHandler = (e) => {
+    const token = localStorage.userLoginToken;
+    const decoded = jwt_decode(token);
     e.preventDefault();
     console.log(this.state.selectedCategory)
     console.log(this.state)
@@ -57,6 +67,7 @@ export default class addNewItemComponent extends Component {
         category: this.state.selectedCategory,
         size: this.state.size,
         stockQuantity: this.state.stockQuantity,
+        addedBy : decoded.email
       })
       .then((res) => {
         console.log(res);

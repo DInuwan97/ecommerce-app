@@ -31,7 +31,7 @@ export default class AdminItemApprove extends Component {
     });
   };
 
-  approveItem = (id) => {
+  approveItem = (id,addedBy,itemName) => {
     console.log(id);
     this.setState({
       items: [...this.state.items.filter((item) => item._id !== id)],
@@ -40,6 +40,8 @@ export default class AdminItemApprove extends Component {
     axios
       .patch(`/api/items/${id}`, {
         isApproved: true,
+        addedBy : addedBy,
+        itemName : itemName
       })
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
