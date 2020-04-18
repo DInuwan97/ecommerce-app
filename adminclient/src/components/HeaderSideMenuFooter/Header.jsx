@@ -11,10 +11,6 @@ export default class Header extends Component {
     constructor(props){
         super(props)
     
-        if(localStorage.getItem("userLoginToken") === null){
-         // window.location.replace('/login');
-        }
-    
             this.state ={
                  firstName: '',
                  lastName: '',
@@ -27,10 +23,7 @@ export default class Header extends Component {
             }
     
         console.log('localstorage login token :' ,localStorage.userLoginToken);
-    
-    
-            
-            ///window.location.reload(true); 
+
         
         }
     
@@ -57,10 +50,7 @@ export default class Header extends Component {
                })
                console.log('Decoded token is : ' ,decoded)
         }
-        
-        if(this.state.isCustomer === true){
-          window.location.replace('/login');
-        }
+     
             
         }
 

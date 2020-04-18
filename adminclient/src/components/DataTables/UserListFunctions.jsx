@@ -35,6 +35,9 @@ export default class UserListFunctions extends Component {
 
       approveSalesManagerRequest = (email) => {
         console.log('approveSalesManagerRequest is',email);
+         this.setState({
+            userList: [...this.state.userList.filter((user) => user.email !== email)],
+         });
         axios({
             method:'post',
             url:'/api/users/confirmSalesManager',
@@ -49,7 +52,7 @@ export default class UserListFunctions extends Component {
             console.log(res) 
           })
           .catch((err) =>{
-     
+            
           });
       };
       

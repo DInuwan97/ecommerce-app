@@ -54,9 +54,7 @@ export default function({id,
                                     swal("The Sales Manager has been Approved", {
                                       icon: "success",
                                     }).then(() => {
-
-                                    approveSalesManagerRequest(email)
-                                    this.history.push(`/salesManagerapprove`)
+                                         approveSalesManagerRequest(email)
                                     })
                                 
                                   } else {

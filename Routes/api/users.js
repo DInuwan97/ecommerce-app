@@ -11,6 +11,7 @@ const authUserSecureCode = require("../../middleware/Usesr").authenticateUserSec
 const authenticateUser = require("../../middleware/Usesr").authenticateUser;
 //const checkSalesManager = require('../../middleware/Usesr').checkSalesManager;
 const onlyAdminAccess = require("../../middleware/Usesr").onlyAdminAccess;
+const isSecurityKeyVerifiedUser = require("../../middleware/Usesr").isSecurityKeyVerifiedUser;
 
 /////////////adding a user////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.post("/register", (req, res) => {
@@ -346,7 +347,6 @@ router.get("/profile", authenticateUser, (req, res) => {
 
 
 //have to authorixation middleweare
-
 router.get('/viewusers', authenticateUser,async (req,res)=>{
   try {
     const users = await User.find();
@@ -358,6 +358,30 @@ router.get('/viewusers', authenticateUser,async (req,res)=>{
   } catch (error) {
     res.status(500).json({ msg: "viewusers route error" });
     console.error(error);
+  }
+})
+
+
+//sales servicer verification
+router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>{
+  try{
+    let user = await User.findOne({email:req.params.email})
+    if(!user){
+      res.status(404).json({"message":"User Not found in to given email"})
+    }else{
+      if(user.secureKeyVerifyStatus === true){
+
+        user.salasManagerVerification = true;
+        await user.save()
+        res.status(200).json({"message":"Update the Sales Manager's Verification"})
+
+      }else{
+        res.status(403).json({"message":`${req.params.email} have to verift security key first`})
+      }
+    }
+
+  }catch(error){
+    console.log(error);
   }
 })
 
