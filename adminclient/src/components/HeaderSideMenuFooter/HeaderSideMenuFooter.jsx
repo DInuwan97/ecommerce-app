@@ -11,8 +11,6 @@ export default class HeaderSideMenuFooter extends Component {
   constructor(props){
     super(props)
 
-
-
 		this.state ={
 			 firstName: '',
 			 lastName: '',
@@ -21,11 +19,9 @@ export default class HeaderSideMenuFooter extends Component {
 			 isAdmin:false,
 			 isCustomer:false,
 			 isSalesManager:false,
-			 isSalesServicer:false
+       isSalesServicer:false,
+       company:''
     }
-    
- 
-		
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
 
@@ -52,9 +48,17 @@ export default class HeaderSideMenuFooter extends Component {
 				isAdmin:decoded.isAdmin,
 				isCustomer:decoded.isCustomer,
 				isSalesManager:decoded.isSalesManager,
-				isSalesServicer:decoded.isSalesServicer
-		   })
-		   console.log('Decoded token is : ' ,decoded)
+        isSalesServicer:decoded.isSalesServicer,
+        company:decoded.company
+       })
+       
+       if(this.setState.isSalesManager){
+         this.setState({
+           company:decoded.company
+         })
+       }
+       console.log('Decoded token is : ' ,decoded)
+       console.log('Decoded Company is : ' ,this.state.company)
     }
     
     if(this.state.isCustomer === true){
@@ -732,7 +736,7 @@ export default class HeaderSideMenuFooter extends Component {
       
 
 
-               <Route path = '/users' component = {UserListpage}/>
+               <Route path = '/salesManagerapprove' component = {UserListpage}/>
                <Route path ='/home' component= {HomePage}/>
                <Route path ='/itemApprove' component= {AdminItemApprove}/>
                <Route path ='/addCategory' component= {Category}/>
