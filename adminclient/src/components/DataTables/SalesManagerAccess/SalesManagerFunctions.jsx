@@ -33,12 +33,13 @@ export default class SalesManagerFunctions extends Component {
       }
 
       approveSalesServicer = (email) => {
+        console.log('Sales Servicer Email : ',email);
         this.setState({
             salesServicersList: [...this.state.salesServicersList.filter((user) => user.email !== email)],
          });
          axios({
-             method:'pacth',
-             url:'/api/users/confirmSalesServicer/:email',
+             method:'patch',
+             url:`/api/users/confirmSalesServicer/${email}`,
              headers:{
                 "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
              }
@@ -55,7 +56,7 @@ export default class SalesManagerFunctions extends Component {
     const { companyName } = this.props;
     console.log('Logged user Company is : ',companyName);
     return (
-        <SalesServicersList users={this.state.salesServicersList} approveSalesServicer = {this.salesServicersList} companyName={companyName}/>
+        <SalesServicersList users={this.state.salesServicersList} approveSalesServicer = {this.approveSalesServicer} companyName={companyName}/>
     );
   }
 }

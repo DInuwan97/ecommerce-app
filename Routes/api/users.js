@@ -374,7 +374,7 @@ router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>
         user.salasManagerVerification = true;
         await user.save()
         res.status(200).json({"message":"Update the Sales Manager's Verification"})
-
+        console.log('Salese Servicer approved on : ',req.params.email);
       }else{
         res.status(403).json({"message":`${req.params.email} have to verift security key first`})
       }
