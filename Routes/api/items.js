@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const nodemailer = require("nodemailer");
 const { check, validationResult } = require("express-validator");
 const auth = require("../../middleware/Usesr").checkAdminManager;
 const adminAuth = require("../../middleware/Usesr").onlyAdminAccess;
@@ -257,7 +258,88 @@ router.patch("/:id", async (req, res) => {
 
     checkItemExits.isApproved = true;
     await checkItemExits.save();
+
+    //sending email to the client
+    let transporter = nodemailer.createTransport({
+      host: "smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+        user: "cd1d2b8d863288",
+        pass: "41ff48f6db0ffa",
+      },
+    });
+
+    console.log(req.body.clientEmail);
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: "dinuka@gmail.com", // sender address
+      to: req.body.clientEmail, // list of receivers
+      subject: "Item Approved", // Subject line
+      text: "Hello world?", // plain text body
+      html: `
+              <h2>Thank You</h2><br/>
+              <span>The Item ${req.body.item}</span> has been Approved  
+              `, // html body
+    });
+
+    transporter.sendMail(info, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
+
+    res.json(checkItemExits)
   } catch (error) {}
 });
+
+/*TEST PURPOSEE */
+// router.post("/testEmail", async (req, res) => {
+//   try {
+//     console.log("hello world");
+//     //sending the email
+//     // let transporter = nodemailer.createTransport({
+//     //   host: "smtp.mailtrap.io",
+//     //   port: 2525,
+//     //   secure: false, // true for 465, false for other ports
+//     //   auth: {
+//     //     user: "	cd1d2b8d863288", // generated ethereal user
+//     //     pass: "41ff48f6db0ffa", // generated ethereal password
+//     //   },
+//     // });
+
+//     let transporter = nodemailer.createTransport({
+//       host: "smtp.mailtrap.io",
+//       port: 2525,
+//       auth: {
+//         user: "cd1d2b8d863288",
+//         pass: "41ff48f6db0ffa"
+//       }
+//     });
+
+//     // send mail with defined transport object
+//     let info = await transporter.sendMail({
+//       from: "dinukashameera0657@gmail.com", // sender address
+//       to: "dinukashameera0657@gmail.com", // list of receivers
+//       subject: "Hello ✔", // Subject line
+//       text: "Hello world?", // plain text body
+//       html: "<b>Hello world?</b>", // html body
+//     });
+
+//     transporter.sendMail(info, function (err, info) {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         console.log(info);
+//       }
+//     });
+
+//     res.send("send");
+//   } catch (error) {
+//     res.json(error)
+//     console.log(error)
+//   }
+// });
 
 module.exports = router;
