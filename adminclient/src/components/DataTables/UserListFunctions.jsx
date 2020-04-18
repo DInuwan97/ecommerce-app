@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import UserList from './UsersList';
 import axios from 'axios';
+import swal from 'sweetalert';
 export default class UserListFunctions extends Component {
 
 
@@ -31,10 +32,31 @@ export default class UserListFunctions extends Component {
         });
         console.log(this.state.user);
       }
+
+
+      approveSalesManagerRequest = (email) => {
+        console.log('approveSalesManagerRequest is',email);
+        axios({
+            method:'post',
+            url:'/api/users/confirmSalesManager',
+            headers: {
+                "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+            },
+            data:{
+                "email":email
+            }
+        })
+          .then((res) => {
+            console.log(res) 
+          })
+          .catch((err) =>{
+     
+          });
+      };
       
     render() {
         return (
-           <UserList users={this.state.userList}/>
+           <UserList users={this.state.userList} approveSalesManagerRequest = {this.approveSalesManagerRequest}/>
         )
     }
 }

@@ -216,7 +216,8 @@ router.post("/login", (req, res) => {
               isAdmin:user.isAdmin,
               isCustomer:user.isCustomer,
               isSalesManager:user.isSalesManager,
-              isSalesServicer:user.isSalesServicer
+              isSalesServicer:user.isSalesServicer,
+              company:user.company
           }
 
             jwt.sign(
@@ -253,12 +254,12 @@ router.post("/login", (req, res) => {
 router.post(
   "/confirmSalesManager",
   authenticateUser,
-  onlyAdminAccess,
   (req, res) => {
+    console.log('Method is calling');
     jwt.verify(req.token, "secretkey", (err, authData) => {
       //checking the authenticateUser middleweare
       if (err) {
-        res.json({ status: "User login token was timed up.." });
+        res.status(403).json({ status: "User login token was timed up.." });
       } else {
         //update query in mongodb
         async function updateUserSecureCode(email) {
@@ -353,7 +354,7 @@ router.get('/viewusers', authenticateUser,async (req,res)=>{
       return res.status(400).json({ msg: "No Users Available" });
     }
     res.status(200).json(users);
-    console.log(res.user);
+   
   } catch (error) {
     res.status(500).json({ msg: "viewusers route error" });
     console.error(error);

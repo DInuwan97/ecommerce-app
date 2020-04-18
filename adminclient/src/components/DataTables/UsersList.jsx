@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 import UserListDataRow from './UserListDataRow';
 
 export default class UsersList extends Component {
+
+
     render() {
-
-      
-
+      const { approveSalesManagerRequest } = this.props;
         return (
             <div className="card">
             <div className="card-header">
@@ -45,7 +45,8 @@ export default class UsersList extends Component {
                   company,
                   packageName
                  }) => {
-                   if((isSalesManager) && (secureKeyVerifyStatus))
+                   if((isSalesManager) && (secureKeyVerifyStatus) && (!adminVerification)){
+                
                    return(
                     <UserListDataRow
                       id={_id}
@@ -63,8 +64,10 @@ export default class UsersList extends Component {
                       adminVerification = {adminVerification}
                       company = {company}
                       packageName = {packageName}
+                      approveSalesManagerRequest = {approveSalesManagerRequest}
                     />
                    )
+                   }
                  }
               )}
 
