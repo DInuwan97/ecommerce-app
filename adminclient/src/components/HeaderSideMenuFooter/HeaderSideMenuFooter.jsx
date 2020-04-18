@@ -31,7 +31,7 @@ export default class HeaderSideMenuFooter extends Component {
 	logOut(e){
 		e.preventDefault()
 		localStorage.removeItem('userLoginToken');
-		this.props.history.push('/login')
+    window.location.replace('/login');
 	}
 
 	componentDidMount(){
@@ -721,10 +721,10 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-
-               <Route path = '/users' component = {UserListpage}/>
-               <Route path ='/home' component= {HomePage}/>
-               
+                <Switch>
+                  <Route path = '/users' component = {UserListpage}/>
+                 <Route path ="/home" component= {HomePage}/>
+               </Switch>
 
               </div>
             </section>

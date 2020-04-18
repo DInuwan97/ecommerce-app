@@ -37,7 +37,7 @@ export default class Login extends Component {
         login(frmData)
         .then(res =>{
             if(res){
-              window.location.replace('/');
+              window.location.replace('/home');
             }
         })
     
