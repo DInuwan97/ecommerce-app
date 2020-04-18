@@ -9,10 +9,11 @@ export default function ItemTableRow({
   declineItem,
   approveItem,
   size,
+  addedBy
 }) {
   return (
     <tr>
-      <td>{id}</td>
+      <td>{addedBy}</td>
       <td>{itemName}</td>
       <td>{price}</td>
       <td>{Brand}</td>
@@ -31,7 +32,7 @@ export default function ItemTableRow({
               if (willApprove) {
                 swal("The item has been Approved", {
                   icon: "success",
-                }).then(() => approveItem(id));
+                }).then(() => approveItem(id,addedBy,itemName));
               } else {
                 swal("The Item is Not Yet Approved");
               }
