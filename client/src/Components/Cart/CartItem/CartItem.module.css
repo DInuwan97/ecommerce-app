@@ -1,0 +1,293 @@
+.container {
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  background-color: #fff;
+  border-radius: 0.57rem;
+
+  display: flex;
+}
+
+.check {
+  flex: 0 0 2%;
+  justify-self: center;
+  align-self: center;
+}
+
+/******************************************** product image ***********************************************/
+.picture {
+  width: 18rem;
+  height: 23rem;
+  overflow: hidden;
+}
+
+.imageFig {
+  width: 100%;
+}
+
+.image {
+  width: 18rem;
+  height: 23rem;
+  transform: scale(1);
+}
+
+/******************************************** details ***********************************************/
+.details {
+  padding-right: 2rem;
+  display: flex;
+  flex: 0 0 46rem;
+  flex-direction: column;
+}
+
+.details__name {
+  padding: 0 1rem 1rem 1rem;
+  width: 46rem;
+  height: 35%;
+  font-weight: 400;
+  font-size: 1.5rem;
+  word-wrap: break-word;
+}
+
+.details__stockq {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.details__stockq_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__stockq_2 {
+  font-weight: 300;
+  padding-left: 0.5rem;
+}
+
+.details__color {
+  padding: 0 1rem 1rem 1rem;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.details__color_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__color_2 {
+  font-weight: 400;
+  padding-left: 0.5rem;
+}
+
+.details__color_3 {
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  margin-left: 0.5rem;
+  background-color: red;
+  border-radius: 100px;
+}
+
+.details__size {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.details__size_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__size_2 {
+  font-weight: 400;
+  padding-left: 0.5rem;
+}
+
+.details__discount {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.details__discount_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__discount_2 {
+  font-weight: 400;
+  padding-left: 0.5rem;
+}
+
+.details__price {
+  padding: 0 1rem 1rem 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/********************************* actions ********************************************/
+.actions {
+  flex: 1;
+  margin-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.actions_1 {
+  display: flex;
+  margin-top: 5rem;
+}
+
+.actions_2 {
+  display: flex;
+  margin-top: 3rem;
+}
+
+.wishlist {
+  flex: 1;
+  cursor: pointer;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wishlist__btn {
+  transform: scale(1.5);
+  fill: #707271;
+}
+
+.wishlist__btn:hover {
+  transform: scale(1.6);
+  fill: #00e58b;
+}
+
+.remove {
+  flex: 1;
+  cursor: pointer;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove__btn {
+  transform: scale(0.8);
+  fill: #707271;
+}
+
+.remove__btn:hover {
+  transform: scale(0.9);
+  fill: #ec2f16;
+}
+
+.plus {
+  background-color: #dad8d8;
+  border-radius: 60px;
+  cursor: pointer;
+  width: 3rem;
+  height: 3rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus__btn {
+  transform: scale(1);
+  fill: #737574;
+  z-index: 50;
+}
+
+.quantity {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quantity__number {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: #0280e1;
+}
+
+.minus {
+  align-items: center;
+  background-color: #dad8d8;
+  border-radius: 60px;
+  cursor: pointer;
+  width: 3rem;
+  height: 3rem;
+
+  display: flex;
+  justify-content: center;
+}
+
+.minus__btn {
+  transform: scale(1);
+  fill: #737574;
+  z-index: 50;
+}
+
+/******************************** custom check box ***********************************/
+.styledCheckbox {
+  position: absolute;
+  opacity: 0;
+}
+
+.styledCheckbox + label {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 400;
+}
+
+.styledCheckbox + label:before {
+  content: "";
+  margin-right: 0.86rem;
+  display: inline-block;
+  vertical-align: text-top;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: #fff;
+  border: 1px solid #c2bfbf;
+  border-radius: 4px;
+  transition: all 0.5s;
+}
+
+.styledCheckbox:hover + label:before {
+  border: 1px solid #00e58b;
+}
+
+.styledCheckbox:focus + label:before {
+  box-shadow: 0 0 1px 1px #0ef89ae3;
+}
+
+.styledCheckbox:checked + label:before {
+  background: #00e58b;
+}
+
+.styledCheckbox:disabled + label {
+  color: #b8b8b8;
+  cursor: auto;
+}
+
+.styledCheckbox:disabled + label:before {
+  box-shadow: none;
+  background: #ddd;
+}
+
+.styledCheckbox:checked + label:after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 9px;
+  background: white;
+  width: 2px;
+  height: 2px;
+  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white,
+    4px -6px 0 white, 4px -8px 0 white;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
