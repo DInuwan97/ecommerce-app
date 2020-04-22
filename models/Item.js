@@ -15,6 +15,11 @@ const itemSchema = mongoose.Schema({
   },
   itemImage: {
     type: String,
+    default: null,
+  },
+  itemImageId: {
+    type: String,
+    default: null,
   },
   size: {
     type: String,
@@ -36,6 +41,10 @@ const itemSchema = mongoose.Schema({
   addedBy: {
     type: mongoose.Schema.Types.String,
     ref: "users",
+  },
+  company: {
+    type: String,
+    default: null,
   },
   addedDate: {
     type: Date,

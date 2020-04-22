@@ -48,7 +48,8 @@ export default class ItemTable extends Component {
                 <th>Price</th>
                 <th>Brand</th>
                 <th>Size</th>
-                <th>Category</th>
+                {/* <th>Category</th> */}
+                <th>View</th>
                 <th>Approve</th>
                 <th>Decline</th>
               </tr>

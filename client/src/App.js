@@ -15,7 +15,7 @@ import Home from './Components/HomePageComponent/HomePage'
 import SingleProduct from './Components/SingleProductComponent/SingleProduct';
 
 import TestB from './Components/testRes/TestB';
-
+import TestImage from './Components/testRes/ImageTestPage'
 import ProductCardList from './Components/ProductsListCard/ProductListCard';
 
 import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
@@ -30,7 +30,7 @@ function App() {
         <Route path = "/" exact component = {Home}/>
         <Route path = "/register" component = {Register}/>
         <Route path = "/login" component = {Login}/>
-
+        <Route exact path = '/testImage' component = {TestImage}/>
         <Route path = "/verifysecurecode" component={VerifySecureCode} />
 
         <Route path = "/single" component={SingleProduct}/>

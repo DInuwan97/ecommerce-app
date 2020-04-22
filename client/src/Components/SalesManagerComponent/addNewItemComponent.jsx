@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import swal from "sweetalert";
 import axios from "axios";
-import jwt_decode from 'jwt-decode'
+import jwt_decode from "jwt-decode";
 export default class addNewItemComponent extends Component {
   constructor() {
     super();
@@ -10,54 +10,59 @@ export default class addNewItemComponent extends Component {
       price: 0,
       Brand: "",
       category: [],
-      selectedCategory : "",
+      selectedCategory: "",
       size: "",
       stockQuantity: 0,
-      addedBy : ''
+      addedBy: "",
+      itemImage: null,
+      company : ''
     };
     this.onChange = this.onChange.bind(this);
-    console.log('localstorage login token :' ,localStorage.userLoginToken);
-
+    console.log("localstorage login token :", localStorage.userLoginToken);
   }
-  
 
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
   };
+
+  //image on Change
+  onChangeImage = (e) => {
+    this.setState({ itemImage: e.target.files[0] });
+  };
+
   // this.setState({ category: [...this.state.category, category] });
   componentDidMount() {
-
-
-
     axios.get(`/api/category`).then((res) => {
       const items = res.data;
       console.log(items);
-      let categoryInfo = items.map(item => {
-        console.log(item)
-        return {categoryName : item.categoryName}
-      })
+      let categoryInfo = items.map((item) => {
+        console.log(item);
+        return { categoryName: item.categoryName };
+      });
       this.setState({
         category: categoryInfo,
       });
-     
     });
-    // this.displayCategory();
   }
 
-  // displayCategory() {
-  //   return this.state.category.map((cat) => {
-  //     return <option value={cat.categoryName}>{cat.categoryName}</option>;
-  //   });
-  // }
+  onImageHandle = () => {
+    
+    let formData = new FormData();
+    formData.append("image", this.state.itemImage);
+    axios
+      .patch(`/api/items/image/${this.state.itemName}`, formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+  }
 
   onSubmitHandler = (e) => {
     const token = localStorage.userLoginToken;
     const decoded = jwt_decode(token);
     e.preventDefault();
-    console.log(this.state.selectedCategory)
-    console.log(this.state)
+    console.log(this.state.selectedCategory);
+    console.log(this.state);
 
     axios
       .post("/api/items", {
@@ -67,7 +72,8 @@ export default class addNewItemComponent extends Component {
         category: this.state.selectedCategory,
         size: this.state.size,
         stockQuantity: this.state.stockQuantity,
-        addedBy : decoded.email
+        addedBy: decoded.email,
+        company : decoded.company
       })
       .then((res) => {
         console.log(res);
@@ -77,11 +83,12 @@ export default class addNewItemComponent extends Component {
         console.log(error);
       });
 
+      this.onImageHandle();
+
     this.setState({
       itemName: "",
       price: 0,
       Brand: "",
-
       size: "",
       stockQuantity: 0,
     });
@@ -93,7 +100,7 @@ export default class addNewItemComponent extends Component {
         <div className="main-agileits">
           <div className="form-w3agile">
             <h3>ADD NEW ITEM</h3>
-            <form onSubmit={this.onSubmitHandler}>
+            <form enctype="multipart/form-data" onSubmit={this.onSubmitHandler}>
               <div class="form-group">
                 <label>Item Name</label>
                 <input
@@ -126,11 +133,13 @@ export default class addNewItemComponent extends Component {
                   style={{ height: 40 }}
                   name="category"
                   required=""
-                  onChange={e => this.setState({selectedCategory : e.target.value})}
+                  onChange={(e) =>
+                    this.setState({ selectedCategory: e.target.value })
+                  }
                 >
-                 {this.state.category.map(cat => (
-                   <option value = {cat.categoryName}>{cat.categoryName}</option>
-                 ))}
+                  {this.state.category.map((cat) => (
+                    <option value={cat.categoryName}>{cat.categoryName}</option>
+                  ))}
                 </select>
 
                 <div className="clearfix"></div>
@@ -169,6 +178,16 @@ export default class addNewItemComponent extends Component {
                   placeholder="Brand"
                   value={this.state.Brand}
                   onChange={this.onChange}
+                />
+              </div>
+              <div class="form-group">
+                <label>Image</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  name="itemImage"
+                  placeholder="itemImage"
+                  onChange={this.onChangeImage}
                 />
               </div>
               <div class="form-group">

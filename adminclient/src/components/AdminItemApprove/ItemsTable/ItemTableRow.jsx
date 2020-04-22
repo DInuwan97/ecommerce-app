@@ -1,5 +1,6 @@
 import React from "react";
 import swal from "sweetalert";
+import {Link} from 'react-router-dom'
 export default function ItemTableRow({
   id,
   itemName,
@@ -9,7 +10,7 @@ export default function ItemTableRow({
   declineItem,
   approveItem,
   size,
-  addedBy
+  addedBy,
 }) {
   return (
     <tr>
@@ -18,9 +19,19 @@ export default function ItemTableRow({
       <td>{price}</td>
       <td>{Brand}</td>
       <td>{size}</td>
-      <td>{category}</td>
+      {/* <td>{category}</td> */}
       <td>
-       <button
+      {/* <Link to = '/viewSingle'></Link> */}
+        <button className="btn btn-md btn-info font-weight-bold"><i class="fas fa-check-circle"></i> <Link 
+              to={{
+                pathname: '/viewSingle', 
+               itemname :{name : 'hello'}
+              }}>
+             View
+            </Link></button>
+      </td>
+      <td>
+        <button
           onClick={() =>
             swal({
               title: "Are you sure?",
@@ -32,7 +43,7 @@ export default function ItemTableRow({
               if (willApprove) {
                 swal("The item has been Approved", {
                   icon: "success",
-                }).then(() => approveItem(id,addedBy,itemName));
+                }).then(() => approveItem(id, addedBy, itemName));
               } else {
                 swal("The Item is Not Yet Approved");
               }
