@@ -2,43 +2,50 @@ import React from 'react';
 
 import classes from "./CartItem.module.css";
 
-const cartItem = (props) => {
+const CartItem = props => {
+  console.log(props.item.isSelected + ' ' + props.item.id);
+  console.log(props.item);
+
+  let isChecked = props.item.isSelected;
 
   return (
     <div className={classes.container}>
       <div className={classes.check}>
-        <input className={classes.styledCheckbox} id="styled-checkbox-2" type="checkbox" value="" />
-        <label for="styled-checkbox-2"></label>
+        <input className={classes.styledCheckbox} id={props.id} type="checkbox" value=""
+          checked={isChecked}
+          onChange={() => props.select(props.id)} />
+        <label for={props.id}></label>
       </div>
 
       <div className={classes.picture}>
-        <figure class={classes.imageFig}>
-          <img src={require('./tp3.jpg')} alt="Product Image" class={classes.image} />
+        <figure className={classes.imageFig}>
+          {/* <img src={require('./tp3.jpg')} alt="Product Image" className={classes.image} /> */}
+          <img src={props.item.itemImage} alt="Product Image" className={classes.image} />
         </figure>
       </div>
 
       <div className={classes.details}>
         <div className={classes.details__name}>
-          MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch
+          {props.item.itemName}
         </div>
         <div className={classes.details__stockq}>
           <span className={classes.details__stockq_1}>Stock Quantity:</span>
-          <span className={classes.details__stockq_2}>10</span>
+          <span className={classes.details__stockq_2}>{props.item.stockQuantity}</span>
         </div>
         <div className={classes.details__color}>
           <span className={classes.details__color_1}>Color:</span>
-          <span className={classes.details__color_2}>red</span>
+          <span className={classes.details__color_2}>{props.item.color}</span>
           <span className={classes.details__color_3}>&nbsp;</span>
         </div>
         <div className={classes.details__size}>
           <span className={classes.details__size_1}>Size:</span>
-          <span className={classes.details__size_2}>10</span>
+          <span className={classes.details__size_2}>{props.item.size}</span>
         </div>
         <div className={classes.details__discount}>
           <span className={classes.details__discount_1}>Discount:</span>
-          <span className={classes.details__discount_2}>10%</span>
+          <span className={classes.details__discount_2}>{props.item.discount}%</span>
         </div>
-        <div className={classes.details__price}>LKR 1144.93</div>
+        <div className={classes.details__price}>LKR {props.item.quantity <= 1 ? props.item.price : props.item.totalPrice}</div>
       </div>
 
       <div className={classes.actions}>
@@ -65,7 +72,9 @@ const cartItem = (props) => {
             </svg>
           </div>
           <div className={classes.quantity}>
-            <span className={classes.quantity__number}>2</span>
+            <span className={classes.quantity__number}>
+              {props.item.quantity < 1 ? 1 : props.item.quantity}
+            </span>
           </div>
           <div className={classes.minus}>
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" className={classes.minus__btn}>
@@ -78,4 +87,4 @@ const cartItem = (props) => {
   );
 };
 
-export default cartItem;
+export default CartItem;

@@ -19,17 +19,18 @@ blue : #0280e1
 
 .leftPanel {
   margin-right: 1.29rem;
-  flex: 0 0 70%;
+  width: 70%;
 }
 
 .rightPanel {
+  flex: 1;
   background-color: #fff;
   border-radius: 0.57rem;
   padding: 2rem;
   position: fixed;
   top: 16.9rem;
-  left: 67.5%;
-  width: 23%;
+  right: 10vw;
+  width: 22%;
   z-index: 0;
 }
 

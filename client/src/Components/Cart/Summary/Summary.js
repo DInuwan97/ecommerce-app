@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import classes from './Summary.module.css';
 
 const summary = (props) => {
-
 
   return (
     <div className={classes.container}>
