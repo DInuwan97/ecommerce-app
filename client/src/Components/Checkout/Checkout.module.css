@@ -1,0 +1,43 @@
+/* 
+light grey : #f8f8f8
+green : #00e58b
+blue : #0280e1
+
+1rem = 10px
+*/
+
+/************************************** basic structure ********************************************/
+
+.container {
+  width: 100%;
+  margin: 1.43rem 0;
+  padding: 1.43rem 10%;
+  background-color: #f8f8f8;
+
+  display: flex;
+}
+
+.leftPanel {
+  margin-right: 1.29rem;
+  width: 70%;
+}
+
+.rightPanel {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 0.57rem;
+  padding: 2rem;
+  position: fixed;
+  right: 10vw;
+  width: 22%;
+  z-index: 0;
+}
+
+.deliveryInfo,
+.paymentInfo,
+.itemReview {
+  background-color: #fff;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 0.57rem;
+}

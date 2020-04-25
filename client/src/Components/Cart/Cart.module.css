@@ -6,7 +6,7 @@ blue : #0280e1
 1rem = 10px
 */
 
-/********************* basic structure *******************/
+/************************************** basic structure ********************************************/
 
 .container {
   width: 100%;
@@ -28,7 +28,6 @@ blue : #0280e1
   border-radius: 0.57rem;
   padding: 2rem;
   position: fixed;
-  top: 16.9rem;
   right: 10vw;
   width: 22%;
   z-index: 0;
@@ -50,4 +49,29 @@ blue : #0280e1
 
 .moreItems {
   background-color: #fff;
+}
+
+.emptyCart {
+  flex: 0 0 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emptyCart img {
+  width: 30%;
+}
+
+.emptyCart h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-top: 2rem;
+}
+
+.emptyCart a {
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 1rem;
 }
