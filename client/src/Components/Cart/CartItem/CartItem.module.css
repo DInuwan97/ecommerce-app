@@ -1,0 +1,434 @@
+button:disabled {
+  cursor: no-drop;
+}
+
+.container {
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  background-color: #fff;
+  border-radius: 0.57rem;
+
+  display: flex;
+}
+
+.check {
+  flex: 0 0 2%;
+  justify-self: center;
+  align-self: center;
+}
+
+/******************************************** product image ***********************************************/
+.picture {
+  padding: 0 1rem;
+  flex: 0 0 22%;
+  overflow: hidden;
+}
+
+.imageFig {
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  transform: scale(1);
+}
+
+/******************************************** details ***********************************************/
+.details {
+  padding-right: 2rem;
+  display: flex;
+  flex: 0 0 62%;
+  flex-direction: column;
+}
+
+.details__name {
+  padding: 0 1rem 1rem 1rem;
+  width: 100%;
+  height: 35%;
+  font-weight: 400;
+  font-size: 1.5rem;
+  word-wrap: break-word;
+}
+
+.details__stockq {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.details__stockq_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__stockq_2 {
+  font-weight: 300;
+  padding-left: 0.5rem;
+}
+
+.details__color {
+  padding: 0 1rem 1rem 1rem;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.details__color_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__color_2 {
+  font-weight: 400;
+  padding-left: 0.5rem;
+}
+
+.details__color_3 {
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  margin-left: 0.5rem;
+  background-color: red;
+  border-radius: 100px;
+}
+
+.details__size {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.details__size_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__size_2 {
+  font-weight: 400;
+  padding-left: 0.5rem;
+}
+
+.details__discount {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.details__discount_1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.details__discount_2 {
+  font-weight: 400;
+  padding-left: 0.5rem;
+}
+
+.details__price {
+  padding: 0 1rem 1rem 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/********************************* actions ********************************************/
+.actions {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.actions_1 {
+  display: flex;
+  margin-top: 5rem;
+}
+
+.actions_2 {
+  display: flex;
+  margin-top: 3rem;
+}
+
+.wishlist {
+  flex: 1;
+  cursor: pointer;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wishlist__btn {
+  transform: scale(1.2);
+  fill: #707271;
+}
+
+.wishlist__btn:hover {
+  transform: scale(1.4);
+  fill: #00e58b;
+}
+
+.remove {
+  flex: 1;
+  cursor: pointer;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove__btn {
+  transform: scale(0.7);
+  fill: #707271;
+}
+
+.remove__btn:hover {
+  transform: scale(0.8);
+  fill: #ec2f16;
+}
+
+.plus {
+  background-color: #dad8d8;
+  border-radius: 100px;
+  cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  outline: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus__btn {
+  transform: scale(1.2);
+  fill: #737574;
+  z-index: 50;
+}
+
+.quantity {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quantity__number {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #0280e1;
+}
+
+.quantity__numberI {
+  width: 100%;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #0280e1;
+  border: none;
+  outline: none;
+  text-align: center;
+}
+
+.quantity__numberI::-webkit-outer-spin-button,
+.quantity__numberI::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.quantity__numberI[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.minus {
+  align-items: center;
+  background-color: #dad8d8;
+  border-radius: 60px;
+  cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  outline: none;
+
+  display: flex;
+  justify-content: center;
+}
+
+.minus__btn {
+  transform: scale(1.2);
+  fill: #737574;
+  z-index: 50;
+}
+
+/******************************** custom check box ***********************************/
+.styledCheckbox {
+  position: absolute;
+  opacity: 0;
+}
+
+.styledCheckbox + label {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 400;
+}
+
+.styledCheckbox + label:before {
+  content: "";
+  margin-right: 0.86rem;
+  display: inline-block;
+  vertical-align: text-top;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: #fff;
+  border: 1px solid #c2bfbf;
+  border-radius: 4px;
+  transition: all 0.5s;
+}
+
+.styledCheckbox:hover + label:before {
+  border: 1px solid #00e58b;
+}
+
+.styledCheckbox:focus + label:before {
+  box-shadow: 0 0 1px 1px #0ef89ae3;
+}
+
+.styledCheckbox:checked + label:before {
+  background: #00e58b;
+}
+
+.styledCheckbox:disabled + label {
+  color: #b8b8b8;
+  cursor: auto;
+}
+
+.styledCheckbox:disabled + label:before {
+  box-shadow: none;
+  background: #ddd;
+}
+
+.styledCheckbox:checked + label:after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 9px;
+  background: white;
+  width: 2px;
+  height: 2px;
+  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white,
+    4px -6px 0 white, 4px -8px 0 white;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/***************************************** popup modal ****************************************/
+.popupModal_active {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.popupModal_deactive {
+  display: none;
+}
+
+/* Modal Content */
+.popupModal__content {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  filter: blur(0);
+  margin: auto;
+  padding: 20px;
+  border: 1px solid rgb(0, 229, 139);
+  box-shadow: 0px 0px 5px 0px rgba(0, 229, 139.75);
+  border-radius: 1rem;
+  width: 30%;
+  transition: all 1s ease-in;
+  animation-name: fadeIn;
+  animation-duration: 0.5s;
+  animation-delay: 0s;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.popupModal__content_1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popupModal__content_2 {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.popupModal__content_3 {
+  margin-top: 1.8rem;
+  display: flex;
+  justify-content: start;
+}
+
+/* The Close Button */
+.popupModal__close {
+  color: #aaaaaa;
+  font-size: 2.8rem;
+  font-weight: bold;
+  transform: translateY(-0.8rem);
+}
+
+.popupModal__close:hover,
+.popupModal__close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.popupModal__btnOk {
+  font-size: 1.6rem;
+  border: none;
+  outline: none;
+  padding: 0.5rem 2rem;
+  margin-right: 1rem;
+  border-radius: 0.8rem;
+  color: #fff;
+  background-color: rgb(0, 229, 139);
+}
+
+.popupModal__btnOk:hover {
+  background-color: #3aeca5;
+}
+
+.popupModal__btnCancel {
+  font-size: 1.6rem;
+  border: none;
+  outline: none;
+  padding: 0.5rem 2rem;
+  border-radius: 0.8rem;
+  color: #000;
+  background-color: #f1eded;
+}
+
+.popupModal__btnCancel:hover {
+  background-color: #f8f8f8;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import swal from "sweetalert";
+import {Link} from 'react-router-dom'
 export default function ItemTableRow({
   id,
   itemName,
@@ -9,15 +10,26 @@ export default function ItemTableRow({
   declineItem,
   approveItem,
   size,
+  addedBy,
 }) {
   return (
     <tr>
-      <td>{id}</td>
+      <td>{addedBy}</td>
       <td>{itemName}</td>
       <td>{price}</td>
       <td>{Brand}</td>
       <td>{size}</td>
-      <td>{category}</td>
+      {/* <td>{category}</td> */}
+      <td>
+      {/* <Link to = '/viewSingle'></Link> */}
+        <button className="btn btn-md btn-info font-weight-bold"><i class="fas fa-check-circle"></i> <Link 
+              to={{
+                pathname: '/viewSingle', 
+               itemname :{name : 'hello'}
+              }}>
+             View
+            </Link></button>
+      </td>
       <td>
         <button
           onClick={() =>
@@ -31,15 +43,15 @@ export default function ItemTableRow({
               if (willApprove) {
                 swal("The item has been Approved", {
                   icon: "success",
-                }).then(() => approveItem(id));
+                }).then(() => approveItem(id, addedBy, itemName));
               } else {
                 swal("The Item is Not Yet Approved");
               }
             })
           }
-          className="btn btn-warning"
+          className="btn btn-warning btn-md font-weight-bold"
         >
-          Approve This
+          <i class="fas fa-check-circle"></i> Approve
         </button>
       </td>
       <td>
@@ -61,9 +73,9 @@ export default function ItemTableRow({
               }
             })
           }
-          className="btn btn-danger"
+          className="btn btn-danger btn-md font-weight-bold"
         >
-          Decline This
+          <i class="fas fa-trash-alt"></i> Decline
         </button>
       </td>
     </tr>
