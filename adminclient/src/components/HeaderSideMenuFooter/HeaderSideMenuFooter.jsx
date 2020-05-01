@@ -6,7 +6,7 @@ import AdminItemApprove from '../AdminItemApprove/AdminItemApprove'
 import Category from '../AdminAddCategory/Category'
 import UserListpage from '../AdminOrientation/UserListPage';
 import SalesServicersList from '../AdminOrientation/SalesServicersApproveList';
-
+import ActiveSalesManagers from '../AdminOrientation/ActiveSalesManagers';
 export default class HeaderSideMenuFooter extends Component {
 
   constructor(props){
@@ -738,7 +738,7 @@ export default class HeaderSideMenuFooter extends Component {
                <Route path ='/itemApprove' component= {AdminItemApprove}/>
                <Route path ='/addCategory' component= {Category}/>
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
-
+               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
 
               </div>
             </section>
