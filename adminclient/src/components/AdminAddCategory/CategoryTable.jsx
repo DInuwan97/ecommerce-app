@@ -1,6 +1,20 @@
 import React, { Component } from "react";
 import TableRow from "./CategoryTableRow";
 export default class CategoryTable extends Component {
+
+  getRow(){
+    return this.props.categories.map(({ _id, categoryName, code, genderType }) => {
+      return  <TableRow
+      id={_id}
+      categoryName={categoryName}
+      code={code}
+      genderType={genderType}
+      deleteCategory={this.props.deleteCategory}
+      updateCategory = {this.props.updateCategory}
+    />
+    })
+  }
+
   render() {
 
     const {deleteCategory,updateCategory} = this.props
@@ -19,19 +33,8 @@ export default class CategoryTable extends Component {
               </tr>
             </thead>
             <tbody>
-                
-              {this.props.categories.map(
-                ({ _id, categoryName, code, genderType }) => (
-                  <TableRow
-                    id={_id}
-                    categoryName={categoryName}
-                    code={code}
-                    genderType={genderType}
-                    deleteCategory={deleteCategory}
-                    updateCategory = {updateCategory}
-                  />
-                )
-              )}
+                {this.getRow()}
+             
             </tbody>
           </table>
         </div>

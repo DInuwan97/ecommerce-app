@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ItemTable from "./ItemsTable/ItemTable";
-import CardList from './ItemApproveCardList/CardList'
+import CardList from "./ItemApproveCardList/CardList";
+import ViewSingleItem from "./ViewSingleItem/ViewSingleItem";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 export default class AdminItemApprove extends Component {
   constructor() {
@@ -31,7 +33,7 @@ export default class AdminItemApprove extends Component {
     });
   };
 
-  approveItem = (id) => {
+  approveItem = (id, addedBy, itemName) => {
     console.log(id);
     this.setState({
       items: [...this.state.items.filter((item) => item._id !== id)],
@@ -40,6 +42,8 @@ export default class AdminItemApprove extends Component {
     axios
       .patch(`/api/items/${id}`, {
         isApproved: true,
+        addedBy: addedBy,
+        itemName: itemName,
       })
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
@@ -48,12 +52,22 @@ export default class AdminItemApprove extends Component {
   render() {
     return (
       <div>
-        <CardList/>
-        <ItemTable
-          items={this.state.items}
-          declineItem={this.declineItem}
-          approveItem={this.approveItem}
-        />
+        <Router>
+          <CardList />
+          <Switch>
+            <Route
+              path="/itemApprove"
+              component={() => (
+                <ItemTable
+                  items={this.state.items}
+                  declineItem={this.declineItem}
+                  approveItem={this.approveItem}
+                />
+              )}
+            />
+            <Route path="/viewSingle" component={() => <ViewSingleItem />} />
+          </Switch>
+        </Router>
       </div>
     );
   }
