@@ -202,7 +202,6 @@ export default class addNewItemComponent extends Component {
                 />
               </div>
               <button
-                type="submit"
                 class="btn btn-primary btn-block btn-lg "
                 onClick={() =>
                   swal({

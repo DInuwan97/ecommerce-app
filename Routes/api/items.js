@@ -344,10 +344,8 @@ router.patch("/:id", async (req, res) => {
       }
     });
 
-
     res.json(checkItemExits);
   } catch (error) {}
-
 });
 
 module.exports = router;
