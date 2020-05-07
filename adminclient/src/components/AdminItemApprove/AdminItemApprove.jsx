@@ -65,7 +65,7 @@ export default class AdminItemApprove extends Component {
                 />
               )}
             />
-            <Route path="/viewSingle" component={() => <ViewSingleItem />} />
+            <Route path="/viewSingle" render={(props) => <ViewSingleItem {...props}/>} />
           </Switch>
         </Router>
       </div>
