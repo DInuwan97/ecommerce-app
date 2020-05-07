@@ -25,7 +25,7 @@ export default function ItemTableRow({
         <button className="btn btn-md btn-info font-weight-bold"><i class="fas fa-check-circle"></i> <Link 
               to={{
                 pathname: '/viewSingle', 
-               itemname :{name : 'hello'}
+               state :{id : id}
               }}>
              View
             </Link></button>

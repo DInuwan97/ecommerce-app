@@ -9,9 +9,10 @@ export default class ViewSingleItem extends Component {
   }
 
   componentDidMount() {
-    axios.get(`/api/items/5e9ea6c18f5c193690c16f7a`).then((res) => {
+    const{ id} = this.props.location.state 
+    axios.get(`/api/items/${id}`).then((res) => {
       const items = res.data;
-      console.log("hello world");
+     
 
       this.setState({ items });
     });
