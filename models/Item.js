@@ -38,6 +38,10 @@ const itemSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  description : {
+    type : String,
+    default : null
+  },
   addedBy: {
     type: mongoose.Schema.Types.String,
     ref: "users",

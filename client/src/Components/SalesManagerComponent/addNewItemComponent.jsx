@@ -14,6 +14,7 @@ export default class addNewItemComponent extends Component {
       size: "",
       stockQuantity: 0,
       addedBy: "",
+      description : "",
       itemImage: null,
       company : ''
     };
@@ -73,6 +74,7 @@ export default class addNewItemComponent extends Component {
         size: this.state.size,
         stockQuantity: this.state.stockQuantity,
         addedBy: decoded.email,
+        description : this.state.description,
         company : decoded.company
       })
       .then((res) => {
@@ -198,6 +200,19 @@ export default class addNewItemComponent extends Component {
                   name="stockQuantity"
                   placeholder="Stock Quantity"
                   value={this.state.stockQuantity}
+                  onChange={this.onChange}
+                />
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea 
+                  rows="4" 
+                  cols="50"
+                  type="text-area"
+                  class="form-control"
+                  name="description"
+                  placeholder="Description"
+                  value={this.state.description}
                   onChange={this.onChange}
                 />
               </div>
