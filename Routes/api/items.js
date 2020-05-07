@@ -93,6 +93,7 @@ router.post(
       stockQuantity,
       rating,
       itemImage,
+      description,
       addedBy,
       company
     } = req.body;
@@ -115,6 +116,7 @@ router.post(
             Brand,
             stockQuantity,
             rating,
+            description,
             addedBy,
             company
 
@@ -131,6 +133,7 @@ router.post(
           Brand,
           stockQuantity,
           rating,
+          description,
           addedBy,
           company
         });
