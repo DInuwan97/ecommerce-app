@@ -22,7 +22,7 @@ export default function ItemTableRow({
       {/* <td>{category}</td> */}
       <td>
       {/* <Link to = '/viewSingle'></Link> */}
-        <button className="btn btn-md btn-info font-weight-bold"><i class="fas fa-check-circle"></i> <Link 
+        <button className="btn btn-md btn-info font-weight-bold" ><i class="fas fa-check-circle"></i> <Link style = {style.viewLink}
               to={{
                 pathname: '/viewSingle', 
                state :{id : id}
@@ -80,4 +80,13 @@ export default function ItemTableRow({
       </td>
     </tr>
   );
+}
+
+
+const style = {
+  viewLink : {
+    size : '20px',
+    color : 'white',
+    textdecoration : 'none'
+  }
 }
