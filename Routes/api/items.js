@@ -83,6 +83,12 @@ router.post(
     ],
   ],
   async (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(400).json({ msg : "Please Enter Correct Fields" });
+    }
+
+
     let {
       itemName,
       price,
