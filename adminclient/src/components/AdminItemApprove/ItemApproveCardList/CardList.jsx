@@ -5,7 +5,7 @@ export default class CardList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      allItems : 0,
+      allItems: 0,
       approvedItems: 0,
     };
   }
@@ -23,9 +23,9 @@ export default class CardList extends Component {
         if (!Items[index].isApproved) {
           count++;
           this.setState({ approvedItems: count });
-        }else {
-          allItemCount ++;
-          this.setState({allItems : allItemCount})
+        } else {
+          allItemCount++;
+          this.setState({ allItems: allItemCount });
         }
       }
     });
