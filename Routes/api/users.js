@@ -208,23 +208,26 @@ router.post("/login", (req, res) => {
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           if (user.secureKeyVerifyStatus == true) {
-            const payload={
-              _id:user._id,
-              firstName:user.firstName,
-              lastName:user.lastName,
-              email:user.email,
-              mobile:user.mobile,
-              isAdmin:user.isAdmin,
-              isCustomer:user.isCustomer,
-              isSalesManager:user.isSalesManager,
-              isSalesServicer:user.isSalesServicer,
-              company:user.company
-          }
+          //   const payload={
+          //     _id:user._id,
+          //     firstName:user.firstName,
+          //     lastName:user.lastName,
+          //     email:user.email,
+          //     mobile:user.mobile,
+          //     isAdmin:user.isAdmin,
+          //     isCustomer:user.isCustomer,
+          //     isSalesManager:user.isSalesManager,
+          //     isSalesServicer:user.isSalesServicer,
+          //     company:user.company
+          // }
+          const payload={
+            user
+        }
 
             jwt.sign(
               payload,
               "secretkey",  
-              { expiresIn: "100s" },
+              { expiresIn: "100h" },
               (err, token) => {
                 res.json({ 
                 'token' : token,

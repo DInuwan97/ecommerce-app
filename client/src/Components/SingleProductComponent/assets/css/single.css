@@ -1,0 +1,7 @@
+.add-review {
+    cursor: pointer;
+}
+
+.add-review:hover {
+    color: blue;
+}

@@ -23,6 +23,8 @@ import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
 
+import ReviewMain from './Components/Review/ReviewMain/ReviewMain';
+
 function App() {
 
   console.log('Client Token : ', localStorage.userLoginToken)
@@ -50,6 +52,9 @@ function App() {
 
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+
+
+        <Route path='/review' component={ReviewMain}/>
 
         <Newsletter />
         <Footer />
