@@ -310,8 +310,8 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
                                 return res.status(200).send({ msg: "No Reviews to Display" });
                             }
                         }
-                    }).sort({ reviewHelpfulCount: -1 });
-
+                        // }).sort({ reviewHelpfulCount: -1 });
+                    });
                 } else {
                     return res.status(200).send({ msg: "No Reviews" });
                 }
@@ -380,8 +380,8 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
                                         return res.status(200).send({ msg: "No Reviews to Display" });
                                     }
                                 }
-                            }).sort({ reviewHelpfulCount: -1 });
-
+                                // }).sort({ reviewHelpfulCount: -1 });
+                            });
                         } else {
                             return res.status(200).send({ msg: "No Reviews" });
                         }

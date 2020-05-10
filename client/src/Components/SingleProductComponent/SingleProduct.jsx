@@ -7,7 +7,52 @@ import Axios from 'axios';
 class SingleProduct extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      CommentDocuments:[],
+      Size:0,
+    }
 
+  }
+  getCommentData = () => {
+    const url = '/api/review/5ea4280a46ab4d05a47dfd21';
+    // const url = '/api/review/5e6e389fe5934e44fc90beb8';
+    const token = localStorage.getItem('userLoginToken');
+    if (token) {
+      Axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then(res => {
+        const CommentDocuments = res.data.CommentDocuments;
+        const Size = res.data.CommentDocuments.length;
+        this.setState({
+          CommentDocuments,
+          Size,
+        });
+      }).catch(err => {
+        console.log(err);
+
+        swal({
+          title: "Error",
+          text: err.message,
+          icon: 'error'
+        });
+      })
+    } else {
+      Axios.get(url).then(res => {
+        console.log(res.data);
+      }).catch(err => {
+        swal({
+          title: "Error",
+          text: err.message,
+          icon: 'error'
+        });
+      })
+    }
+  }
+
+  componentDidMount = () => {
+    this.getCommentData();
   }
 
   addReview = () => {
@@ -21,27 +66,29 @@ class SingleProduct extends Component {
       }
     }).then(msg => {
       if (msg != "" && msg) {
-        const url = "/api/Review/newReviewComment/5e6e389fe5934e44fc90beb8";
+        
+        const url = "/api/Review/newReviewComment/5ea4280a46ab4d05a47dfd21";
+        // const url = "/api/Review/newReviewComment/5e6e389fe5934e44fc90beb8";
         const token = localStorage.getItem('userLoginToken');
         const data = {
           reviewMessage: msg
         }
         Axios.post(url, data, {
           headers: {
-            Authorization:`bearer ${token}`
+            Authorization: `bearer ${token}`
           }
-        }).then(async res=>{
+        }).then(async res => {
           await swal({
-            title:"Status",
-            text:res.data.msg,
-            icon:'success'
+            title: "Status",
+            text: res.data.msg,
+            icon: 'success'
           });
-          this.props.history.push('/single');
-        }).catch(err=>{
+          this.getCommentData();
+        }).catch(err => {
           swal({
-            title:"Error!",
-            text:err.message,
-            icon:'error'
+            title: "Error!",
+            text: err.message,
+            icon: 'error'
           });
         });
       }
@@ -295,7 +342,7 @@ class SingleProduct extends Component {
                         className="fa fa-check-square-o fa-icon"
                         aria-hidden="true"
                       ></i>{" "}
-                    reviews (5){" "}
+                    Reviews {this.state.Size}{" "}
                       <span
                         className="fa fa-angle-down fa-arrow"
                         aria-hidden="true"
@@ -314,7 +361,7 @@ class SingleProduct extends Component {
                   aria-labelledby="headingThree"
                 >
                   <div className="panel-body">
-                    <ReviewMain />
+                    <ReviewMain CommentDocuments={this.state.CommentDocuments} getCommentData={this.getCommentData}/>
                   </div>
                 </div>
               </div>

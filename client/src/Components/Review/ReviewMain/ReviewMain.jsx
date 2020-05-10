@@ -9,7 +9,6 @@ class ReviewMain extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            CommentDocuments: [],
             Size: 0,
             SelectedPage: 1,
             PageCount: 1,
@@ -17,52 +16,13 @@ class ReviewMain extends Component {
             PageNumbersArr: []
         }
     }
-
-    getCommentData = () =>{
-        // const url = '/api/review/5ea4280a46ab4d05a47dfd21';
-        const url = '/api/review/5e6e389fe5934e44fc90beb8';
-        const token = localStorage.getItem('userLoginToken');
-        if (token) {
-            Axios.get(url, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then(res => {
-                const CommentDocuments = res.data.CommentDocuments;
-                const Size = res.data.CommentDocuments.length;
-                this.setState({
-                    CommentDocuments,
-                    Size,
-                });
-                this.PageArrSetter();
-            }).catch(err => {
-                console.log(err);
-
-                Swal({
-                    title: "Error",
-                    text: err.message,
-                    icon: 'error'
-                });
-            })
-        } else {
-            Axios.get(url).then(res => {
-                console.log(res.data);
-            }).catch(err => {
-                Swal({
-                    title: "Error",
-                    text: err.message,
-                    icon: 'error'
-                });
-            })
+    componentWillReceiveProps=(props)=>{
+        if(this.props != props){
+            this.PageArrSetter();
         }
     }
-
-    componentDidMount = () => {
-        this.getCommentData();
-
-    }
     PageArrSetter = async () => {
-        const Size = this.state.CommentDocuments.length;
+        const Size = this.props.CommentDocuments.length;
         const PageCount = Math.ceil((Size / this.state.DisplaySize));
         await this.setState({
             PageCount,
@@ -140,8 +100,8 @@ class ReviewMain extends Component {
     }
 
     HelpfulComment = async (id, type, state) => {
-        // const url = 'api/Review/newHelpfulReview/5ea4280a46ab4d05a47dfd21';
-        const url = 'api/Review/newHelpfulReview/5e6e389fe5934e44fc90beb8';
+        const url = 'api/Review/newHelpfulReview/5ea4280a46ab4d05a47dfd21';
+        // const url = 'api/Review/newHelpfulReview/5e6e389fe5934e44fc90beb8';
         const token = localStorage.getItem('userLoginToken');
         let data;
         if (type == 'like') {
@@ -170,7 +130,7 @@ class ReviewMain extends Component {
                 icon: 'error'
             });
         });
-        this.getCommentData();
+        this.props.getCommentData();
     }
 
 
@@ -219,9 +179,9 @@ class ReviewMain extends Component {
                         </nav>
                     </div>
                 </div>
-                <div className='row'>
+                <div className='row comments-row'>
                     <div className="col-md-12">
-                        {this.state.CommentDocuments.slice(startOfArr, endofArr).map((element, key, self) => (
+                        {this.props.CommentDocuments.slice(startOfArr, endofArr).map((element, key, self) => (
                             <ReviewCard commentDocument={element} key={key} HelpfulComment={this.HelpfulComment} />
                         ))}
                     </div>
