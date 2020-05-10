@@ -13,13 +13,19 @@ class ReviewMain extends Component {
             SelectedPage: 1,
             PageCount: 1,
             DisplaySize: 5,
-            PageNumbersArr: []
+            PageNumbersArr: [],
         }
     }
-    componentWillReceiveProps=(props)=>{
-        if(this.props != props){
-            this.PageArrSetter();
-        }
+    // componentWillReceiveProps = (props) => {
+    //     if (this.props != props) {
+    //         this.PageArrSetter();
+    //     }
+    // }
+    componentDidMount(){
+        this.PageArrSetter();
+        this.setState({
+            DisplaySize:5
+        })
     }
     PageArrSetter = async () => {
         const Size = this.props.CommentDocuments.length;
@@ -107,7 +113,7 @@ class ReviewMain extends Component {
         if (type == 'like') {
             data = {
                 reviewID: id,
-                reviewWasHelpful:  state,
+                reviewWasHelpful: state,
                 reviewWasNotHelpful: false
             }
         } else if (type == 'unlike') {
@@ -182,7 +188,13 @@ class ReviewMain extends Component {
                 <div className='row comments-row'>
                     <div className="col-md-12">
                         {this.props.CommentDocuments.slice(startOfArr, endofArr).map((element, key, self) => (
-                            <ReviewCard commentDocument={element} key={key} HelpfulComment={this.HelpfulComment} />
+                            <ReviewCard
+                                commentDocument={element} key={key}
+                                HelpfulComment={this.HelpfulComment}
+                                MyComment={this.props.MyComments ? this.props.MyComments.includes(element._id) ? true : false : false}
+                                EditComment={this.props.EditComment}
+                                DeleteComment={this.props.DeleteComment}
+                            />
                         ))}
                     </div>
                 </div>

@@ -51,3 +51,11 @@
 .user-image-row {
     padding: 1mm 0 1mm 0;
 }
+
+.button-row {
+    margin: 1mm 0 1mm 0mm;
+}
+
+.vertical-btn {
+    width: 100%;
+}

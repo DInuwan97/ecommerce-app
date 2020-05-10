@@ -7,9 +7,13 @@ import Axios from 'axios';
 class SingleProduct extends Component {
   constructor(props) {
     super(props);
-    this.state={
-      CommentDocuments:[],
-      Size:0,
+    this.state = {
+      CommentDocuments: [],
+      Size: 0,
+      AverageStarRating: [0],
+      AverageRating: 0,
+      MyComments: [],
+
     }
 
   }
@@ -23,11 +27,27 @@ class SingleProduct extends Component {
           'Authorization': `Bearer ${token}`
         }
       }).then(res => {
+        console.log(res.data);
+        const AverageRating = res.data.AverageStarRating.toFixed(1);
+        const AverageStarRating = [];
+        for (let index = 1; index <= 5; index++) {
+          if (Math.floor(res.data.AverageStarRating) >= index) {
+            AverageStarRating.push(1);
+          } else if ((index - res.data.AverageStarRating.toFixed(1)) <= 0.5) {
+            AverageStarRating.push(0.5);
+          } else {
+            AverageStarRating.push(0);
+          }
+        }
+        const MyComments = res.data.myCommentID;
         const CommentDocuments = res.data.CommentDocuments;
         const Size = res.data.CommentDocuments.length;
         this.setState({
           CommentDocuments,
           Size,
+          AverageStarRating,
+          AverageRating,
+          MyComments
         });
       }).catch(err => {
         console.log(err);
@@ -40,7 +60,25 @@ class SingleProduct extends Component {
       })
     } else {
       Axios.get(url).then(res => {
-        console.log(res.data);
+        const AverageRating = res.data.AverageStarRating.toFixed(1);
+        const AverageStarRating = [];
+        for (let index = 1; index <= 5; index++) {
+          if (Math.floor(res.data.AverageStarRating) >= index) {
+            AverageStarRating.push(1);
+          } else if ((index - res.data.AverageStarRating.toFixed(1)) <= 0.5) {
+            AverageStarRating.push(0.5);
+          } else {
+            AverageStarRating.push(0);
+          }
+        }
+        const CommentDocuments = res.data.CommentDocuments;
+        const Size = res.data.CommentDocuments.length;
+        this.setState({
+          CommentDocuments,
+          Size,
+          AverageStarRating,
+          AverageRating
+        });
       }).catch(err => {
         swal({
           title: "Error",
@@ -66,7 +104,7 @@ class SingleProduct extends Component {
       }
     }).then(msg => {
       if (msg != "" && msg) {
-        
+
         const url = "/api/Review/newReviewComment/5ea4280a46ab4d05a47dfd21";
         // const url = "/api/Review/newReviewComment/5e6e389fe5934e44fc90beb8";
         const token = localStorage.getItem('userLoginToken');
@@ -93,6 +131,63 @@ class SingleProduct extends Component {
         });
       }
     });
+  }
+
+  EditComment = async (id, editreview) => {
+    const url = "/api/Review/updateReviceComment/5ea4280a46ab4d05a47dfd21";
+    // const url = "/api/Review/updateReviceComment/5e6e389fe5934e44fc90beb8";
+    const token = localStorage.getItem('userLoginToken');
+    let data = {
+      reviewID: id,
+      reviewMessage: editreview
+    }
+    await Axios.patch(url, data, {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }).then(res => {
+      swal({
+        title: "Status",
+        text: res.data.msg,
+        icon: 'success'
+      });
+    }).catch(err => {
+      swal({
+        title: "Error!",
+        text: err.message,
+        icon: 'error'
+      });
+    });
+    this.getCommentData();
+  }
+  DeleteComment = async (id) => {
+    const url = "/api/Review/deleteReviewComment/5ea4280a46ab4d05a47dfd21";
+    // const url = "/api/Review/deleteReviewComment/5e6e389fe5934e44fc90beb8";
+
+    const token = localStorage.getItem('userLoginToken');
+    await Axios.delete(url, {
+      headers: {
+        Authorization: `bearer ${token}`
+      },
+      data: {
+        reviewID: id,
+      }
+    }).then(res => {
+      console.log(res.data);
+
+      swal({
+        title: "Status",
+        text: res.data.msg,
+        icon: 'success'
+      });
+    }).catch(err => {
+      swal({
+        title: "Error!",
+        text: err.message,
+        icon: 'error'
+      });
+    });
+    this.getCommentData();
   }
 
   redirectToCart = () => {
@@ -153,21 +248,14 @@ class SingleProduct extends Component {
                 </p>
                 <div className="single-rating">
                   <ul>
-                    <li>
-                      <i className="fa fa-star-half-o" aria-hidden="true"></i>
-                    </li>
-                    <li>
-                      <i className="fa fa-star-o" aria-hidden="true"></i>
-                    </li>
-                    <li>
-                      <i className="fa fa-star-o" aria-hidden="true"></i>
-                    </li>
-                    <li>
-                      <i className="fa fa-star-o" aria-hidden="true"></i>
-                    </li>
-                    <li>
-                      <i className="fa fa-star-o" aria-hidden="true"></i>
-                    </li>
+                    {
+                      this.state.AverageStarRating.map((element) => (
+                        <li>
+                          <i className={element == 1 ? "fa fa-star" : element == 0.5 ? "fa fa-star-half-o" : "fa fa-star-o"} aria-hidden="true"></i>
+                        </li>
+                      ))
+                    }
+                    <li className="rating">{this.state.AverageRating}</li>
                     <li className="rating"><a href="#headingThree">reviews</a></li>
                     <li>
                       <p className="add-review" onClick={() => this.addReview()}>Add your review</p>
@@ -361,7 +449,13 @@ class SingleProduct extends Component {
                   aria-labelledby="headingThree"
                 >
                   <div className="panel-body">
-                    <ReviewMain CommentDocuments={this.state.CommentDocuments} getCommentData={this.getCommentData}/>
+                    <ReviewMain
+                      CommentDocuments={this.state.CommentDocuments}
+                      getCommentData={this.getCommentData}
+                      MyComments={this.state.MyComments}
+                      EditComment={this.EditComment}
+                      DeleteComment={this.DeleteComment}
+                    />
                   </div>
                 </div>
               </div>
