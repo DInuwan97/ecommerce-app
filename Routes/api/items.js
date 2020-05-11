@@ -63,6 +63,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+router.get("/company/:company", async (req, res) => {
+  try {
+    const item = await Item.find({ company: req.params.company });
+    if (!item) {
+      return res.status(400).send({ msg: "No item found" });
+    }
+    res.json(item);
+    console.log(item);
+  } catch (error) {
+    res.status(500).json({ msg: "Sever Error" });
+    console.error(error);
+  }
+});
+
+
+
 //adding a new item to the store &  checking whether the
 //item exist from the name if exist update the stock quantity and other details
 // update other values
@@ -83,6 +100,12 @@ router.post(
     ],
   ],
   async (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(400).json({ msg : "Please Enter Correct Fields" });
+    }
+
+
     let {
       itemName,
       price,
@@ -271,9 +294,9 @@ router.delete("/:id", async (req, res) => {
 router.patch(
   "/addDiscount",
   [
-    auth,
+    // auth,
     [
-      check("itemName", "Item Name is required").not().notEmpty(),
+      // check("itemName", "Item Name is required").not().notEmpty(),
       check("discount", "Discount is required").not().isEmpty(),
       check("discount", "Discount is Number").isNumeric(),
     ],
@@ -285,8 +308,8 @@ router.patch(
       if (!error.isEmpty()) {
         return res.status(400).json({ error: error.array() });
       }
-      const checkItemExits = await Item.findOne({
-        itemName: req.body.itemName,
+      const checkItemExits = await Item.findById({
+        _id: req.body._id,
       });
       if (!checkItemExits) {
         return res.status(400).json({ msg: "Item does not exist" });
