@@ -13,7 +13,8 @@ class SingleProduct extends Component {
       AverageStarRating: [0],
       AverageRating: 0,
       MyComments: [],
-
+      MyLiked: [],
+      MyDisliked: []
     }
 
   }
@@ -42,21 +43,38 @@ class SingleProduct extends Component {
         const MyComments = res.data.myCommentID;
         const CommentDocuments = res.data.CommentDocuments;
         const Size = res.data.CommentDocuments.length;
+        const MyLikedData = res.data.myLiked;
+        const MyLiked = [];
+        const MyDisliked = [];
+        console.log(MyLikedData);
+        
+        if (MyLikedData) {
+          for (let index = 0; index < MyLikedData.length; index++) {
+            if (MyLikedData[index].liked) {
+              MyLiked.push(MyLikedData[index].reviewId);
+            }
+            if (MyLikedData[index].disliked) {
+              MyDisliked.push(MyLikedData[index].reviewId);
+            }
+          }
+        }
         this.setState({
           CommentDocuments,
           Size,
           AverageStarRating,
           AverageRating,
-          MyComments
+          MyComments,
+          MyLiked,
+          MyDisliked
         });
       }).catch(err => {
         console.log(err);
 
-        swal({
-          title: "Error",
-          text: err.message,
-          icon: 'error'
-        });
+        // swal({
+        //   title: "Error",
+        //   text: err.message,
+        //   icon: 'error'
+        // });
       })
     } else {
       Axios.get(url).then(res => {
@@ -80,11 +98,11 @@ class SingleProduct extends Component {
           AverageRating
         });
       }).catch(err => {
-        swal({
-          title: "Error",
-          text: err.message,
-          icon: 'error'
-        });
+        // swal({
+        //   title: "Error",
+        //   text: err.message,
+        //   icon: 'error'
+        // });
       })
     }
   }
@@ -455,6 +473,8 @@ class SingleProduct extends Component {
                       MyComments={this.state.MyComments}
                       EditComment={this.EditComment}
                       DeleteComment={this.DeleteComment}
+                      MyLiked={this.state.MyLiked}
+                      MyDisliked={this.state.MyDisliked}
                     />
                   </div>
                 </div>

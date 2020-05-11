@@ -14,18 +14,29 @@ class ReviewMain extends Component {
             PageCount: 1,
             DisplaySize: 5,
             PageNumbersArr: [],
+            MyLiked: [],
+            MyDisliked: []
         }
     }
-    // componentWillReceiveProps = (props) => {
-    //     if (this.props != props) {
-    //         this.PageArrSetter();
-    //     }
-    // }
-    componentDidMount(){
+    componentWillReceiveProps = (props) => {
+        if (this.state.MyLiked != props.MyDisliked || this.state.MyLiked != props.MyDisliked ) {
+            this.setState({
+                MyLiked:props.MyLiked,
+                MyDisliked:props.MyDisliked
+            });
+            console.log("run");
+
+        }
+
+    }
+    componentDidMount() {
         this.PageArrSetter();
         this.setState({
-            DisplaySize:5
-        })
+            DisplaySize: 5,
+        });
+        setTimeout(() => {
+            this.PageArrSetter();
+        }, 2000);
     }
     PageArrSetter = async () => {
         const Size = this.props.CommentDocuments.length;
@@ -128,6 +139,42 @@ class ReviewMain extends Component {
             headers: {
                 Authorization: "bearer " + token,
             }
+            // })
+            // .then(res=>{
+            //     console.log(res.data.data);
+
+            //     if(res.data.data){
+            //         this.state.MyLiked.map((element,index,self)=>{
+            //             if(element == res.data.data.reviewID){
+            //                 if(!res.data.data.reviewWasHelpful){
+            //                     self.slice(index,1);
+            //                     this.setState({
+            //                         MyLiked:self
+            //                     })
+            //                 }else{
+            //                     self.push(res.data.data.reviewID);
+            //                     this.setState({
+            //                         MyLiked:self
+            //                     })
+            //                 }
+            //             }
+            //         });
+            //         this.state.MyDisliked.map((element,index,self)=>{
+            //             if(element == res.data.data.reviewID){
+            //                 if(!res.data.data.reviewWasNotHelpful){
+            //                     self.slice(index,1);
+            //                     this.setState({
+            //                         MyDisliked:self
+            //                     })
+            //                 }else{
+            //                     self.push(res.data.data.reviewID);
+            //                     this.setState({
+            //                         MyDisliked:self
+            //                     })
+            //                 }
+            //             }
+            //         })
+            //     }
         }).catch((err) => {
             console.log(err);
             Swal({
@@ -145,10 +192,28 @@ class ReviewMain extends Component {
         let endofArr = this.state.SelectedPage * this.state.DisplaySize;
         return (
             <div >
-
+                <div className='row comments-row'>
+                    <div className="col-md-12">
+                        {this.props.CommentDocuments.slice(startOfArr, endofArr).map((element, key, self) => (
+                            <ReviewCard
+                                commentDocument={element} key={key}
+                                HelpfulComment={this.HelpfulComment}
+                                MyComment={this.props.MyComments ? this.props.MyComments.includes(element._id) ? true : false : false}
+                                EditComment={this.props.EditComment}
+                                DeleteComment={this.props.DeleteComment}
+                                MyLiked={this.state.MyLiked.includes(element._id) ? true : false}
+                                MyDisliked={this.state.MyDisliked.includes(element._id) ? true : false}
+                            />
+                        ))}
+                    </div>
+                </div>
                 <div className="row navigation-row">
-                    <div className="col-md-4"></div>
-                    <div className="col-md-2">
+                    <div className="col-md-8" style={{textAlign:"end"}}>
+                        <p>
+                            Disply Number
+                        </p>
+                    </div>
+                    <div className="col-md-1" style={{ textAlign: "end",width:"auto" }}>
                         <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.DisplaySize} <span className="caret"></span>
                         </button>
@@ -160,8 +225,8 @@ class ReviewMain extends Component {
                             <li><p onClick={() => this.PageSizeSelector(100)}>100</p></li>
                         </ul>
                     </div>
-                    <div className="col-md-6">
-                        <nav aria-label="Page navigation">
+                    <div className="col-md-3" style={{width:"auto" }}>
+                        <nav aria-label="Page navigation" style={{ textAlign: "end"}}>
                             <ul className="pagination">
                                 <li className={this.state.SelectedPage == 1 ? "disabled" : ""}
                                     onClick={() => this.PageSelectorPrevious()}>
@@ -183,19 +248,6 @@ class ReviewMain extends Component {
                                 </li>
                             </ul>
                         </nav>
-                    </div>
-                </div>
-                <div className='row comments-row'>
-                    <div className="col-md-12">
-                        {this.props.CommentDocuments.slice(startOfArr, endofArr).map((element, key, self) => (
-                            <ReviewCard
-                                commentDocument={element} key={key}
-                                HelpfulComment={this.HelpfulComment}
-                                MyComment={this.props.MyComments ? this.props.MyComments.includes(element._id) ? true : false : false}
-                                EditComment={this.props.EditComment}
-                                DeleteComment={this.props.DeleteComment}
-                            />
-                        ))}
                     </div>
                 </div>
             </div>

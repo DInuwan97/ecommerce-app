@@ -2,11 +2,49 @@ import React, { Component, Fragment } from 'react';
 import './ReviewCard.css';
 import swal from 'sweetalert';
 class ReviewCard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            MyLiked: false,
+            MyDisliked: false
+        }
+    }
+    componentDidMount() {
+        this.setState({
+            MyLiked: this.props.MyLiked,
+            MyDisliked: this.props.MyDisliked
+        });
+    }
 
-    likeButtons = (type, state) => {
+    componentWillReceiveProps = (props) => {
+        this.setState({
+            MyLiked: props.MyLiked,
+            MyDisliked: props.MyDisliked
+        });
+
+
+    }
+
+
+    likeButtons = (type) => {
         if (!this.props.MyComment) {
             if (localStorage.getItem('userLoginToken')) {
-                this.props.HelpfulComment(this.props.commentDocument._id, 'like', true);
+                let state;
+                if (type === "like") {
+                    state = !this.props.MyLiked;
+                    this.setState({
+                        MyLiked:!this.props.MyLiked,
+                        MyDisliked:false
+                    });
+                    this.props.HelpfulComment(this.props.commentDocument._id, type, state);
+                } else if (type === "unlike") {
+                    state = !this.props.MyDisliked;
+                    this.setState({
+                        MyDisliked:!this.props.MyDisliked,
+                        MyLiked:false
+                    });
+                    this.props.HelpfulComment(this.props.commentDocument._id, type, state);
+                }
             } else {
                 swal({
                     title: "Error!",
@@ -30,13 +68,21 @@ class ReviewCard extends Component {
                     attributes: {
                         placeholder: this.props.commentDocument.reviewMessage
                     }
-                }
+                },
+                buttons: {
+                    cancel: true,
+                    confirm: true,
+
+                },
+                closeOnClickOutside: false,
             }).then(data => {
                 let editedData = textBar.value;
                 console.log(editedData, data);
 
-                if (data != "" && data) {
-                    this.props.EditComment(this.props.commentDocument._id, editedData);
+                if (editedData != "" && data && editedData) {
+                    if (editedData !== this.props.commentDocument.reviewMessage) {
+                        this.props.EditComment(this.props.commentDocument._id, editedData);
+                    }
                 }
             });
         }
@@ -78,42 +124,24 @@ class ReviewCard extends Component {
                                     </div>
                                 </div>
                                 <div className="row like-row">
-                                    <div className="col-md-3 col-xs-3"></div>
-                                    <div className="user-helpful col-md-3 col-xs-3">
-                                        <button className={this.props.MyComment ? "btn btn-success disabled" : "btn btn-success"} onClick={() => this.likeButtons()}> <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                    <div className="col-md-2 col-xs-2"></div>
+                                    <div className="user-helpful col-md-4 col-xs-4">
+                                        <span className={this.props.MyComment ? "disabled like-icon" : "like-icon"} onClick={() => this.likeButtons("like")}>
+                                            {this.state.MyLiked ? <i class="fa fa-thumbs-up"></i> : <i class="fa fa-thumbs-o-up"></i>}
                                             {" " + this.props.commentDocument.reviewHelpfulCount}
-                                        </button>
+                                        </span>
                                     </div>
-                                    <div className="user-not-helpful col-md-3 col-xs-3">
-                                        <button className={this.props.MyComment ? "btn btn-danger disabled" : "btn btn-danger"}>
-                                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                    <div className="user-not-helpful col-md-4 col-xs-4">
+                                        <span className={this.props.MyComment ? "disabled dislike-icon" : "dislike-icon"} onClick={() => this.likeButtons("unlike")}>
+                                            {this.state.MyDisliked ? <i class="fa fa-thumbs-up"></i> : <i class="fa fa-thumbs-o-up"></i>}
                                             {" " + this.props.commentDocument.reviewNotHelpfulCount}
-                                        </button>
+                                        </span>
                                     </div>
-                                    <div className="user-helpful col-md-3 col-xs-3"></div>
+                                    <div className="user-helpful col-md-2 col-xs-2"></div>
                                 </div>
-                                {this.props.MyComment ?
-                                    <div className="row button-row">
-                                        <div className="col-md-12">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Action <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Edit Review</a></li>
-                                                    <li><a href="#">Delete Review</a></li>
-                                                </ul>
-                                            </div>
-                                            {/* <div class="btn-group-vertical vertical-btn" role="group" aria-label="...">
-                                                <button class="btn btn-info" onClick={()=>this.EditComment()}>Edit Review</button>
-                                                <button class="btn btn-danger" onClick={()=>this.DeleteComment()}>Delete Review</button>
-                                            </div> */}
-                                        </div>
-                                    </div> : <div></div>
-                                }
                             </div>
                         </div>
-                        <div className="col-md-9 review-col">
+                        <div className="col-md-8 review-col col-xs-6">
                             <div className="review-part">
                                 <div className='row review-message-row'>
                                     <div className="review-message col-md-12">
@@ -130,13 +158,27 @@ class ReviewCard extends Component {
                                     <div className="review-date col-md-5">
                                         {AddedDate}
                                     </div>
-                                    <div className="review "></div>
                                 </div>
+
                             </div>
+                        </div>
+                        <div className="col-md-1 col-xs-6 settings-button-col">
+                            {this.props.MyComment ?
+                                <div class="btn-group">
+                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="glyphicon glyphicon-option-vertical"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+                                        <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+                                    </ul>
+                                </div> :
+                                <div></div>
+                            }
                         </div>
                     </div>
                 </div>
-            </Fragment>
+            </Fragment >
         );
     }
 }

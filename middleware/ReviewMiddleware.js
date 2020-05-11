@@ -51,4 +51,50 @@ module.exports = {
 
     },
 
+    updateLikeCount: (req) => {
+        var itemId = req.params.id;
+        ReviewComments.find({ item: itemId }, (err, data) => {
+            if (err) {
+                return;
+            } else {
+                data.forEach(element => {
+                    ReviewHelpful.find({ reviewID: element._id, reviewWasHelpful: true }, (err, helpfulData) => {
+                        if (err) {
+                            return;
+                        } else {
+                            ReviewComments.update({ _id: element._id }, { reviewHelpfulCount: helpfulData.length }, (err) => {
+                                if (err) {
+                                    return;
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    },
+
+    updateDislikeCount: (req) => {
+        var itemId = req.params.id;
+        ReviewComments.find({ item: itemId }, (err, data) => {
+            if (err) {
+                return;
+            } else {
+                data.forEach(element => {
+                    ReviewHelpful.find({ reviewID: element._id, reviewWasNotHelpful: true }, (err, helpfulNotData) => {
+                        if (err) {
+                            return;
+                        } else {
+                            ReviewComments.update({ _id: element._id }, { reviewNotHelpfulCount: helpfulNotData.length }, (err) => {
+                                if (err) {
+                                    return;
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    }
+
 }

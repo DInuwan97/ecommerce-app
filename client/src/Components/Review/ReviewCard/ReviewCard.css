@@ -4,6 +4,7 @@
     border-radius: 0.5rem;
     margin-top: 1mm;
     padding: 1mm 0 1mm 0;
+    margin: 1mm -5px 0 -5px;
 }
 
 
@@ -52,10 +53,43 @@
     padding: 1mm 0 1mm 0;
 }
 
-.button-row {
-    margin: 1mm 0 1mm 0mm;
+.settings-button-col {
+    padding: 0;
+    text-align: right;
 }
 
-.vertical-btn {
-    width: 100%;
+.like-icon {
+    font-size: x-large;
+    color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.like-icon:hover {
+    color: #449d44;
+    border-color: #398439;
+    cursor: pointer;
+}
+
+.user-helpful>.disabled:hover {
+    cursor: no-drop;
+    color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.dislike-icon {
+    font-size: x-large;
+    color: #d9534f;
+    border-color: #d43f3a;
+    cursor: pointer;
+}
+
+.dislike-icon:hover {
+    color: #c9302c;
+    border-color: #ac2925;
+}
+
+.user-not-helpful>.disabled:hover {
+    cursor: no-drop;
+    color: #ac2925;
+    border-color: #761c19;
 }

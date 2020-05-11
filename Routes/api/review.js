@@ -91,11 +91,20 @@ router.patch("/newRating/:id", authenticateUser, verifyUserSecureCode, verifyIte
 });
 
 
+const updateLike = require('../../middleware/ReviewMiddleware').updateLikeCount;
+const updateDisLike = require('../../middleware/ReviewMiddleware').updateDislikeCount;
+router.get('/updateHelpfuls/:id', async (req, res) => {
+    await updateLike(req);
+    await updateDisLike(req);
+    return res.status(200).send({ msg: "updated" })
+});
+
+
 //liking and unliking a comment by other user. only one time for a comment per a user.
 //need to add a method to delete useless data from the DB
 //reviewhelpful and reviewnothelful both false data are useless and therefor no need to keep them inside
 //the DB
-router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, verifyItem, verifyReview, (req, res) => {
+router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, verifyItem, verifyReview, async (req, res) => {
     var itemId = req.params.id;
     var reviewWasHelpful = false;
     var reviewWasNotHelpful = false;
@@ -112,20 +121,19 @@ router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, ve
         return res.status(400).send({ msg: "Invalid details" });
     }
     ReviewHelpful.findOne({ reviewViewesUser: req.authData.user._id, reviewID: req.body.reviewID },
-        async(err, review) => {
+        async (err, review) => {
             if (err) {
                 res.send({ msg: err });
             }
-            let update = false;
+            // let update = false;
             if (review) {
                 await ReviewHelpful.findByIdAndUpdate({ _id: review._id }, { reviewWasHelpful: reviewWasHelpful, reviewWasNotHelpful: reviewWasNotHelpful },
-                    (err) => {
+                    {new:true},(err,data) => {
                         if (err) {
                             return res.status(400).send({ msg: err });
                         } else {
-                            update = true;
-                            console.log(update);
-                            return res.status(200).send({ msg: "Helpful updated" })
+                            // update = true;
+                            return res.status(200).send({ msg: "Helpful updated",data })
                         }
                     });
             } else {
@@ -133,13 +141,13 @@ router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, ve
                     reviewViewesUser: req.authData.user._id,
                     reviewID: req.body.reviewID,
                     reviewWasHelpful: reviewWasHelpful,
-                    reviewWasNotHelpful: reviewWasNotHelpful
+                    reviewWasNotHelpful: reviewWasNotHelpful,
+                    item: itemId
                 }
                 await ReviewHelpful.create(reviewHelpfulData, (err) => {
                     if (err) {
                         return res.status(400).send({ msg: err });
                     } else {
-                        console.log(update);
                         return res.status(200).send({ msg: "Helpful created" })
 
                     }
@@ -210,8 +218,8 @@ router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, ve
             //     }
             // }
         });
-
-
+    await updateLike(req);
+    await updateDisLike(req);
 });
 // //middleware to update like count of reviews
 helpfulCount = (req, res, next) => {
@@ -268,15 +276,15 @@ helpfulNotCount = (req, res, next) => {
     });
 }
 
-router.get('/updateHelpfuls/:id', helpfulNotCount, helpfulCount, (req, res) => {
-    return res.status(200).send({ msg: "updated" })
-});
+
 
 //publicaly accessible 
 //can see all the ratings 
 
 router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
-    // router.get("/:id", verifyItem, (req, res) => {
+    // router.get("/:id", verifyItem, async(req, res) => {
+    //     await updateLike(req);
+    //     await updateDisLike(req);
     const userHeader = req.headers["authorization"];
     var itemId = req.params.id;
     if (typeof userHeader == "undefined") {
@@ -304,7 +312,7 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
                             if (commentData) {
                                 response.CommentDocuments = commentData;
 
-                                return res.send(response);
+
 
                             } else {
                                 return res.status(200).send({ msg: "No Reviews to Display" });
@@ -312,6 +320,8 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
                         }
                         // }).sort({ reviewHelpfulCount: -1 });
                     });
+
+
                 } else {
                     return res.status(200).send({ msg: "No Reviews" });
                 }
@@ -373,9 +383,28 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
                                             response.userType = "Customer"
                                         }
 
-
-                                        return res.send(response);
-
+                                        ReviewHelpful.find({ reviewViewesUser: authData.user._id, item: itemId }, (err, data) => {
+                                            if (err) {
+                                                return res.status(400).send({ msg: err });
+                                            } else {
+                                                if (data) {
+                                                    const MyLiked = [];
+                                                    let dataForLike;
+                                                    data.forEach(element => {
+                                                        dataForLike = {
+                                                            reviewId: element.reviewID,
+                                                            liked: element.reviewWasHelpful,
+                                                            disliked: element.reviewWasNotHelpful
+                                                        }
+                                                        MyLiked.push(dataForLike);
+                                                    });
+                                                    if (MyLiked.length > 0) {
+                                                        response.myLiked = MyLiked;
+                                                    }
+                                                }
+                                                return res.send(response);
+                                            }
+                                        });
                                     } else {
                                         return res.status(200).send({ msg: "No Reviews to Display" });
                                     }
@@ -449,7 +478,7 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
         } else {
             if (authData.user.secureKeyVerifyStatus == true) {
                 ReviewComments.deleteOne({ _id: req.body.reviewID, item: itemId, reviewedUser: authData.user._id },
-                    function(err) {
+                    function (err) {
                         if (err) {
                             return res.status(400).send({ msg: err });
                         } else {
