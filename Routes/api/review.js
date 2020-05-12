@@ -128,12 +128,12 @@ router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, ve
             // let update = false;
             if (review) {
                 await ReviewHelpful.findByIdAndUpdate({ _id: review._id }, { reviewWasHelpful: reviewWasHelpful, reviewWasNotHelpful: reviewWasNotHelpful },
-                    {new:true},(err,data) => {
+                    { new: true }, (err, data) => {
                         if (err) {
                             return res.status(400).send({ msg: err });
                         } else {
                             // update = true;
-                            return res.status(200).send({ msg: "Helpful updated",data })
+                            return res.status(200).send({ msg: "Helpful updated", data })
                         }
                     });
             } else {
@@ -277,6 +277,53 @@ helpfulNotCount = (req, res, next) => {
 }
 
 
+router.get("/getRating/:id", verifyItem, (req, res) => {
+    const itemId = req.params.id;
+    ReviewRating.find({ item: itemId }, (err, data) => {
+        if (err) {
+            return res.status(400).send({ msg: err });
+        } else {
+            if (data) {
+                let totalStarRating = 0;
+                data.forEach(element => {
+                    totalStarRating += element.starRating;
+                });
+                if (totalStarRating == 0) {
+                    AverageStarRating = 0;
+                } else {
+                    AverageStarRating = totalStarRating / data.length;
+                }
+                return res.status(200).send({ AverageStarRating });
+
+            } else {
+                return res.status(200).send({ AverageStarRating: 0 })
+            }
+        }
+    });
+});
+
+router.get("/MyRating/:id",authenticateUser,verifyItem,(req,res)=>{
+    const itemId = req.params.id;
+    jwt.verify(req.token,"secretkey",(err,authData)=>{
+        if(err){
+            return res.status(400).send({ msg: err });
+        }else{
+            ReviewRating.find({item:itemId,reviewedUser:authData._id},(err,data)=>{
+                if(err){
+                    return res.status(400).send({ msg: err });
+                }else{
+                    if(data[0]){
+                        return res.status(200).send({ MyRating:data[0].starRating });                     
+                    }else{
+                        return res.status(200).send({ MyRating:0 });
+                    }
+                }
+            });
+        }
+    });
+    
+});
+
 
 //publicaly accessible 
 //can see all the ratings 
@@ -288,44 +335,18 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
     const userHeader = req.headers["authorization"];
     var itemId = req.params.id;
     if (typeof userHeader == "undefined") {
-        var response;
-        ReviewRating.find({ item: itemId }, (err, data) => {
+        var response = {};
+        ReviewComments.find({ item: itemId }, (err, commentData) => {
             if (err) {
-                return res.status(400).send({ msg: err });
+                res.status(400).send({ msg: err });
             } else {
-                if (data) {
-                    totalStarRating = 0;
-                    data.forEach(element => {
-                        totalStarRating += element.starRating;
-                    });
-                    if (totalStarRating == 0) {
-                        AverageStarRating = 0;
-                    } else {
-                        AverageStarRating = totalStarRating / data.length;
-                    }
-                    response = { "AverageStarRating": AverageStarRating }
-
-                    ReviewComments.find({ item: itemId }, (err, commentData) => {
-                        if (err) {
-                            res.status(400).send({ msg: err });
-                        } else {
-                            if (commentData) {
-                                response.CommentDocuments = commentData;
-
-
-
-                            } else {
-                                return res.status(200).send({ msg: "No Reviews to Display" });
-                            }
-                        }
-                        // }).sort({ reviewHelpfulCount: -1 });
-                    });
-
-
+                if (commentData) {
+                    response.CommentDocuments = commentData;
                 } else {
-                    return res.status(200).send({ msg: "No Reviews" });
+                    return res.status(200).send({ msg: "No Reviews to Display" });
                 }
             }
+            // }).sort({ reviewHelpfulCount: -1 });
         });
     } else {
         req.token = (userHeader.split(" "))[1];
@@ -334,87 +355,62 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
                 res.status(400).send({ msg: err });
             } else {
                 console.log(authData)
-                var response;
-                ReviewRating.find({ item: itemId }, (err, data) => {
+                var response = {};
+
+                ReviewComments.find({ item: itemId }, (err, commentData) => {
                     if (err) {
-                        return res.status(400).send({ msg: err });
+                        res.status(400).send({ msg: err });
                     } else {
-                        if (data) {
-                            response = {}
-                            totalStarRating = 0;
-                            data.forEach(element => {
-                                totalStarRating += element.starRating;
+                        if (commentData) {
+                            var myCommentID = [];
+                            commentData.forEach(element => {
                                 if (element.reviewedUser == authData.user._id) {
-                                    response.myStarRating = element.starRating;
+                                    myCommentID.push(element._id);
                                 }
                             });
-                            if (totalStarRating == 0) {
-                                AverageStarRating = 0;
-                            } else {
-                                AverageStarRating = totalStarRating / data.length;
+                            if (myCommentID.length > 0) {
+                                response.myCommentID = myCommentID;
                             }
-                            response.AverageStarRating = AverageStarRating;
+                            response.CommentDocuments = commentData;
+                            if (authData.user.isAdmin) {
+                                response.userType = "Admin";
+                            } else if (authData.user.isCustomer) {
+                                response.userType = "Customer";
+                            } else if (authData.user.isSalesManager) {
+                                response.userType = "SalesManager";
+                            } else if (authData.user.isSalesServicer) {
+                                response.userType = "SalesServicer";
+                            } else {
+                                response.userType = "Customer"
+                            }
 
-                            ReviewComments.find({ item: itemId }, (err, commentData) => {
+                            ReviewHelpful.find({ reviewViewesUser: authData.user._id, item: itemId }, (err, data) => {
                                 if (err) {
-                                    res.status(400).send({ msg: err });
+                                    return res.status(400).send({ msg: err });
                                 } else {
-                                    if (commentData) {
-                                        var myCommentID = [];
-                                        commentData.forEach(element => {
-                                            if (element.reviewedUser == authData.user._id) {
-                                                myCommentID.push(element._id);
+                                    if (data) {
+                                        const MyLiked = [];
+                                        let dataForLike;
+                                        data.forEach(element => {
+                                            dataForLike = {
+                                                reviewId: element.reviewID,
+                                                liked: element.reviewWasHelpful,
+                                                disliked: element.reviewWasNotHelpful
                                             }
-
+                                            MyLiked.push(dataForLike);
                                         });
-                                        if (myCommentID.length > 0) {
-                                            response.myCommentID = myCommentID;
+                                        if (MyLiked.length > 0) {
+                                            response.myLiked = MyLiked;
                                         }
-                                        response.CommentDocuments = commentData;
-                                        if (authData.user.isAdmin) {
-                                            response.userType = "Admin";
-                                        } else if (authData.user.isCustomer) {
-                                            response.userType = "Customer";
-                                        } else if (authData.user.isSalesManager) {
-                                            response.userType = "SalesManager";
-                                        } else if (authData.user.isSalesServicer) {
-                                            response.userType = "SalesServicer";
-                                        } else {
-                                            response.userType = "Customer"
-                                        }
-
-                                        ReviewHelpful.find({ reviewViewesUser: authData.user._id, item: itemId }, (err, data) => {
-                                            if (err) {
-                                                return res.status(400).send({ msg: err });
-                                            } else {
-                                                if (data) {
-                                                    const MyLiked = [];
-                                                    let dataForLike;
-                                                    data.forEach(element => {
-                                                        dataForLike = {
-                                                            reviewId: element.reviewID,
-                                                            liked: element.reviewWasHelpful,
-                                                            disliked: element.reviewWasNotHelpful
-                                                        }
-                                                        MyLiked.push(dataForLike);
-                                                    });
-                                                    if (MyLiked.length > 0) {
-                                                        response.myLiked = MyLiked;
-                                                    }
-                                                }
-                                                return res.send(response);
-                                            }
-                                        });
-                                    } else {
-                                        return res.status(200).send({ msg: "No Reviews to Display" });
                                     }
+                                    return res.send(response);
                                 }
-                                // }).sort({ reviewHelpfulCount: -1 });
                             });
                         } else {
-                            return res.status(200).send({ msg: "No Reviews" });
+                            return res.status(200).send({ msg: "No Reviews to Display" });
                         }
                     }
+                    // }).sort({ reviewHelpfulCount: -1 });
                 });
             }
         });

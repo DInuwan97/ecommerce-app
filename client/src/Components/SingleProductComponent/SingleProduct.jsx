@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReviewMain from '../Review/ReviewMain/ReviewMain';
 import './assets/css/single.css';
 import swal from 'sweetalert';
@@ -14,9 +14,118 @@ class SingleProduct extends Component {
       AverageRating: 0,
       MyComments: [],
       MyLiked: [],
-      MyDisliked: []
+      MyDisliked: [],
+      Rating: [0, 0, 0, 0, 0]
     }
 
+  }
+
+  getStarRating = () => {
+    const url = '/api/review/getRating/5ea4280a46ab4d05a47dfd21';
+    // const url = '/api/review/5e6e389fe5934e44fc90beb8';
+    Axios.get(url).then(res => {
+      console.log(res.data);
+
+      const AverageRating = res.data.AverageStarRating.toFixed(1);
+      const AverageStarRating = [];
+      for (let index = 1; index <= 5; index++) {
+        if (Math.floor(res.data.AverageStarRating) >= index) {
+          AverageStarRating.push(1);
+        } else if ((index - res.data.AverageStarRating.toFixed(1)) <= 0.5) {
+          AverageStarRating.push(0.5);
+        } else {
+          AverageStarRating.push(0);
+        }
+      }
+      this.setState({
+        AverageStarRating,
+        AverageRating
+      });
+
+    });
+  }
+
+  getMyRating = () => {
+    const url = '/api/review/MyRating/5ea4280a46ab4d05a47dfd21';
+    // const url = '/api/review/MyRating/5e6e389fe5934e44fc90beb8';
+    const token = localStorage.getItem('userLoginToken');
+    Axios.get(url,
+      {
+        headers:
+        {
+          Authorization: `bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res.data.MyRating);
+        const MyRating =[0,0,0,0,0];
+        if(res.data.MyRating >= 1 && res.data.MyRating <=5){
+          MyRating[5-res.data.MyRating] = 1;
+          this.setState({
+            Rating:MyRating
+          })
+        }else{
+          this.setState({
+            Rating:MyRating
+          })
+        }
+
+      }).catch(err=>{
+        console.log(err);
+      });
+
+  }
+
+  addRate = (value) => {
+    const MyRating = [];
+    for (let index = 0; index < 5; index++) {
+      if (value == index + 1) {
+        MyRating.push(1);
+      } else {
+        MyRating.push(0);
+      }
+    }
+    console.log(MyRating);
+    
+    if (MyRating.length == 5) {
+      this.setState({
+        Rating: MyRating
+      });
+    }
+  }
+  confirmRate = ()=>{
+    const url = '/api/review/newRating/5ea4280a46ab4d05a47dfd21';
+    // const url = '/api/review/newRating/5e6e389fe5934e44fc90beb8';
+    const token = localStorage.getItem('userLoginToken');
+    let data = {
+      starRating:0
+    }
+    for (let index = 0; index < 5; index++) {
+      const element = this.state.Rating[index];
+      if(element == 1){
+        data.starRating=(5-index);
+        break;
+      }
+    }
+    Axios.patch(url,data,
+      {
+        headers:{
+          Authorization:`bearer ${token}`
+        }
+      }).then( res=>{
+         this.getStarRating();
+        swal({
+          title:"Status",
+          text:res.data.msg,
+          icon:"success"
+        })
+      }).catch(err=>{
+        swal({
+          title:"Error!",
+          text:err.message,
+          icon:'error'
+        });
+      });
+    
   }
   getCommentData = () => {
     const url = '/api/review/5ea4280a46ab4d05a47dfd21';
@@ -25,21 +134,11 @@ class SingleProduct extends Component {
     if (token) {
       Axios.get(url, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       }).then(res => {
         console.log(res.data);
-        const AverageRating = res.data.AverageStarRating.toFixed(1);
-        const AverageStarRating = [];
-        for (let index = 1; index <= 5; index++) {
-          if (Math.floor(res.data.AverageStarRating) >= index) {
-            AverageStarRating.push(1);
-          } else if ((index - res.data.AverageStarRating.toFixed(1)) <= 0.5) {
-            AverageStarRating.push(0.5);
-          } else {
-            AverageStarRating.push(0);
-          }
-        }
+
         const MyComments = res.data.myCommentID;
         const CommentDocuments = res.data.CommentDocuments;
         const Size = res.data.CommentDocuments.length;
@@ -47,7 +146,7 @@ class SingleProduct extends Component {
         const MyLiked = [];
         const MyDisliked = [];
         console.log(MyLikedData);
-        
+
         if (MyLikedData) {
           for (let index = 0; index < MyLikedData.length; index++) {
             if (MyLikedData[index].liked) {
@@ -61,8 +160,6 @@ class SingleProduct extends Component {
         this.setState({
           CommentDocuments,
           Size,
-          AverageStarRating,
-          AverageRating,
           MyComments,
           MyLiked,
           MyDisliked
@@ -78,24 +175,11 @@ class SingleProduct extends Component {
       })
     } else {
       Axios.get(url).then(res => {
-        const AverageRating = res.data.AverageStarRating.toFixed(1);
-        const AverageStarRating = [];
-        for (let index = 1; index <= 5; index++) {
-          if (Math.floor(res.data.AverageStarRating) >= index) {
-            AverageStarRating.push(1);
-          } else if ((index - res.data.AverageStarRating.toFixed(1)) <= 0.5) {
-            AverageStarRating.push(0.5);
-          } else {
-            AverageStarRating.push(0);
-          }
-        }
         const CommentDocuments = res.data.CommentDocuments;
         const Size = res.data.CommentDocuments.length;
         this.setState({
           CommentDocuments,
-          Size,
-          AverageStarRating,
-          AverageRating
+          Size
         });
       }).catch(err => {
         // swal({
@@ -109,6 +193,8 @@ class SingleProduct extends Component {
 
   componentDidMount = () => {
     this.getCommentData();
+    this.getStarRating();
+    this.getMyRating();
   }
 
   addReview = () => {
@@ -273,8 +359,12 @@ class SingleProduct extends Component {
                         </li>
                       ))
                     }
+
                     <li className="rating">{this.state.AverageRating}</li>
                     <li className="rating"><a href="#headingThree">reviews</a></li>
+                    <li className="rating add-rating" data-toggle="modal" data-target="#myModal">
+                      <p>Rate Item</p>
+                    </li>
                     <li>
                       <p className="add-review" onClick={() => this.addReview()}>Add your review</p>
                     </li>
@@ -531,6 +621,37 @@ class SingleProduct extends Component {
             </div>
           </div>
         </div>
+        <div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 className="modal-title" id="myModalLabel">Please rate:</h4>
+              </div>
+              <div className="modal-body">
+                <fieldset className="rating-stars">
+                  {this.state.Rating.slice(0,5).reverse().map((element, index,self) => (
+                    <Fragment>
+                      <input type="radio" id={"star" + (5 - index)}
+                        name="rating-stars"
+                        value={(5 - index)}
+                        onChange={(e) => this.addRate(e.currentTarget.value)}
+                        checked={element}
+                      />
+                      <label for={"star" + (5 - index)} title={(5 - index) + " Stars"}>{(5 - index)} star</label>
+                    </Fragment>
+                  ))}
+                </fieldset>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.confirmRate()}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     );
   }
