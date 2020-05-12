@@ -102,7 +102,7 @@ class SingleProduct extends Component {
     for (let index = 0; index < 5; index++) {
       const element = this.state.Rating[index];
       if(element == 1){
-        data.starRating=(5-index);
+        data.starRating=(index+1);
         break;
       }
     }
@@ -626,7 +626,8 @@ class SingleProduct extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 className="modal-title" id="myModalLabel">Please rate:</h4>
+                {/* <h2 className="modal-title" id="myModalLabel">Please rate:</h2> */}
+                <div class="swal-title" >Please rate</div>
               </div>
               <div className="modal-body">
                 <fieldset className="rating-stars">
