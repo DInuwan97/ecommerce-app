@@ -6,10 +6,28 @@ export default class MyProfile extends Component {
   constructor(props) {
       super(props)
         this.state = {
-          file: null
+          file: null,
+          firstName:null,
+          email:''
         }
         this.uploadSingleFile = this.uploadSingleFile.bind(this)
         this.upload = this.upload.bind(this)
+       // this.setFirstName = this.setFirstName.bind(this);
+        //this.setEmail = this.setEmail.bind(this);
+        console.log('Profile DATA : ' ,this.props.fName);
+    }
+
+    componentDidMount() {
+      this.setState({
+        email:this.props.loggedEmail
+      })
+
+      this.setState({
+        firstName:this.props.fName
+      })
+
+      console.log('Profile DATA First NAME: ' ,this.props.fName);
+
     }
 
     uploadSingleFile(e) {
@@ -17,6 +35,7 @@ export default class MyProfile extends Component {
         file: URL.createObjectURL(e.target.files[0])
       })
     }
+
 
     upload(e) {
       e.preventDefault()
@@ -318,7 +337,7 @@ export default class MyProfile extends Component {
                   <div className="tab-pane" id="settings">
                     <form className="form-horizontal">
                       <div className="form-group row">
-                        <label for="firstName" className="col-sm-2 col-form-label">First Name</label>
+                        <label for="firstName" className="col-sm-2 col-form-label">{this.props.fName}</label>
                         <div className="col-sm-10">
                           <input type="text" className="form-control" id="firstName" name="firstName" placeholder="First Name"/>
                         </div>

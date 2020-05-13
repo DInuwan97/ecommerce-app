@@ -9,7 +9,7 @@ import SalesServicersList from '../AdminOrientation/SalesServicersApproveList';
 import ActiveSalesManagers from '../AdminOrientation/ActiveSalesManagers';
 import AddDiscount from '../SalesManagerAddDiscount/AddDiscount'
 
-import MyProfile from '../UserProfile/MyProfile';
+import MyProfile from '../AdminOrientation/MyProfile';
 export default class HeaderSideMenuFooter extends Component {
 
   constructor(props){
@@ -742,8 +742,11 @@ export default class HeaderSideMenuFooter extends Component {
                <Route path ='/addCategory' component= {Category}/>
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
                <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
-               <Route path='/MyProfile' component={()=><MyProfile companyName={this.state.company}/>}/>
+
+               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email}/>}/>
+
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
+
               </div>
             </section>
 
