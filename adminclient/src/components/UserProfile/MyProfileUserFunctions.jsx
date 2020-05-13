@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './assets/css/imageUploadPreview.css';
+import swal from 'sweetalert';
 import axios from 'axios';
 export default class MyProfileUserFunctions extends Component {
 
@@ -91,13 +92,22 @@ export default class MyProfileUserFunctions extends Component {
 
 
     updateMyProfile = (email) =>{
+     
         console.log('Sales Servicer Email : ',email);
         axios({
             method:'patch',
             url:`/api/users/updatemyProfile/${email}`,
             headers:{
                "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+            },
+            data:{
+              firstName:this.state.firstName,
+              lastName:this.state.lastName,
+              mobile:this.state.mobile,
+              address:this.state.address
             }
+            
+
         })
         .then(res=>{
             console.log(res);
@@ -119,6 +129,8 @@ export default class MyProfileUserFunctions extends Component {
         e.preventDefault()
         console.log(this.state.file)
       }
+
+
       
     render() {
 
@@ -147,7 +159,7 @@ export default class MyProfileUserFunctions extends Component {
             <div className="card card-primary card-outline">
               <div className="card-body box-profile">
                 <div className="text-center">
-                  <img className="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture"/>
+                  {imgPreview}
                 </div>
 
                 <h3 className="profile-username text-center">{this.state.firstName} {this.state.lastName}</h3>
@@ -421,7 +433,7 @@ export default class MyProfileUserFunctions extends Component {
                   
 
                   <div className="tab-pane" id="settings">
-                    <form className="form-horizontal">
+              
                       <div className="form-group row">
                         <label for="firstName" className="col-sm-2 col-form-label">First Name</label>
                         <div className="col-sm-10">
@@ -443,12 +455,12 @@ export default class MyProfileUserFunctions extends Component {
                       </div>
                       <div className="form-group row">
                         <label for="userEmail" className="col-sm-2 col-form-label">Email</label>
-
+                        <div className="col-sm-10">
 
                           <input type="email" value={this.props.loggedEmail} disabled onChange={this.onChangeHandler} className="form-control" id="userEmail" name="userEmail" placeholder="Email"/>
-
+                          </div>
                         </div>
-                      </div>
+                
                       <div className="form-group row">
                         <label for="userMobile" className="col-sm-2 col-form-label">Mobile</label>
                         <div className="col-sm-10">
@@ -463,7 +475,7 @@ export default class MyProfileUserFunctions extends Component {
                         <div className="col-sm-10">
 
 
-                          <input type="text" value={this.state.address} onChange={this.onChangeHandler} className="form-control" id="address" placeholder="Address"/>
+                          <input type="text" value={this.state.address} onChange={this.onChangeHandler} className="form-control" id="address" placeholder="Address" name="address"/>
 
                         </div>
                       </div>
@@ -496,10 +508,23 @@ export default class MyProfileUserFunctions extends Component {
                       </div>
                       <div className="form-group row">
                         <div className="offset-sm-2 col-sm-10">
-                          <button  className="btn btn-danger">Submit</button>
+                          <button  
+                                 onClick={()=>{
+                                  swal({
+                                    title: "Done",
+                                    text: "Profile was Updated",
+                                    icon: "success",
+                                  })
+                                  .then(()=>{
+                                    this.updateMyProfile(this.props.loggedEmail)
+                                  })
+                               
+                                }
+                              }
+                          className="btn btn-danger">Submit</button>
                         </div>
                       </div>
-                    </form>
+                  
                   </div>
                  
                 </div>
