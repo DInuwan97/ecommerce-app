@@ -49,29 +49,31 @@ class SingleProduct extends Component {
     const url = '/api/review/MyRating/5ea4280a46ab4d05a47dfd21';
     // const url = '/api/review/MyRating/5e6e389fe5934e44fc90beb8';
     const token = localStorage.getItem('userLoginToken');
-    Axios.get(url,
-      {
-        headers:
+    if (token) {
+      Axios.get(url,
         {
-          Authorization: `bearer ${token}`
-        }
-      }).then(res => {
-        console.log(res.data.MyRating);
-        const MyRating =[0,0,0,0,0];
-        if(res.data.MyRating >= 1 && res.data.MyRating <=5){
-          MyRating[5-res.data.MyRating] = 1;
-          this.setState({
-            Rating:MyRating
-          })
-        }else{
-          this.setState({
-            Rating:MyRating
-          })
-        }
+          headers:
+          {
+            Authorization: `bearer ${token}`
+          }
+        }).then(res => {
+          console.log(res.data.MyRating);
+          const MyRating = [0, 0, 0, 0, 0];
+          if (res.data.MyRating >= 1 && res.data.MyRating <= 5) {
+            MyRating[5 - res.data.MyRating] = 1;
+            this.setState({
+              Rating: MyRating
+            })
+          } else {
+            this.setState({
+              Rating: MyRating
+            })
+          }
 
-      }).catch(err=>{
-        console.log(err);
-      });
+        }).catch(err => {
+          console.log(err);
+        });
+    }
 
   }
 
@@ -85,47 +87,54 @@ class SingleProduct extends Component {
       }
     }
     console.log(MyRating);
-    
+
     if (MyRating.length == 5) {
       this.setState({
         Rating: MyRating
       });
     }
   }
-  confirmRate = ()=>{
+  confirmRate = () => {
     const url = '/api/review/newRating/5ea4280a46ab4d05a47dfd21';
     // const url = '/api/review/newRating/5e6e389fe5934e44fc90beb8';
     const token = localStorage.getItem('userLoginToken');
-    let data = {
-      starRating:0
-    }
-    for (let index = 0; index < 5; index++) {
-      const element = this.state.Rating[index];
-      if(element == 1){
-        data.starRating=(index+1);
-        break;
+    if (token) {
+      let data = {
+        starRating: 0
       }
-    }
-    Axios.patch(url,data,
-      {
-        headers:{
-          Authorization:`bearer ${token}`
+      for (let index = 0; index < 5; index++) {
+        const element = this.state.Rating[index];
+        if (element == 1) {
+          data.starRating = (index + 1);
+          break;
         }
-      }).then( res=>{
-         this.getStarRating();
-        swal({
-          title:"Status",
-          text:res.data.msg,
-          icon:"success"
-        })
-      }).catch(err=>{
-        swal({
-          title:"Error!",
-          text:err.message,
-          icon:'error'
+      }
+      Axios.patch(url, data,
+        {
+          headers: {
+            Authorization: `bearer ${token}`
+          }
+        }).then(res => {
+          this.getStarRating();
+          swal({
+            title: "Status",
+            text: res.data.msg,
+            icon: "success"
+          })
+        }).catch(err => {
+          swal({
+            title: "Error!",
+            text: err.message,
+            icon: 'error'
+          });
         });
+    } else {
+      swal({
+        title: "Error!",
+        text: "Login/Signup to Rate Items",
+        icon: "error"
       });
-    
+    }
   }
   getCommentData = () => {
     const url = '/api/review/5ea4280a46ab4d05a47dfd21';
@@ -198,100 +207,126 @@ class SingleProduct extends Component {
   }
 
   addReview = () => {
-    swal({
-      title: "Add Review",
-      content: {
-        element: "input",
-        attributes: {
-          placeholder: "Add your review here"
-        }
-      }
-    }).then(msg => {
-      if (msg != "" && msg) {
-
-        const url = "/api/Review/newReviewComment/5ea4280a46ab4d05a47dfd21";
-        // const url = "/api/Review/newReviewComment/5e6e389fe5934e44fc90beb8";
-        const token = localStorage.getItem('userLoginToken');
-        const data = {
-          reviewMessage: msg
-        }
-        Axios.post(url, data, {
-          headers: {
-            Authorization: `bearer ${token}`
+    const url = "/api/Review/newReviewComment/5ea4280a46ab4d05a47dfd21";
+    // const url = "/api/Review/newReviewComment/5e6e389fe5934e44fc90beb8";
+    const token = localStorage.getItem('userLoginToken');
+    if (token) {
+      swal({
+        title: "Add Review",
+        content: {
+          element: "input",
+          attributes: {
+            placeholder: "Add your review here"
           }
-        }).then(async res => {
-          await swal({
-            title: "Status",
-            text: res.data.msg,
-            icon: 'success'
+        }
+      }).then(msg => {
+        if (msg != "" && msg) {
+
+
+          const data = {
+            reviewMessage: msg
+          }
+          Axios.post(url, data, {
+            headers: {
+              Authorization: `bearer ${token}`
+            }
+          }).then(async res => {
+            await swal({
+              title: "Status",
+              text: res.data.msg,
+              icon: 'success'
+            });
+            this.getCommentData();
+          }).catch(err => {
+            swal({
+              title: "Error!",
+              text: err.message,
+              icon: 'error'
+            });
           });
-          this.getCommentData();
-        }).catch(err => {
-          swal({
-            title: "Error!",
-            text: err.message,
-            icon: 'error'
-          });
-        });
-      }
-    });
+        }
+      });
+    } else {
+      swal({
+        title: "Error!",
+        text: "Login/Signup to Add Reviews to Items",
+        icon: "error"
+      });
+    }
   }
 
   EditComment = async (id, editreview) => {
     const url = "/api/Review/updateReviceComment/5ea4280a46ab4d05a47dfd21";
     // const url = "/api/Review/updateReviceComment/5e6e389fe5934e44fc90beb8";
     const token = localStorage.getItem('userLoginToken');
-    let data = {
-      reviewID: id,
-      reviewMessage: editreview
-    }
-    await Axios.patch(url, data, {
-      headers: {
-        Authorization: `bearer ${token}`
+    if (token) {
+      let data = {
+        reviewID: id,
+        reviewMessage: editreview
       }
-    }).then(res => {
-      swal({
-        title: "Status",
-        text: res.data.msg,
-        icon: 'success'
+      await Axios.patch(url, data, {
+        headers: {
+          Authorization: `bearer ${token}`
+        }
+      }).then(res => {
+        swal({
+          title: "Status",
+          text: res.data.msg,
+          icon: 'success'
+        });
+      }).catch(err => {
+        swal({
+          title: "Error!",
+          text: err.message,
+          icon: 'error'
+        });
       });
-    }).catch(err => {
+      this.getCommentData();
+    } else {
       swal({
         title: "Error!",
-        text: err.message,
-        icon: 'error'
+        text: "Login/Signup to Edit Review",
+        icon: "error"
       });
-    });
-    this.getCommentData();
+    }
   }
   DeleteComment = async (id) => {
     const url = "/api/Review/deleteReviewComment/5ea4280a46ab4d05a47dfd21";
     // const url = "/api/Review/deleteReviewComment/5e6e389fe5934e44fc90beb8";
 
     const token = localStorage.getItem('userLoginToken');
-    await Axios.delete(url, {
-      headers: {
-        Authorization: `bearer ${token}`
-      },
-      data: {
-        reviewID: id,
-      }
-    }).then(res => {
-      console.log(res.data);
+    if (token) {
 
-      swal({
-        title: "Status",
-        text: res.data.msg,
-        icon: 'success'
+      await Axios.delete(url, {
+        headers: {
+          Authorization: `bearer ${token}`
+        },
+        data: {
+          reviewID: id,
+        }
+      }).then(res => {
+        console.log(res.data);
+
+        swal({
+          title: "Status",
+          text: res.data.msg,
+          icon: 'success'
+        });
+      }).catch(err => {
+        swal({
+          title: "Error!",
+          text: err.message,
+          icon: 'error'
+        });
       });
-    }).catch(err => {
+      this.getCommentData();
+    } else {
       swal({
         title: "Error!",
-        text: err.message,
-        icon: 'error'
+        text: "Login/Signup to Delete Review",
+        icon: "error"
       });
-    });
-    this.getCommentData();
+    }
   }
 
   redirectToCart = () => {
@@ -631,7 +666,7 @@ class SingleProduct extends Component {
               </div>
               <div className="modal-body">
                 <fieldset className="rating-stars">
-                  {this.state.Rating.slice(0,5).reverse().map((element, index,self) => (
+                  {this.state.Rating.slice(0, 5).reverse().map((element, index, self) => (
                     <Fragment>
                       <input type="radio" id={"star" + (5 - index)}
                         name="rating-stars"

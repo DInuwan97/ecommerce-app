@@ -8,6 +8,10 @@ import UserListpage from '../AdminOrientation/UserListPage';
 import SalesServicersList from '../AdminOrientation/SalesServicersApproveList';
 import ActiveSalesManagers from '../AdminOrientation/ActiveSalesManagers';
 
+import ReviewTable from '../ReviewDataTable/ReviewDataTable';
+import Compose from '../ReviewDataTable/SendEmail';
+import SingleReviews from '../ReviewDataTable/SingleItemReview';
+
 import MyProfile from '../UserProfile/MyProfile';
 export default class HeaderSideMenuFooter extends Component {
 
@@ -39,7 +43,7 @@ export default class HeaderSideMenuFooter extends Component {
 	}
 
 	componentDidMount(){
-
+    
 		if(localStorage.getItem("userLoginToken") !== null){
 			const token = localStorage.userLoginToken;
 			const decoded = jwt_decode(token);
@@ -175,7 +179,7 @@ export default class HeaderSideMenuFooter extends Component {
           <aside className="main-sidebar sidebar-dark-primary elevation-4">
 
             <a href="../../index3.html" className="brand-link">
-              <img src="./dist/img/AdminLTELogo.png"
+              <img src="/dist/img/AdminLTELogo.png"
                    alt="AdminLTE Logo"
                    className="brand-image img-circle elevation-3"/>
               <span className="brand-text font-weight-light">AdminLTE 3</span>
@@ -186,7 +190,7 @@ export default class HeaderSideMenuFooter extends Component {
              
               <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div className="image">
-                  <img src="./dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image"/>
+                  <img src="/dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image"/>
                 </div>
                 <div className="info">
                   <a href="#" className="d-block">{this.state.firstName}{' '}{this.state.lastName}</a>
@@ -742,7 +746,9 @@ export default class HeaderSideMenuFooter extends Component {
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
                <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
                <Route path='/MyProfile' component={()=><MyProfile companyName={this.state.company}/>}/>
-
+                <Route path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
+                <Route path='/Compose' component={Compose}/>
+                <Route path='/SingleReviews/:id' component={SingleReviews}/>
               </div>
             </section>
 

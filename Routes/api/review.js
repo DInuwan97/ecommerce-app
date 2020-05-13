@@ -27,6 +27,7 @@ router.post("/newReviewComment/:id", authenticateUser, verifyUserSecureCode, ver
             reviewUserFirstName: req.authData.user.firstName,
             reviewUserLastName: req.authData.user.lastName,
             reviewerEmail: req.authData.user.email,
+            itemCompany: req.company
         };
         ReviewComments.create(ReviewDetails, (err) => {
             if (err) {
@@ -302,26 +303,26 @@ router.get("/getRating/:id", verifyItem, (req, res) => {
     });
 });
 
-router.get("/MyRating/:id",authenticateUser,verifyItem,(req,res)=>{
+router.get("/MyRating/:id", authenticateUser, verifyItem, (req, res) => {
     const itemId = req.params.id;
-    jwt.verify(req.token,"secretkey",(err,authData)=>{
-        if(err){
+    jwt.verify(req.token, "secretkey", (err, authData) => {
+        if (err) {
             return res.status(400).send({ msg: err });
-        }else{
-            ReviewRating.find({item:itemId,reviewedUser:authData._id},(err,data)=>{
-                if(err){
+        } else {
+            ReviewRating.find({ item: itemId, reviewedUser: authData._id }, (err, data) => {
+                if (err) {
                     return res.status(400).send({ msg: err });
-                }else{
-                    if(data[0]){
-                        return res.status(200).send({ MyRating:data[0].starRating });                     
-                    }else{
-                        return res.status(200).send({ MyRating:0 });
+                } else {
+                    if (data[0]) {
+                        return res.status(200).send({ MyRating: data[0].starRating });
+                    } else {
+                        return res.status(200).send({ MyRating: 0 });
                     }
                 }
             });
         }
     });
-    
+
 });
 
 
@@ -342,6 +343,7 @@ router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
             } else {
                 if (commentData) {
                     response.CommentDocuments = commentData;
+                    return res.status(200).send(response)
                 } else {
                     return res.status(200).send({ msg: "No Reviews to Display" });
                 }
@@ -425,17 +427,21 @@ verifyUserIsTheReviewPoster = (req, res, next) => {
             if (err) {
                 return res.status(400).send({ msg: err });
             } else {
-                ReviewComments.findOne({ _id: req.body.reviewID }, (err, data) => {
-                    if (err) {
-                        return res.status(400).send({ msg: err });
-                    } else {
-                        if (authData.user._id == data.reviewedUser) {
-                            next();
+                if (!req.body.adminAccess) {
+                    ReviewComments.findOne({ _id: req.body.reviewID }, (err, data) => {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
                         } else {
-                            return res.status(400).send({ msg: "This client didn't posted the review" });
+                            if (authData.user._id == data.reviewedUser) {
+                                next();
+                            } else {
+                                return res.status(400).send({ msg: "This client didn't posted the review" });
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    next()
+                }
             }
         });
     })
@@ -473,7 +479,7 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
             return res.status(400).send({ msg: err })
         } else {
             if (authData.user.secureKeyVerifyStatus == true) {
-                ReviewComments.deleteOne({ _id: req.body.reviewID, item: itemId, reviewedUser: authData.user._id },
+                ReviewComments.deleteOne({ _id: req.body.reviewID, item: itemId },
                     function (err) {
                         if (err) {
                             return res.status(400).send({ msg: err });
@@ -498,6 +504,49 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
         }
     });
 });
+
+const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
+const Items = require('../../models/Item');
+
+router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => {
+    ReviewComments.find({ itemCompany: req.authData.company }, { item: 1, _id: 0 }, async (err, data) => {
+        if (err) {
+            return res.status(400).send({ msg: err });
+        } else {
+            if (data) {
+                let itemIdArr = data.map((document) => {
+                    return document.item.toString();
+                });
+                itemIdArr.sort();
+                let unique = [], count = [], before, items = [];
+                for (let index = 0; index < itemIdArr.length; index++) {
+                    if (itemIdArr[index] !== before) {
+                        unique.push(itemIdArr[index]);
+                        count.push(1);
+                        await Items.findById(itemIdArr[index], (err, data) => {
+                            if (err) {
+                                return res.status(500).send({ msg: err });
+                            } else {
+                                items.push(data.itemName);
+                            }
+                        })
+                    } else {
+                        count[count.length - 1]++;
+                    }
+                    before = itemIdArr[index];
+                }
+                response = [];
+                unique.forEach((element, index) => {
+                    response.push({ item: element, itemName: items[index], count: count[index] })
+                });
+                res.status(200).send({ data: response });
+
+            } else {
+                return res.status(200).send({ data: [] })
+            }
+        }
+    })
+})
 
 
 

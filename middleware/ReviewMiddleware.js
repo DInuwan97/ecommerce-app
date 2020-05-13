@@ -26,7 +26,8 @@ module.exports = {
             if (err) {
                 return res.status(400).send({ msg: err });
             } else {
-                if (itemDocuments.length != 0) {
+                if (itemDocuments.length == 1) {
+                    req.company = itemDocuments[0].company;
                     next();
                 } else {
                     return res.status(400).send({ msg: "Invalid Item ID" });
@@ -95,6 +96,20 @@ module.exports = {
                 });
             }
         });
-    }
+    },
 
+    verifyAdmin: (req, res, next) => {
+        jwt.verify(req.token, "secretkey", (err, authData) => {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                if (authData.isAdmin || authData.isSalesManager || authData.isSalesServicer) {
+                    req.authData = authData;
+                    next();
+                } else {
+                    return res.status(403).send({ msg: "No Authorization" })
+                }
+            };
+        })
+    },
 }
