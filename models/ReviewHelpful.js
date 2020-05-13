@@ -19,8 +19,12 @@ const ReviewHelpfulSchema = mongoose.Schema({
     reviewWasNotHelpful:{
         type:Boolean,
         default:false
+    },
+    item: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "item",
+        required: true
     }
-
 });
 
 module.exports = ReviewHelpful = mongoose.model('reviewHelpful',ReviewHelpfulSchema);
