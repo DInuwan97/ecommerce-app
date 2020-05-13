@@ -78,6 +78,13 @@ export default class MyProfileUserFunctions extends Component {
     }
 
 
+    onChangeHandler = e =>{
+        this.setState({
+          [e.target.name] : e.target.value
+        })
+    }
+
+
     componentDidMount(){
         this.getUser();
     }
@@ -418,31 +425,46 @@ export default class MyProfileUserFunctions extends Component {
                       <div className="form-group row">
                         <label for="firstName" className="col-sm-2 col-form-label">First Name</label>
                         <div className="col-sm-10">
-                          <input type="text" value={this.state.firstName} className="form-control" id="firstName" name="firstName" placeholder="First Name"/>
+
+                        
+
+                          <input type="text" value={this.state.firstName} onChange={this.onChangeHandler} className="form-control" id="firstName" name="firstName" placeholder="First Name"/>
+
                         </div>
                       </div>
                       <div className="form-group row">
                         <label for="lastName" className="col-sm-2 col-form-label">Last Name</label>
                         <div className="col-sm-10">
-                          <input type="text" value={this.state.lastName} className="form-control" id="lastName" name="lastName" placeholder="Last Name"/>
+
+
+                          <input type="text" value={this.state.lastName} onChange={this.onChangeHandler} className="form-control" id="lastName" name="lastName" placeholder="Last Name"/>
+
                         </div>
                       </div>
                       <div className="form-group row">
                         <label for="userEmail" className="col-sm-2 col-form-label">Email</label>
-                        <div className="col-sm-10">
-                          <input type="email" value={this.props.loggedEmail} className="form-control" id="userEmail" name="userEmail" placeholder="Email"/>
+
+
+                          <input type="email" value={this.props.loggedEmail} disabled onChange={this.onChangeHandler} className="form-control" id="userEmail" name="userEmail" placeholder="Email"/>
+
                         </div>
                       </div>
                       <div className="form-group row">
                         <label for="userMobile" className="col-sm-2 col-form-label">Mobile</label>
                         <div className="col-sm-10">
-                          <input type="text" value={this.state.mobile} className="form-control" id="userMobile" name="userMobile" placeholder="Mobile"/>
+
+
+                          <input type="text" value={this.state.mobile} onChange={this.onChangeHandler} className="form-control" id="userMobile" name="mobile" placeholder="Mobile"/>
+
                         </div>
                       </div>
                       <div className="form-group row">
                         <label for="userAddress" className="col-sm-2 col-form-label">Address</label>
                         <div className="col-sm-10">
-                          <input type="text" value={this.state.address} className="form-control" id="userAddress" placeholder="Address"/>
+
+
+                          <input type="text" value={this.state.address} onChange={this.onChangeHandler} className="form-control" id="address" placeholder="Address"/>
+
                         </div>
                       </div>
 
