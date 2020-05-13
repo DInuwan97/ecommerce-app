@@ -393,6 +393,7 @@ router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
   console.log('Request Body of updateMyProfile : ', req.params);
 
   jwt.verify(req.token, "secretkey",  async (err, authData) => {
+
     if(err){
       res.status(400).json({'error':err})
     }else{
@@ -402,7 +403,7 @@ router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
       if(req.params.email == authData.email){
         user.firstName = req.body.firstName,
         user.lastName = req.body.lastName,
-        user.email = req.body.email,
+        //user.email = req.body.email,
         user.mobile = req.body.mobile,
         user.address = req.body.address
   
