@@ -14,8 +14,9 @@ export default class addNewItemComponent extends Component {
       size: "",
       stockQuantity: 0,
       addedBy: "",
+      description: "",
       itemImage: null,
-      company : ''
+      company: "",
     };
     this.onChange = this.onChange.bind(this);
     console.log("localstorage login token :", localStorage.userLoginToken);
@@ -48,14 +49,13 @@ export default class addNewItemComponent extends Component {
   }
 
   onImageHandle = () => {
-    
     let formData = new FormData();
     formData.append("image", this.state.itemImage);
     axios
       .patch(`/api/items/image/${this.state.itemName}`, formData)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
-  }
+  };
 
   onSubmitHandler = (e) => {
     const token = localStorage.userLoginToken;
@@ -73,17 +73,30 @@ export default class addNewItemComponent extends Component {
         size: this.state.size,
         stockQuantity: this.state.stockQuantity,
         addedBy: decoded.email,
-        company : decoded.company
+        description: this.state.description,
+        company: decoded.company,
       })
       .then((res) => {
         console.log(res);
         console.log(res.data);
+        swal({
+          title: "THANK YOU",
+          text: "ITEM ADDED SUCESSFULLY",
+          icon: "success",
+          button: "OKAY",
+        });
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response);
+        swal({
+          title: "Oops!!!",
+          text: "Fields are Empty",
+          icon: "error",
+          button: "Please Enter the Again",
+        });
       });
 
-      this.onImageHandle();
+    this.onImageHandle();
 
     this.setState({
       itemName: "",
@@ -201,19 +214,20 @@ export default class addNewItemComponent extends Component {
                   onChange={this.onChange}
                 />
               </div>
-              <button
-                class="btn btn-primary btn-block btn-lg "
-                onClick={() =>
-                  swal({
-                    title: "THANK YOU",
-                    text: "ITEM ADDED SUCESSFULLY",
-                    icon: "success",
-                    button: "OKAY",
-                  })
-                }
-              >
-                Submit
-              </button>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea
+                  rows="4"
+                  cols="50"
+                  type="text-area"
+                  class="form-control"
+                  name="description"
+                  placeholder="Description"
+                  value={this.state.description}
+                  onChange={this.onChange}
+                />
+              </div>
+              <button class="btn btn-primary btn-block btn-lg ">Submit</button>
             </form>
           </div>
         </div>

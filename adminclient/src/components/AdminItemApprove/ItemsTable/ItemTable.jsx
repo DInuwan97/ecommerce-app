@@ -34,9 +34,9 @@ export default class ItemTable extends Component {
   render() {
    
     return (
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title">DataTable with default features</h3>
+      <div className="card ">
+        <div className="card-header ">
+          <h2 className="card-title ">ITEMS TO BE APPROVED</h2>
         </div>
 
         <div className="card-body">
