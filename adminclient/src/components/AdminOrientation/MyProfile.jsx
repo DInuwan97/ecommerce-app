@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import DashbordCardPanel from '../DashbordCardPannel/DashobordCardPanel';
-import MyProfile from '../UserProfile/MyProfile';
+import MyProfileFunctions from '../UserProfile/MyProfileUserFunctions';
 export default class MyProfile extends Component {
     render() {
-        const{companyName} = this.props;
+        const{loggedEmail} = this.props;
         return (
             <div>
                  <DashbordCardPanel/>
-                 <MyProfile/>
+                 <MyProfileFunctions loggedEmail={loggedEmail}/>
             </div>
         )
     }

@@ -383,6 +383,55 @@ router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>
   }catch(error){
     console.log(error);
   }
+});
+
+//update logged user profile
+
+router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
+
+  console.log('Request Body of updateMyProfile : ', req.params);
+
+  jwt.verify(req.token, "secretkey",  async (err, authData) => {
+    if(err){
+      res.status(400).json({'error':err})
+    }else{
+ 
+      let user = await User.findOne({email:req.params.email})
+
+      if(req.params.email == authData.email){
+        user.firstName = req.body.firstName,
+        user.lastName = req.body.lastName,
+        user.email = req.body.email,
+        user.mobile = req.body.mobile,
+        user.address = req.body.address
+  
+        await user.save();
+        res.status(200).json(user);
+
+      }else{
+        res.status(404).json({"msg" : "Email is not logged user's email"})
+      }
+    }
+    });
+
+});
+
+
+
+router.get('/singleUser/:email',async (req,res)=>{
+  try {
+    console.log('Request Body of singeUser : ', req.params);
+    const users = await User.findOne({email:req.params.email});
+    //const users = await User.find();
+    if (!users) {
+      return res.status(400).json({ msg: "No User is Available" });
+    }
+    res.status(200).json(users);
+   
+  } catch (error) {
+    res.status(500).json({ msg: "viewusers route error" });
+    console.error(error);
+  }
 })
 
 
