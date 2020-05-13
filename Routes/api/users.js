@@ -218,13 +218,14 @@ router.post("/login", (req, res) => {
               isCustomer:user.isCustomer,
               isSalesManager:user.isSalesManager,
               isSalesServicer:user.isSalesServicer,
-              company:user.company
+              company:user.company,
+              user
           }
 
             jwt.sign(
               payload,
               "secretkey",  
-              { expiresIn: "100s" },
+              { expiresIn: "100h" },
               (err, token) => {
                 res.json({ 
                 'token' : token,

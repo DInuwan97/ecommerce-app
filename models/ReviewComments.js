@@ -40,6 +40,10 @@ const ReviewCommentSchema = mongoose.Schema({
     reviewerEmail:{
         type:String,
         required:true
+    },
+    itemCompany:{
+        type:String,
+        required:false
     }
 
 });
