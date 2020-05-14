@@ -748,13 +748,10 @@ export default class HeaderSideMenuFooter extends Component {
                <Route path ='/addCategory' component= {Category}/>
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
                <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
-               <Route path='/UserListpage' component={()=><UserListpage companyName={this.state.company}/>}/>
-               
-               
+             
                 <Route path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
                 <Route path='/Compose' component={Compose}/>
                 <Route path='/SingleReviews/:id' component={SingleReviews}/>
-
 
                <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email}/>}/>
 

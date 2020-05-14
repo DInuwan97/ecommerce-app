@@ -16,7 +16,8 @@ export default class MyProfileUserFunctions extends Component {
             isSalesManager:'',
             isSalesServicer:'',
             isCustomer:'',
-            userDesignation :''
+            userDesignation :'',
+            userImageUrl:''
 
         };
 
@@ -46,7 +47,8 @@ export default class MyProfileUserFunctions extends Component {
             isAdmin:user.isAdmin,
             isSalesManager:user.isSalesManager,
             isSalesServicer:user.isSalesServicer,
-            isCustomer:user.isCustomer
+            isCustomer:user.isCustomer,
+            userImageUrl:user.userImageUrl
           })
 
           
@@ -90,6 +92,16 @@ export default class MyProfileUserFunctions extends Component {
         this.getUser();
     }
 
+    
+    onImageHandle = () => {
+      let formData = new FormData();
+      formData.append("image", this.state.userImageUrl);
+      axios
+        .patch(`/api/users/updatemyProfile/uploadImage/:${this.props.loggedEmail}`, formData)
+        .then((res) => console.log(res))
+        .catch((err) => console.error(err));
+    };
+
 
     updateMyProfile = (email) =>{
      
@@ -115,6 +127,8 @@ export default class MyProfileUserFunctions extends Component {
         .catch(err=>{
            console.log(err)
         });
+
+        this.onImageHandle()
     }
 
 
@@ -122,6 +136,10 @@ export default class MyProfileUserFunctions extends Component {
         this.setState({
           file: URL.createObjectURL(e.target.files[0])
         })
+        
+        this.setState({ 
+          userImageUrl: e.target.files[0] 
+        });
       }
   
   
@@ -489,7 +507,7 @@ export default class MyProfileUserFunctions extends Component {
                         </div>
 
              
-                    <input type="file"  onChange={this.uploadSingleFile} />
+                    <input type="file" name="userImageUrl" onChange={this.uploadSingleFile} />
                 
                     
 

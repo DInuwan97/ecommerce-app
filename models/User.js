@@ -46,7 +46,7 @@ const UserSchema = new Schema({
             }
         }
     },
-    package:{
+    packageName:{
         type:String,
         required:function(){
             if(this.isSalesManager || this.isAdmin){
@@ -58,6 +58,10 @@ const UserSchema = new Schema({
         uppercase:true
     },
     userImageUrl:{
+        type:String,
+        default:''
+    },
+    userImageUrlId:{
         type:String,
         default:''
     },
