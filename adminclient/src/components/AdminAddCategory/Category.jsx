@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CardList from './CategoryCardList'
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
+import swal from "sweetalert";
 import axios from "axios";
 export default class Category extends Component {
   constructor(props) {
@@ -33,14 +34,24 @@ export default class Category extends Component {
         code: category.code,
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        this.setState({ category: [...this.state.category, category] });
+        swal({
+          title: "THANK YOU",
+          text: "ITEM ADDED SUCESSFULLY",
+          icon: "success",
+          button: "OKAY",
+        });
       })
       .catch(function (error) {
-        console.log(error);
+        swal({
+          title: "ERROR",
+          text: "Please Enter the required Fields",
+          icon: "error",
+          button: "Try Again",
+        });
       });
 
-      this.setState({ category: [...this.state.category, category] });
+     
   };
 
   //deleting a category

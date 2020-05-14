@@ -16,13 +16,15 @@ export default function ItemTableRow({
     <tr>
       <td>{addedBy}</td>
       <td>{itemName}</td>
-      <td>{price}</td>
+      <td>Rs. {price}</td>
       <td>{Brand}</td>
       <td>{size}</td>
-      <td>{discount}</td>
+      <td>{discount}%</td>
+      <td>Rs. {(1 - discount*0.01) * price}</td>
+
       <td>
         <button
-          className="btn btn-primary btn-md"
+          className="btn btn-primary btn-md font-weight-bold"
           onClick={() =>
             swal("Please Enter the Discount:", {
               content: "input",
@@ -48,8 +50,7 @@ export default function ItemTableRow({
               }
             })
           }
-        >
-          ADD Discount
+        ><i class="fas fa-plus"></i> ADD Discount
         </button>
       </td>
     </tr>
