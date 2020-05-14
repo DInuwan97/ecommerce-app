@@ -184,9 +184,10 @@ button:disabled {
   fill: #ec2f16;
 }
 
-.plus {
-  background-color: #dad8d8;
-  border-radius: 100px;
+.minus {
+  align-items: center;
+  background-color: rgb(242, 242, 242);
+  border-radius: 60px;
   cursor: pointer;
   width: 2.5rem;
   height: 2.5rem;
@@ -195,13 +196,20 @@ button:disabled {
 
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-.plus__btn {
+.minus:disabled {
+  background-color: rgb(231, 229, 229);
+}
+
+.minus__btn {
   transform: scale(1.2);
-  fill: #737574;
+  fill: rgb(49, 49, 49);
   z-index: 50;
+}
+
+.minus__btn_deactive {
+  fill: rgb(122, 122, 122);
 }
 
 .quantity {
@@ -238,10 +246,9 @@ button:disabled {
   -moz-appearance: textfield;
 }
 
-.minus {
-  align-items: center;
-  background-color: #dad8d8;
-  border-radius: 60px;
+.plus {
+  background-color: rgb(218, 216, 216);
+  border-radius: 100px;
   cursor: pointer;
   width: 2.5rem;
   height: 2.5rem;
@@ -250,12 +257,21 @@ button:disabled {
 
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.minus__btn {
+.plus:disabled {
+  background-color: rgb(231, 229, 229);
+}
+
+.plus__btn {
   transform: scale(1.2);
-  fill: #737574;
+  fill: rgb(49, 49, 49);
   z-index: 50;
+}
+
+.plus__btn_deactive {
+  fill: rgb(122, 122, 122);
 }
 
 /******************************** custom check box ***********************************/

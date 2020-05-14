@@ -15,6 +15,16 @@ const CartItem = props => {
     price = props.item.totalPrice;
   }
 
+  // set disable styles for increse and decrease quantity buttons
+  let plusBtnStyle = 'plus__btn';
+  let minusBtnStyle = 'minus__btn';
+  if (props.item.quantity <= 1) {
+    minusBtnStyle = 'minus__btn_deactive';
+  }
+  if (props.item.quantity === props.item.stockQuantity) {
+    plusBtnStyle = 'plus__btn_deactive';
+  }
+
   //console.log(props.item.isSelected + ' ' + props.item.id);
   //console.log(props.item);
   console.log('rendered cartitem');
@@ -152,7 +162,7 @@ const CartItem = props => {
 
         <div className={classes.actions_2}>
           <button className={classes.minus} onClick={decreaseQuantity} disabled={props.item.quantity === 1}>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" className={classes.minus__btn}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" className={classes[minusBtnStyle]}>
               <path d="M16 10c0 0.553-0.048 1-0.601 1h-10.798c-0.552 0-0.601-0.447-0.601-1s0.049-1 0.601-1h10.799c0.552 0 0.6 0.447 0.6 1z"></path>
             </svg>
           </button>
@@ -164,7 +174,7 @@ const CartItem = props => {
             </span> */}
           </div>
           <button className={classes.plus} onClick={increaseQuantity} disabled={props.item.quantity === props.item.stockQuantity}>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className={classes.plus__btn}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className={classes[plusBtnStyle]}>
               <path d="M18.984 12.984h-6v6h-1.969v-6h-6v-1.969h6v-6h1.969v6h6v1.969z"></path>
             </svg>
           </button>
