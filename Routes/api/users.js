@@ -503,9 +503,86 @@ router.get('/singleUser/:email',async (req,res)=>{
 
 
 //get all registered companies 
+router.get('/getCompnayNames',async(req,res)=>{
+  try{
+
+    
+    //let companies = await User
+
+
+  }catch(err){
+    console.log(err);
+    res.json(err);
+  }
+})
+
+//change passwords
+router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
+
+  console.log('Changing password : ' ,req.body);
+  jwt.verify(req.token, "secretkey",  async (err, authData) => {
+
+    try{
+
+      if(err){
+        res.status(500).json({'error':err})
+      }else{
+
+        
+        let user = await User.findOne({email:req.params.email});
+        if(!user) res.status(404).json({msg:'No user Found'})
+
+        if(req.params.email == authData.email){
+
+       
+          //bcrypt.compareSync(req.body.oldPasswrod, authData.password)
+         // .then(res=>{
+
+            try{
+              if(req.body.newPassword == req.body.confirmPassword){
+
+                bcrypt.hash(req.body.newPassword, 10, async (err, hash) => {
+                  user.password = hash;
+                  
+                  await user.save();
+                  res.status(200).json({'user new data' : user});
+                })
+  
+              }else{
+                res.status(403).json({'msg':'Passwords does not match'})
+              }
+            }catch(err){
+              res.json('Bcrypt error is : ', err)
+            }
+           
+         // })
+        //  .catch(err=>{
+         //   res.json('Bcrypt error is : ', err)
+         // })
+
+            
+
+          // }else{
+          //   res.status(403).json({'msg':'Current Password is incoreect'})
+          // }
 
 
 
+
+
+        }else{
+          res.status(400).json('email blongs to another person');
+        }
+      }
+  
+    }catch(err){
+      console.log(err);
+      res.json(err);
+    }
+
+  })
+
+})
 
 
 

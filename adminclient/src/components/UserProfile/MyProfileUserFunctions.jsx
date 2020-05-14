@@ -21,7 +21,11 @@ export default class MyProfileUserFunctions extends Component {
             userImageUrl:'',
 
             itemImage:'',
-            itemList:[]
+            itemList:[],
+
+            oldPassword:'',
+            newPassword:'',
+            confirmPassword:''
 
         };
 
@@ -132,7 +136,7 @@ export default class MyProfileUserFunctions extends Component {
               lastName:this.state.lastName,
               mobile:this.state.mobile,
               address:this.state.address
-              
+
             }
             
 
@@ -174,14 +178,12 @@ export default class MyProfileUserFunctions extends Component {
 
 
 
-
-
       getItemstoYourCompany= () =>{
         axios({
           method:'get',
           url:`/api/items/company/${this.props.companyName}`,
-      })
-      .then(res=>{
+        })
+        .then(res=>{
             
         const item = res.data;
 
@@ -195,6 +197,26 @@ export default class MyProfileUserFunctions extends Component {
       .catch(err=>{
          console.log(err)
       });
+      }
+
+
+      changeUserPassword= () =>{
+        axios({
+          method:'patch',
+          url:`/api/users/changePassword/${this.props.loggedEmail}`,
+          headers:{
+            "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+         },
+         data:{
+           oldPassword:this.state.oldPassword,
+           newPassword:this.state.newPassword,
+           confirmPassword:this.state.confirmPassword
+         }
+
+        })
+        .then({
+
+        })
       }
 
 
@@ -298,6 +320,107 @@ export default class MyProfileUserFunctions extends Component {
                   <li className="nav-item"><a className="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
                   <li className="nav-item"><a className="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
                   <li className="nav-item"><a className="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+
+                <div style={{float:"right"}}>
+                  <button type="button" className="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal" style={{float:"right"}}>
+                        Change Password
+                  </button>
+                  </div>
+                  
+<div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+          <div className="form-group">
+            <label for="recipient-name" className="col-form-label">Old Password:</label>
+            <input type="password" onChange={this.onChangeHandler} name="oldPassword" palceholder="Old Password" className="form-control" id="oldPassword"/>
+          </div>
+
+          <div className="row">
+
+            <div className="col">
+              <div className="form-group">
+                <label for="message-text" className="col-form-label">New Password:</label>
+                <input type="password" onChange={this.onChangeHandler} name="newPassword" palceholder="New Password" className="form-control" id="newPassword"/>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="form-group">
+                <label for="message-text" className="col-form-label">Confirm New Password:</label>
+                <input type="password" onChange={this.onChangeHandler} name="confirmPassword" palceholder="Confirm New Password" className="form-control" id="confirmPassword"/>
+              </div>
+            </div>
+
+          </div>
+
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button className="btn btn-primary" 
+          onClick={() =>
+
+            swal({
+              title: "Password Changing",
+              text: "Are your sure ? ",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willConfirm) => {
+              if (willConfirm) {
+
+                if(this.state.newPassword === this.state.confirmPassword && this.state.newPassword != null){
+                  swal("Password has been Changed", {
+                    icon: "success",
+                  }).then(() => {
+                      this.changeUserPassword()
+                  })
+
+                }else{
+                    swal({
+                      title: "Oops!!!",
+                      text: "Passwords are not matching",
+                      icon: "error",
+                      button: true,
+                    })
+                }
+            
+              } else {
+                swal({
+                  title: "Canceled",
+                  text: "No changes happend",
+                  icon: "success",
+                  buttons: true,
+                });
+              }
+            })
+
+          // }else{
+          //   swal({
+          //     title: "Oops!!!",
+          //     text: "Passwords are not matching",
+          //     icon: "error",
+          //     button: true,
+          // })
+          // }
+          
+        } 
+        data-dismiss="modal">
+          Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                  
+
                 </ul>
               </div>
               <div className="card-body">
@@ -599,6 +722,14 @@ export default class MyProfileUserFunctions extends Component {
                           className="btn btn-danger">Submit</button>
                         </div>
                       </div>
+
+
+                   
+
+
+
+
+
                   
                   </div>
                  
