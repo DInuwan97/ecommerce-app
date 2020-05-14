@@ -18,6 +18,7 @@ class ReviewTableRow extends Component {
                 <td>{this.props.data.item}</td>
                 <td>{this.props.data.itemName}</td>
                 <td>{this.props.data.count}</td>
+                <td>{this.props.data.replyCount}</td>
                 <td>
                     <button className="btn btn-info" style={{ width: "100%" }} onClick={() => this.goToItemReviews()}>View</button>
                 </td>

@@ -117,7 +117,12 @@ class ReviewCard extends Component {
                             <div className="user-part " >
                                 <div className='row vertical-align user-image-row'>
                                     <div className="user-image col-xs-4">
-                                        <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" />
+                                        {
+                                            this.props.commentDocument.userImageUrl == ""?
+                                            <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" />:
+                                            <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
+                                        }
+                                        
                                     </div>
                                     <div className="user-name col-xs-8 ">
                                         {this.props.commentDocument.reviewUserFirstName + " " + this.props.commentDocument.reviewUserLastName}

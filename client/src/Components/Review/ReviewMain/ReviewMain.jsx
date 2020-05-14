@@ -117,8 +117,7 @@ class ReviewMain extends Component {
     }
 
     HelpfulComment = async (id, type, state) => {
-        const url = 'api/Review/newHelpfulReview/5ea4280a46ab4d05a47dfd21';
-        // const url = 'api/Review/newHelpfulReview/5e6e389fe5934e44fc90beb8';
+        const url = `/api/Review/newHelpfulReview/${this.props.itemId}`;
         const token = localStorage.getItem('userLoginToken');
         let data;
         if (type == 'like') {

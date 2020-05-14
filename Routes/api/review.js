@@ -7,7 +7,7 @@ const ReviewHelpful = require("../../models/ReviewHelpful");
 const ReviewRating = require("../../models/Reviews");
 const Item = require("../../models/Item");
 
-const authenticateUser = require("../../middleware/Usesr").authenticateUser;
+const authenticateUser = require("../../middleware/ReviewMiddleware").authenticateUser;
 
 const verifyItem = require("../../middleware/ReviewMiddleware").verifyItem;
 const verifyReview = require("../../middleware/ReviewMiddleware").verifyReview;
@@ -21,6 +21,7 @@ router.post("/newReviewComment/:id", authenticateUser, verifyUserSecureCode, ver
     var itemID = req.params.id;
     if (req.body.reviewMessage) {
         reviewMessageFromBody = req.body.reviewMessage;
+        console.log(req.authData);
 
         var ReviewDetails = {
             reviewedUser: req.authData.user._id,
@@ -29,7 +30,8 @@ router.post("/newReviewComment/:id", authenticateUser, verifyUserSecureCode, ver
             reviewUserFirstName: req.authData.user.firstName,
             reviewUserLastName: req.authData.user.lastName,
             reviewerEmail: req.authData.user.email,
-            itemCompany: req.company
+            itemCompany: req.company,
+            userImageUrl: req.authData.user.userImageUrl
         };
         ReviewComments.create(ReviewDetails, (err) => {
             if (err) {
@@ -96,7 +98,7 @@ router.patch("/newRating/:id", authenticateUser, verifyUserSecureCode, verifyIte
 
 const updateLike = require('../../middleware/ReviewMiddleware').updateLikeCount;
 const updateDisLike = require('../../middleware/ReviewMiddleware').updateDislikeCount;
-router.get('/updateHelpfuls/:id', async (req, res) => {
+router.post('/updateHelpfuls/:id', async (req, res) => {
     await updateLike(req);
     await updateDisLike(req);
     return res.status(200).send({ msg: "updated" })
@@ -331,8 +333,8 @@ router.get("/MyRating/:id", authenticateUser, verifyItem, (req, res) => {
 //publicaly accessible 
 //can see all the ratings 
 
-router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
-    // router.get("/:id", verifyItem, async(req, res) => {
+// router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
+router.get("/:id", verifyItem, async (req, res) => {
     //     await updateLike(req);
     //     await updateDisLike(req);
     const userHeader = req.headers["authorization"];
@@ -441,7 +443,7 @@ verifyUserIsTheReviewPoster = (req, res, next) => {
                             }
                         }
                     });
-                }else{
+                } else {
                     next()
                 }
             }
@@ -511,35 +513,54 @@ const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
 const Items = require('../../models/Item');
 
 router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => {
-    ReviewComments.find({ itemCompany: req.authData.company }, { item: 1, _id: 0 }, async (err, data) => {
+    ReviewComments.find({ itemCompany: req.authData.company }, { item: 1, _id: 0, didAdminReplied: 1 }, async (err, data) => {
         if (err) {
             return res.status(400).send({ msg: err });
         } else {
             if (data) {
-                let itemIdArr = data.map((document) => {
-                    return document.item.toString();
+
+                data.sort((a, b) => {
+                    var x = a.item.toString().toLowerCase();
+                    var y = b.item.toString().toLowerCase();
+                    if (x < y) { return -1; }
+                    if (x > y) { return 1; }
+                    return 0;
                 });
-                itemIdArr.sort();
+
                 let unique = [], count = [], before, items = [];
-                for (let index = 0; index < itemIdArr.length; index++) {
-                    if (itemIdArr[index] !== before) {
-                        unique.push(itemIdArr[index]);
+                for (let index = 0; index < data.length; index++) {
+                    if (data[index].item.toString() !== before) {
+                        if (data[index].didAdminReplied) {
+                            unique.push({ item: data[index].item.toString(), replyCount: 1 });
+                        } else {
+                            unique.push({ item: data[index].item.toString(), replyCount: 0 });
+                        }
                         count.push(1);
-                        await Items.findById(itemIdArr[index], (err, data) => {
-                            if (err) {
-                                return res.status(500).send({ msg: err });
-                            } else {
-                                items.push(data.itemName);
-                            }
+                        // await Items.findById(data[index].item.toString(), (err, data) => {
+                        //     if (err) {
+                        //         return res.status(500).send({ msg: err });
+                        //     } else {
+                        //         items.push(data.itemName);
+                        //     }
+                        // })
+                        await Items.findById(data[index].item.toString()).then(dat => {
+                            items.push(dat.itemName);
+                        }).catch(err => {
+                            return res.status(500).send({ msg: err });
                         })
                     } else {
                         count[count.length - 1]++;
+                        if (data[index].didAdminReplied) {
+                            unique[unique.length - 1].replyCount++;
+                        }
                     }
-                    before = itemIdArr[index];
+                    before = data[index].item.toString();
                 }
                 response = [];
+                console.log(unique);
+
                 unique.forEach((element, index) => {
-                    response.push({ item: element, itemName: items[index], count: count[index] })
+                    response.push({ item: element.item, itemName: items[index], count: count[index], replyCount: element.replyCount })
                 });
                 res.status(200).send({ data: response });
 
@@ -552,14 +573,15 @@ router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => 
 
 const email = require('../../config/mailCredentials').email;
 const password = require('../../config/mailCredentials').password;
-router.post('/admin/sendMail/',authenticateUser,verifyAdmin,async (req,res)=>{
+router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) => {
     const msg = req.body.msg;
     const to = req.body.to;
     const subject = req.body.subject;
     const cc = req.body.cc;
     const bcc = req.body.bcc;
-    if(msg && subject && (to || cc||bcc)){
-        console.log(to,cc,bcc,subject,msg);
+    const reviewId = req.body.reviewId;
+    if (msg && subject && (to || cc || bcc)) {
+        console.log(to, cc, bcc, subject, msg);
         const transporter = await nodemailer.createTransport({
             service: "Gmail",
             auth: {
@@ -573,18 +595,84 @@ router.post('/admin/sendMail/',authenticateUser,verifyAdmin,async (req,res)=>{
             cc: cc,
             bcc: bcc,
             subject: subject,
-            html:msg
-    
-        }).then(done=>{
-            return res.status(200).send({msg:"Email Sent",data:done});
-        }).catch(err=>{
-            res.status(400).send({msg:err})
-        })
-        
-    }else{
-        res.status(400).send({msg:"Mandory fields are missing. To/CC/BCC or Subject or message"})
+            html: msg
+
+        }).then(async done => {
+            if (reviewId) {
+                let reviewUpdate = {
+                    adminsReplyTime: new Date(),
+                    adminsReply: msg,
+                    didAdminReplied: true
+                }
+                await ReviewComments.findByIdAndUpdate(reviewId, reviewUpdate, (err, previous) => {
+                    if (err) {
+                        return res.status(400).send({ msg: err });
+                    }
+                });
+            }
+            return res.status(200).send({ msg: "Email Sent", data: done });
+        }).catch(err => {
+            res.status(400).send({ msg: err });
+        });
+
+
+    } else {
+        res.status(400).send({ msg: "Mandory fields are missing. To/CC/BCC or Subject or message" })
     }
+
 });
 
+
+
+router.post('/admin/changeUserData', (req, res) => {
+    ReviewComments.find((err, allReviews) => {
+        if (err) {
+            res.status(400).send({ msg: err });
+        } else {
+            if (allReviews) {
+                allReviews.map(async (element, index, self) => {
+                    await User.findById(element.reviewedUser, (err, user) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            if (user) {
+                                if (user.firstName != element.reviewUserFirstName || user.lastName != element.reviewUserLastName || user.userImageUrl != element.userImageUrl) {
+                                    let update = {
+                                        reviewUserFirstName: user.firstName,
+                                        reviewUserLastName: user.lastName,
+                                        userImageUrl: user.userImageUrl
+                                    }
+                                    ReviewComments.findByIdAndUpdate(element._id, update, (err, data) => {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    });
+                });
+                res.status(200).send({ msg: "Updated" });
+            } else {
+                res.status(200).send({ msg: "No Reviews to Update" });
+            }
+        }
+    });
+});
+
+
+router.patch('/admin/markAsRead/:id', authenticateUser, verifyAdmin, (req, res) => {
+    ReviewComments.findByIdAndUpdate(req.params.id, {
+        adminsReplyTime: new Date(),
+        adminsReply: "Marked as Reviewed",
+        didAdminReplied: true
+    }, (err, prev) => {
+        if(err){
+            return res.status(400).send({msg:err});
+        }else{
+            return res.status(200).send({msg:"Marked as Reviewd"})
+        }
+    })
+});
 
 module.exports = router;

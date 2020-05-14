@@ -13,7 +13,8 @@ class SendEmail extends Component {
             subject: "",
             cc: "",
             bcc: "",
-            msg: ""
+            msg: "",
+            reviewId:""
         }
     }
     componentDidMount() {
@@ -21,7 +22,8 @@ class SendEmail extends Component {
             this.setState({
                 to:this.props.location.state.email,
                 subject:`Regarding the Review on our item`,
-                msg:`Your Review : ${this.props.location.state.review}`
+                msg:`Your Review : ${this.props.location.state.review}`,
+                reviewId:this.props.location.state.reviewId
             })
         }
 
@@ -44,7 +46,8 @@ class SendEmail extends Component {
                 cc: this.state.cc,
                 bcc: this.state.bcc,
                 subject: this.state.subject,
-                msg: this.state.msg
+                msg: this.state.msg,
+                reviewId: this.state.reviewId
             }
             const url = "/api/review/admin/sendMail"
             Axios.post(url, data, {
@@ -62,7 +65,8 @@ class SendEmail extends Component {
                     cc:"",
                     bcc:"",
                     msg:"",
-                    subject:""
+                    subject:"",
+                    reviewId:""
                 });
                 
             }).catch(err=>{

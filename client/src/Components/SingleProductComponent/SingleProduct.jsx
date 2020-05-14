@@ -607,6 +607,7 @@ class SingleProduct extends Component {
                       DeleteComment={this.DeleteComment}
                       MyLiked={this.state.MyLiked}
                       MyDisliked={this.state.MyDisliked}
+                      itemId={this.props.match.params.id}
                     />
                   </div>
                 </div>
