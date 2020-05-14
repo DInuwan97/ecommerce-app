@@ -8,7 +8,7 @@ export default class Category extends Component {
     super(props);
     this.state = {
       category: [],
-      updatingCategory: {},
+      updatingCategory: {}
     };
   }
 
@@ -25,7 +25,7 @@ export default class Category extends Component {
 
   //adding a new category
   addCategory = (category) => {
-    this.setState({ category: [...this.state.category, category] });
+    
     axios
       .post("/api/category", {
         categoryName: category.categoryName,
@@ -39,6 +39,8 @@ export default class Category extends Component {
       .catch(function (error) {
         console.log(error);
       });
+
+      this.setState({ category: [...this.state.category, category] });
   };
 
   //deleting a category
@@ -59,6 +61,7 @@ export default class Category extends Component {
         categoryName: "newCategory",
         genderType: "Male",
         code: "NM19",
+        edit : true
       },
     });
   };

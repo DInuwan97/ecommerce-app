@@ -1,10 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
+const multer = require("multer");
 const { check, validationResult } = require("express-validator");
 const auth = require("../../middleware/Usesr").checkAdminManager;
 const adminAuth = require("../../middleware/Usesr").onlyAdminAccess;
 const Item = require("../../models/Item");
+
+//storage for image uploading
+const storage = multer.diskStorage({
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  },
+});
+
+//image filtering and upploading
+const imageFilter = function (req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error("Only image files are accepted!"), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: "dsuhs6bf5", //ENTER YOUR CLOUDINARY NAME
+  api_key: require("../../config/keys").CLOUDINARY_API_KEY, // THIS IS COMING FROM CLOUDINARY WHICH WE SAVED FROM EARLIER
+  api_secret: require("../../config/keys").CLOUDINARY_API_SECRET, // ALSO COMING FROM CLOUDINARY WHICH WE SAVED EARLIER
+});
 
 //getting all the items
 //public access
@@ -59,11 +83,6 @@ router.post(
     ],
   ],
   async (req, res) => {
-    //checking for errors
-    // const error = validationResult(req);
-    // if (!error.isEmpty()) {
-    //   return res.status(400).json({ error: error.array() });
-    // }
     let {
       itemName,
       price,
@@ -73,19 +92,10 @@ router.post(
       Brand,
       stockQuantity,
       rating,
+      itemImage,
+      addedBy,
+      company
     } = req.body;
-
-    if (
-      !(
-        category == "BRONZE" ||
-        category == "SILVER" ||
-        category == "GOLD" ||
-        category == "PLATINUM"
-      )
-    ) {
-      return res.status(400).json({ msg: "Not a Valid Category" });
-    }
-
     const checkItemExist = await Item.findOne({ itemName });
     let result = null;
     let newItem = null;
@@ -99,11 +109,15 @@ router.post(
             itemName,
             price,
             category,
+            itemImage,
             size,
             color,
             Brand,
             stockQuantity,
             rating,
+            addedBy,
+            company
+
           }
         );
       } else {
@@ -111,11 +125,14 @@ router.post(
           itemName,
           price,
           category,
+          itemImage,
           size,
           color,
           Brand,
           stockQuantity,
           rating,
+          addedBy,
+          company
         });
       }
 
@@ -127,6 +144,43 @@ router.post(
     }
   }
 );
+
+//patching the image to the added item
+router.patch("/image/:id", upload.single("image"), async (req, res) => {
+
+
+  setTimeout(async function(){
+    try {
+      console.log(req.params.id);
+      const itemNameImage = await Item.findOne({ itemName: req.params.id });
+      console.log(itemNameImage._id);
+      console.log("hello world 2");
+      //image uplaoding part
+      const result2 = null;
+      cloudinary.v2.uploader.upload(req.file.path, async function (err, result) {
+        if (err) {
+          res.json(err.message);
+        }
+        //req.body.image = result.secure_url;
+        try {
+          itemNameImage.itemImage = result.secure_url;
+          itemNameImage.itemImageId = result.public_id;
+          result2 = await itemNameImage.save();
+        } catch (error) {
+          
+        }
+      });
+  
+      console.log(result2);
+      res.json(result2);
+    } catch (error) {
+      console.log(error);
+    }
+  },3000);
+
+
+ 
+});
 
 //update and item
 //access private
@@ -269,16 +323,16 @@ router.patch("/:id", async (req, res) => {
       },
     });
 
-    console.log(req.body.clientEmail);
+    console.log(req.body.addedBy);
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: "dinuka@gmail.com", // sender address
-      to: req.body.clientEmail, // list of receivers
+      to: req.body.addedBy, // list of receivers
       subject: "Item Approved", // Subject line
       text: "Hello world?", // plain text body
       html: `
               <h2>Thank You</h2><br/>
-              <span>The Item ${req.body.item}</span> has been Approved  
+              <span>The Item ${req.body.itemName}</span> has been Approved  
               `, // html body
     });
 
@@ -290,9 +344,8 @@ router.patch("/:id", async (req, res) => {
       }
     });
 
-    res.json(checkItemExits)
+    res.json(checkItemExits);
   } catch (error) {}
 });
-
 
 module.exports = router;
