@@ -48,8 +48,11 @@ export default class MyProfileUserFunctions extends Component {
             isSalesManager:user.isSalesManager,
             isSalesServicer:user.isSalesServicer,
             isCustomer:user.isCustomer,
-            userImageUrl:user.userImageUrl
+            userImageUrl:user.userImageUrl,
+            file:user.userImageUrl
           })
+
+          //this.state.file = this.state.userImageUrl;
 
           
           if(this.state.isCustomer === true){
@@ -96,8 +99,15 @@ export default class MyProfileUserFunctions extends Component {
     onImageHandle = () => {
       let formData = new FormData();
       formData.append("image", this.state.userImageUrl);
-      axios
-        .patch(`/api/users/updatemyProfile/uploadImage/:${this.props.loggedEmail}`, formData)
+      axios({
+        method:'patch',
+        url:`/api/users/updateImage/:${this.props.loggedEmail}`,
+        headers:{
+          "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+        },
+        data:formData
+      })
+        //.patch(`/api/users/updateImage/:${this.props.loggedEmail}`, formData)
         .then((res) => console.log(res))
         .catch((err) => console.error(err));
     };
@@ -117,6 +127,7 @@ export default class MyProfileUserFunctions extends Component {
               lastName:this.state.lastName,
               mobile:this.state.mobile,
               address:this.state.address
+              
             }
             
 
@@ -128,7 +139,15 @@ export default class MyProfileUserFunctions extends Component {
            console.log(err)
         });
 
-        this.onImageHandle()
+        let formData = new FormData();
+        formData.append("image", this.state.userImageUrl);
+        axios({
+          method:'patch',
+          url:`/api/users/updateImage/${this.props.loggedEmail}`,
+          data:formData
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.error(err));
     }
 
 

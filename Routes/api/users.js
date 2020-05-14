@@ -401,6 +401,7 @@ router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
     }else{
  
       let user = await User.findOne({email:req.params.email})
+     
 
       if(req.params.email == authData.email){
         user.firstName = req.body.firstName,
@@ -447,39 +448,41 @@ cloudinary.config({
 });
 
 //update user profile image
-router.patch('/updatemyProfile/uploadImage/:email',upload.single("image"),(req,res)=>{
+router.patch('/updateImage/:email',upload.single("image"),async (req,res)=>{
 
   console.log('image uploading route call : ');
-  setTimeout(async function(){
+  //setTimeout(async function(){
     try {
-
-      const userImageName = await Item.findOne({ email: req.params.email });
-      //console.log(userImageName);
-      //console.log("hello world 2");
-      //image uplaoding part
+      console.log('lOgged email : ', req.params.email);
+      let user = await User.findOne({email:req.params.email})
+      console.log("User Email: ",user);
+     
       const result2 = null;
       cloudinary.v2.uploader.upload(req.file.path, async function (err, result) {
         if (err) {
           res.json(err.message);
+          console.log('Err msg')
         }
         //req.body.image = result.secure_url;
         try {
-          userImageName.userImageUrl = result.secure_url;
-          userImageName.userImageUrlId = result.public_id;
-          result2 = await  userImageName.save();
+          user.userImageUrl = result.secure_url;
+          user.userImageUrlId = result.public_id;
+
+          console.log(user.userImageUrl);
+          result2 = await  user.save();
         } catch (error) {
-          
+          console.log('Error : ');
         }
-      });
+     });
   
-      console.log(result2);
-      res.json(result2);
+      console.log(user);
+      
+      res.json(user);
     } catch (error) {
       console.log(error);
     }
-  },3000);
+  //},3000);
 })
-
 
 
 router.get('/singleUser/:email',async (req,res)=>{
