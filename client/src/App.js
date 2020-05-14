@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 
 import Header from './Components/Header/Header';
 import Newsletter from './Components/Newsletter/Newsletter';
@@ -22,6 +23,9 @@ import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 
 import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
+
+import ContactUs from './Components/Contacts/Contacts';
+import UserProfile from './Components/UserProfile/UserProfile';
 
 function App() {
 
@@ -50,7 +54,10 @@ function App() {
 
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        
 
+        <Route path="/contactus" component={ContactUs} />
+        <Route path="/editMyprofile" component={UserProfile}/>
 
         <Newsletter />
         <Footer />

@@ -81,7 +81,7 @@ export class Header extends Component {
     <span style={{marginLeft:5}} className="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">My Profile</a></li>
+    <li><Link to ='/editMyProfile'className="hyper"><span>My Profile</span></Link></li>
     <li><a href="#">Security Policies</a></li>
     <li><a href="#">Privacy Change</a></li>
     <li role="separator" class="divider"></li>
