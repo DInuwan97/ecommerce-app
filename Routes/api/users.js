@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
@@ -71,7 +72,7 @@ router.post("/register", (req, res) => {
     userData.adminVerification = adminVerification;
   }
   if (isAdmin || isSalesMaager) {
-    userData.package = req.body.package;
+    userData.packageName = req.body.packageName;
   }
   if (isSalesMaager || isAdmin || isSalesServicer) {
     userData.company = req.body.company;
@@ -386,8 +387,9 @@ router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>
   }
 });
 
-//update logged user profile
 
+
+//update logged user profile
 router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
 
   console.log('Request Body of updateMyProfile : ', req.params);
@@ -406,7 +408,8 @@ router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
         //user.email = req.body.email,
         user.mobile = req.body.mobile,
         user.address = req.body.address
-  
+       // user.userImageUrl = req.body.userImageUrl
+
         await user.save();
         res.status(200).json(user);
 
@@ -417,6 +420,65 @@ router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
     });
 
 });
+
+
+
+//storage for image uploading
+const storage = multer.diskStorage({
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  },
+});
+
+//image filtering and upploading
+const imageFilter = function (req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error("Only image files are accepted!"), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: "dsuhs6bf5", //ENTER YOUR CLOUDINARY NAME
+  api_key: require("../../config/keys").CLOUDINARY_API_KEY, // THIS IS COMING FROM CLOUDINARY WHICH WE SAVED FROM EARLIER
+  api_secret: require("../../config/keys").CLOUDINARY_API_SECRET, // ALSO COMING FROM CLOUDINARY WHICH WE SAVED EARLIER
+});
+
+//update user profile image
+router.patch('/updatemyProfile/uploadImage/:email',upload.single("image"),(req,res)=>{
+
+  console.log('image uploading route call : ');
+  setTimeout(async function(){
+    try {
+
+      const userImageName = await Item.findOne({ email: req.params.email });
+      //console.log(userImageName);
+      //console.log("hello world 2");
+      //image uplaoding part
+      const result2 = null;
+      cloudinary.v2.uploader.upload(req.file.path, async function (err, result) {
+        if (err) {
+          res.json(err.message);
+        }
+        //req.body.image = result.secure_url;
+        try {
+          userImageName.userImageUrl = result.secure_url;
+          userImageName.userImageUrlId = result.public_id;
+          result2 = await  userImageName.save();
+        } catch (error) {
+          
+        }
+      });
+  
+      console.log(result2);
+      res.json(result2);
+    } catch (error) {
+      console.log(error);
+    }
+  },3000);
+})
 
 
 
@@ -435,6 +497,13 @@ router.get('/singleUser/:email',async (req,res)=>{
     console.error(error);
   }
 })
+
+
+
+
+
+
+
 
 
 
