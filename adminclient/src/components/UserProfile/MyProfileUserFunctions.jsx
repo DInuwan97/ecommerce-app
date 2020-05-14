@@ -87,8 +87,6 @@ export default class MyProfileUserFunctions extends Component {
             console.log(err);
         });
 
-      
-        
     }
 
 

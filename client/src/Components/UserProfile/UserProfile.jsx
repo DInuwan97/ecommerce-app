@@ -96,6 +96,11 @@ uploadSingleFile(e) {
       file: URL.createObjectURL(e.target.files[0])
     })
 
+      
+    this.setState({ 
+        userImageUrl: e.target.files[0] 
+    });
+
 }
 
 onChangeHandler = e =>{
@@ -110,7 +115,7 @@ onChangeHandler = e =>{
         if (this.state.file) {
             imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
         }else{
-          imgPreview = <img src="https://res.cloudinary.com/dsuhs6bf5/image/upload/v1589448087/zr4ozjadcms7g1kezmrc.png" alt='' style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
+          imgPreview = <img src="https://res.cloudinary.com/dsuhs6bf5/image/upload/v1589448087/zozjadcms7g1kezmrc.png" alt='' style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
         }
 
 
@@ -128,10 +133,10 @@ onChangeHandler = e =>{
   <div className={classes.container} >
       <div className={classes.header}>
         <center>
-             <img src="https://res.cloudinary.com/dsuhs6bf5/image/upload/v1589448087/zr4ozjadcms7g1kezmrc.png" alt='' style={{width:'160px',height:'160px',borderRadius:'100px'}}/>
-             <h2 style={{color:'black'}}>Dinuwan Kalubowila</h2>
-             <p style={{color:'black'}}>Sales Servicer</p>
-             <span class="label label-primary">THILAKAWARDHENE TEXTILES</span>
+        {imgPreview}
+        <center><h2 style={{color:'black'}}>{this.state.firstName} {this.state.lastName}</h2></center>
+             <p style={{color:'black'}}>{this.state.userDesignation}</p>
+             <span class="label label-primary">{this.props.companyName}</span>
         </center>
         
       </div>
@@ -139,11 +144,11 @@ onChangeHandler = e =>{
       <div className={classes.details}>
         <div className={classes.subtotal}>
           <span style={{fontWeight:'bold',color:'black'}}>EMAIL</span>
-          <span style={{fontWeight:'bold'}}>dinuwan@gmail.com </span>
+          <span style={{fontWeight:'bold'}}>{this.props.loggedEmail} </span>
         </div>
         <div className={classes.discount}>
           <span style={{fontWeight:'bold',color:'black'}}>MOBILE</span>
-          <span style={{fontWeight:'bold'}}>0712184518</span>
+          <span style={{fontWeight:'bold'}}>{this.state.mobile}</span>
         </div>
         <div className={classes.discount}>
           <span style={{fontWeight:'bold',color:'black'}}>HEAD QUATERS HOTLINE</span>
@@ -179,15 +184,16 @@ onChangeHandler = e =>{
           <div className="form-w3agile">
           <h3 style={{marginTop:15}}>Edit Your Profile</h3>
 
-				<input type="text" name="firstName" placeholder="First Name" required=" "/>
-                <input type="text" name="lastName" placeholder="Last Name" required=" "/>
-				<input type="text" name="email" placeholder="Email" required=" "/>
-                <input type="text" name="mobile" placeholder="Mobile" required=" "/>
-                <input type="text" name="mobile" placeholder="Mobile" required=" "/>
-				<input type="text" name="address" placeholder="Address" required=" " style={{marginBottom:30}}/>
+				<input type="text" name="firstName" placeholder="First Name" required=" " value={this.state.firstName} onChange={this.onChangeHandler}/>
+                <input type="text" name="lastName" placeholder="Last Name" required=" " value={this.state.lastName} onChange={this.onChangeHandler}/>
+				<input type="text" name="email" placeholder="Email" required=" " value={this.props.loggedEmail} onChange={this.onChangeHandler}/>
+                <input type="text" name="mobile" placeholder="Mobile" required=" " value={this.state.mobile} onChange={this.onChangeHandler}/>
+                <input type="text" name="address" placeholder="Address" required=" " style={{marginBottom:30}} value={this.state.address} onChange={this.onChangeHandler}/>
+                <input type="text" name="Joined Date" placeholder="Joined Date" required=" " />
+				
                 
                 {imgPreview}
-                <input type="file"style={{marginBottom:15}} onChange={this.uploadSingleFile}/>
+                <input type="file"style={{marginBottom:15}} name="userImageUrl" onChange={this.uploadSingleFile}/>
 				<input type="submit" value="Send message"/>
 
 	 
