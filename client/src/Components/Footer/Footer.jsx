@@ -8,7 +8,7 @@ export default class Footer extends Component {
         <div className="container">
           <div className="col-md-3 footer-grids fgd1">
             <a href="index.html">
-              <img src="images/logo2.png" alt=" " />
+              <img src="/images/logo2.png" alt=" " />
               <h3>
                 FASHION<span>CLUB</span>
               </h3>

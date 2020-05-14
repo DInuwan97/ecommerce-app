@@ -15,14 +15,24 @@ class SingleProduct extends Component {
       MyComments: [],
       MyLiked: [],
       MyDisliked: [],
-      Rating: [0, 0, 0, 0, 0]
+      Rating: [0, 0, 0, 0, 0],
     }
 
   }
+  componentDidMount = () => {
+    this.getCommentData();
+    this.getStarRating();
+    this.getMyRating();
+    
+  }
+
+
+
+
 
   getStarRating = () => {
-    const url = '/api/review/getRating/5ea4280a46ab4d05a47dfd21';
-    // const url = '/api/review/5e6e389fe5934e44fc90beb8';
+    const {id} = this.props.match.params;
+    const url = `/api/review/getRating/${id}`;
     Axios.get(url).then(res => {
       console.log(res.data);
 
@@ -43,11 +53,12 @@ class SingleProduct extends Component {
       });
 
     });
+
   }
 
   getMyRating = () => {
-    const url = '/api/review/MyRating/5ea4280a46ab4d05a47dfd21';
-    // const url = '/api/review/MyRating/5e6e389fe5934e44fc90beb8';
+    const {id} = this.props.match.params;
+    const url = `/api/review/MyRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
       Axios.get(url,
@@ -95,8 +106,8 @@ class SingleProduct extends Component {
     }
   }
   confirmRate = () => {
-    const url = '/api/review/newRating/5ea4280a46ab4d05a47dfd21';
-    // const url = '/api/review/newRating/5e6e389fe5934e44fc90beb8';
+    const {id} = this.props.match.params;
+    const url = `/api/review/newRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
       let data = {
@@ -137,8 +148,8 @@ class SingleProduct extends Component {
     }
   }
   getCommentData = () => {
-    const url = '/api/review/5ea4280a46ab4d05a47dfd21';
-    // const url = '/api/review/5e6e389fe5934e44fc90beb8';
+    const {id} = this.props.match.params;
+    const url = `/api/review/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
       Axios.get(url, {
@@ -200,15 +211,11 @@ class SingleProduct extends Component {
     }
   }
 
-  componentDidMount = () => {
-    this.getCommentData();
-    this.getStarRating();
-    this.getMyRating();
-  }
+
 
   addReview = () => {
-    const url = "/api/Review/newReviewComment/5ea4280a46ab4d05a47dfd21";
-    // const url = "/api/Review/newReviewComment/5e6e389fe5934e44fc90beb8";
+    const {id} = this.props.match.params;
+    const url = `/api/Review/newReviewComment/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
       swal({
@@ -256,8 +263,8 @@ class SingleProduct extends Component {
   }
 
   EditComment = async (id, editreview) => {
-    const url = "/api/Review/updateReviceComment/5ea4280a46ab4d05a47dfd21";
-    // const url = "/api/Review/updateReviceComment/5e6e389fe5934e44fc90beb8";
+    const itemId = this.props.match.params.id;
+    const url = `/api/Review/updateReviceComment/${itemId}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
       let data = {
@@ -291,8 +298,8 @@ class SingleProduct extends Component {
     }
   }
   DeleteComment = async (id) => {
-    const url = "/api/Review/deleteReviewComment/5ea4280a46ab4d05a47dfd21";
-    // const url = "/api/Review/deleteReviewComment/5e6e389fe5934e44fc90beb8";
+    const itemId = this.props.match.params.id;
+    const url = `/api/Review/deleteReviewComment/${itemId}`;
 
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -396,7 +403,7 @@ class SingleProduct extends Component {
                     }
 
                     <li className="rating">{this.state.AverageRating}</li>
-                    <li className="rating"><a href="#headingThree">reviews</a></li>
+                    <li className="rating"><a href="#headingThree">Reviews</a></li>
                     <li className="rating add-rating" data-toggle="modal" data-target="#myModal">
                       <p>Rate Item</p>
                     </li>
