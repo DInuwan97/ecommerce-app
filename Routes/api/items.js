@@ -65,7 +65,9 @@ router.get("/:id", async (req, res) => {
 
 
 router.get("/company/:company", async (req, res) => {
+  console.log('Items : ' ,req.params)
   try {
+    
     const item = await Item.find({ company: req.params.company });
     if (!item) {
       return res.status(400).send({ msg: "No item found" });

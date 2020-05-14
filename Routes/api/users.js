@@ -502,6 +502,7 @@ router.get('/singleUser/:email',async (req,res)=>{
 })
 
 
+//get all registered companies 
 
 
 

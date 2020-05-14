@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './assets/css/imageUploadPreview.css';
 import swal from 'sweetalert';
 import axios from 'axios';
+
 export default class MyProfileUserFunctions extends Component {
 
     constructor(props){
@@ -17,7 +18,10 @@ export default class MyProfileUserFunctions extends Component {
             isSalesServicer:'',
             isCustomer:'',
             userDesignation :'',
-            userImageUrl:''
+            userImageUrl:'',
+
+            itemImage:'',
+            itemList:[]
 
         };
 
@@ -93,6 +97,7 @@ export default class MyProfileUserFunctions extends Component {
 
     componentDidMount(){
         this.getUser();
+        this.getItemstoYourCompany();
     }
 
     
@@ -168,10 +173,35 @@ export default class MyProfileUserFunctions extends Component {
       }
 
 
+
+
+
+      getItemstoYourCompany= () =>{
+        axios({
+          method:'get',
+          url:`/api/items/company/${this.props.companyName}`,
+      })
+      .then(res=>{
+            
+        const item = res.data;
+
+
+        this.setState({
+          itemList:item,
+          itemImage:item.itemImage
+        })
+
+      })
+      .catch(err=>{
+         console.log(err)
+      });
+      }
+
+
       
     render() {
 
-        const{loggedEmail} = this.props;
+        const{loggedEmail,companyName} = this.props;
         console.log('Logged User Email is : ' ,loggedEmail);
         console.log('Logged User FirstName is : ' ,this.state.firstName);
 
@@ -202,7 +232,7 @@ export default class MyProfileUserFunctions extends Component {
                 <h3 className="profile-username text-center">{this.state.firstName} {this.state.lastName}</h3>
 
                 <p className="text-muted text-center">{this.state.userDesignation}</p>
-
+               <center><p class="badge badge-warning">{this.props.companyName}</p></center> 
                 <ul className="list-group list-group-unbordered mb-3">
                   <li className="list-group-item">
                     <b>Followers</b> <a className="float-right">1,322</a>
@@ -451,13 +481,21 @@ export default class MyProfileUserFunctions extends Component {
                         <div className="timeline-item">
                           <span className="time"><i className="far fa-clock"></i> 2 days ago</span>
 
-                          <h3 className="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+                          <h3 className="timeline-header"><a href="#">{this.props.companyName}</a> 's Latest updates</h3>
 
                           <div className="timeline-body">
-                            <img src="http://placehold.it/150x100" alt="..."/>
-                            <img src="http://placehold.it/150x100" alt="..."/>
-                            <img src="http://placehold.it/150x100" alt="..."/>
-                            <img src="http://placehold.it/150x100" alt="..."/>
+
+                          {this.state.itemList.slice(0, 5).map(({
+                            itemImage
+                          })=>{
+                            return(
+                              <img src={itemImage} alt="..." style={{width:'10%', height:'20%',marginRight:30}}/>
+                            )
+                          })}
+
+
+                            
+                       
                           </div>
                         </div>
                       </div>
