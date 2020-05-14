@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+import { Redirect } from 'react-router';
 
 class SingleItemReviewRow extends Component {
 
-    DeleteReview = ()=>{
+    DeleteReview = () => {
         swal("Are you sure?", {
             dangerMode: true,
             buttons: true,
@@ -26,14 +27,18 @@ class SingleItemReviewRow extends Component {
         return (
             <tr>
                 <td>{this.props.commentDocument.reviewMessage}</td>
-                <td>{this.props.commentDocument.reviewUserFirstName + " "+ this.props.commentDocument.reviewUserLastName }</td>
+                <td>{this.props.commentDocument.reviewUserFirstName + " " + this.props.commentDocument.reviewUserLastName}</td>
                 <td>{this.props.commentDocument.reviewHelpfulCount}</td>
                 <td>{this.props.commentDocument.reviewNotHelpfulCount}</td>
                 <td>{AddedDate}</td>
                 <td>
-                    <div className='btn-group' style={{width:'100%'}}>
-                    <button className='btn btn-info'>Reply</button>
-                    <button className='btn btn-danger' onClick={()=>this.DeleteReview()}>Delete</button>
+                    <div className='btn-group' style={{ width: '100%' }}>
+                        <button className='btn btn-info'
+                            onClick={() => this.props.goToCompose(this.props.commentDocument)}
+                        >
+                            Reply
+                        </button>
+                        <button className='btn btn-danger' onClick={() => this.DeleteReview()}>Delete</button>
                     </div>
                 </td>
             </tr>

@@ -73,6 +73,26 @@ class SingleItemReview extends Component {
         }
     }
 
+    goToCompose = (data)=>{
+        const token = localStorage.getItem('userLoginToken');
+        
+        if(token){
+            this.props.history.push(
+                '/compose',
+                {
+                    email:data.reviewerEmail,
+                    review:data.reviewMessage
+                
+            })
+        }else{
+            swal({
+                title:"Error!",
+                text:"Login/Signup to reply to reviews",
+                icon:'error'
+            })
+        }
+    }
+
     render() {
         return (
             <div>
@@ -96,7 +116,8 @@ class SingleItemReview extends Component {
                                 {
                                     this.state.reviews.map((element, index, actions) => (
                                         <SingleItemRow commentDocument={element} index={index} 
-                                        DeleteReview = {this.deleteReview}/>
+                                        DeleteReview = {this.deleteReview}
+                                        goToCompose={this.goToCompose}/>
                                     ))
                                 }
                             </tbody>

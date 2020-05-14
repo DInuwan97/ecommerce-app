@@ -13,6 +13,8 @@ const verifyItem = require("../../middleware/ReviewMiddleware").verifyItem;
 const verifyReview = require("../../middleware/ReviewMiddleware").verifyReview;
 const verifyUserSecureCode = require("../../middleware/ReviewMiddleware").verifyUserSecureCode;
 
+const nodemailer = require('nodemailer');
+
 //new review
 //user can have multiple reviews
 router.post("/newReviewComment/:id", authenticateUser, verifyUserSecureCode, verifyItem, (req, res) => {
@@ -546,8 +548,43 @@ router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => 
             }
         }
     })
-})
+});
 
+const email = require('../../config/mailCredentials').email;
+const password = require('../../config/mailCredentials').password;
+router.post('/admin/sendMail/',authenticateUser,verifyAdmin,async (req,res)=>{
+    const msg = req.body.msg;
+    const to = req.body.to;
+    const subject = req.body.subject;
+    const cc = req.body.cc;
+    const bcc = req.body.bcc;
+    if(msg && subject && (to || cc||bcc)){
+        console.log(to,cc,bcc,subject,msg);
+        const transporter = await nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+                user: email,
+                pass: password
+            }
+        });
+        //Sending the Email
+        await transporter.sendMail({
+            to: to,
+            cc: cc,
+            bcc: bcc,
+            subject: subject,
+            html:msg
+    
+        }).then(done=>{
+            return res.status(200).send({msg:"Email Sent",data:done});
+        }).catch(err=>{
+            res.status(400).send({msg:err})
+        })
+        
+    }else{
+        res.status(400).send({msg:"Mandory fields are missing. To/CC/BCC or Subject or message"})
+    }
+});
 
 
 module.exports = router;

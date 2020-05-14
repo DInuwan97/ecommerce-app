@@ -18,16 +18,18 @@ class ReviewDataTable extends Component {
     getTableData = () => {
         const url = "/api/review/admin/itemsReviews/";
         const token = localStorage.getItem('userLoginToken');
-        Axios.get(url, {
-            headers: {
-                Authorization: `bearer ${token}`
-            }
-        }).then(async res => {
-            await this.setState({
-                items: res.data.data
+        if(token){
+            Axios.get(url, {
+                headers: {
+                    Authorization: `bearer ${token}`
+                }
+            }).then(async res => {
+                await this.setState({
+                    items: res.data.data
+                });
+                
             });
-            
-        });
+        }
     }
 
     componentDidMount = () => {
@@ -37,9 +39,6 @@ class ReviewDataTable extends Component {
         $('#review-table').DataTable()
     }
 
-    sendEmail =(msg)=>{
-
-    }
 
     render() {
         return (
