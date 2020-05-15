@@ -625,6 +625,7 @@ class SingleProduct extends Component {
                       MyDisliked={this.state.MyDisliked}
                       itemId={this.props.match.params.id}
                       userType={this.state.userType}
+                      getCommentData={this.getCommentData}
                     />
                   </div>
                 </div>

@@ -50,6 +50,13 @@ class SendEmail extends Component {
                 reviewId: this.state.reviewId
             }
             const url = "/api/review/admin/sendMail"
+            swal({
+                title:"Sending...",
+                text:"1..2..3..",
+                buttons:false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            })
             Axios.post(url, data, {
                 headers: {
                     Authorization: `bearer ${token}`

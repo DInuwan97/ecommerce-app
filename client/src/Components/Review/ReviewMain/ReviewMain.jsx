@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import './ReviewMain.css';
 import ReviewCard from '../ReviewCard/ReviewCard';
 import Axios from 'axios';
-import Swal from 'sweetalert';
 import swal from 'sweetalert';
+
+import { Editor } from '@tinymce/tinymce-react';
+
+const $ = require('jquery')
 
 class ReviewMain extends Component {
 
@@ -16,14 +19,20 @@ class ReviewMain extends Component {
             DisplaySize: 5,
             PageNumbersArr: [],
             MyLiked: [],
-            MyDisliked: []
+            MyDisliked: [],
+            to: "",
+            subject: "",
+            cc: "",
+            bcc: "",
+            msg: "",
+            reviewId: ""
         }
     }
     componentWillReceiveProps = (props) => {
         if (this.state.MyLiked != props.MyLiked || this.state.MyDisliked != props.MyDisliked) {
             this.setState({
-                MyLiked:props.MyLiked,
-                MyDisliked:props.MyDisliked,
+                MyLiked: props.MyLiked,
+                MyDisliked: props.MyDisliked,
             });
         }
 
@@ -133,7 +142,7 @@ class ReviewMain extends Component {
             }
         }).catch((err) => {
             console.log(err);
-            Swal({
+            swal({
                 title: "Error!",
                 text: err.message,
                 icon: 'error'
@@ -141,8 +150,14 @@ class ReviewMain extends Component {
         });
         this.props.getCommentData();
     }
-    ReplyProduct = (to, cc, bcc, subject, msg, reviewId) => {
+    ReplyProduct = () => {
         const token = localStorage.getItem('userLoginToken');
+        let to = this.state.to;
+        let cc = this.state.cc;
+        let bcc = this.state.bcc;
+        let subject = this.state.subject;
+        let msg = this.state.msg;
+        let reviewId = this.state.reviewId;
         if ((to || cc || bcc) && subject && msg && (to != "" || cc != "" || bcc != "") && subject != "" && msg != "" && reviewId) {
             let data = {
                 to: to,
@@ -152,7 +167,14 @@ class ReviewMain extends Component {
                 msg: msg,
                 reviewId: reviewId
             }
-            const url = "/api/review/admin/sendMail"
+            const url = "/api/review/admin/sendMail";
+            swal({
+                title:"Sending...",
+                text:"1..2..3..",
+                buttons:false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            })
             Axios.post(url, data, {
                 headers: {
                     Authorization: `bearer ${token}`
@@ -163,6 +185,7 @@ class ReviewMain extends Component {
                     text: res.data.msg,
                     icon: 'success'
                 });
+                await this.props.getCommentData()
                 this.setState({
                     to: "",
                     cc: "",
@@ -187,6 +210,53 @@ class ReviewMain extends Component {
             })
         }
     }
+    MarkAsRead = (id) => {
+        const url = `/api/review/admin/markAsRead/${id}`;
+        Axios.patch(url, "", {
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('userLoginToken')}`
+            }
+        }).then(res => {
+
+            swal({
+                text: res.data.msg,
+                title: "Status",
+                icon: 'success'
+            });
+            this.props.getCommentData()
+        }).catch(err => {
+            swal({
+                title: "Error!",
+                text: err.response.data.msg,
+                icon: 'error'
+            });
+        });
+    }
+
+
+    triggerModal = (to, cc, bcc, subject, msg, reviewId) => {
+        this.setState({
+            to,
+            cc,
+            bcc,
+            subject,
+            msg,
+            reviewId
+        })
+
+    }
+
+    handleEditorChange = (content, editor) => {
+        this.setState({
+            msg: content
+        })
+
+    }
+    inputChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
 
     render() {
         let startOfArr = (this.state.SelectedPage - 1) * this.state.DisplaySize;
@@ -197,7 +267,8 @@ class ReviewMain extends Component {
                     <div className="col-md-12">
                         {this.props.CommentDocuments.slice(startOfArr, endofArr).map((element, key, self) => (
                             <ReviewCard
-                                commentDocument={element} key={key}
+                                commentDocument={element}
+                                key={startOfArr + key}
                                 HelpfulComment={this.HelpfulComment}
                                 MyComment={this.props.MyComments ? this.props.MyComments.includes(element._id) ? true : false : false}
                                 EditComment={this.props.EditComment}
@@ -206,6 +277,9 @@ class ReviewMain extends Component {
                                 MyDisliked={this.state.MyDisliked.includes(element._id) ? true : false}
                                 userType={this.props.userType}
                                 ReplyProduct={this.ReplyProduct}
+                                MarkAsRead={this.MarkAsRead}
+                                triggerModal={this.triggerModal}
+
                             />
                         ))}
                     </div>
@@ -251,6 +325,61 @@ class ReviewMain extends Component {
                                 </li>
                             </ul>
                         </nav>
+                    </div>
+                </div>
+                <div className="modal fade" id='composeModal' tabindex="-1" role="dialog" aria-labelledby="composeModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                <div class="swal-title" >Send Message</div>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <input className="form-control" name='to' placeholder="To:" onChange={(e) => this.inputChange(e)} value={this.state.to} />
+                                </div>
+                                <div className="form-group">
+                                    <input className="form-control" name='cc' placeholder="CC:" onChange={(e) => this.inputChange(e)} value={this.state.cc} />
+                                </div>
+                                <div className="form-group">
+                                    <input className="form-control" name='bcc' placeholder="Bcc:" onChange={(e) => this.inputChange(e)} value={this.state.bcc} />
+                                </div>
+                                <div className="form-group">
+                                    <input className="form-control" name='subject' placeholder="Subject:" onChange={(e) => this.inputChange(e)} value={this.state.subject} />
+                                </div>
+                                <div className="form-group">
+                                    <Editor
+                                        apiKey="n23yi564w9ps2xugf67ppfuw5q5izogzxspted9goxsxoezg"
+                                        value={this.state.msg}
+                                        init={{
+                                            height: 500,
+                                            menubar: false,
+                                            plugins: [
+                                                'advlist autolink lists link image',
+                                                'charmap print preview anchor help',
+                                                'searchreplace visualblocks code',
+                                                'insertdatetime media table paste wordcount media',
+                                                'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons'],
+                                            toolbar:
+                                                'undo redo | bold italic underline strikethrough | \
+                                        fontselect fontsizeselect formatselect | \
+                                        alignleft aligncenter alignright alignjustify |\
+                                         outdent indent | \
+                                          numlist bullist |\
+                                           forecolor backcolor removeformat | \
+                                           pagebreak | charmap emoticons | fullscreen  preview save print | \
+                                         link codesample | ltr rtl'
+                                        }}
+                                        onEditorChange={this.handleEditorChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary"  data-dismiss="modal" onClick={() => this.ReplyProduct()}>Confirm</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
