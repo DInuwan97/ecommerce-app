@@ -10,6 +10,7 @@ const Category = require("./Routes/api/category");
 const Review = require("./Routes/api/review");
 const Cart = require("./Routes/api/cart");
 const Purchase = require("./Routes/api/purchased");
+const PackageNames = require('./Routes/api/packageName');
 //middlewear
 const app = express();
 
@@ -37,5 +38,6 @@ app.use("/api/category", Category);
 app.use("/api/review", Review);
 app.use("/api/cart", Cart);
 app.use("/api/pruchase", Purchase);
+app.use("/api/packages",PackageNames);
 
 app.listen(5000, () => console.log("Server started on 5000"));
