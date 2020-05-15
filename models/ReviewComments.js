@@ -40,8 +40,26 @@ const ReviewCommentSchema = mongoose.Schema({
     reviewerEmail:{
         type:String,
         required:true
+    },
+    itemCompany:{
+        type:String,
+        required:false
+    },
+    userImageUrl:{
+        type:String,
+        default:''
+    },
+    didAdminReplied:{
+        type:Boolean,
+        default:false
+    },
+    adminsReply:{
+        type:String,
+        default:''
+    },
+    adminsReplyTime:{
+        type:Date,
     }
-
 });
 
 module.exports = ReviewComment = mongoose.model('reviewComment', ReviewCommentSchema);

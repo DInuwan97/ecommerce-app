@@ -1,0 +1,96 @@
+.navigation-row {
+    margin: 10px 0 0 0 !important;
+}
+
+.pagination {
+    margin: 0 0 0 0;
+    user-select: none;
+}
+
+.pagination>li>p,
+.pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.pagination>li>p:hover,
+.pagination>li>span :hover {
+    cursor: pointer;
+}
+
+.pagination>li:first-child>p,
+.pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.pagination>li:last-child>p,
+.pagination>li:last-child>span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.pagination>li>p:hover,
+.pagination>li>span:hover,
+.pagination>li>p:focus,
+.pagination>li>span:focus {
+    z-index: 2;
+    color: #23527c;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination>.active>p,
+.pagination>.active>span,
+.pagination>.active>p:hover,
+.pagination>.active>span:hover,
+.pagination>.active>p:focus,
+.pagination>.active>span:focus {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.pagination>.disabled>span,
+.pagination>.disabled>span:hover,
+.pagination>.disabled>span:focus,
+.pagination>.disabled>p,
+.pagination>.disabled>p:hover,
+.pagination>.disabled>p:focus {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.dropdown-menu>li>p {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.dropdown-menu>li>p:hover,
+.dropdown-menu>li>p:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.comments-row {
+    color: black;
+}

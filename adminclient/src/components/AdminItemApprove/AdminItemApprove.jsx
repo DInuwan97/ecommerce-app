@@ -51,7 +51,7 @@ export default class AdminItemApprove extends Component {
 
   render() {
     return (
-      <div>
+      <div className = 'container'>
         <Router>
           <CardList />
           <Switch>
@@ -65,7 +65,7 @@ export default class AdminItemApprove extends Component {
                 />
               )}
             />
-            <Route path="/viewSingle" component={() => <ViewSingleItem />} />
+            <Route path="/viewSingle" render={(props) => <ViewSingleItem {...props}/>} />
           </Switch>
         </Router>
       </div>

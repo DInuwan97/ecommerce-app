@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import $ from "jquery";
+//import $ from "jquery";
 
 import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
 import PaymentInfo from "./PaymentInfo/PaymentInfo";
@@ -41,9 +41,9 @@ class Checkout extends Component {
   }
 }
 
-$(window).scroll(function () {
-  $("#rightPanel").css("top", Math.max(15, 169 - $(this).scrollTop()));
-});
+// $(window).scroll(function () {
+//   $("#rightPanel").css("top", Math.max(15, 169 - $(this).scrollTop()));
+// });
 
 $(document).ready(function () {
   $(this).scrollTop(0);

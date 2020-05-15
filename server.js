@@ -8,6 +8,10 @@ const Users = require("./Routes/api/Users");
 const Items = require("./Routes/api/items");
 const Category = require("./Routes/api/category");
 const Review = require("./Routes/api/review");
+const Cart = require("./Routes/api/cart");
+const Purchase = require("./Routes/api/purchased");
+const PackageNames = require('./Routes/api/packageName');
+const Companies = require('./Routes/api/companies');
 //middlewear
 const app = express();
 
@@ -25,13 +29,17 @@ const db = require("./config/keys").mongoURI;
 
 //Connet to mongo
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true , useFindAndModify : false})
+  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
   .then(() => console.log("Mongo DB Connected."))
   .catch(err => console.log(err));
 
 app.use("/api/users", Users);
 app.use("/api/items", Items);
 app.use("/api/category", Category);
-app.use("/api/review",Review);
+app.use("/api/review", Review);
+app.use("/api/cart", Cart);
+app.use("/api/pruchase", Purchase);
+app.use("/api/packages",PackageNames);
+app.use("/api/companies",Companies);
 
 app.listen(5000, () => console.log("Server started on 5000"));

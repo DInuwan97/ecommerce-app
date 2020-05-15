@@ -11,7 +11,7 @@ export const register = newUser =>{
       email:newUser.email,
       mobile:newUser.mobile,
       company:newUser.company,
-      package:newUser.package,
+      packageName:newUser.packageName,
       userType:newUser.userType,
       password:newUser.password
     })

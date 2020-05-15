@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import swal from "sweetalert";
+
 export default class CategoryForm extends Component {
   constructor(props) {
     super(props);
@@ -77,14 +77,7 @@ export default class CategoryForm extends Component {
             <button
               type="submit"
               className="btn btn-primary btn-block"
-              onClick={() =>
-                swal({
-                  title: "THANK YOU",
-                  text: "NEW CATEGORY ADDED SUCESSFULLY",
-                  icon: "success",
-                  button: "CONTINUE",
-                })
-              }
+
             >
               {this.props.updatingCategory.edit ? "Edit Item" : "Add Item "}
             </button>
