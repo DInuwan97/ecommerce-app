@@ -1,18 +1,34 @@
 import React, { Component, Fragment } from 'react';
 import './ReviewCard.css';
 import swal from 'sweetalert';
+
+import { Editor } from '@tinymce/tinymce-react';
 class ReviewCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             MyLiked: false,
-            MyDisliked: false
+            MyDisliked: false,
+            to: "",
+            subject: "",
+            cc: "",
+            bcc: "",
+            msg: "",
+            reviewId: ""
         }
     }
     componentDidMount() {
+        console.log(this.props.commentDocument);
+
         this.setState({
             MyLiked: this.props.MyLiked,
-            MyDisliked: this.props.MyDisliked
+            MyDisliked: this.props.MyDisliked,
+            to: this.props.commentDocument.reviewerEmail,
+            subject: `Regarding the Review on our item`,
+            cc: "",
+            bcc: "",
+            msg: `Your Review : ${this.props.commentDocument.reviewMessage}`,
+            reviewId: this.props.commentDocument._id
         });
     }
 
@@ -26,6 +42,7 @@ class ReviewCard extends Component {
     }
 
 
+
     likeButtons = (type) => {
         if (!this.props.MyComment) {
             if (localStorage.getItem('userLoginToken')) {
@@ -33,15 +50,15 @@ class ReviewCard extends Component {
                 if (type === "like") {
                     state = !this.props.MyLiked;
                     this.setState({
-                        MyLiked:!this.props.MyLiked,
-                        MyDisliked:false
+                        MyLiked: !this.props.MyLiked,
+                        MyDisliked: false
                     });
                     this.props.HelpfulComment(this.props.commentDocument._id, type, state);
                 } else if (type === "unlike") {
                     state = !this.props.MyDisliked;
                     this.setState({
-                        MyDisliked:!this.props.MyDisliked,
-                        MyLiked:false
+                        MyDisliked: !this.props.MyDisliked,
+                        MyLiked: false
                     });
                     this.props.HelpfulComment(this.props.commentDocument._id, type, state);
                 }
@@ -87,19 +104,36 @@ class ReviewCard extends Component {
             });
         }
     }
-    DeleteComment = () => {
-        if (this.props.MyComment) {
+
+    sendMail = () => {
+        this.props.ReplyProduct(this.state.to, this.state.cc, this.state.bcc,
+            this.state.subject, this.state.msg, this.state.reviewId);
+    }
+    handleEditorChange = (content, editor) => {
+        this.setState({
+            msg: content
+        })
+        
+    }
+
+    DeleteComment = (byPass) => {
+        if (this.props.MyComment || byPass) {
             swal("Are you sure?", {
                 dangerMode: true,
                 buttons: true,
             }).then(res => {
                 if (res) {
-                    this.props.DeleteComment(this.props.commentDocument._id);
+                    this.props.DeleteComment(this.props.commentDocument._id, byPass);
                 }
             })
         }
     }
 
+    inputChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
     render() {
         const options = {
             month: "long", day: "numeric", year: "numeric",
@@ -118,11 +152,11 @@ class ReviewCard extends Component {
                                 <div className='row vertical-align user-image-row'>
                                     <div className="user-image col-xs-4">
                                         {
-                                            this.props.commentDocument.userImageUrl == ""?
-                                            <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" />:
-                                            <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
+                                            this.props.commentDocument.userImageUrl == "" ?
+                                                <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> :
+                                                <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
                                         }
-                                        
+
                                     </div>
                                     <div className="user-name col-xs-8 ">
                                         {this.props.commentDocument.reviewUserFirstName + " " + this.props.commentDocument.reviewUserLastName}
@@ -168,18 +202,95 @@ class ReviewCard extends Component {
                             </div>
                         </div>
                         <div className="col-md-1 col-xs-6 settings-button-col">
-                            {this.props.MyComment ?
-                                <div class="btn-group">
-                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="glyphicon glyphicon-option-vertical"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
-                                        <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
-                                    </ul>
-                                </div> :
-                                <div></div>
+                            {this.props.userType == "Customer" ?
+                                this.props.MyComment ?
+                                    <div class="btn-group">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="glyphicon glyphicon-option-vertical"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+                                            <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+                                        </ul>
+                                    </div> :
+                                    <div></div>
+                                :
+                                this.props.MyComment ?
+                                    <div class="btn-group">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="glyphicon glyphicon-option-vertical"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+                                            <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+                                            <li><p data-toggle="modal" data-target="#composeModal">Reply</p></li>
+                                        </ul>
+                                    </div> :
+                                    <div class="btn-group">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="glyphicon glyphicon-option-vertical"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><p onClick={() => this.DeleteComment(true)}>Delete Review</p></li>
+                                            <li><p data-toggle="modal" data-target="#composeModal">Reply</p></li>
+                                        </ul>
+                                    </div>
                             }
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="composeModal" tabindex="-1" role="dialog" aria-labelledby="composeModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                <div class="swal-title" >Send Message</div>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <input className="form-control" name='to' placeholder="To:" onChange={(e) => this.inputChange(e)} value={this.state.to} />
+                                </div>
+                                <div className="form-group">
+                                    <input className="form-control" name='cc' placeholder="CC:" onChange={(e) => this.inputChange(e)} value={this.state.cc} />
+                                </div>
+                                <div className="form-group">
+                                    <input className="form-control" name='bcc' placeholder="Bcc:" onChange={(e) => this.inputChange(e)} value={this.state.bcc} />
+                                </div>
+                                <div className="form-group">
+                                    <input className="form-control" name='subject' placeholder="Subject:" onChange={(e) => this.inputChange(e)} value={this.state.subject} />
+                                </div>
+                                <div className="form-group">
+                                    <Editor
+                                        apiKey="n23yi564w9ps2xugf67ppfuw5q5izogzxspted9goxsxoezg"
+                                        value={this.state.msg}
+                                        init={{
+                                            height: 500,
+                                            menubar: false,
+                                            plugins: [
+                                                'advlist autolink lists link image',
+                                                'charmap print preview anchor help',
+                                                'searchreplace visualblocks code',
+                                                'insertdatetime media table paste wordcount media',
+                                                'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons'],
+                                            toolbar:
+                                                'undo redo | bold italic underline strikethrough | \
+                                        fontselect fontsizeselect formatselect | \
+                                        alignleft aligncenter alignright alignjustify |\
+                                         outdent indent | \
+                                          numlist bullist |\
+                                           forecolor backcolor removeformat | \
+                                           pagebreak | charmap emoticons | fullscreen  preview save print | \
+                                         link codesample | ltr rtl'
+                                        }}
+                                        onEditorChange={this.handleEditorChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.sendMail()}>Confirm</button>
+                            </div>
                         </div>
                     </div>
                 </div>

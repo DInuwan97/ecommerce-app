@@ -3,6 +3,7 @@ import './ReviewMain.css';
 import ReviewCard from '../ReviewCard/ReviewCard';
 import Axios from 'axios';
 import Swal from 'sweetalert';
+import swal from 'sweetalert';
 
 class ReviewMain extends Component {
 
@@ -19,10 +20,10 @@ class ReviewMain extends Component {
         }
     }
     componentWillReceiveProps = (props) => {
-        if (this.state.MyLiked != props.MyDisliked || this.state.MyLiked != props.MyDisliked ) {
+        if (this.state.MyLiked != props.MyDisliked || this.state.MyLiked != props.MyDisliked) {
             this.setState({
-                MyLiked:props.MyLiked,
-                MyDisliked:props.MyDisliked
+                MyLiked: props.MyLiked,
+                MyDisliked: props.MyDisliked
             });
             console.log("run");
 
@@ -81,6 +82,11 @@ class ReviewMain extends Component {
             }
             this.setState({
                 PageNumbersArr
+            })
+        } else if (PageCount == 0) {
+            this.setState({
+                PageNumbersArr: [1],
+                PageCount: 1
             })
         } else {
             const PageNumbersArr = [];
@@ -184,7 +190,52 @@ class ReviewMain extends Component {
         });
         this.props.getCommentData();
     }
+    ReplyProduct = (to, cc, bcc, subject, msg,reviewId) => {
+        const token = localStorage.getItem('userLoginToken');
+        if ((to || cc || bcc) && subject && msg && (to != "" || cc != "" || bcc != "") && subject != "" && msg != "" && reviewId) {
+            let data = {
+                to: to,
+                cc: cc,
+                bcc: bcc,
+                subject: subject,
+                msg: msg,
+                reviewId:reviewId
+            }
+            const url = "/api/review/admin/sendMail"
+            Axios.post(url, data, {
+                headers: {
+                    Authorization: `bearer ${token}`
+                }
+            }).then(async res => {
+                await swal({
+                    title: "Success",
+                    text: res.data.msg,
+                    icon: 'success'
+                });
+                this.setState({
+                    to: "",
+                    cc: "",
+                    bcc: "",
+                    msg: "",
+                    subject: "",
+                    reviewId: ""
+                });
 
+            }).catch(err => {
+                swal({
+                    title: "Error!",
+                    text: err.message,
+                    icon: 'error'
+                })
+            });
+        } else {
+            swal({
+                title: "Error!",
+                text: 'To/CC/Bcc , Subject and message must be filled',
+                icon: 'error'
+            })
+        }
+    }
 
     render() {
         let startOfArr = (this.state.SelectedPage - 1) * this.state.DisplaySize;
@@ -202,17 +253,19 @@ class ReviewMain extends Component {
                                 DeleteComment={this.props.DeleteComment}
                                 MyLiked={this.state.MyLiked.includes(element._id) ? true : false}
                                 MyDisliked={this.state.MyDisliked.includes(element._id) ? true : false}
+                                userType={this.props.userType}
+                                ReplyProduct={this.ReplyProduct}
                             />
                         ))}
                     </div>
                 </div>
                 <div className="row navigation-row">
-                    <div className="col-md-8" style={{textAlign:"end"}}>
+                    <div className="col-md-8" style={{ textAlign: "end" }}>
                         <p>
                             Disply Number
                         </p>
                     </div>
-                    <div className="col-md-1" style={{ textAlign: "end",width:"auto" }}>
+                    <div className="col-md-1" style={{ textAlign: "end", width: "auto" }}>
                         <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.DisplaySize} <span className="caret"></span>
                         </button>
@@ -224,8 +277,8 @@ class ReviewMain extends Component {
                             <li><p onClick={() => this.PageSizeSelector(100)}>100</p></li>
                         </ul>
                     </div>
-                    <div className="col-md-3" style={{width:"auto" }}>
-                        <nav aria-label="Page navigation" style={{ textAlign: "end"}}>
+                    <div className="col-md-3" style={{ width: "auto" }}>
+                        <nav aria-label="Page navigation" style={{ textAlign: "end" }}>
                             <ul className="pagination">
                                 <li className={this.state.SelectedPage == 1 ? "disabled" : ""}
                                     onClick={() => this.PageSelectorPrevious()}>

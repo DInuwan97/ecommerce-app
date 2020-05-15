@@ -59,6 +59,10 @@ const ReviewCommentSchema = mongoose.Schema({
     },
     adminsReplyTime:{
         type:Date,
+    },
+    repliedAdmin:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
     }
 });
 

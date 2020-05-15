@@ -70,23 +70,20 @@ router.patch("/newRating/:id", authenticateUser, verifyUserSecureCode, verifyIte
                             }
                         });
                 } else {
-                    if (req.body.starRating) {
-                        var ReviewRatingDetails = {
-                            reviewedUser: req.authData.user._id,
-                            item: itemID,
-                            starRating: req.body.starRating
-                        }
-                        console.log(ReviewRatingDetails);
-                        ReviewRating.create(ReviewRatingDetails, (err) => {
-                            if (err) {
-                                return res.status(400).send({ msg: err });
-                            } else {
-                                return res.status(201).send({ msg: "Successfull rating" });
-                            }
-                        })
-                    } else {
-                        return res.status(400).send({ msg: "Star Rating is Empty" });
+                    var ReviewRatingDetails = {
+                        reviewedUser: req.authData.user._id,
+                        item: itemID,
+                        starRating: req.body.starRating
                     }
+                    console.log(ReviewRatingDetails);
+                    ReviewRating.create(ReviewRatingDetails, (err) => {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            return res.status(201).send({ msg: "Successfull rating" });
+                        }
+                    })
+
                 }
             }
         })
@@ -352,8 +349,8 @@ router.get("/:id", verifyItem, async (req, res) => {
                     return res.status(200).send({ msg: "No Reviews to Display" });
                 }
             }
-            // }).sort({ reviewHelpfulCount: -1 });
-        });
+        }).sort({ AddedTime: -1 });
+        // });
     } else {
         req.token = (userHeader.split(" "))[1];
         jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -416,8 +413,8 @@ router.get("/:id", verifyItem, async (req, res) => {
                             return res.status(200).send({ msg: "No Reviews to Display" });
                         }
                     }
-                    // }).sort({ reviewHelpfulCount: -1 });
-                });
+                }).sort({ AddedTime: -1 });
+                // });
             }
         });
 
@@ -437,6 +434,7 @@ verifyUserIsTheReviewPoster = (req, res, next) => {
                             return res.status(400).send({ msg: err });
                         } else {
                             if (authData.user._id == data.reviewedUser) {
+                                console.log("posted");
                                 next();
                             } else {
                                 return res.status(400).send({ msg: "This client didn't posted the review" });
@@ -444,6 +442,7 @@ verifyUserIsTheReviewPoster = (req, res, next) => {
                         }
                     });
                 } else {
+                    console.log("ByPassed");
                     next()
                 }
             }
@@ -602,7 +601,8 @@ router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) 
                 let reviewUpdate = {
                     adminsReplyTime: new Date(),
                     adminsReply: msg,
-                    didAdminReplied: true
+                    didAdminReplied: true,
+                    repliedAdmin: req.authData._id
                 }
                 await ReviewComments.findByIdAndUpdate(reviewId, reviewUpdate, (err, previous) => {
                     if (err) {
@@ -667,10 +667,10 @@ router.patch('/admin/markAsRead/:id', authenticateUser, verifyAdmin, (req, res) 
         adminsReply: "Marked as Reviewed",
         didAdminReplied: true
     }, (err, prev) => {
-        if(err){
-            return res.status(400).send({msg:err});
-        }else{
-            return res.status(200).send({msg:"Marked as Reviewd"})
+        if (err) {
+            return res.status(400).send({ msg: err });
+        } else {
+            return res.status(200).send({ msg: "Marked as Reviewed" })
         }
     })
 });
