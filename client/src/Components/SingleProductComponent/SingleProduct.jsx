@@ -172,7 +172,6 @@ class SingleProduct extends Component {
         const MyLikedData = res.data.myLiked;
         const MyLiked = [];
         const MyDisliked = [];
-        console.log(MyLikedData);
         const userType = res.data.userType;
         if (userType) {
           this.setState({
@@ -182,10 +181,10 @@ class SingleProduct extends Component {
 
         if (MyLikedData) {
           for (let index = 0; index < MyLikedData.length; index++) {
-            if (MyLikedData[index].liked) {
+            if (MyLikedData[index].status == 1) {
               MyLiked.push(MyLikedData[index].reviewId);
             }
-            if (MyLikedData[index].disliked) {
+            if (MyLikedData[index].status==(-1)) {
               MyDisliked.push(MyLikedData[index].reviewId);
             }
           }

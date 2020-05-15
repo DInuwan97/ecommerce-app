@@ -20,13 +20,11 @@ class ReviewMain extends Component {
         }
     }
     componentWillReceiveProps = (props) => {
-        if (this.state.MyLiked != props.MyDisliked || this.state.MyLiked != props.MyDisliked) {
+        if (this.state.MyLiked != props.MyLiked || this.state.MyDisliked != props.MyDisliked) {
             this.setState({
-                MyLiked: props.MyLiked,
-                MyDisliked: props.MyDisliked
+                MyLiked:props.MyLiked,
+                MyDisliked:props.MyDisliked,
             });
-            console.log("run");
-
         }
 
     }
@@ -122,64 +120,17 @@ class ReviewMain extends Component {
         }
     }
 
-    HelpfulComment = async (id, type, state) => {
+    HelpfulComment = async (id, state) => {
         const url = `/api/Review/newHelpfulReview/${this.props.itemId}`;
         const token = localStorage.getItem('userLoginToken');
-        let data;
-        if (type == 'like') {
-            data = {
-                reviewID: id,
-                reviewWasHelpful: state,
-                reviewWasNotHelpful: false
-            }
-        } else if (type == 'unlike') {
-            data = {
-                reviewID: id,
-                reviewWasNotHelpful: state,
-                reviewWasHelpful: false
-            }
+        let data = {
+            reviewID: id,
+            reviewLikeStatus: state
         }
-
-        await Axios.patch(url, data, {
+        await Axios.put(url, data, {
             headers: {
                 Authorization: "bearer " + token,
             }
-            // })
-            // .then(res=>{
-            //     console.log(res.data.data);
-
-            //     if(res.data.data){
-            //         this.state.MyLiked.map((element,index,self)=>{
-            //             if(element == res.data.data.reviewID){
-            //                 if(!res.data.data.reviewWasHelpful){
-            //                     self.slice(index,1);
-            //                     this.setState({
-            //                         MyLiked:self
-            //                     })
-            //                 }else{
-            //                     self.push(res.data.data.reviewID);
-            //                     this.setState({
-            //                         MyLiked:self
-            //                     })
-            //                 }
-            //             }
-            //         });
-            //         this.state.MyDisliked.map((element,index,self)=>{
-            //             if(element == res.data.data.reviewID){
-            //                 if(!res.data.data.reviewWasNotHelpful){
-            //                     self.slice(index,1);
-            //                     this.setState({
-            //                         MyDisliked:self
-            //                     })
-            //                 }else{
-            //                     self.push(res.data.data.reviewID);
-            //                     this.setState({
-            //                         MyDisliked:self
-            //                     })
-            //                 }
-            //             }
-            //         })
-            //     }
         }).catch((err) => {
             console.log(err);
             Swal({
@@ -190,7 +141,7 @@ class ReviewMain extends Component {
         });
         this.props.getCommentData();
     }
-    ReplyProduct = (to, cc, bcc, subject, msg,reviewId) => {
+    ReplyProduct = (to, cc, bcc, subject, msg, reviewId) => {
         const token = localStorage.getItem('userLoginToken');
         if ((to || cc || bcc) && subject && msg && (to != "" || cc != "" || bcc != "") && subject != "" && msg != "" && reviewId) {
             let data = {
@@ -199,7 +150,7 @@ class ReviewMain extends Component {
                 bcc: bcc,
                 subject: subject,
                 msg: msg,
-                reviewId:reviewId
+                reviewId: reviewId
             }
             const url = "/api/review/admin/sendMail"
             Axios.post(url, data, {

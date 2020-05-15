@@ -53,14 +53,23 @@ class ReviewCard extends Component {
                         MyLiked: !this.props.MyLiked,
                         MyDisliked: false
                     });
-                    this.props.HelpfulComment(this.props.commentDocument._id, type, state);
+                    if(this.state.MyLiked){
+                        this.props.HelpfulComment(this.props.commentDocument._id, 0);
+                    }else{
+                        this.props.HelpfulComment(this.props.commentDocument._id, 1);
+                    }
                 } else if (type === "unlike") {
                     state = !this.props.MyDisliked;
                     this.setState({
                         MyDisliked: !this.props.MyDisliked,
                         MyLiked: false
                     });
-                    this.props.HelpfulComment(this.props.commentDocument._id, type, state);
+                    if(this.state.MyDisliked){
+                        this.props.HelpfulComment(this.props.commentDocument._id, 0);
+                    }else{
+                        this.props.HelpfulComment(this.props.commentDocument._id, -1);
+                    }
+                    
                 }
             } else {
                 swal({
