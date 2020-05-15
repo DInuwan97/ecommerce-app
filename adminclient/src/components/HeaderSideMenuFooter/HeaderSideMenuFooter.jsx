@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
+
+import {Link,withRouter} from 'react-router-dom';
+
+
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
 import AdminItemApprove from '../AdminItemApprove/AdminItemApprove'
@@ -127,8 +131,9 @@ export default class HeaderSideMenuFooter extends Component {
                 </a>
 
                 <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                  <a href="#" className="dropdown-item">
-                        <i className="fas fa-envelope mr-2"></i> My Profile
+                  <a href='/MyProfile' className="dropdown-item">
+                        <i className="fas fa-envelope mr-2"></i>                         
+                        My Profile
                   </a>
                   <div className="dropdown-divider"></div>
                   <a href="#" className="dropdown-item">
@@ -753,7 +758,7 @@ export default class HeaderSideMenuFooter extends Component {
                 <Route path='/Compose' component={Compose}/>
                 <Route path='/SingleReviews/:id' component={SingleReviews}/>
 
-               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email}/>}/>
+               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './assets/css/imageUploadPreview.css';
 import swal from 'sweetalert';
 import axios from 'axios';
+
 export default class MyProfileUserFunctions extends Component {
 
     constructor(props){
@@ -17,7 +18,14 @@ export default class MyProfileUserFunctions extends Component {
             isSalesServicer:'',
             isCustomer:'',
             userDesignation :'',
-            userImageUrl:''
+            userImageUrl:'',
+
+            itemImage:'',
+            itemList:[],
+
+            oldPassword:'',
+            newPassword:'',
+            confirmPassword:''
 
         };
 
@@ -79,8 +87,6 @@ export default class MyProfileUserFunctions extends Component {
             console.log(err);
         });
 
-      
-        
     }
 
 
@@ -93,6 +99,7 @@ export default class MyProfileUserFunctions extends Component {
 
     componentDidMount(){
         this.getUser();
+        this.getItemstoYourCompany();
     }
 
     
@@ -127,7 +134,7 @@ export default class MyProfileUserFunctions extends Component {
               lastName:this.state.lastName,
               mobile:this.state.mobile,
               address:this.state.address
-              
+
             }
             
 
@@ -168,10 +175,53 @@ export default class MyProfileUserFunctions extends Component {
       }
 
 
+
+      getItemstoYourCompany= () =>{
+        axios({
+          method:'get',
+          url:`/api/items/company/${this.props.companyName}`,
+        })
+        .then(res=>{
+            
+        const item = res.data;
+
+
+        this.setState({
+          itemList:item,
+          itemImage:item.itemImage
+        })
+
+      })
+      .catch(err=>{
+         console.log(err)
+      });
+      }
+
+
+      changeUserPassword= () =>{
+        axios({
+          method:'patch',
+          url:`/api/users/changePassword/${this.props.loggedEmail}`,
+          headers:{
+            "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+         },
+         data:{
+           oldPassword:this.state.oldPassword,
+           newPassword:this.state.newPassword,
+           confirmPassword:this.state.confirmPassword
+         }
+
+        })
+        .then({
+
+        })
+      }
+
+
       
     render() {
 
-        const{loggedEmail} = this.props;
+        const{loggedEmail,companyName} = this.props;
         console.log('Logged User Email is : ' ,loggedEmail);
         console.log('Logged User FirstName is : ' ,this.state.firstName);
 
@@ -202,7 +252,7 @@ export default class MyProfileUserFunctions extends Component {
                 <h3 className="profile-username text-center">{this.state.firstName} {this.state.lastName}</h3>
 
                 <p className="text-muted text-center">{this.state.userDesignation}</p>
-
+               <center><p class="badge badge-warning">{this.props.companyName}</p></center> 
                 <ul className="list-group list-group-unbordered mb-3">
                   <li className="list-group-item">
                     <b>Followers</b> <a className="float-right">1,322</a>
@@ -268,6 +318,107 @@ export default class MyProfileUserFunctions extends Component {
                   <li className="nav-item"><a className="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
                   <li className="nav-item"><a className="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
                   <li className="nav-item"><a className="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+
+                <div style={{float:"right"}}>
+                  <button type="button" className="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal" style={{float:"right"}}>
+                        Change Password
+                  </button>
+                  </div>
+                  
+<div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+          <div className="form-group">
+            <label for="recipient-name" className="col-form-label">Old Password:</label>
+            <input type="password" onChange={this.onChangeHandler} name="oldPassword" palceholder="Old Password" className="form-control" id="oldPassword"/>
+          </div>
+
+          <div className="row">
+
+            <div className="col">
+              <div className="form-group">
+                <label for="message-text" className="col-form-label">New Password:</label>
+                <input type="password" onChange={this.onChangeHandler} name="newPassword" palceholder="New Password" className="form-control" id="newPassword"/>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="form-group">
+                <label for="message-text" className="col-form-label">Confirm New Password:</label>
+                <input type="password" onChange={this.onChangeHandler} name="confirmPassword" palceholder="Confirm New Password" className="form-control" id="confirmPassword"/>
+              </div>
+            </div>
+
+          </div>
+
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button className="btn btn-primary" 
+          onClick={() =>
+
+            swal({
+              title: "Password Changing",
+              text: "Are your sure ? ",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willConfirm) => {
+              if (willConfirm) {
+
+                if(this.state.newPassword === this.state.confirmPassword && this.state.newPassword != null){
+                  swal("Password has been Changed", {
+                    icon: "success",
+                  }).then(() => {
+                      this.changeUserPassword()
+                  })
+
+                }else{
+                    swal({
+                      title: "Oops!!!",
+                      text: "Passwords are not matching",
+                      icon: "error",
+                      button: true,
+                    })
+                }
+            
+              } else {
+                swal({
+                  title: "Canceled",
+                  text: "No changes happend",
+                  icon: "success",
+                  buttons: true,
+                });
+              }
+            })
+
+          // }else{
+          //   swal({
+          //     title: "Oops!!!",
+          //     text: "Passwords are not matching",
+          //     icon: "error",
+          //     button: true,
+          // })
+          // }
+          
+        } 
+        data-dismiss="modal">
+          Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                  
+
                 </ul>
               </div>
               <div className="card-body">
@@ -451,13 +602,21 @@ export default class MyProfileUserFunctions extends Component {
                         <div className="timeline-item">
                           <span className="time"><i className="far fa-clock"></i> 2 days ago</span>
 
-                          <h3 className="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+                          <h3 className="timeline-header"><a href="#">{this.props.companyName}</a> 's Latest updates</h3>
 
                           <div className="timeline-body">
-                            <img src="http://placehold.it/150x100" alt="..."/>
-                            <img src="http://placehold.it/150x100" alt="..."/>
-                            <img src="http://placehold.it/150x100" alt="..."/>
-                            <img src="http://placehold.it/150x100" alt="..."/>
+
+                          {this.state.itemList.slice(0, 5).map(({
+                            itemImage
+                          })=>{
+                            return(
+                              <img src={itemImage} alt="..." style={{width:'10%', height:'20%',marginRight:30}}/>
+                            )
+                          })}
+
+
+                            
+                       
                           </div>
                         </div>
                       </div>
@@ -561,6 +720,14 @@ export default class MyProfileUserFunctions extends Component {
                           className="btn btn-danger">Submit</button>
                         </div>
                       </div>
+
+
+                   
+
+
+
+
+
                   
                   </div>
                  

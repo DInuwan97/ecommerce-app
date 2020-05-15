@@ -51,6 +51,7 @@ export default class Table extends Component {
                 <th>Size</th>
                 {/* <th>Category</th> */}
                 <th>Discount</th>
+                <th>New Price</th>
                 <th>Add Discount</th>
               </tr>
             </thead>

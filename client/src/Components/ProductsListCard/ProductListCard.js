@@ -19,7 +19,12 @@ export default class ProductListCard extends Component {
     axios.get("/api/items").then((res) => {
       const items = res.data;
       this.setState({ items,isLoading:false });
+
+
+      
     });
+    
+    
   }
 
   render() {
