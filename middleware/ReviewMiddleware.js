@@ -3,6 +3,19 @@ const ReviewComments = require("../models/ReviewComments");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+
+    authenticateUser: (req, res, next) => {
+        const bearerHeader = req.headers["authorization"];
+        if (typeof bearerHeader !== "undefined") {
+            const bearer = bearerHeader.split(" ");
+            const bearerToken = bearer[1];
+            req.token = bearerToken;
+            next();
+        } else {
+            return res.status(400).send({msg:"Login/Signup token expired"})
+        }
+    },
+
     //middleware to verify security code
     verifyUserSecureCode: (req, res, next) => {
         jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -111,5 +124,5 @@ module.exports = {
                 }
             };
         })
-    },
+    }
 }

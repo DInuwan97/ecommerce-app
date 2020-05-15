@@ -107,7 +107,7 @@ export class Header extends Component {
 	    <div className="container">
 
 		<div className="col-md-6 logo-w3">
-			<a href="index.html"><img src="images/logo2.png" alt=" " /><h1>FASHION<span>CLUB</span></h1></a>
+			<a href="/"><img src="/images/logo2.png" alt=" " /><h1>FASHION<span>CLUB</span></h1></a>
 		</div>
 
 
@@ -244,8 +244,8 @@ export class Header extends Component {
 
                         </li>
 
-                        <li><a href="about.html" className="hyper"><span>About</span></a></li>
-						<li><a href="contact.html" className="hyper"><span>Contact Us</span></a></li>
+                        <li><a href="/about.html" className="hyper"><span>About</span></a></li>
+						<li><a href="/contact.html" className="hyper"><span>Contact Us</span></a></li>
 
                     </ul>
                 </div>    

@@ -117,7 +117,12 @@ class ReviewCard extends Component {
                             <div className="user-part " >
                                 <div className='row vertical-align user-image-row'>
                                     <div className="user-image col-xs-4">
-                                        <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" />
+                                        {
+                                            this.props.commentDocument.userImageUrl == ""?
+                                            <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" />:
+                                            <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
+                                        }
+                                        
                                     </div>
                                     <div className="user-name col-xs-8 ">
                                         {this.props.commentDocument.reviewUserFirstName + " " + this.props.commentDocument.reviewUserLastName}
@@ -133,7 +138,7 @@ class ReviewCard extends Component {
                                     </div>
                                     <div className="user-not-helpful col-md-4 col-xs-4">
                                         <span className={this.props.MyComment ? "disabled dislike-icon" : "dislike-icon"} onClick={() => this.likeButtons("unlike")}>
-                                            {this.state.MyDisliked ? <i class="fa fa-thumbs-up"></i> : <i class="fa fa-thumbs-o-up"></i>}
+                                            {this.state.MyDisliked ? <i class="fa fa-thumbs-down"></i> : <i class="fa fa-thumbs-o-down"></i>}
                                             {" " + this.props.commentDocument.reviewNotHelpfulCount}
                                         </span>
                                     </div>

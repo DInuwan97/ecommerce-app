@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 import { Redirect } from 'react-router';
+import Axios from 'axios';
 
 class SingleItemReviewRow extends Component {
 
@@ -14,6 +15,12 @@ class SingleItemReviewRow extends Component {
             }
         })
     }
+
+    componentDidMount = () => {
+        console.log(this.props.commentDocument);
+
+    }
+
 
 
     render() {
@@ -31,14 +38,22 @@ class SingleItemReviewRow extends Component {
                 <td>{this.props.commentDocument.reviewHelpfulCount}</td>
                 <td>{this.props.commentDocument.reviewNotHelpfulCount}</td>
                 <td>{AddedDate}</td>
+                <td style={{ textAlign: 'center' }}>{this.props.commentDocument.didAdminReplied ? <i class="fa fa-check" style={{ color: 'green' }}></i> : <i class="fa fa-times" style={{ color: '#dc3545' }}></i>}</td>
                 <td>
                     <div className='btn-group' style={{ width: '100%' }}>
-                        <button className='btn btn-info'
+                        {
+                            this.props.commentDocument.didAdminReplied ? "":
+                            <button className='btn btn-success' title="Mark Reviewed" onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)} >
+                                {/* <span class="glyphicon glyphicon-check" ></span> */}
+                                <i class="fa fa-check-square" style={{ color: 'white' }}></i>
+                            </button>
+                        }
+                        <button className='btn btn-info' title="Reply"
                             onClick={() => this.props.goToCompose(this.props.commentDocument)}
                         >
-                            Reply
+                            <i class="fa fa-envelope"></i>
                         </button>
-                        <button className='btn btn-danger' onClick={() => this.DeleteReview()}>Delete</button>
+                        <button title="Delete Review" className='btn btn-danger' onClick={() => this.DeleteReview()}><i class="fa fa-trash"></i></button>
                     </div>
                 </td>
             </tr>

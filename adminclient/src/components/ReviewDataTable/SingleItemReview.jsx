@@ -30,7 +30,9 @@ class SingleItemReview extends Component {
             await this.setState({
                 reviews:res.data.CommentDocuments
             })
-            dtable=$('#review-table-2').DataTable()
+            dtable=$('#review-table-2').DataTable({
+                "order": [[ 5, "desc" ]]
+            })
 
         }).catch(err=>{
             console.log(err);
@@ -81,8 +83,8 @@ class SingleItemReview extends Component {
                 '/compose',
                 {
                     email:data.reviewerEmail,
-                    review:data.reviewMessage
-                
+                    review:data.reviewMessage,
+                    reviewId:data._id
             })
         }else{
             swal({
@@ -91,6 +93,26 @@ class SingleItemReview extends Component {
                 icon:'error'
             })
         }
+    }
+
+    MarkAsRead = (id)=>{
+        const url=`/api/review/admin/markAsRead/${id}`;
+        Axios.patch(url,"",{headers:{
+            Authorization:`bearer ${localStorage.getItem('userLoginToken')}`
+        }}).then(res=>{
+            swal({
+                text:res.data.msg,
+                title:"Status",
+                icon:'success'
+            });
+            this.getData();
+        }).catch(err=>{
+            swal({
+                title:"Error!",
+                text:err.response.data.msg,
+                icon:'error'
+            });
+        });
     }
 
     render() {
@@ -109,6 +131,7 @@ class SingleItemReview extends Component {
                                     <th>Likes</th>
                                     <th>Dislikes</th>
                                     <th>Added</th>
+                                    <th>Reviewed</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -117,7 +140,8 @@ class SingleItemReview extends Component {
                                     this.state.reviews.map((element, index, actions) => (
                                         <SingleItemRow commentDocument={element} index={index} 
                                         DeleteReview = {this.deleteReview}
-                                        goToCompose={this.goToCompose}/>
+                                        goToCompose={this.goToCompose}
+                                        MarkAsRead={this.MarkAsRead} />
                                     ))
                                 }
                             </tbody>
