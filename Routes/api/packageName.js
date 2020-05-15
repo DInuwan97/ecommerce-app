@@ -4,13 +4,19 @@ const PackageName = require('../../models/PackageNames');
 
 //add package
 router.post('/add', (req,res)=>{
-    const newPackage = new PackageName(req.body);
-    newPackage.save()
-    .then((res)=>{
-        res.status(200).json({'msg':'Package Added Succssfully'})
-    })
-    .catch(err=>{
-        res.status(400).json(err)
+  
+    let packageName = {
+        packageName:req.body.packageName,
+        maxNoOfSalesServicers:req.body.maxNoOfSalesServicers,
+        packageIconImage:req.body.packageIconImage
+    }
+
+    PackageName.create(packageName,(err)=>{
+        if(err){
+            return res.status(400).send({ msg: err });
+        }else{
+            return res.status(201).send(packageName);
+        }
     })
 });
 
@@ -20,7 +26,7 @@ router.get('/view',async (req,res)=>{
     try {
         const packesNames = await PackageName.find();
         if (!packesNames) {
-          return res.status(400).json({ msg: "No Items Found" });
+          return res.status(400).json({ msg: "No Packages Found" });
         }
     
         res.json(packesNames);
