@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './ReviewCard.css';
 import swal from 'sweetalert';
+import jwt_decode from 'jwt-decode'
 
 class ReviewCard extends Component {
     constructor(props) {
@@ -13,15 +14,21 @@ class ReviewCard extends Component {
             cc: "",
             bcc: "",
             msg: "",
-            reviewId: ""
+            reviewId: "",
+            userCompany:''
         }
+
     }
     componentDidMount() {
-        console.log(this.props.commentDocument);
-
+        // console.log(this.props.commentDocument);
+        const token = localStorage.getItem('userLoginToken');
+        const userData = jwt_decode(token);
+        const company = userData.company;
+        
         this.setState({
             MyLiked: this.props.MyLiked,
             MyDisliked: this.props.MyDisliked,
+            userCompany:company,
             to: this.props.commentDocument.reviewerEmail,
             subject: `Regarding the Review on our item`,
             cc: "",
@@ -195,7 +202,7 @@ class ReviewCard extends Component {
                             </div>
                         </div>
                         <div className="col-md-1 col-xs-6 settings-button-col">
-                            {this.props.userType == "Customer" ?
+                            {this.props.userType == "Customer" || this.state.userCompany !== this.props.company?
                                 this.props.MyComment ?
                                     <div class="btn-group">
                                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

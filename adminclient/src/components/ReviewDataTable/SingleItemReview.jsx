@@ -83,8 +83,11 @@ class SingleItemReview extends Component {
             this.props.history.push(
                 '/compose',
                 {
-                    email:data.reviewerEmail,
-                    review:data.reviewMessage,
+                    to:data.reviewerEmail,
+                    msg:`Your Review : ${data.reviewMessage}`,
+                    subject:`Regarding the Review on our item`,
+                    cc:"",
+                    bcc:"",
                     reviewId:data._id
             })
         }else{

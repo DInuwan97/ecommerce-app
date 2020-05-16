@@ -279,6 +279,7 @@ class ReviewMain extends Component {
                                 ReplyProduct={this.ReplyProduct}
                                 MarkAsRead={this.MarkAsRead}
                                 triggerModal={this.triggerModal}
+                                company={this.props.company}
 
                             />
                         ))}
