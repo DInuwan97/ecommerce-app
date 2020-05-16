@@ -197,16 +197,18 @@ class Cart extends Component {
     // selected items move to the checkout component
     console.log('buy');
 
-    if (this.state.cartSummary.subtotal > 0) {
-      let object = {
-        items: this.state.items,
-        summary: this.state.cartSummary
-      };
-      this.props.history.push({
-        pathname: '/checkout',
-        state: object
-      });
-    }
+    setTimeout(() => {
+      if (this.state.cartSummary.subtotal > 0) {
+        let object = {
+          items: this.state.items,
+          summary: this.state.cartSummary
+        };
+        this.props.history.push({
+          pathname: '/checkout',
+          state: object
+        });
+      }
+    }, 3000);
 
   };
 
@@ -265,9 +267,19 @@ class Cart extends Component {
   }
 }
 
+
+$(window).scroll(function () {
+  $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()));
+});
+
+$(document).ready(function () {
+  $(this).scrollTop(0);
+});
+
 // $(window).scroll(function () {
 //   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()))
 // });
+
 
 export default Cart;
 

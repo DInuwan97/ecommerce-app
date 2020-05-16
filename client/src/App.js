@@ -94,7 +94,7 @@ class App extends Component {
         <Route exact path='/testImage' component={TestImage} />
         <Route path="/verifysecurecode" component={VerifySecureCode} />
 
-        <Route path="/single" component={SingleProduct} />
+        <Route path="/:type/:id" component={SingleProduct} />
         <Route path="/salesManager" component={SalesManager} />
         <Route path="/itemApprove" component={itemApprove} />
         <Route path="/category" component={Category} />

@@ -18,7 +18,6 @@ class SingleItemReview extends Component {
 
     componentDidMount = () => {
         this.getData();
-        
     }
 
 
@@ -30,7 +29,11 @@ class SingleItemReview extends Component {
             await this.setState({
                 reviews:res.data.CommentDocuments
             })
-            dtable=$('#review-table-2').DataTable()
+            dtable=$('#review-table-2').DataTable(
+            //     {
+            //     "order": [[ 5, "desc" ]]
+            // }
+            )
 
         }).catch(err=>{
             console.log(err);
@@ -73,6 +76,49 @@ class SingleItemReview extends Component {
         }
     }
 
+    goToCompose = (data)=>{
+        const token = localStorage.getItem('userLoginToken');
+        
+        if(token){
+            this.props.history.push(
+                '/compose',
+                {
+                    to:data.reviewerEmail,
+                    msg:`Your Review : ${data.reviewMessage}`,
+                    subject:`Regarding the Review on our item`,
+                    cc:"",
+                    bcc:"",
+                    reviewId:data._id
+            })
+        }else{
+            swal({
+                title:"Error!",
+                text:"Login/Signup to reply to reviews",
+                icon:'error'
+            })
+        }
+    }
+
+    MarkAsRead = (id)=>{
+        const url=`/api/review/admin/markAsRead/${id}`;
+        Axios.patch(url,"",{headers:{
+            Authorization:`bearer ${localStorage.getItem('userLoginToken')}`
+        }}).then(res=>{
+            swal({
+                text:res.data.msg,
+                title:"Status",
+                icon:'success'
+            });
+            this.getData();
+        }).catch(err=>{
+            swal({
+                title:"Error!",
+                text:err.response.data.msg,
+                icon:'error'
+            });
+        });
+    }
+
     render() {
         return (
             <div>
@@ -89,6 +135,7 @@ class SingleItemReview extends Component {
                                     <th>Likes</th>
                                     <th>Dislikes</th>
                                     <th>Added</th>
+                                    <th>Reviewed</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -96,7 +143,9 @@ class SingleItemReview extends Component {
                                 {
                                     this.state.reviews.map((element, index, actions) => (
                                         <SingleItemRow commentDocument={element} index={index} 
-                                        DeleteReview = {this.deleteReview}/>
+                                        DeleteReview = {this.deleteReview}
+                                        goToCompose={this.goToCompose}
+                                        MarkAsRead={this.MarkAsRead} />
                                     ))
                                 }
                             </tbody>
