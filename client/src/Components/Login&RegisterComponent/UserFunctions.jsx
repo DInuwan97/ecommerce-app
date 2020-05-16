@@ -34,6 +34,25 @@ export const register = newUser =>{
             })
         }
     });
+
+
+}
+
+export const addCompany = newUser =>{
+    
+    return axios
+    .post('api/companies/add',{
+        company:newUser.company,
+        mobile:newUser.mobile,
+        email:newUser.email,
+        packageName:newUser.packageName
+    })
+    .then(()=>{
+        console.log('company saved')
+    })
+    .catch(err=>{
+        console.log(err)
+    })
 }
 
 

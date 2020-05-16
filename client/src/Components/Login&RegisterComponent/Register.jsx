@@ -1,16 +1,26 @@
 import React, { Component } from "react";
 import {register} from './UserFunctions';
-
+import {addCompany} from './UserFunctions';
+import axios from 'axios';
 export default class Register extends Component {
 
 
   constructor(props){
     super(props);
     this.state = {
-      userType : ''
+      userType : '',
+      company:'',
+      companyList:[],
+      packageName:'',
+      packageList:[]
     }
   }
 
+
+  componentDidMount(){
+    this.getCompanies();
+    this.getPackages();
+  }
 
 
   onChangeHandler = e =>{
@@ -42,6 +52,45 @@ export default class Register extends Component {
        
     })
 
+    const resultCompanyRegistation = addCompany(frmData);
+
+  }
+
+
+  getCompanies =() =>{
+    axios({
+      method:'get',
+      url:`api/companies/view`
+    })
+    .then(res=>{
+      let com = res.data;
+
+      this.setState({
+        companyList:com,
+        company:com.companyName
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+  getPackages =() =>{
+    axios({
+      method:'get',
+      url:`api/packages/view`
+    })
+    .then(res=>{
+      let pack = res.data;
+
+      this.setState({
+        packageList:pack,
+        packageName:pack.packageName
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
   }
   
   render(){
@@ -148,10 +197,9 @@ export default class Register extends Component {
             <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="packageName" required="" onChange={this.onChangeHandler}>
 
                 <option value="">Select the Package</option>
-                <option value="Platinum">Platinum</option>  
-                <option value="Gold">Gold</option>      
-                <option value="Silver">Silver</option> 
-                <option value="Bronze">Bronze</option>  
+                {this.state.packageList.map((pack) => (
+                    <option value={pack.packageName}>{pack.packageName}</option>
+                  ))}
 
             </select>
 
@@ -165,13 +213,22 @@ export default class Register extends Component {
               <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="company" required="" onChange={this.onChangeHandler}>
 
                 <option value="">Select the Company</option>
-                <option value="ODEL">ODEL</option>  
-                <option value="Thilakawardhene">Thilakawardhene</option>      
-                <option value="House of Fashion">House of Fashion</option> 
-                <option value="Kandy">Kandy</option>  
+
+                  {this.state.companyList.map((com) => (
+                    <option value={com.companyName}>{com.companyName}</option>
+                  ))}
+                         
+
+            
 
               </select>
+
+      
+
+            
             }
+
+          
 
 
 

@@ -22,6 +22,8 @@ import ReviewReplyTable from '../ReviewDataTable/ReviewReply/ReviewReplyTable';
 
 import MyProfile from '../AdminOrientation/MyProfile';
 
+import AdminPackage from '../AdminOrientation/AdminPackage';
+
 export default class HeaderSideMenuFooter extends Component {
 
   constructor(props){
@@ -766,6 +768,9 @@ export default class HeaderSideMenuFooter extends Component {
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
+
+                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company}/>}/>
+
               </div>
             </section>
 
