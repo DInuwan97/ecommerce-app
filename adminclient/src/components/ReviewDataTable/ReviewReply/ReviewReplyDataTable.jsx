@@ -31,8 +31,8 @@ class ReviewReplyDataTable extends Component {
                 headers: {
                     Authorization: `bearer ${token}`
                 }
-            }).then(res => {
-                this.setState({
+            }).then(async res => {
+                await this.setState({
                     items: res.data.data
                 });
             }).catch(err=>{

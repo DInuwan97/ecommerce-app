@@ -20,10 +20,12 @@ class SendEmail extends Component {
     componentDidMount() {
         if (this.props.location.state) {
             this.setState({
-                to:this.props.location.state.email,
-                subject:`Regarding the Review on our item`,
-                msg:`Your Review : ${this.props.location.state.review}`,
-                reviewId:this.props.location.state.reviewId
+                to:this.props.location.state.to,
+                subject:this.props.location.state.subject,
+                msg:this.props.location.state.msg,
+                cc:this.props.location.state.cc,
+                bcc:this.props.location.state.bcc,
+                reviewId:this.props.location.state.reviewId,
             })
         }
 

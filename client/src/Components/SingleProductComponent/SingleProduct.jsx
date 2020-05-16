@@ -16,17 +16,55 @@ class SingleProduct extends Component {
       MyLiked: [],
       MyDisliked: [],
       Rating: [0, 0, 0, 0, 0],
-      userType: "Customer"
+      userType: "Customer",
+
+      itemImage: "",
+      itemColors: [],
+      StockQuantity: 0,
+      discount: 10,
+      description: "",
+      company: "",
+      itemId: "",
+      itemName: "",
+      price: 0,
+      category: "",
+      size: "",
+      Brand: "",
     }
 
   }
   componentDidMount = () => {
+    this.getItemDetails();
     this.getCommentData();
     this.getStarRating();
     this.getMyRating();
 
   }
 
+  getItemDetails = () => {
+    const itemId = this.props.match.params.id;
+    const url = `/api/items/${itemId}`;
+    Axios.get(url).then(res => {
+      this.setState({
+        itemImage:     res.data.itemImage,
+        itemColors:    res.data.color,
+        StockQuantity: res.data.stockQuantity,
+        discount:      res.data.discount,
+        description:   res.data.description,
+        company:       res.data.company,
+        itemId:        res.data._id,
+        itemName:      res.data.itemName,
+        price:         res.data.price,
+        category:      res.data.category,
+        size:          res.data.size,
+        Brand:         res.data.Brand,
+      })
+
+    }).catch(err => {
+      console.log(err);
+
+    })
+  }
 
 
 
@@ -184,7 +222,7 @@ class SingleProduct extends Component {
             if (MyLikedData[index].status == 1) {
               MyLiked.push(MyLikedData[index].reviewId);
             }
-            if (MyLikedData[index].status==(-1)) {
+            if (MyLikedData[index].status == (-1)) {
               MyDisliked.push(MyLikedData[index].reviewId);
             }
           }
@@ -366,11 +404,11 @@ class SingleProduct extends Component {
               <div className="col-md-6 single-top-left">
                 <div className="flexslider">
                   <ul className="slides">
-                    <li data-thumb={require("./assets/images/s1.jpg")}>
+                    <li data-thumb={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}>
                       <div className="thumb-image detail_images">
                         {" "}
                         <img
-                          src={require("./assets/images/s1.jpg")}
+                          src={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}
                           data-imagezoom="true"
                           className="img-responsive"
                           alt=""
@@ -403,7 +441,7 @@ class SingleProduct extends Component {
                 </div>
               </div>
               <div className="col-md-6 single-top-right">
-                <h3 className="item_name"> Black Handbag</h3>
+                <h3 className="item_name"> {this.state.itemName}</h3>
                 <p>
                   Processing Time: Item will be shipped out within 2-3 working
                 days.{" "}
@@ -430,12 +468,12 @@ class SingleProduct extends Component {
                 </div>
                 <div className="single-price">
                   <ul>
-                    <li>$54</li>
+                    <li>{"$"+ (this.state.price - this.state.price*this.state.discount/100)}</li>
                     <li>
-                      <del>$60</del>
+                      <del>{"$"+this.state.price}</del>
                     </li>
                     <li>
-                      <span className="w3off">10% OFF</span>
+                      <span className="w3off">{this.state.discount+"%"} OFF</span>
                     </li>
                     <li>Ends on: Oct,15th</li>
                     <li>
@@ -517,17 +555,7 @@ class SingleProduct extends Component {
                   aria-labelledby="headingOne"
                 >
                   <div className="panel-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life
-                    accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                    non cupidatat skateboard dolor brunch. Food truck quinoa
-                    nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                    aliqua put a bird on it squid single-origin coffee nulla
-                    assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                    beer labore wes anderson cred nesciunt sapiente ea proident.
-                    Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                    beer farm-to-table, raw denim aesthetic synth nesciunt you
-                    probably haven't heard of them accusamus labore sustainable
-                    VHS.
+                  {this.state.description}
                 </div>
                 </div>
               </div>
@@ -626,6 +654,7 @@ class SingleProduct extends Component {
                       itemId={this.props.match.params.id}
                       userType={this.state.userType}
                       getCommentData={this.getCommentData}
+                      company={this.state.company}
                     />
                   </div>
                 </div>

@@ -646,4 +646,27 @@ router.get('/admin/getAdminReplies/:id',authenticateUser,verifyAdmin,(req,res)=>
     })
 })
 
+
+
+router.get('/admin/viewUser/:id',authenticateUser,verifyAdmin,(req,res)=>{
+    let id = req.params.id;
+    User.findById(id,(err,data)=>{
+        if(err){
+            return res.status(400).send({msg:err});
+        }else{
+            if(data){
+                jwt.sign({data}, 'secretkey',{expiresIn:'3m'},(err,token)=>{
+                    if(err){
+                        return res.status(400).send({msg:err});
+                    }else{
+                        return res.status(200).send({data:token})
+                    }
+                })
+            }else{
+                return res.send(200).send({data:""})
+            }
+        }
+    })
+})
+
 module.exports = router;
