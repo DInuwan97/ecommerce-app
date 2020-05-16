@@ -5,7 +5,7 @@ import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
 import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
-
+const $ =require('jquery')
 class Checkout extends Component {
   constructor(props) {
     super(props);

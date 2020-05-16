@@ -615,7 +615,10 @@ router.get('/admin/getAdminReplyItems/', authenticateUser, verifyAdmin, (req, re
                             count: itemCount[index]
                         });
                         if (uniqueItems.length - 1 == index) {
-                            res.status(200).send({ data: responses })
+                            setTimeout(()=>{
+                                res.status(200).send({ data: responses })
+                            },100)
+                            
                         }
                     }).catch(err=>{
                         res.status(400).send({ msg: err })
@@ -633,7 +636,7 @@ router.get('/admin/getAdminReplyItems/', authenticateUser, verifyAdmin, (req, re
 
 router.get('/admin/getAdminReplies/:id',authenticateUser,verifyAdmin,(req,res)=>{
     const itemId = req.params.id;
-    ReviewComments.find({item:itemId,didAdminReplied:true},(err,data)=>{
+    ReviewComments.find({item:itemId,didAdminReplied:true,itemCompany:req.authData.company},(err,data)=>{
         if(err){
             return res.status(400).send({msg:err});
         }else{

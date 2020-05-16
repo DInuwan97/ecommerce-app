@@ -46,18 +46,18 @@ class SingleProduct extends Component {
     const url = `/api/items/${itemId}`;
     Axios.get(url).then(res => {
       this.setState({
-        itemImage:     res.data.itemImage,
-        itemColors:    res.data.color,
+        itemImage: res.data.itemImage,
+        itemColors: res.data.color,
         StockQuantity: res.data.stockQuantity,
-        discount:      res.data.discount,
-        description:   res.data.description,
-        company:       res.data.company,
-        itemId:        res.data._id,
-        itemName:      res.data.itemName,
-        price:         res.data.price,
-        category:      res.data.category,
-        size:          res.data.size,
-        Brand:         res.data.Brand,
+        discount: res.data.discount,
+        description: res.data.description,
+        company: res.data.company,
+        itemId: res.data._id,
+        itemName: res.data.itemName,
+        price: res.data.price,
+        category: res.data.category,
+        size: res.data.size,
+        Brand: res.data.Brand,
       })
 
     }).catch(err => {
@@ -112,7 +112,7 @@ class SingleProduct extends Component {
           console.log(res.data.MyRating);
           const MyRating = [0, 0, 0, 0, 0];
           if (res.data.MyRating >= 1 && res.data.MyRating <= 5) {
-            MyRating[5 - res.data.MyRating] = 1;
+            MyRating[res.data.MyRating-1] = 1;
             this.setState({
               Rating: MyRating
             })
@@ -450,7 +450,7 @@ class SingleProduct extends Component {
                   <ul>
                     {
                       this.state.AverageStarRating.map((element) => (
-                        <li>
+                        <li data-toggle="modal" data-target="#myModal">
                           <i className={element == 1 ? "fa fa-star" : element == 0.5 ? "fa fa-star-half-o" : "fa fa-star-o"} aria-hidden="true"></i>
                         </li>
                       ))
@@ -468,14 +468,19 @@ class SingleProduct extends Component {
                 </div>
                 <div className="single-price">
                   <ul>
-                    <li>{"$"+ (this.state.price - this.state.price*this.state.discount/100)}</li>
-                    <li>
-                      <del>{"$"+this.state.price}</del>
-                    </li>
-                    <li>
-                      <span className="w3off">{this.state.discount+"%"} OFF</span>
-                    </li>
-                    <li>Ends on: Oct,15th</li>
+                    <li>{"$" + (this.state.price - this.state.price * this.state.discount / 100)}</li>
+                    {this.state.discount == 0 ? "" :
+                      <Fragment>
+                        <li>
+                          <del>{"$" + this.state.price}</del>
+                        </li>
+
+                        <li>
+                          <span className="w3off">{this.state.discount + "%"} OFF</span>
+                        </li>
+                        <li>Ends on: Oct,15th</li>
+                      </Fragment>
+                    }
                     <li>
                       <a href="#">
                         <i className="fa fa-gift" aria-hidden="true"></i> Coupon
@@ -555,8 +560,8 @@ class SingleProduct extends Component {
                   aria-labelledby="headingOne"
                 >
                   <div className="panel-body">
-                  {this.state.description}
-                </div>
+                    {this.state.description}
+                  </div>
                 </div>
               </div>
               <div className="panel panel-default">

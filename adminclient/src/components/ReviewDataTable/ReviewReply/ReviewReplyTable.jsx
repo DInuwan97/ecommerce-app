@@ -65,6 +65,20 @@ class ReviewReplyTable extends Component {
         $('#review-reply-table-2').DataTable();
     }
 
+    sendEmailToAdmin = () => {
+        if (this.state.reviewAdminMail != "") {
+            this.props.history.push({
+                pathname: '/compose',
+                state: {
+                    to: this.state.reviewAdminMail,
+                    cc: "",
+                    bcc: "",
+                    subject: "Regarding a Review Reply",
+                    msg: ""
+                }
+            })
+        }
+    }
 
     setAdminProfile = (id) => {
 
@@ -73,29 +87,34 @@ class ReviewReplyTable extends Component {
         Axios.get(url, { headers: { Authorization: `bearer ${token}` } }).then(res => {
             if (res) {
                 const user = JwtDecode(res.data.data);
-                let designation ="Customer";
-                if(user.data.isAdmin){
-                    designation="Admin";
-                }else if(user.data.isSalesManager){
-                    designation="Sales Manager";
-                }else if(user.data.isSalesServicer){
-                    designation="Sales Servicer";
+                let designation = "Customer";
+                if (user.data.isAdmin) {
+                    designation = "Admin";
+                } else if (user.data.isSalesManager) {
+                    designation = "Sales Manager";
+                } else if (user.data.isSalesServicer) {
+                    designation = "Sales Servicer";
                 }
                 this.setState({
                     reviweAdminFirstName: user.data.firstName,
                     reviweAdminLastName: user.data.lastName,
                     reviweAdminImage: user.data.userImageUrl,
                     reviewAdminPosition: designation,
-                    reviewAdminCompany:user.data.company ,
+                    reviewAdminCompany: user.data.company,
                     reviewAdminMail: user.data.email
                 })
 
 
             }
         }).catch(err => {
-            swal({
-                title: "Error!",
-                text: err.response.data ? err.response.data.msg : err.message
+            this.setState({
+                reviweAdminFirstName: "Error!",
+                reviweAdminImage: "https://res.cloudinary.com/dsuhs6bf5/image/upload/v1589621741/zehopwq1wkhq1fjfctza.png",
+                reviewAdminPosition: err.message,
+                reviweAdminLastName: "",
+                reviewAdminPosition: "",
+                reviewAdminCompany: "",
+                reviewAdminMail: ""
             })
         })
 
@@ -103,9 +122,84 @@ class ReviewReplyTable extends Component {
     render() {
         return (
             <div>
+                <div className="row">
+                    <div className="col-lg-3 col-6">
+
+                        <div className="small-box bg-info">
+                            <div className="inner">
+                                <h3>{this.state.Reviews.length}</h3>
+
+                                <p>All Reviews </p>
+                            </div>
+                            <div className="icon">
+                                <i className="ion ion-email"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* <div className="col-lg-3 col-6">
+
+                        <div className="small-box bg-success">
+                            <div className="inner">
+                                <h3>{this.state.UnansweredCount}</h3>
+
+                                <p>Unanswered Reviews</p>
+                            </div>
+                            <div className="icon">
+                                <i className="ion ion-email-unread"></i>
+                            </div>
+                        </div>
+                    </div> */}
+
+                    <div className="col-lg-3 col-6">
+
+                        <div className="small-box bg-warning">
+                            <div className="inner">
+                                <h3>{this.state.MarkedCount}</h3>
+
+                                <p>Marked Reviews</p>
+                            </div>
+                            <div className="icon">
+                                <i className="ion ion-android-checkmark-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-3 col-6">
+
+                        <div className="small-box bg-danger">
+                            <div className="inner">
+                                <h3>{this.state.EmailedCount}</h3>
+
+                                <p>Replied Reviews</p>
+                            </div>
+                            <div className="icon">
+                                <i class="far fa-envelope-open"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3 col-sm-6 col-12">
+                        <div className="info-box bg-success">
+                            <span className="info-box-icon"><i class="fa fa-share-square"></i></span>
+                            <div className="info-box-content">
+                                <span className="info-box-text">Reply Rate</span>
+                                <span className="info-box-number">{this.state.EmailedCount + " /" + this.state.Reviews.length}</span>
+                                <div className="progress">
+                                    <div className="progress-bar" style={{ width: this.state.Reviews.length != 0 ? ((this.state.EmailedCount / this.state.Reviews.length) * 100).toFixed(2) : '100%' }} />
+                                </div>
+                                <span className="progress-description">
+                                    {this.state.Reviews.length != 0 ? ((this.state.EmailedCount / this.state.Reviews.length) * 100).toFixed(2) : "100"}% Reply Rate
+                            </span>
+                            </div>
+                            {/* /.info-box-content */}
+                        </div>
+                        {/* /.info-box */}
+                    </div>
+
+                </div>
                 <div className="card">
                     <div className="card-header">
-                        <h3 className="card-title">Review Replies of Item Name : {this.props.location.state ? this.props.location.state.itemName : ""}</h3>
+                        <h3 className="card-title">{this.props.location.state ? "Review Replies of Item Name :" + this.props.location.state.itemName : "Review Replies"}</h3>
                     </div>
                     <div className="card-body">
                         <table id="review-reply-table-2" className="table table-bordered table-striped">
@@ -168,7 +262,7 @@ class ReviewReplyTable extends Component {
                                                     <img src={this.state.reviweAdminImage} alt='' style={{ width: '160px', height: '160px', borderRadius: '100px' }} />
 
                                                     :
-                                                    <img src="../../dist/img/user4-128x128.jpg" alt='' style={{ width: '160px', height: '160px', borderRadius: '100px' }} />
+                                                    <div alt='' style={{ width: '160px', height: '160px', borderRadius: '100px', backgroundColor: 'white' }} />
                                             }
                                         </div>
 
@@ -189,7 +283,7 @@ class ReviewReplyTable extends Component {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Send Email</button>
+                                <button type="button" onClick={() => this.sendEmailToAdmin()} class="btn btn-secondary" data-dismiss="modal">Send Email</button>
                                 <button type="button" class="btn btn-primary">Close</button>
                             </div>
                         </div>
