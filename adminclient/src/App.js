@@ -1,24 +1,25 @@
 import React from 'react';
-import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
+import {BrowserRouter as Router,withRouter, Route,Switch} from "react-router-dom";
 import Login from './components/LoginRegister/Login';
 import HeaderSideMenuFooter from './components/HeaderSideMenuFooter/HeaderSideMenuFooter';
 
-function App() {
+function App({location}) {
 
  
 
   console.log('Admin Token : ' ,localStorage.userLoginToken)
   return (
-    <Router>
+    // <Router>
     <div className="App">
 
 
     <Route path = "/login" component={Login} />
-    <HeaderSideMenuFooter/>  
+    {(location.pathname !=='/login')?
+    <HeaderSideMenuFooter/>  :""
     
 
 
-
+    }
 
     
      
@@ -26,8 +27,8 @@ function App() {
   
 
     </div>
-    </Router>
+    // </Router> 
   );
 }
 
-export default App;
+export default withRouter(App);
