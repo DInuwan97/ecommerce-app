@@ -1,6 +1,6 @@
 import React from "react";
-
-export default function Card({ color, name, value, icon }) {
+import {Link} from 'react-router-dom'
+export default function Card({ color, name, value, icon,link }) {
   return (
     <div className="col-lg-3 col-6">
       <div className={`small-box ${color}`}>
@@ -12,9 +12,9 @@ export default function Card({ color, name, value, icon }) {
         <div className="icon">
           <i className={`ion ${icon}`}></i>
         </div>
-        <a href="#" className="small-box-footer">
+        <Link to  = {link} className="small-box-footer">
           More info <i className="fas fa-arrow-circle-right"></i>
-        </a>
+        </Link>
       </div>
     </div>
   );
