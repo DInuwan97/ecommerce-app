@@ -30,7 +30,7 @@ export default function ItemTableRow({
               content: "input",
             }).then((value) => {
               parseFloat(value);
-              if (value > 0 && value < 100) {
+              if (value >= 0 && value < 100) {
                 swal(`${value}% of discount is Added : ${itemName}`);
                 addDiscount(id, value);
               } else if (value < 0 || value > 100) {

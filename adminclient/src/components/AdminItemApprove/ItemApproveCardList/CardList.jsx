@@ -47,23 +47,25 @@ export default class CardList extends Component {
           icon={"ion-bag"}
           value={this.state.allItems}
           name={"ALL ITEMS IN SHOP"}
+          link = {'/allItems'}
         />
         <Card
           color={"bg-success"}
           icon={"ion-stats-bars"}
           value={this.state.approvedItems}
           name={"ITEMS TO BE APPROVED"}
+          link = {'/itemApprove'}
         />
         <Card
           color={"bg-warning"}
           icon={"ion-person-add"}
-          value={150}
+          value={1}
           name={"NEWLY ADDED"}
         />
         <Card
           color={"bg-danger"}
           icon={"ion-pie-graph"}
-          value={150}
+          value={3}
           name={"DECLINED ITEMS"}
         />
       </div>
