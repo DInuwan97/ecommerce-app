@@ -5,13 +5,16 @@ import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
 import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
-
+const $ =require('jquery')
 class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       items: this.props.location.state.items,
       summary: this.props.location.state.summary,
+      buyer: {
+
+      }
     };
   }
 
@@ -41,5 +44,9 @@ class Checkout extends Component {
 // $(window).scroll(function () {
 //   $("#rightPanel").css("top", Math.max(15, 169 - $(this).scrollTop()));
 // });
+
+$(document).ready(function () {
+  $(this).scrollTop(0);
+});
 
 export default Checkout;

@@ -35,8 +35,8 @@ export class AddDiscount extends Component {
 
   render() {
     return (
-      <div>
-        <CardList />
+      <div className='container'>
+        <CardList items={this.state.items}/>
         <Table items={this.state.items} addDiscount={this.addDiscount} />
       </div>
     );

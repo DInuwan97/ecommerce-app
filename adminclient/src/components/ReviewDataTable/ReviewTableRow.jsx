@@ -6,7 +6,7 @@ class ReviewTableRow extends Component {
     goToItemReviews = () => {
         const { history } = this.props;
         if (history) {
-            history.push(`/SingleReviews/${this.props.data.item}`);
+            history.push(`/Reviews/${this.props.data.item}`);
         }
     }
 
@@ -18,6 +18,7 @@ class ReviewTableRow extends Component {
                 <td>{this.props.data.item}</td>
                 <td>{this.props.data.itemName}</td>
                 <td>{this.props.data.count}</td>
+                <td>{this.props.data.replyCount}</td>
                 <td>
                     <button className="btn btn-info" style={{ width: "100%" }} onClick={() => this.goToItemReviews()}>View</button>
                 </td>

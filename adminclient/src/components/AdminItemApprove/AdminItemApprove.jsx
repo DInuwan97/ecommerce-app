@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ItemTable from "./ItemsTable/ItemTable";
 import CardList from "./ItemApproveCardList/CardList";
 import ViewSingleItem from "./ViewSingleItem/ViewSingleItem";
+import AllItems from './allItems/allItemsTable'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 export default class AdminItemApprove extends Component {
@@ -51,7 +52,7 @@ export default class AdminItemApprove extends Component {
 
   render() {
     return (
-      <div>
+      <div className = 'container'>
         <Router>
           <CardList />
           <Switch>
@@ -66,6 +67,8 @@ export default class AdminItemApprove extends Component {
               )}
             />
             <Route path="/viewSingle" render={(props) => <ViewSingleItem {...props}/>} />
+            <Route path="/allItems" render={(props) => <AllItems {...props}  items={this.state.items}  declineItem = {this.declineItem}/>} />
+
           </Switch>
         </Router>
       </div>

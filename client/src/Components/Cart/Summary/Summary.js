@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 
 import classes from './Summary.module.css';
+import spinnerClasses from './Spinner.module.css';
 
 const Summary = (props) => {
   console.log(props.details);
+
+  const [spinner, setSpinner] = useState(false);
+
+  const buy = () => {
+    //spinner = true;
+    setSpinner(true);
+    props.buy();
+  };
 
   return (
     <div className={classes.container}>
@@ -28,7 +37,9 @@ const Summary = (props) => {
       </div>
 
       <div className={classes.button}>
-        <button className={classes.button_buy} onClick={props.buy} disabled={props.details.isDisabled}>BUY</button>
+        {spinner ? <div className={spinnerClasses.loader}>Loading...</div> :
+          <button className={classes.button_buy} onClick={buy} disabled={props.details.isDisabled}>BUY</button>
+        }
       </div>
     </div>
   );

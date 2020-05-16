@@ -220,7 +220,7 @@ router.post("/login", (req, res) => {
               isSalesManager:user.isSalesManager,
               isSalesServicer:user.isSalesServicer,
               company:user.company,
-              user
+              userImageUrl:user.userImageUrl
           }
 
             jwt.sign(

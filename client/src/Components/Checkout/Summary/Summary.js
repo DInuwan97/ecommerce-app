@@ -28,6 +28,7 @@ const Summary = props => {
 
       <div className={classes.button}>
         <button className={classes.button_buy}>ORDER</button>
+
       </div>
     </div>
   );
