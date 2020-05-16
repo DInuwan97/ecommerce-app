@@ -18,7 +18,6 @@ class SingleItemReview extends Component {
 
     componentDidMount = () => {
         this.getData();
-        
     }
 
 
@@ -30,9 +29,11 @@ class SingleItemReview extends Component {
             await this.setState({
                 reviews:res.data.CommentDocuments
             })
-            dtable=$('#review-table-2').DataTable({
-                "order": [[ 5, "desc" ]]
-            })
+            dtable=$('#review-table-2').DataTable(
+            //     {
+            //     "order": [[ 5, "desc" ]]
+            // }
+            )
 
         }).catch(err=>{
             console.log(err);

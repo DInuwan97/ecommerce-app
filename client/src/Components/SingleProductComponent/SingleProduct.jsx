@@ -16,6 +16,7 @@ class SingleProduct extends Component {
       MyLiked: [],
       MyDisliked: [],
       Rating: [0, 0, 0, 0, 0],
+      userType: "Customer"
     }
 
   }
@@ -23,7 +24,7 @@ class SingleProduct extends Component {
     this.getCommentData();
     this.getStarRating();
     this.getMyRating();
-    
+
   }
 
 
@@ -31,7 +32,7 @@ class SingleProduct extends Component {
 
 
   getStarRating = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/getRating/${id}`;
     Axios.get(url).then(res => {
       console.log(res.data);
@@ -47,17 +48,19 @@ class SingleProduct extends Component {
           AverageStarRating.push(0);
         }
       }
+
       this.setState({
         AverageStarRating,
         AverageRating
       });
+
 
     });
 
   }
 
   getMyRating = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/MyRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -106,7 +109,7 @@ class SingleProduct extends Component {
     }
   }
   confirmRate = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/newRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -120,6 +123,10 @@ class SingleProduct extends Component {
           break;
         }
       }
+      if (data.starRating == 0) {
+        return;
+      }
+
       Axios.patch(url, data,
         {
           headers: {
@@ -148,7 +155,7 @@ class SingleProduct extends Component {
     }
   }
   getCommentData = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -165,14 +172,19 @@ class SingleProduct extends Component {
         const MyLikedData = res.data.myLiked;
         const MyLiked = [];
         const MyDisliked = [];
-        console.log(MyLikedData);
+        const userType = res.data.userType;
+        if (userType) {
+          this.setState({
+            userType
+          });
+        }
 
         if (MyLikedData) {
           for (let index = 0; index < MyLikedData.length; index++) {
-            if (MyLikedData[index].liked) {
+            if (MyLikedData[index].status == 1) {
               MyLiked.push(MyLikedData[index].reviewId);
             }
-            if (MyLikedData[index].disliked) {
+            if (MyLikedData[index].status==(-1)) {
               MyDisliked.push(MyLikedData[index].reviewId);
             }
           }
@@ -195,6 +207,7 @@ class SingleProduct extends Component {
       })
     } else {
       Axios.get(url).then(res => {
+
         const CommentDocuments = res.data.CommentDocuments;
         const Size = res.data.CommentDocuments.length;
         this.setState({
@@ -214,7 +227,7 @@ class SingleProduct extends Component {
 
 
   addReview = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/Review/newReviewComment/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -297,7 +310,7 @@ class SingleProduct extends Component {
       });
     }
   }
-  DeleteComment = async (id) => {
+  DeleteComment = async (id, adminAccess) => {
     const itemId = this.props.match.params.id;
     const url = `/api/Review/deleteReviewComment/${itemId}`;
 
@@ -310,6 +323,7 @@ class SingleProduct extends Component {
         },
         data: {
           reviewID: id,
+          adminAccess
         }
       }).then(res => {
         console.log(res.data);
@@ -340,6 +354,8 @@ class SingleProduct extends Component {
     console.log(this.props);
     this.props.history.push("/cart");
   };
+
+
 
   render() {
     return (
@@ -608,6 +624,8 @@ class SingleProduct extends Component {
                       MyLiked={this.state.MyLiked}
                       MyDisliked={this.state.MyDisliked}
                       itemId={this.props.match.params.id}
+                      userType={this.state.userType}
+                      getCommentData={this.getCommentData}
                     />
                   </div>
                 </div>
@@ -669,6 +687,7 @@ class SingleProduct extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
                 {/* <h2 className="modal-title" id="myModalLabel">Please rate:</h2> */}
                 <div class="swal-title" >Please rate</div>
               </div>

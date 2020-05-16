@@ -6,7 +6,7 @@ class ReviewTableRow extends Component {
     goToItemReviews = () => {
         const { history } = this.props;
         if (history) {
-            history.push(`/SingleReviews/${this.props.data.item}`);
+            history.push(`/Reviews/${this.props.data.item}`);
         }
     }
 

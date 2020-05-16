@@ -1,18 +1,33 @@
 import React, { Component, Fragment } from 'react';
 import './ReviewCard.css';
 import swal from 'sweetalert';
+
 class ReviewCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             MyLiked: false,
-            MyDisliked: false
+            MyDisliked: false,
+            to: "",
+            subject: "",
+            cc: "",
+            bcc: "",
+            msg: "",
+            reviewId: ""
         }
     }
     componentDidMount() {
+        console.log(this.props.commentDocument);
+
         this.setState({
             MyLiked: this.props.MyLiked,
-            MyDisliked: this.props.MyDisliked
+            MyDisliked: this.props.MyDisliked,
+            to: this.props.commentDocument.reviewerEmail,
+            subject: `Regarding the Review on our item`,
+            cc: "",
+            bcc: "",
+            msg: `Your Review : ${this.props.commentDocument.reviewMessage}`,
+            reviewId: this.props.commentDocument._id
         });
     }
 
@@ -26,6 +41,7 @@ class ReviewCard extends Component {
     }
 
 
+
     likeButtons = (type) => {
         if (!this.props.MyComment) {
             if (localStorage.getItem('userLoginToken')) {
@@ -33,17 +49,26 @@ class ReviewCard extends Component {
                 if (type === "like") {
                     state = !this.props.MyLiked;
                     this.setState({
-                        MyLiked:!this.props.MyLiked,
-                        MyDisliked:false
+                        MyLiked: !this.props.MyLiked,
+                        MyDisliked: false
                     });
-                    this.props.HelpfulComment(this.props.commentDocument._id, type, state);
+                    if (this.state.MyLiked) {
+                        this.props.HelpfulComment(this.props.commentDocument._id, 0);
+                    } else {
+                        this.props.HelpfulComment(this.props.commentDocument._id, 1);
+                    }
                 } else if (type === "unlike") {
                     state = !this.props.MyDisliked;
                     this.setState({
-                        MyDisliked:!this.props.MyDisliked,
-                        MyLiked:false
+                        MyDisliked: !this.props.MyDisliked,
+                        MyLiked: false
                     });
-                    this.props.HelpfulComment(this.props.commentDocument._id, type, state);
+                    if (this.state.MyDisliked) {
+                        this.props.HelpfulComment(this.props.commentDocument._id, 0);
+                    } else {
+                        this.props.HelpfulComment(this.props.commentDocument._id, -1);
+                    }
+
                 }
             } else {
                 swal({
@@ -87,18 +112,20 @@ class ReviewCard extends Component {
             });
         }
     }
-    DeleteComment = () => {
-        if (this.props.MyComment) {
+
+    DeleteComment = (byPass) => {
+        if (this.props.MyComment || byPass) {
             swal("Are you sure?", {
                 dangerMode: true,
                 buttons: true,
             }).then(res => {
                 if (res) {
-                    this.props.DeleteComment(this.props.commentDocument._id);
+                    this.props.DeleteComment(this.props.commentDocument._id, byPass);
                 }
             })
         }
     }
+
 
     render() {
         const options = {
@@ -118,11 +145,11 @@ class ReviewCard extends Component {
                                 <div className='row vertical-align user-image-row'>
                                     <div className="user-image col-xs-4">
                                         {
-                                            this.props.commentDocument.userImageUrl == ""?
-                                            <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" />:
-                                            <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
+                                            this.props.commentDocument.userImageUrl == "" ?
+                                                <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> :
+                                                <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
                                         }
-                                        
+
                                     </div>
                                     <div className="user-name col-xs-8 ">
                                         {this.props.commentDocument.reviewUserFirstName + " " + this.props.commentDocument.reviewUserLastName}
@@ -168,21 +195,63 @@ class ReviewCard extends Component {
                             </div>
                         </div>
                         <div className="col-md-1 col-xs-6 settings-button-col">
-                            {this.props.MyComment ?
-                                <div class="btn-group">
-                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="glyphicon glyphicon-option-vertical"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
-                                        <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
-                                    </ul>
-                                </div> :
-                                <div></div>
+                            {this.props.userType == "Customer" ?
+                                this.props.MyComment ?
+                                    <div class="btn-group">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="glyphicon glyphicon-option-vertical"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+                                            <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+                                        </ul>
+                                    </div> :
+                                    <div></div>
+                                :
+                                this.props.MyComment ?
+                                    <div class="btn-group" >
+                                        <button type="button"  class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="glyphicon glyphicon-option-vertical"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+                                            <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+                                            {this.props.commentDocument.didAdminReplied ?
+                                                <Fragment>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc, this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)} data-target={`#composeModal`}>Reply Again</p></li>
+                                                </Fragment>
+                                                :
+                                                <Fragment>
+                                                    <li><p onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)}>Mark As Read</p></li>
+                                                    <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc, this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)} data-target={`#composeModal`}>Reply</p></li>
+                                                </Fragment>}
+                                        </ul>
+                                    </div>
+                                    :
+                                    <div class="btn-group">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="glyphicon glyphicon-option-vertical"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><p onClick={() => this.DeleteComment(true)}>Delete Review</p></li>
+                                            {this.props.commentDocument.didAdminReplied ?
+                                                <Fragment>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc, this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)} data-target={`#composeModal`}>Reply Again</p></li>
+                                                </Fragment> :
+                                                <Fragment>
+                                                    <li><p onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)}>Mark As Read</p></li>
+                                                    <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc, this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)} data-target={`#composeModal`}>Reply</p></li>
+                                                </Fragment>
+                                            }
+                                        </ul>
+                                    </div>
                             }
                         </div>
                     </div>
                 </div>
+
             </Fragment >
         );
     }
