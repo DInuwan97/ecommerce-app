@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//import $ from "jquery";
+import $ from "jquery";
 
 import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
 import PaymentInfo from "./PaymentInfo/PaymentInfo";
