@@ -58,13 +58,17 @@ button:disabled {
 }
 
 .button {
-  text-align: center;
+  background-color: #00e58b;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
 }
 
 .button_buy {
   font-size: 1.5rem;
   font-weight: 700;
-  width: 95%;
+  width: 100%;
   border: none;
   padding: 1rem 0;
   border-radius: 5px;
@@ -75,4 +79,11 @@ button:disabled {
 
 .button button:hover {
   background-color: #3aeca5;
+}
+
+.error {
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 1.3rem;
+  color: orangered;
 }

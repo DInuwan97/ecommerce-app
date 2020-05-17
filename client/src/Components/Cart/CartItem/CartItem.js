@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import classes from "./CartItem.module.css";
+import PopupMessage from '../../PopupMessage/PopupMessage';
 
 const CartItem = props => {
   const [popupModal, setPopupModal] = useState({
-    class: 'popupModal_deactive',
+    isActive: false,
     activeModal: '',
     text: ''
   });
@@ -34,21 +35,20 @@ const CartItem = props => {
   //////////////////////////////// methods ////////////////////////////////
   // open popup to add to wishlist
   const moveToWishlistHandler = () => {
-    if (popupModal.class == 'popupModal_deactive') {
+    if (!popupModal.isActive) {
       setPopupModal({
-        class: 'popupModal_active',
+        isActive: true,
         activeModal: 'wishlist',
         text: 'This action will move this item to the wishlist.'
       });
     }
-
   };
 
   // open popup to remove item
   const removeItemHandler = () => {
-    if (popupModal.class == 'popupModal_deactive') {
+    if (!popupModal.isActive) {
       setPopupModal({
-        class: 'popupModal_active',
+        isActive: true,
         activeModal: 'remove',
         text: 'This action will remove this item from your shopping cart.'
       });
@@ -68,8 +68,8 @@ const CartItem = props => {
 
   // close popup
   const closePopup = () => {
-    if (popupModal.class == 'popupModal_active') {
-      setPopupModal({ class: 'popupModal_deactive', activeModal: '', text: '' });
+    if (popupModal.isActive) {
+      setPopupModal({ isActive: false, activeModal: '', text: '' });
     }
   };
 
@@ -103,6 +103,11 @@ const CartItem = props => {
     props.changeQuantity(props.item.id, number);
   };
 
+  // redirect to single item
+  const redirectToSingleItem = (item) => {
+    console.log(item);
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.check}>
@@ -120,7 +125,7 @@ const CartItem = props => {
       </div>
 
       <div className={classes.details}>
-        <div className={classes.details__name}>
+        <div className={classes.details__name} onClick={() => redirectToSingleItem(props.item)}>
           {props.item.itemName}
         </div>
         <div className={classes.details__stockq}>
@@ -182,21 +187,8 @@ const CartItem = props => {
       </div>
 
       {/*******  pop up modal ***********/}
-      <div className={classes[popupModal.class]}>
-        <div className={classes.popupModal__content}>
-          <div className={classes.popupModal__content_1}>
-            <h3>Are you sure about this?</h3>
-            <span id="close" className={classes.popupModal__close} onClick={closePopup}>&times;</span>
-          </div>
-          <div className={classes.popupModal__content_2}>
-            {popupModal.text}
-          </div>
-          <div className={classes.popupModal__content_3}>
-            <button className={classes.popupModal__btnOk} onClick={moveOrRemove}>OK</button>
-            <button className={classes.popupModal__btnCancel} onClick={closePopup}>Cancel</button>
-          </div>
-        </div>
-      </div>
+      {popupModal.isActive ? <PopupMessage content={popupModal.text} close={closePopup} action={moveOrRemove} /> : null}
+
     </div >
   );
 };

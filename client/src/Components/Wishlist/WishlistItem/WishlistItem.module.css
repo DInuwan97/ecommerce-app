@@ -1,0 +1,110 @@
+.container {
+  width: 100%;
+  background-color: #fff;
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  align-items: flex-start;
+}
+
+/********************************* image ***************************/
+
+.image {
+  flex: 0 0 18%;
+}
+
+.imageFig {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.imageFig img {
+  width: 100%;
+  scale: 1;
+}
+
+/********************************* description ***************************/
+
+.description {
+  flex: 0 0 60%;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.description__name {
+  font-size: 1.3rem;
+  font-weight: 400;
+  width: 100%;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+
+.description__price {
+  margin-top: 1rem;
+}
+
+.description__price span {
+  color: rgb(255, 69, 0);
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.description__date {
+  margin-top: 3rem;
+}
+
+.description__date span {
+  font-size: 1.1rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/********************************* actions ***************************/
+
+.actions {
+  flex: 1;
+  height: auto;
+  padding: 1rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.remove {
+  margin-top: 1rem;
+}
+
+.addToCart {
+  margin-top: 1rem;
+}
+
+.remove button {
+  font-size: 1.3rem;
+  border: none;
+  background-color: #fff;
+  color: #0280e1;
+  transition: all 0.2s ease-in;
+}
+
+.remove button:hover {
+  color: orangered;
+}
+
+.addToCart button {
+  text-transform: uppercase;
+  font-size: 1.3rem;
+  font-weight: 500;
+  padding: 0.3rem 0.6rem;
+  background-color: #00e58b;
+  border-radius: 0.5rem;
+  color: #fff;
+  border: none;
+  transition: all 0.2s ease-in;
+}
+
+.addToCart button:hover {
+  background-color: rgba(0, 229, 137, 0.7);
+}
