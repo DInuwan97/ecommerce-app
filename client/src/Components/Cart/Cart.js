@@ -8,8 +8,6 @@ import PaymentDetail from './PaymentDetail/PaymentDetail';
 
 import classes from "./Cart.module.css";
 
-const $ =require('jquery')
-
 class Cart extends Component {
   state = {
     totalItems: 3,
