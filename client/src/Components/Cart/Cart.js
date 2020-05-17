@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import $ from "jquery";
 
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
