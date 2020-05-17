@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 
 import Header from './Components/Header/Header';
 import Newsletter from './Components/Newsletter/Newsletter';
@@ -24,41 +25,99 @@ import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
 import Wishlist from './Components/Wishlist/Wishlist';
 
-function App() {
+import ContactUs from './Components/Contacts/Contacts';
+import UserProfile from './Components/UserProfile/UserProfile';
 
-  console.log('Client Token : ', localStorage.userLoginToken)
-  return (
-    <Router>
-      <div className="App">
+class App extends Component {
 
-        <Header />
-        <Route path="/" exact component={Home} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route exact path='/testImage' component={TestImage} />
-        <Route path="/verifysecurecode" component={VerifySecureCode} />
+  constructor(props) {
+    super(props)
 
-        <Route path="/single" component={SingleProduct} />
-        <Route path="/salesManager" component={SalesManager} />
-        <Route path="/itemApprove" component={itemApprove} />
-        <Route path="/category" component={Category} />
+    this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      mobile: '',
+      isAdmin: false,
+      isCustomer: false,
+      isSalesManager: false,
+      isSalesServicer: false,
+      company: ''
+    }
 
-        <Route path="/testb" component={TestB} />
+    // console.log('localstorage login token :' ,localStorage.userLoginToken);
+  }
 
-        <Route path="/ProductCardList" component={ProductCardList} />
+  componentDidMount() {
 
-        <Route path="/ResendEmail" component={ResendEmail} />
+    if (localStorage.getItem("userLoginToken") !== null) {
+      const token = localStorage.userLoginToken;
+      const decoded = jwt_decode(token);
+      this.setState({
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+        email: decoded.email,
+        mobile: decoded.mobile,
+        isAdmin: decoded.isAdmin,
+        isCustomer: decoded.isCustomer,
+        isSalesManager: decoded.isSalesManager,
+        isSalesServicer: decoded.isSalesServicer,
+        company: decoded.company
+      })
 
-        <Route path="/cart" component={Cart} />
-        <Route path="/checkout" component={Checkout} />
-        <Route path="/wishlist" component={Wishlist} />
+      if (this.setState.isSalesManager) {
+        this.setState({
+          company: decoded.company
+        })
+      }
+      //console.log('Decoded token is : ' ,decoded)
+      // console.log('Decoded Company is : ' ,this.state.company)
+    }
 
-        <Newsletter />
-        <Footer />
 
-      </div>
-    </Router>
-  );
+
+  }
+
+  render() {
+
+    console.log('Client Token : ', localStorage.userLoginToken)
+    return (
+      <Router>
+        <div className="App">
+
+          <Header />
+          <Route path="/" exact component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route exact path='/testImage' component={TestImage} />
+          <Route path="/verifysecurecode" component={VerifySecureCode} />
+
+          <Route path="/:type/:id" component={SingleProduct} />
+          <Route path="/salesManager" component={SalesManager} />
+          <Route path="/itemApprove" component={itemApprove} />
+          <Route path="/category" component={Category} />
+
+          <Route path="/testb" component={TestB} />
+
+          <Route path="/ProductCardList" component={ProductCardList} />
+
+          <Route path="/ResendEmail" component={ResendEmail} />
+
+          <Route path="/cart" component={Cart} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/wishlist" component={Wishlist} />
+
+          <Route path="/contactus" component={ContactUs} />
+          <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+
+          <Newsletter />
+          <Footer />
+
+        </div>
+      </Router>
+    );
+
+  }
 }
 
 export default App;

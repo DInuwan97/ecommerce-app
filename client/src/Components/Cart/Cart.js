@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import $ from 'jquery';
 
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
@@ -268,6 +267,7 @@ class Cart extends Component {
   }
 }
 
+
 $(window).scroll(function () {
   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()));
 });
@@ -275,6 +275,11 @@ $(window).scroll(function () {
 $(document).ready(function () {
   $(this).scrollTop(0);
 });
+
+// $(window).scroll(function () {
+//   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()))
+// });
+
 
 export default Cart;
 

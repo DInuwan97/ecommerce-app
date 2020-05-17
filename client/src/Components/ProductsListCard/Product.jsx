@@ -1,8 +1,21 @@
 import React, { Component } from "react";
-
+import Rating from "./ratings";
 export default class Product extends Component {
+  getDiscountPrice() {
+    if (this.props.discount > 0 && this.props.discount <= 100) {
+      return (
+        <div>
+          {" "}
+          <span>{(1 - this.props.discount * 0.01) * this.props.price}</span>
+        </div>
+      );
+    } else {
+      return <span>{this.props.price}</span>;
+    }
+  }
+
   render() {
-    const { itemName, price, itemImage } = this.props;
+    const { itemName, price, itemImage, discount } = this.props;
 
     return (
       <div
@@ -26,13 +39,25 @@ export default class Product extends Component {
             </div>
           </div>
         </a>
-        <i className="fa fa-star yellow-star" aria-hidden="true"></i>
-        <i className="fa fa-star yellow-star" aria-hidden="true"></i>
-        <i className="fa fa-star yellow-star" aria-hidden="true"></i>
-        <i className="fa fa-star yellow-star" aria-hidden="true"></i>
-        <i className="fa fa-star gray-star" aria-hidden="true"></i>
+
+        <Rating itemId={this.props.id} />
         <h4>{itemName}</h4>
-        <h5>{price}</h5>
+        <h5>
+          <div className="">
+            <span
+              style={{
+                textDecoration: discount > 0 ? "line-through" : "none",
+                visibility: discount == 0 ? "hidden" : "none",
+              }}
+            >
+              Rs. {price}
+            </span>
+          </div>
+
+          <div className="">
+            <span>Rs. {this.getDiscountPrice()} </span>
+          </div>
+        </h5>
       </div>
     );
   }

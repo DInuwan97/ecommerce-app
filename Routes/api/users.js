@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
@@ -71,7 +72,7 @@ router.post("/register", (req, res) => {
     userData.adminVerification = adminVerification;
   }
   if (isAdmin || isSalesMaager) {
-    userData.package = req.body.package;
+    userData.packageName = req.body.packageName;
   }
   if (isSalesMaager || isAdmin || isSalesServicer) {
     userData.company = req.body.company;
@@ -218,13 +219,14 @@ router.post("/login", (req, res) => {
               isCustomer:user.isCustomer,
               isSalesManager:user.isSalesManager,
               isSalesServicer:user.isSalesServicer,
-              company:user.company
+              company:user.company,
+              user
           }
 
             jwt.sign(
               payload,
               "secretkey",  
-              { expiresIn: "100s" },
+              { expiresIn: "100h" },
               (err, token) => {
                 res.json({ 
                 'token' : token,
@@ -383,7 +385,206 @@ router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>
   }catch(error){
     console.log(error);
   }
+});
+
+
+
+//update logged user profile
+router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
+
+  console.log('Request Body of updateMyProfile : ', req.params);
+
+  jwt.verify(req.token, "secretkey",  async (err, authData) => {
+
+    if(err){
+      res.status(400).json({'error':err})
+    }else{
+ 
+      let user = await User.findOne({email:req.params.email})
+     
+
+      if(req.params.email == authData.email){
+        user.firstName = req.body.firstName,
+        user.lastName = req.body.lastName,
+        //user.email = req.body.email,
+        user.mobile = req.body.mobile,
+        user.address = req.body.address
+       // user.userImageUrl = req.body.userImageUrl
+
+        await user.save();
+        res.status(200).json(user);
+
+      }else{
+        res.status(404).json({"msg" : "Email is not logged user's email"})
+      }
+    }
+    });
+
+});
+
+
+
+//storage for image uploading
+const storage = multer.diskStorage({
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  },
+});
+
+//image filtering and upploading
+const imageFilter = function (req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error("Only image files are accepted!"), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: "dsuhs6bf5", //ENTER YOUR CLOUDINARY NAME
+  api_key: require("../../config/keys").CLOUDINARY_API_KEY, // THIS IS COMING FROM CLOUDINARY WHICH WE SAVED FROM EARLIER
+  api_secret: require("../../config/keys").CLOUDINARY_API_SECRET, // ALSO COMING FROM CLOUDINARY WHICH WE SAVED EARLIER
+});
+
+//update user profile image
+router.patch('/updateImage/:email',upload.single("image"),async (req,res)=>{
+
+  console.log('image uploading route call : ');
+  //setTimeout(async function(){
+    try {
+      console.log('lOgged email : ', req.params.email);
+      let user = await User.findOne({email:req.params.email})
+      console.log("User Email: ",user);
+     
+      const result2 = null;
+      cloudinary.v2.uploader.upload(req.file.path, async function (err, result) {
+        if (err) {
+          res.json(err.message);
+          console.log('Err msg')
+        }
+        //req.body.image = result.secure_url;
+        try {
+          user.userImageUrl = result.secure_url;
+          user.userImageUrlId = result.public_id;
+
+          console.log(user.userImageUrl);
+          result2 = await  user.save();
+        } catch (error) {
+          console.log('Error : ');
+        }
+     });
+  
+      console.log(user);
+      
+      res.json(user);
+    } catch (error) {
+      console.log(error);
+    }
+  //},3000);
 })
+
+
+router.get('/singleUser/:email',async (req,res)=>{
+  try {
+    console.log('Request Body of singeUser : ', req.params);
+    const users = await User.findOne({email:req.params.email});
+    //const users = await User.find();
+    if (!users) {
+      return res.status(400).json({ msg: "No User is Available" });
+    }
+    res.status(200).json(users);
+   
+  } catch (error) {
+    res.status(500).json({ msg: "viewusers route error" });
+    console.error(error);
+  }
+})
+
+
+//get all registered companies 
+router.get('/getCompnayNames',async(req,res)=>{
+  try{
+
+    
+    //let companies = await User
+
+
+  }catch(err){
+    console.log(err);
+    res.json(err);
+  }
+})
+
+//change passwords
+router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
+
+  console.log('Changing password : ' ,req.body);
+  jwt.verify(req.token, "secretkey",  async (err, authData) => {
+
+    try{
+
+      if(err){
+        res.status(500).json({'error':err})
+      }else{
+
+        
+        let user = await User.findOne({email:req.params.email});
+        if(!user) res.status(404).json({msg:'No user Found'})
+
+        if(req.params.email == authData.email){
+
+       
+          //bcrypt.compareSync(req.body.oldPasswrod, authData.password)
+         // .then(res=>{
+
+            try{
+              if(req.body.newPassword == req.body.confirmPassword){
+
+                bcrypt.hash(req.body.newPassword, 10, async (err, hash) => {
+                  user.password = hash;
+                  
+                  await user.save();
+                  res.status(200).json({'user new data' : user});
+                })
+  
+              }else{
+                res.status(403).json({'msg':'Passwords does not match'})
+              }
+            }catch(err){
+              res.json('Bcrypt error is : ', err)
+            }
+           
+         // })
+        //  .catch(err=>{
+         //   res.json('Bcrypt error is : ', err)
+         // })
+
+            
+
+          // }else{
+          //   res.status(403).json({'msg':'Current Password is incoreect'})
+          // }
+
+
+
+
+
+        }else{
+          res.status(400).json('email blongs to another person');
+        }
+      }
+  
+    }catch(err){
+      console.log(err);
+      res.json(err);
+    }
+
+  })
+
+})
+
+
 
 
 

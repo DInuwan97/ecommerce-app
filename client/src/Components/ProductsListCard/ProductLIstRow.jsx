@@ -9,7 +9,9 @@ export default class ProductLIstRow extends Component {
         itemName,
         price,
         Brand,
+        discount,
         category,
+        rating,
         isApproved,
         size,
         addedBy,
@@ -23,6 +25,8 @@ export default class ProductLIstRow extends Component {
               itemImage={itemImage}
               price={price}
               Brand={Brand}
+              discount = {discount}
+              rating = {rating}
               size={size}
               category={category}
               declineItem={this.props.declineItem}

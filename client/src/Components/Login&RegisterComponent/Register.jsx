@@ -31,7 +31,7 @@ export default class Register extends Component {
       mobile:this.state.mobile,
       userType:this.state.userType,
       company:this.state.company,
-      package:this.state.package,
+      packageName:this.state.packageName,
       password:this.state.password
     }
     const token = register(frmData)
@@ -145,7 +145,7 @@ export default class Register extends Component {
             </div>
 
 
-            <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="package" required="" onChange={this.onChangeHandler}>
+            <select className="form-control form-control-lg" style={{height:40,marginBottom:20}} name="packageName" required="" onChange={this.onChangeHandler}>
 
                 <option value="">Select the Package</option>
                 <option value="Platinum">Platinum</option>  

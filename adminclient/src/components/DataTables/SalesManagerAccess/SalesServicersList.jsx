@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SalesServicersDataRow from './SalesServicersDataRow';
 
+
+const $ = require('jquery');
+$.DataTable = require('datatables.net');
 export default class SalesServicersList extends Component {
   render() {
 
