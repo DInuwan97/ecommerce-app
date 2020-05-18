@@ -481,8 +481,9 @@ router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) 
     const cc = req.body.cc;
     const bcc = req.body.bcc;
     const reviewId = req.body.reviewId;
+    console.log(msg);
+    
     if (msg && subject && (to || cc || bcc)) {
-        console.log(to, cc, bcc, subject, msg);
         const transporter = await nodemailer.createTransport({
             service: "Gmail",
             auth: {
@@ -670,19 +671,6 @@ router.get('/admin/viewUser/:id',authenticateUser,verifyAdmin,(req,res)=>{
             }
         }
     })
-})
-
-
-
-
-router.get('/reviews/view/:company',async(req,res)=>{
-    let review = await ReviewComments.find({itemCompany:req.params.company})
-
-    if(!review)
-        res.status(404).json({msg:'No Data Found'})
-    else{
-        res.json(review);
-    }
 })
 
 module.exports = router;

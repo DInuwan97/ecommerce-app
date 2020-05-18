@@ -12,6 +12,7 @@ const Cart = require("./Routes/api/cart");
 const Purchase = require("./Routes/api/purchased");
 const PackageNames = require('./Routes/api/packageName');
 const Companies = require('./Routes/api/companies');
+const ContactUs = require('./Routes/api/ContactUs');
 //middlewear
 const app = express();
 
@@ -41,5 +42,6 @@ app.use("/api/cart", Cart);
 app.use("/api/pruchase", Purchase);
 app.use("/api/packages",PackageNames);
 app.use("/api/companies",Companies);
+app.use("/api/contactus",ContactUs);
 
 app.listen(5000, () => console.log("Server started on 5000"));

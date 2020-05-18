@@ -71,5 +71,19 @@ module.exports = {
                 }
             };
         })
+    },
+    verifyOnlyAdmin: (req, res, next) => {
+        jwt.verify(req.token, "secretkey", (err, authData) => {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                if (authData.isAdmin) {
+                    req.authData = authData;
+                    next();
+                } else {
+                    return res.status(403).send({ msg: "No Authorization" })
+                }
+            };
+        })
     }
 }
