@@ -89,9 +89,6 @@ class SingleProduct extends Component {
     })
   }
 
-
-
-
   getStarRating = () => {
     const { id } = this.props.match.params;
     const url = `/api/review/getRating/${id}`;
