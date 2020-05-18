@@ -3,6 +3,7 @@ import ReviewMain from '../Review/ReviewMain/ReviewMain';
 import './assets/css/single.css';
 import swal from 'sweetalert';
 import Axios from 'axios';
+import jwt_decode from 'jwt-decode'
 
 class SingleProduct extends Component {
   constructor(props) {
@@ -18,22 +19,44 @@ class SingleProduct extends Component {
       Rating: [0, 0, 0, 0, 0],
       userType: "Customer",
 
-      itemImage: "",
-      itemColors: [],
+      itemImage: "",//
+      itemColors: [],//
       StockQuantity: 0,
-      discount: 10,
+      discount: 10,//
       description: "",
-      company: "",
+      company: "",//
       itemId: "",
-      itemName: "",
-      price: 0,
-      category: "",
-      size: "",
-      Brand: "",
+      itemName: "",//
+      price: 0,//
+      category: "",//
+      size: "",//
+      Brand: "",//
+
+      addedUserFirstName:'',
+      addedUserLastName:'',
+      addedUserEmail:'',
+      addedDate:'',
+      quantity:1,
+      isSelectedItem: false,
+      totalPrice: 0
+
     }
 
   }
   componentDidMount = () => {
+
+
+    if (localStorage.getItem("userLoginToken") !== null) {
+      const token = localStorage.userLoginToken;
+      const decoded = jwt_decode(token);
+      this.setState({
+        addedUserFirstName: decoded.firstName,
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
+      })
+    }
+
+    
     this.getItemDetails();
     this.getCommentData();
     this.getStarRating();
@@ -57,7 +80,7 @@ class SingleProduct extends Component {
         price: res.data.price,
         category: res.data.category,
         size: res.data.size,
-        Brand: res.data.Brand,
+        Brand: res.data.Brand
       })
 
     }).catch(err => {
@@ -394,6 +417,41 @@ class SingleProduct extends Component {
   };
 
 
+  addProductintoCart=()=>{
+    Axios({
+      method:'post',
+      url:`/api/cart/add`,
+      data:{
+          itemName:this.state.itemName,
+          price:this.state.price,
+          category:this.state.category,
+          itemImage:this.state.itemImage,
+          size:this.state.size,
+          brand:this.state.brand,
+          discount:this.state.discount,
+          addedUserFirstName:this.state.addedUserFirstName,
+          addedUserLastName: this.state.addedUserLastName,
+          addedUserEmail:this.state.addedUserEmail,
+          rating:this.state.rating,
+          quantity:this.state.quantity,
+          company:this.state.company,
+          isSelectedItem: false,
+          totalPrice: 0
+      }
+    })
+    .then(()=>{
+      swal({
+        title: "Status",
+        text: "Done",
+        icon: 'success'
+      });
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+
 
   render() {
     return (
@@ -500,14 +558,15 @@ class SingleProduct extends Component {
                   <input type="hidden" name="w3ls1_item" value="Handbag" />
                   <input type="hidden" name="amount" value="540.00" />
                 </form>
-                <button
-                  type="submit"
-                  onClick={() => this.redirectToCart()}
+
+                
+                <button onClick={this.addProductintoCart}
                   className="w3ls-cart"
                 >
                   <i className="fa fa-cart-plus" aria-hidden="true"></i> Add to
                 cart
               </button>
+             
                 <button className="w3ls-cart w3ls-cart-like">
                   <i className="fa fa-heart-o" aria-hidden="true"></i> Add to
                 Wishlist

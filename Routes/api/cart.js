@@ -1,14 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
-const cart = require("../../models/CartItems");
+const CartItem = require("../../models/CartItems");
 
 /////////////////////////////////////// get all items from cartItemsSchema to the cart //////////////////////////////////////////
 /* after user went to the shopping cart */
-router.get('/', async (req, res) => {
+router.get('/view/:email', async (req, res) => {
+
+console.log('Front req  ',req.params);
+
   try {
-    console.log("get cart items");
-    // rest
+    let cartItems = await CartItem.find({addedUserEmail:req.params.email});
+    if(!cartItems)
+      res.status(404).json({msg:'No Items Found'})
+    else{
+      res.status(200).json(cartItems)
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Sever Error" });
@@ -19,10 +26,40 @@ router.get('/', async (req, res) => {
 /////////////////////////////////////////////// add item to the cartItemsSchema //////////////////////////////////////////////////
 /* once user click button add to cart */
 router.post('/add', async (req, res) => {
+
+console.log('Add req body : ',req.body);
+
+  console.log(req.body)
   try {
-    console.log("add a item to cart");
-    console.log(req.body);
-    // rest
+    let cartItem = {
+      itemName:req.body.itemName,
+      price:req.body.price,
+      category:req.body.category,
+      itemImage:req.body.itemImage,
+      size:req.body.size,
+      color:req.body.color,
+      brand:req.body.brand,
+      stockQuantity:req.body.stockQuantity,
+      discount:req.body.discount,
+      addedUserFirstName:req.body.addedUserFirstName,
+      addedUserLastName:req.body.addedUserLastName,
+      addedUserEmail:req.body.addedUserEmail,
+      addedDate:req.body.addedDate,
+      rating:req.body.rating,
+      isApproved:req.body.isApproved,
+      quantity:req.body.quantity,
+      company:req.body.company,
+      isSelectedItem:req.body.isSelectedItem,
+      totalPrice:req.body.totalPrice
+  }
+
+  CartItem.create(cartItem ,(err)=>{
+      if(err){
+          return res.status(400).send({ msg: err });
+      }else{
+          return res.status(201).send(cartItem);
+      }
+  })
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Sever Error" });
