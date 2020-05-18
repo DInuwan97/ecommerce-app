@@ -20,6 +20,8 @@ import SingleReviews from '../ReviewDataTable/SingleItemReview';
 import ReviewReplyData from '../ReviewDataTable/ReviewReply/ReviewReplyDataTable';
 import ReviewReplyTable from '../ReviewDataTable/ReviewReply/ReviewReplyTable';
 
+import ContactUsDT from '../ContactUs/ContactusDT';
+
 import MyProfile from '../AdminOrientation/MyProfile';
 
 import AdminPackage from '../AdminOrientation/AdminPackage';
@@ -321,6 +323,15 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
+                  <li className="nav-item has-treeview">
+                    <a href="/ContactUs" className="nav-link">
+                      <i className="nav-icon fas fa-copy"></i>
+                      <p>
+                        Contact Us Messages
+                      </p>
+                    </a>
+                  </li>
+
  
                   <li className="nav-item has-treeview">
             
@@ -421,7 +432,6 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-
                <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company}/>} />
                <Route path ='/home' component= {HomePage}/>
                <Route path ='/itemApprove' component= {AdminItemApprove}/>
@@ -435,13 +445,15 @@ export default class HeaderSideMenuFooter extends Component {
                 <Route exact path='/ReviewReplies' component = {()=> <ReviewReplyData company={this.state.company}/>}/>
                 <Route exact path='/ReviewReplies/:id' component={()=> <ReviewReplyTable company={this.state.company}/>}/>
 
+                <Route exact path='/ContactUs' component={ContactUsDT}/>
+
                <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
 
                 <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company}/>}/>
-
+                
               </div>
             </section>
 

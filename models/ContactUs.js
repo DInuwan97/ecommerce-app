@@ -22,6 +22,11 @@ const contactus = new mongoose.Schema({
         type:String,
         required:true
     },
+    addedTime:{
+        type:Date,
+        default:new Date(),
+        required:true,
+    },
     replied:{
         type:Boolean,
         default:false

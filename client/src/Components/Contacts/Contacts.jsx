@@ -23,12 +23,39 @@ export default class Contacts extends Component {
 	sendMail = () => {
 		if (this.state.email != "" && this.state.msg != ""
 			&& this.state.name != "" && this.state.subject != "" && this.state.phoneNumber != "") {
-
+			const url = "/api/contactus/";
+			const data = {
+				name: this.state.name,
+				email: this.state.email,
+				subject: this.state.subject,
+				phoneNumber: this.state.phoneNumber,
+				msg: this.state.msg
+			}
+			Axios.post(url, data).then(async res => {
+				await swal({
+					title: "Status",
+					text: res.data.msg,
+					icon: "success"
+				});
+				this.setState({
+					email: "",
+					msg: "",
+					name: "",
+					subject: "",
+					phoneNumber: ""
+				})
+			}).catch(err => {
+				swal({
+					title: "Error!",
+					text: err.message,
+					icon: 'error'
+				})
+			})
 		} else {
 			swal({
-				title:"Error!",
-				text:"Fill all the fields.",
-				icon:'error'
+				title: "Error!",
+				text: "Fill all the fields.",
+				icon: 'error'
 			})
 		}
 
@@ -57,12 +84,12 @@ export default class Contacts extends Component {
 							</div>
 						</div>
 						<div className="col-md-9 col-sm-9 contact-right">
-							<input type="text" value={this.state.name} name="name" placeholder="Your name" required=" " onChange={e=>this.changeInput(e)} />
-							<input type="text" value={this.state.email}  name="email" placeholder="Your email" required=" " onChange={e=>this.changeInput(e)}/>
-							<input type="text" value={this.state.subject}  name="subject" placeholder="Your subject" required=" " onChange={e=>this.changeInput(e)} />
-							<input type="text" value={this.state.phoneNumber}  name="phoneNumber" placeholder="Phone number" required=" " onChange={e=>this.changeInput(e)}/>
-							<textarea name="msg" value={this.state.msg}  placeholder="Your message" required=" " onChange={e=>this.changeInput(e)}></textarea>
-							<input type="submit" value="Send message" onClick={()=>this.sendMail()}/>
+							<input type="text" value={this.state.name} name="name" placeholder="Your name" required=" " onChange={e => this.changeInput(e)} />
+							<input type="text" value={this.state.email} name="email" placeholder="Your email" required=" " onChange={e => this.changeInput(e)} />
+							<input type="text" value={this.state.subject} name="subject" placeholder="Your subject" required=" " onChange={e => this.changeInput(e)} />
+							<input type="text" value={this.state.phoneNumber} name="phoneNumber" placeholder="Phone number" required=" " onChange={e => this.changeInput(e)} />
+							<textarea name="msg" value={this.state.msg} placeholder="Your message" required=" " onChange={e => this.changeInput(e)}></textarea>
+							<input type="submit" value="Send message" onClick={() => this.sendMail()} />
 
 						</div>
 					</div>

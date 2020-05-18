@@ -481,6 +481,8 @@ router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) 
     const cc = req.body.cc;
     const bcc = req.body.bcc;
     const reviewId = req.body.reviewId;
+    console.log(msg);
+    
     if (msg && subject && (to || cc || bcc)) {
         const transporter = await nodemailer.createTransport({
             service: "Gmail",
