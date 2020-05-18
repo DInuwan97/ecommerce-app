@@ -7,7 +7,7 @@ export default class Footer extends Component {
       <div className="footer">
         <div className="container">
           <div className="col-md-3 footer-grids fgd1">
-            <a href="index.html">
+            <a href="/">
               <img src="/images/logo2.png" alt=" " />
               <h3>
                 FASHION<span>CLUB</span>
@@ -40,13 +40,7 @@ export default class Footer extends Component {
                 <a href="/contactus">Contact Us</a>
               </li>
               <li>
-                <a href="icons.html">Web Icons</a>
-              </li>
-              <li>
-                <a href="typography.html">Typography</a>
-              </li>
-              <li>
-                <a href="faq.html">FAQ's</a>
+                <a href="/faq">FAQ's</a>
               </li>
             </ul>
           </div>
@@ -54,16 +48,16 @@ export default class Footer extends Component {
             <h4>Shop</h4>
             <ul>
               <li>
-                <a href="jewellery.html">Jewellery</a>
+                <a href="/jewellery">Jewellery</a>
               </li>
               <li>
-                <a href="cosmetics.html">Cosmetics</a>
+                <a href="/cosmetics">Cosmetics</a>
               </li>
               <li>
-                <a href="Shoes.html">Shoes</a>
+                <a href="/Shoes">Shoes</a>
               </li>
               <li>
-                <a href="deos.html">Deos</a>
+                <a href="/deos">Deos</a>
               </li>
             </ul>
           </div>
@@ -75,9 +69,6 @@ export default class Footer extends Component {
               </li>
               <li>
                 <a href="/register">Register</a>
-              </li>
-              <li>
-                <a href="recommended.html">Recommended </a>
               </li>
               <li>
                 <a href="/cart">Cart</a>

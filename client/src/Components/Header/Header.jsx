@@ -155,7 +155,7 @@ export class Header extends Component {
 
                 <div className="collapse navbar-collapse" id="bs-megadropdown-tabs">
 					<ul className="nav navbar-nav ">
-						<li className=" active"><a href="index.html" className="hyper "><span>Home</span></a></li>	
+						<li className=" active"><a href="/" className="hyper "><span>Home</span></a></li>	
 
 						<li className="dropdown ">
                         <a href="#" className="dropdown-toggle  hyper" data-toggle="dropdown" ><span>Clothing<b className="caret"></b></span></a>
@@ -166,10 +166,10 @@ export class Header extends Component {
 									<div className="col-sm-4">
 										<ul className="multi-column-dropdown">
 
-                                        <li><a href="women.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Women's Clothing</a></li>
-										<li><a href="men.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Men's Clothing</a></li>
-										<li><a href="kids.html"> <i className="fa fa-angle-right" aria-hidden="true"></i>Kid's Wear</a></li>
-										<li><a href="party.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Party Wear</a></li>
+                                        <li><a href="/women"><i className="fa fa-angle-right" aria-hidden="true"></i>Women's Clothing</a></li>
+										<li><a href="/men"><i className="fa fa-angle-right" aria-hidden="true"></i>Men's Clothing</a></li>
+										<li><a href="/kids"> <i className="fa fa-angle-right" aria-hidden="true"></i>Kid's Wear</a></li>
+										<li><a href="/party"><i className="fa fa-angle-right" aria-hidden="true"></i>Party Wear</a></li>
 
                                         </ul>
                                     </div>
@@ -178,16 +178,16 @@ export class Header extends Component {
                                     <div className="col-sm-4">
 										<ul className="multi-column-dropdown">
 
-                                        <li><a href="casuals.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Casuals</a></li>
-										<li><a href="night.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Night Wear</a></li>
-										<li><a href="formals.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Formals</a></li>
-										<li><a href="inner.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Inner Wear</a></li>
+                                        <li><a href="/casuals"><i className="fa fa-angle-right" aria-hidden="true"></i>Casuals</a></li>
+										<li><a href="/night"><i className="fa fa-angle-right" aria-hidden="true"></i>Night Wear</a></li>
+										<li><a href="/formals"><i className="fa fa-angle-right" aria-hidden="true"></i>Formals</a></li>
+										<li><a href="/inner"><i className="fa fa-angle-right" aria-hidden="true"></i>Inner Wear</a></li>
 
                                         </ul>
                                     </div>
 
                                     <div className="col-sm-4 w3l">
-										<a href="women.html">
+										<a href="/women">
                                             <img src={require('./assets/images/menu1.jpg')} className="img-responsive" alt="" />
                                         </a>
 									</div>
@@ -211,10 +211,10 @@ export class Header extends Component {
 									<div className="col-sm-4">
 										<ul className="multi-column-dropdown">
 
-                                        <li><a href="jewellery.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Jewellery </a></li>
-										<li><a href="watches.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Watches</a></li>
-										<li><a href="cosmetics.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Cosmetics</a></li>
-										<li><a href="deos.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Deo & Perfumes</a></li>
+                                        <li><a href="/jewellery"><i className="fa fa-angle-right" aria-hidden="true"></i>Jewellery </a></li>
+										<li><a href="/watches"><i className="fa fa-angle-right" aria-hidden="true"></i>Watches</a></li>
+										<li><a href="/cosmetics"><i className="fa fa-angle-right" aria-hidden="true"></i>Cosmetics</a></li>
+										<li><a href="/deos"><i className="fa fa-angle-right" aria-hidden="true"></i>Deo & Perfumes</a></li>
 
                                         </ul>
                                     </div>
@@ -223,16 +223,16 @@ export class Header extends Component {
                                     <div className="col-sm-4">
 										<ul className="multi-column-dropdown">
 
-                                        <li><a href="haircare.html"> <i className="fa fa-angle-right" aria-hidden="true"></i>Hair Care </a></li>
-										<li><a href="shoes.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Shoes</a></li>
-										<li><a href="handbags.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Handbags</a></li>
-										<li><a href="skincare.html"><i className="fa fa-angle-right" aria-hidden="true"></i>Skin care</a></li>
+                                        <li><a href="/haircare"> <i className="fa fa-angle-right" aria-hidden="true"></i>Hair Care </a></li>
+										<li><a href="/shoes"><i className="fa fa-angle-right" aria-hidden="true"></i>Shoes</a></li>
+										<li><a href="/handbags"><i className="fa fa-angle-right" aria-hidden="true"></i>Handbags</a></li>
+										<li><a href="/skincare"><i className="fa fa-angle-right" aria-hidden="true"></i>Skin care</a></li>
 
                                         </ul>
                                     </div>
 
                                     <div className="col-sm-4 w3l">
-                                        <a href="jewellery.html">
+                                        <a href="/jewellery">
                                             <img src={require('./assets/images/menu2.jpg')} className="img-responsive" alt=""/>
                                         </a>
 									</div>
@@ -244,8 +244,8 @@ export class Header extends Component {
 
                         </li>
 
-                        <li><a href="/about.html" className="hyper"><span>About</span></a></li>
-						<li><a href="/contact.html" className="hyper"><span>Contact Us</span></a></li>
+                        <li><a href="/contactus" className="hyper"><span>About</span></a></li>
+						<li><a href="/contactus" className="hyper"><span>Contact Us</span></a></li>
 
                     </ul>
                 </div>    
