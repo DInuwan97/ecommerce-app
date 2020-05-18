@@ -107,7 +107,7 @@ class App extends Component {
 
           <Route path="/ResendEmail" component={ResendEmail} />
 
-          <Route path="/cart" component={Cart} />
+          <Route path="/cart" component={()=> <Cart loggedEmail={this.state.email} />} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/wishlist" component={Wishlist} />
 

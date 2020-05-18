@@ -672,4 +672,17 @@ router.get('/admin/viewUser/:id',authenticateUser,verifyAdmin,(req,res)=>{
     })
 })
 
+
+
+
+router.get('/reviews/view/:company',async(req,res)=>{
+    let review = await ReviewComments.find({itemCompany:req.params.company})
+
+    if(!review)
+        res.status(404).json({msg:'No Data Found'})
+    else{
+        res.json(review);
+    }
+})
+
 module.exports = router;

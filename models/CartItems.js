@@ -15,15 +15,18 @@ const cartItemsSchema = mongoose.Schema({
   },
   itemImage: {
     type: String,
+    required:true
   },
   size: {
     type: String,
   },
   color: {
     type: [String],
+    default:''
   },
-  Brand: {
+  brand: {
     type: String,
+    default:''
   },
   stockQuantity: {
     type: Number,
@@ -33,9 +36,17 @@ const cartItemsSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
-  addedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+  addedUserFirstName:{
+    type:String,
+    required:true
+  },
+  addedUserLastName:{
+    type:String,
+    required:true
+  },
+  addedUserEmail:{
+    type:String,
+    required:true
   },
   addedDate: {
     type: Date,
@@ -47,13 +58,24 @@ const cartItemsSchema = mongoose.Schema({
   },
   isApproved: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   quantity: {
     type: Number,
     default: 1
-  }
+  },
+ company:{
+  type:String,
+  required:true
+ },
+ isSelectedItem:{
+   type:Boolean
+ },
+ totalPrice:{
+  type:Number
+ }
+
 });
 
 
-module.exports = Cart = mongoose.model('cartItems', cartItemsSchema);
+module.exports = CartItem = mongoose.model('cartItems', cartItemsSchema);

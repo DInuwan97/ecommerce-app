@@ -21,7 +21,7 @@ export default function HomePage() {
               <div className="container-fluid"> 
               <div className="row">     
                 <div className="col-md-6">
-                  <FlaotAreaChart/> 
+                  <BarChart/> 
                 </div> 
                 <div className="col-md-6">
                   <DonutChart/> 

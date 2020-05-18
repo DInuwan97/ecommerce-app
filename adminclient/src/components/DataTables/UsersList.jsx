@@ -7,6 +7,11 @@ $.DataTable = require('datatables.net');
 
 export default class UsersList extends Component {
 
+componentDidUpdate = () => {
+    $('#userlist-table').DataTable()
+}
+
+
 
     render() {
       const { approveSalesManagerRequest,companyName } = this.props;
@@ -18,7 +23,7 @@ export default class UsersList extends Component {
            
             <div className="card-body">
 
-              <table id="example1" className="table table-bordered table-striped">
+              <table id="userlist-table" className="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>Username</th>
