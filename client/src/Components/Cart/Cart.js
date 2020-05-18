@@ -276,11 +276,6 @@ $(document).ready(function () {
   $(this).scrollTop(0);
 });
 
-// $(window).scroll(function () {
-//   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()))
-// });
-
-
 export default Cart;
 
 
