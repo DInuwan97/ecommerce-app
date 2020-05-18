@@ -12,22 +12,31 @@ class DeliveryInfo extends Component {
       address: this.props.buyer.addedUserAddress,
       isWarning: false,
 
-      interval: setInterval(() => {
-        this.setState({
-          firstName: this.props.buyer.addedUserFirstName,
-          lastName: this.props.buyer.addedUserLastName,
-          phone: this.props.buyer.addedUserMobile,
-          address: this.props.buyer.addedUserAddress,
-          isWarning: false
-        });
-      }, 1000),
+      detailActive: false,
 
       initialObj: {
         firstName: this.props.buyer.addedUserFirstName,
         lastName: this.props.buyer.addedUserLastName,
         phone: this.props.buyer.addedUserMobile,
         address: this.props.buyer.addedUserAddress
-      }
+      },
+
+      interval: setInterval(() => {
+        this.setState({
+          firstName: this.props.buyer.addedUserFirstName,
+          lastName: this.props.buyer.addedUserLastName,
+          phone: this.props.buyer.addedUserMobile,
+          address: this.props.buyer.addedUserAddress,
+          initialObj: {
+            firstName: this.props.buyer.addedUserFirstName,
+            lastName: this.props.buyer.addedUserLastName,
+            phone: this.props.buyer.addedUserMobile,
+            address: this.props.buyer.addedUserAddress
+          }
+
+        });
+      }, 1000),
+
     };
   }
 
@@ -61,22 +70,33 @@ class DeliveryInfo extends Component {
         phone: this.state.phone,
         address: this.state.address
       };
+      this.setState({ detailActive: false });
       this.props.change(buyer);
     }
   };
 
   cancel = () => {
+    console.log(this.state.initialObj);
     this.setState({
       firstName: this.state.initialObj.firstName,
       lastName: this.state.initialObj.lastName,
       phone: this.state.initialObj.phone,
       address: this.state.initialObj.address,
+      detailActive: false
     });
-    this.props.changeActive();
   };
 
   openform = () => {
-    this.props.changeActive();
+    this.setState({ detailActive: true });
+  };
+
+  changeActive = () => {
+    console.log("called");
+    if (this.state.detailActive) {
+      this.setState({ detailActive: false });
+    } else {
+      this.setState({ detailActive: true });
+    }
   };
 
   render() {
@@ -89,7 +109,7 @@ class DeliveryInfo extends Component {
         <span className={classes.step}>Step 1 of 3</span>
         <h3 className={classes.header}>Delivery Information</h3>
 
-        {this.props.isActive ?
+        {this.state.detailActive ?
           <div className={classes.editDetail}>
             <div className={classes.editDetail__names}>
               <div className={classes.editDetail__names__firstName}>
