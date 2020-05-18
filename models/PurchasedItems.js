@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const purchasedItemsSchema = mongoose.Schema({
   // user id
+  purchasedUserEmail:{
+    type:String,
+    required:true
+  },
   buyerDetails:{
     firstName:{
       type:String,
@@ -16,8 +20,7 @@ const purchasedItemsSchema = mongoose.Schema({
       required:true
     },
     address:{
-      type:String,
-      required:true
+      type:String
     }
   },
   items:{
@@ -36,6 +39,10 @@ const purchasedItemsSchema = mongoose.Schema({
       type:Number,
       required:true
     }
+  },
+  purchasedDate:{
+    type:Date,
+    default:Date.now()
   }
  
   

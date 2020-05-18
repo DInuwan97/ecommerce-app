@@ -175,12 +175,13 @@ class Checkout extends Component {
         // });
 
         axios({
-          method: 'post',
-          url: `/api/pruchase/add`,
-          data: {
-            buyerDetails: this.state.buyerDetails,
-            items: this.state.items,
-            summary: this.state.summary
+          method:'post',
+          url:`/api/pruchase/add`,
+          data:{
+            purchasedUserEmail:this.state.buyerDetails.email,
+            buyerDetails:this.state.buyerDetails,
+            items:this.state.items,
+            summary:this.state.summary
           }
         })
           .then(res => {
