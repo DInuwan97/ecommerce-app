@@ -91,10 +91,8 @@ class Checkout extends Component {
       })
 
       console.log("Check out firstname : ",this.state.buyerDetails.email);
-
-
+  })
   }
-
   //////////////////////////////// functions /////////////////////////////////////
 
   changeDetails = (buyer) => {
