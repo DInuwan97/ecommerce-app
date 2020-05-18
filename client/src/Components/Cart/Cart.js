@@ -9,31 +9,21 @@ import PaymentDetail from './PaymentDetail/PaymentDetail';
 import classes from "./Cart.module.css";
 import axios from 'axios';
 const $ =require('jquery')
-
+const decoded = '';
 class Cart extends Component {
 
 constructor(props){
   super(props);
   this.state = {
+
+    
     addedUserFirstName:'',
     addedUserLastName:'',
     addedUserEmail:'',
     totalItems:'',
     isAllItemsSelected: false,
     items: [
-      //{
-        // id: 1,
-        // itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        // stockQuantity: 10,
-        // color: 'red',
-        // size: 'XL',
-        // price: 1200.30,
-        // discount: 10,
-        // itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        // totalPrice: 0,
-        // quantity: 1,
-        // isSelectedItem: false
-      //}
+ 
     ],
     cartSummary: {
       subtotal: 0,
@@ -50,28 +40,28 @@ constructor(props){
 
   /////////////////////////////////////////// functions ///////////////////////////////////////////////////////
   // select all items in the cart
-  componentDidMount= () =>{
-
+  componentDidMount = () =>{
+    const token = localStorage.userLoginToken;
+    const decoded = jwt_decode(token);
     if (localStorage.getItem("userLoginToken") !== null) {
-      const token = localStorage.userLoginToken;
-      const decoded = jwt_decode(token);
+
       this.setState({
         addedUserFirstName:decoded.firstName,
         addedUserLastName:decoded.lastName,
         addedUserEmail:decoded.email,
       })
-      console.log('Decoded Email in Cart : ',this.props.loggedEmail);
+      console.log('Decoded Email in Cart : ',decoded.email);
     }
 
    
-    this.getCartItems();
+    this.getCartItems(decoded.email);
 
   }
 
-  getCartItems = () =>{
+  getCartItems = (email) =>{
     axios({
       method:'get',
-      url:`/api/cart/view/${this.props.loggedEmail}`
+      url:`/api/cart/view/${email}`
     })
     .then(res=>{
       let cartProducts = res.data
@@ -301,7 +291,7 @@ constructor(props){
   }
 }
 
-
+export default Cart;
 $(window).scroll(function () {
   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()));
 });
@@ -315,6 +305,6 @@ $(document).ready(function () {
 // });
 
 
-export default Cart;
+
 
 
