@@ -20,21 +20,9 @@ class Cart extends Component {
       addedUserEmail: '',
       totalItems: '',
       isAllItemsSelected: false,
-      items: [
-        //{
-        // id: 1,
-        // itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        // stockQuantity: 10,
-        // color: 'red',
-        // size: 'XL',
-        // price: 1200.30,
-        // discount: 10,
-        // itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        // totalPrice: 0,
-        // quantity: 1,
-        // isSelectedItem: false
-        //}
-      ],
+
+      items: [],
+
       cartSummary: {
         subtotal: 0,
         totalDiscount: 0,
@@ -49,27 +37,27 @@ class Cart extends Component {
   /////////////////////////////////////////// functions ///////////////////////////////////////////////////////
   // select all items in the cart
   componentDidMount = () => {
+    const token = localStorage.userLoginToken;
+    const decoded = jwt_decode(token);
 
-    if (localStorage.getItem("userLoginToken") !== null) {
-      const token = localStorage.userLoginToken;
-      const decoded = jwt_decode(token);
+    if (localStorage.getItem("userLoginToken") !== null) { 
       this.setState({
         addedUserFirstName: decoded.firstName,
         addedUserLastName: decoded.lastName,
         addedUserEmail: decoded.email,
       })
-      console.log('Decoded Email in Cart : ', this.props.loggedEmail);
+      console.log('Decoded Email in Cart : ', decoded.email);
     }
 
 
-    this.getCartItems();
+    this.getCartItems(decoded.email);
 
   }
 
-  getCartItems = () => {
+  getCartItems = (email) => {
     axios({
       method: 'get',
-      url: `/api/cart/view/${this.props.loggedEmail}`
+      url: `/api/cart/view/${email}`
     })
       .then(res => {
         let cartProducts = res.data;
@@ -135,6 +123,16 @@ class Cart extends Component {
     let tempItems;
     tempItems = this.state.items.filter(item => {
       if (item._id !== id) {
+        axios({
+          method:'delete',
+          url:`/api/cart/remove/${id}`,
+        })
+        // .then(res=>{
+        //   return item;
+        // })
+        // .catch(err=>{
+        //   console.log(err);
+        // })
         return item;
       }
     });
@@ -322,5 +320,3 @@ $(document).ready(function () {
 
 
 export default Cart;
-
-
