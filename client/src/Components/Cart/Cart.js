@@ -8,20 +8,20 @@ import PaymentDetail from './PaymentDetail/PaymentDetail';
 
 import classes from "./Cart.module.css";
 import axios from 'axios';
-const $ =require('jquery')
+const $ = require('jquery')
 
 class Cart extends Component {
 
-constructor(props){
-  super(props);
-  this.state = {
-    addedUserFirstName:'',
-    addedUserLastName:'',
-    addedUserEmail:'',
-    totalItems:'',
-    isAllItemsSelected: false,
-    items: [
-      //{
+  constructor(props) {
+    super(props);
+    this.state = {
+      addedUserFirstName: '',
+      addedUserLastName: '',
+      addedUserEmail: '',
+      totalItems: '',
+      isAllItemsSelected: false,
+      items: [
+        //{
         // id: 1,
         // itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
         // stockQuantity: 10,
@@ -33,54 +33,58 @@ constructor(props){
         // totalPrice: 0,
         // quantity: 1,
         // isSelectedItem: false
-      //}
-    ],
-    cartSummary: {
-      subtotal: 0,
-      totalDiscount: 0,
-      total: 0,
-      isDisabled: true
+        //}
+      ],
+      cartSummary: {
+        subtotal: 0,
+        totalDiscount: 0,
+        total: 0,
+        isDisabled: true
+      }
+
+
     }
-
-
   }
-}
-
- 
 
   /////////////////////////////////////////// functions ///////////////////////////////////////////////////////
   // select all items in the cart
-  componentDidMount= () =>{
+  componentDidMount = () => {
 
     if (localStorage.getItem("userLoginToken") !== null) {
       const token = localStorage.userLoginToken;
       const decoded = jwt_decode(token);
       this.setState({
-        addedUserFirstName:decoded.firstName,
-        addedUserLastName:decoded.lastName,
-        addedUserEmail:decoded.email,
+        addedUserFirstName: decoded.firstName,
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
       })
-      console.log('Decoded Email in Cart : ',this.props.loggedEmail);
+      console.log('Decoded Email in Cart : ', this.props.loggedEmail);
     }
 
-   
+
     this.getCartItems();
 
   }
 
-  getCartItems = () =>{
+  getCartItems = () => {
     axios({
-      method:'get',
-      url:`/api/cart/view/${this.props.loggedEmail}`
+      method: 'get',
+      url: `/api/cart/view/${this.props.loggedEmail}`
     })
-    .then(res=>{
-      let cartProducts = res.data
-      this.setState({
-        items:res.data,
-        totalItems:cartProducts.length
+      .then(res => {
+        let cartProducts = res.data;
+        cartProducts.forEach((product, index) => {
+          console.log(product);
+
+        });
+
+
+        this.setState({
+          items: res.data,
+          totalItems: cartProducts.length
+        })
+        console.log('Items details : ', this.state.items);
       })
-      console.log('Items details : ',this.state.items);
-    })
   }
 
 
@@ -90,6 +94,8 @@ constructor(props){
     tempItems.forEach(item => {
       item.isSelectedItem = !this.state.isAllItemsSelected;
     });
+
+    console.log(tempItems);
 
     // set summary
     let summary = this.setSummary(tempItems);
@@ -103,7 +109,7 @@ constructor(props){
     let tempItems = [...this.state.items];
     let allItemsSelected = true;
     tempItems.forEach(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item.isSelectedItem = !item.isSelectedItem;
         if (!item.isSelectedItem) {
           allItemsSelected = false;
@@ -128,7 +134,7 @@ constructor(props){
     console.log(id);
     let tempItems;
     tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+      if (item._id !== id) {
         return item;
       }
     });
@@ -148,7 +154,7 @@ constructor(props){
     let tempItems;
     let moveItem;
     tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+      if (item._id !== id) {
         return item;
       } else {
         moveItem = item;
@@ -174,7 +180,7 @@ constructor(props){
     let isDisabled = true;
 
     tempItems.forEach(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item.quantity = quantity;
         item.totalPrice = item.price * quantity;
         if (item.isSelectedItem) {
