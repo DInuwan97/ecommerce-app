@@ -1,19 +1,27 @@
 import React, { Component } from "react";
 //import $ from "jquery";
-
+import jwt_decode from 'jwt-decode'
 import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
 import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
+import axios from 'axios';
 const $ =require('jquery')
 class Checkout extends Component {
-  state = {
+
+  constructor(props) {
+
+    super(props);
+
+    this.state = {
     items: this.props.location.state.items,
     summary: this.props.location.state.summary,
     buyer: {
-      name: "Sachin Athukorala",
-      phone: "771234567",
-      address: "No 131/1, Sandalla, Yalagala Road, Horana"
+      addedUserFirstName:'',
+      addedUserLastName: '',
+      addedUserEmail: '',
+      addedUserAddress:'',
+      addedUserMobile:'',
     },
     detailActive: false,
     card_number: '',
@@ -23,14 +31,51 @@ class Checkout extends Component {
     orderError: false,
     isSpinnerActive: false
   };
-
-  constructor(props) {
-    super(props);
+    
     this.changeCard = this.changeCard.bind(this);
   }
 
   componentDidMount() {
     // get users info (buyer)
+    const token = localStorage.userLoginToken;
+    const decoded = jwt_decode(token);
+
+    if (localStorage.getItem("userLoginToken") !== null) { 
+      this.setState({
+
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
+        addedUserMobile:decoded.mobile
+      })
+      console.log('Decoded Email in Cart : ', decoded.email);
+    }
+
+   this.getPurchasedCurrentUserDetails(decoded.email);
+   // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
+  }
+
+
+  getPurchasedCurrentUserDetails = (loggedEmail) =>{
+    axios({
+      method:'get',
+      url:`/api/users/singleUser/${loggedEmail}`
+    })
+    .then(res=>{
+      ////console.log('Chekc oUT USER DATA : ',res.data);
+      const user = res.data;
+      const userBuyer = {
+        addedUserFirstName:res.data.firstName,
+        addedUserLastName:res.data.lastName,
+        addedUserAddress:res.data.address,
+        addedUserMobile:res.data.mobile
+      }
+      this.setState({
+        buyer:userBuyer
+      })
+
+    
+      console.log("Check out firstname : ",this.state.buyer);
+    })
   }
 
   //////////////////////////////// functions /////////////////////////////////////
@@ -126,6 +171,7 @@ class Checkout extends Component {
   };
 
   render() {
+  
     return (
       <div className={classes.container}>
         <div className={classes.leftPanel}>
