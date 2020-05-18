@@ -301,7 +301,7 @@ export default class MyProfileUserFunctions extends Component {
                 </ul>
 
                 <a href="#" className="btn btn-success btn-block"><b>Voice</b></a>
-                <a href="#" className="btn btn-dark btn-block"><b>Mail</b></a>
+                <a href="/compose" className="btn btn-dark btn-block"><b>Mail</b></a>
               </div>
 
             </div>

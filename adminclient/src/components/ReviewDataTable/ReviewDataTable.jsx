@@ -102,7 +102,7 @@ class ReviewDataTable extends Component {
                             <span className="info-box-icon"><i className="fas fa-comments" /></span>
                             <div className="info-box-content">
                                 <span className="info-box-text">Reply Rate</span>
-                                <span className="info-box-number">{this.state.UnasweredReviewCount+" / "+this.state.TotalReviewCount}</span>
+                                <span className="info-box-number">{this.state.TotalReviewCount-this.state.UnasweredReviewCount+" / "+this.state.TotalReviewCount}</span>
                                 <div className="progress">
                                     <div className="progress-bar" style={{ width:  this.state.TotalReviewCount !=0  ? 100 - this.state.UnasweredReviewCount / this.state.TotalReviewCount * 100 + "%" : '100%'}} />
                                 </div>
@@ -130,7 +130,7 @@ class ReviewDataTable extends Component {
                                     <th>Id</th>
                                     <th>Item Name</th>
                                     <th>Review Count</th>
-                                    <th>Reply Count</th>
+                                    <th>Reply/Mark Count</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

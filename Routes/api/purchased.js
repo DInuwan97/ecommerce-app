@@ -40,10 +40,14 @@ router.delete('/remove/:id', async (req, res) => {
 });
 
 ///////////////////////////////////// remove a purchase records /////////////////////////////////////////////
-router.get('/removeAll', async (req, res) => {
+router.get('/view/:id', async (req, res) => {
   try {
-    console.log("remove all purchase records");
-    // rest
+    let purchasedItems = await PurchasedItem.find({ _id:req.params.id})
+    if(!purchasedItems)
+      res.status(404).json({msg:'Order Bot Found'})
+      else{
+        res.status(200).json(purchasedItems)
+      }
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Sever Error" });
