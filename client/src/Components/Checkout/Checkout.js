@@ -6,33 +6,31 @@ import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
 import axios from 'axios';
-const $ =require('jquery')
+const $ = require('jquery');
+
 class Checkout extends Component {
 
   constructor(props) {
-
     super(props);
-
     this.state = {
-    items: this.props.location.state.items,
-    summary: this.props.location.state.summary,
-    buyer: {
-      addedUserFirstName:'',
-      addedUserLastName: '',
-      addedUserEmail: '',
-      addedUserAddress:'',
-      addedUserMobile:'',
-    },
-    detailActive: false,
-    card_number: '',
-    card_holder: '',
-    card_expire: '',
-    card_cw: '',
-    orderError: false,
-    isSpinnerActive: false
-  };
-    
+      items: this.props.location.state.items,
+      summary: this.props.location.state.summary,
+      buyer: {
+        addedUserFirstName: '',
+        addedUserLastName: '',
+        addedUserAddress: '',
+        addedUserMobile: '',
+      },
+      card_number: '',
+      card_holder: '',
+      card_expire: '',
+      card_cw: '',
+      orderError: false,
+      isSpinnerActive: false
+    }
+
     this.changeCard = this.changeCard.bind(this);
+
   }
 
   componentDidMount() {
@@ -40,42 +38,40 @@ class Checkout extends Component {
     const token = localStorage.userLoginToken;
     const decoded = jwt_decode(token);
 
-    if (localStorage.getItem("userLoginToken") !== null) { 
+    if (localStorage.getItem("userLoginToken") !== null) {
       this.setState({
-
         addedUserLastName: decoded.lastName,
         addedUserEmail: decoded.email,
-        addedUserMobile:decoded.mobile
+        addedUserMobile: decoded.mobile
       })
       console.log('Decoded Email in Cart : ', decoded.email);
     }
 
-   this.getPurchasedCurrentUserDetails(decoded.email);
-   // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
+    this.getPurchasedCurrentUserDetails(decoded.email);
+    // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
+
   }
 
-
-  getPurchasedCurrentUserDetails = (loggedEmail) =>{
+  getPurchasedCurrentUserDetails = (loggedEmail) => {
     axios({
-      method:'get',
-      url:`/api/users/singleUser/${loggedEmail}`
+      method: 'get',
+      url: `/api/users/singleUser/${loggedEmail}`
     })
-    .then(res=>{
-      ////console.log('Chekc oUT USER DATA : ',res.data);
-      const user = res.data;
-      const userBuyer = {
-        addedUserFirstName:res.data.firstName,
-        addedUserLastName:res.data.lastName,
-        addedUserAddress:res.data.address,
-        addedUserMobile:res.data.mobile
-      }
-      this.setState({
-        buyer:userBuyer
-      })
+      .then(res => {
+        console.log('Chekc oUT USER DATA : ', res.data);
+        const user = res.data;
+        const userBuyer = {
+          addedUserFirstName: res.data.firstName,
+          addedUserLastName: res.data.lastName,
+          addedUserAddress: res.data.address,
+          addedUserMobile: res.data.mobile
+        }
+        this.setState({
+          buyer: userBuyer
+        });
 
-    
-      console.log("Check out firstname : ",this.state.buyer);
-    })
+        console.log("Check out firstname : ", this.state.buyer);
+      })
   }
 
   //////////////////////////////// functions /////////////////////////////////////
@@ -84,15 +80,6 @@ class Checkout extends Component {
     console.log(buyer);
     this.setState({ buyer: buyer, detailActive: false });
   }
-
-  changeActive = () => {
-    console.log("called");
-    if (this.state.detailActive) {
-      this.setState({ detailActive: false });
-    } else {
-      this.setState({ detailActive: true });
-    }
-  };
 
   changeCard = (field, value) => {
     console.log(field);
@@ -170,13 +157,14 @@ class Checkout extends Component {
 
   };
 
+
   render() {
-  
+
     return (
       <div className={classes.container}>
         <div className={classes.leftPanel}>
           <div className={classes.deliveryInfo}>
-            <DeliveryInfo buyer={this.state.buyer} change={this.changeDetails} isActive={this.state.detailActive} changeActive={this.changeActive} />
+            <DeliveryInfo buyer={this.state.buyer} change={this.changeDetails} />
           </div>
           <div className={classes.paymentInfo}>
             <PaymentInfo change={this.changeCard}

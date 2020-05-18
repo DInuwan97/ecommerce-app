@@ -40,7 +40,7 @@ class Cart extends Component {
     const token = localStorage.userLoginToken;
     const decoded = jwt_decode(token);
 
-    if (localStorage.getItem("userLoginToken") !== null) { 
+    if (localStorage.getItem("userLoginToken") !== null) {
       this.setState({
         addedUserFirstName: decoded.firstName,
         addedUserLastName: decoded.lastName,
@@ -121,8 +121,8 @@ class Cart extends Component {
     tempItems = this.state.items.filter(item => {
       if (item._id !== id) {
         axios({
-          method:'delete',
-          url:`/api/cart/remove/${id}`,
+          method: 'delete',
+          url: `/api/cart/remove/${id}`,
         })
         // .then(res=>{
         //   return item;
@@ -238,6 +238,7 @@ class Cart extends Component {
           items: this.state.items,
           summary: this.state.cartSummary
         };
+        console.log(object);
         this.props.history.push({
           pathname: '/checkout',
           state: object
