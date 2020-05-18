@@ -49,7 +49,6 @@ class Cart extends Component {
       console.log('Decoded Email in Cart : ', decoded.email);
     }
 
-
     this.getCartItems(decoded.email);
 
   }
@@ -65,8 +64,6 @@ class Cart extends Component {
           console.log(product);
 
         });
-
-
         this.setState({
           items: res.data,
           totalItems: cartProducts.length

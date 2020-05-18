@@ -3,16 +3,18 @@ import React, { useState } from 'react';
 import classes from "./DeliveryInfo.module.css";
 
 const DeliveryInfo = props => {
-  const [name, setName] = useState(props.buyer.name);
-  const [phone, setPhone] = useState(props.buyer.phone);
-  const [address, setAddress] = useState(props.buyer.address);
+  const [name, setName] = useState(props.buyer.addedUserFirstName);
+  const [nameLast, setLastName] = useState(props.buyer.addedUserLastName);
+  const [phone, setPhone] = useState(props.buyer.addedUserMobile);
+  const [address, setAddress] = useState(props.buyer.addedUserAddress);
   const [isWarning, setIsWarning] = useState(false);
 
   let isActive = props.isActive;
   let form2 = {
-    name: props.buyer.name,
-    phone: props.buyer.phone,
-    address: props.buyer.address
+    name: props.buyer.addedUserFirstName,
+    nameLast:props.buyer.addedUserLastName,
+    phone: props.buyer.addedUserMobile,
+    address: props.buyer.addedUserAddress
   };
 
   const nameChangeHandler = event => {
@@ -27,6 +29,10 @@ const DeliveryInfo = props => {
     setAddress(event.target.value);
   };
 
+  const nameLastChangeHandler = event => {
+    setLastName(event.target.value);
+  };
+
   const confirm = () => {
     console.log("called");
     if (name.trim().length == 0 || phone.trim().length == 0 || address.trim().length == 0) {
@@ -34,6 +40,7 @@ const DeliveryInfo = props => {
     } else {
       let buyer = {
         name: name,
+        nameLast:nameLast,
         phone: phone,
         address: address
       };
@@ -60,14 +67,15 @@ const DeliveryInfo = props => {
           <label>Contact Info</label>
           <div className={classes.editDetail__1}>
             <div className={classes.editDetail__1__name}>
-              <input type="text" value={name} className={classes.editDetail__1__name__input} onChange={nameChangeHandler} required />
+              <input type="text" value={form2.name+' '+form2.nameLast} className={classes.editDetail__1__name__input} onChange={nameChangeHandler} required />
+              
             </div>
             <div className={classes.editDetail__1__phone}>
               <div className={classes.editDetail__1__phone__1}>
                 <span>+94</span>
               </div>
               <div className={classes.editDetail__1__phone__2}>
-                <input type="number" value={phone} className={classes.editDetail__1__phone__2__input} onChange={phoneChangeHandler}
+                <input type="number" value={form2.phone} className={classes.editDetail__1__phone__2__input} onChange={phoneChangeHandler}
                   required />
               </div>
             </div>
@@ -76,7 +84,7 @@ const DeliveryInfo = props => {
 
           <label>Address</label>
           <div className={classes.editDetail__2}>
-            <textarea value={address} onChange={addressChangeHandler} />
+            <textarea value={form2.address} onChange={addressChangeHandler} />
           </div>
 
           <div className={classes.editDetail__3}>
@@ -89,7 +97,7 @@ const DeliveryInfo = props => {
         </div>
         :
         <div className={classes.contactInfo}>
-          <div className={classes.contactInfo__1}>{form2.name}, {form2.phone}</div>
+          <div className={classes.contactInfo__1}>{form2.name} {form2.nameLast}, {form2.phone}</div>
           <div className={classes.contactInfo__2}>{form2.address}</div>
           <div className={classes.editBtn}>
             <button onClick={openform}>Edit Details</button>
