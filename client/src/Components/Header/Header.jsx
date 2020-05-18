@@ -122,11 +122,11 @@ export class Header extends Component {
 
 		<div className="col-md-1 cart-wthree" style={{float:"right"}}>
 			<div className="cart"> 
-				<form action="#" method="post" className="last"> 
+				
 					<input type="hidden" name="cmd" value="_cart" />
 					<input type="hidden" name="display" value="1" />
-					<button className="w3view-cart" type="submit" name="submit" value=""><i className="fa fa-cart-arrow-down" aria-hidden="true"></i></button>
-				</form>  
+					<a href="/cart" className="w3view-cart"  name="submit" value=""><i className="fa fa-cart-arrow-down" aria-hidden="true"></i></a>
+				
 			</div>			
 		</div>
 

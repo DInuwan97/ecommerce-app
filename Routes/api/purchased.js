@@ -1,12 +1,26 @@
 const express = require("express");
 const router = express.Router();
 
+const PurchasedItem = require('../../models/PurchasedItems');
 ///////////////////////////////////// add pruchase record ////////////////////////////////////////////////
 router.post('/add', async (req, res) => {
+
+  console.log("Data came from checkout : ",req.body);
   try {
-    console.log("add a purchase record");
-    console.log(req.body);
-    // rest
+    
+  let purchasedItem = {
+    buyerDetails:req.body.buyerDetails,
+    items:req.body.items,
+    summary:req.body.summary
+  }
+
+  PurchasedItem.create(purchasedItem ,(err)=>{
+    if(err){
+        return res.status(400).send({ msg: err });
+    }else{
+        return res.status(201).send(purchasedItem);
+    }
+  })
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Sever Error" });

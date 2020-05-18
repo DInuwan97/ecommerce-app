@@ -11,6 +11,7 @@ class DeliveryInfo extends Component {
       phone: this.props.buyer.addedUserMobile,
       address: this.props.buyer.addedUserAddress,
       isWarning: false,
+
       detailActive: false,
 
       initialObj: {
