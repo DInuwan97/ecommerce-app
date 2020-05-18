@@ -14,5 +14,125 @@
 .header {
   align-self: flex-start;
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 900;
+}
+
+.logos {
+  padding: 3rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logos img {
+  width: 20%;
+}
+
+.card {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.card__left {
+  width: 45%;
+  background-color: #f8f8f8;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  padding: 3rem 2rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.card__right {
+  width: 45%;
+  background-color: #f8f8f8;
+  border-radius: 1rem;
+  margin-left: 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.card__left__1 {
+}
+
+.card__left__2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__right__1 {
+  width: 100%;
+  height: 5rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  margin-top: 3rem;
+}
+
+.card__right__2 {
+  width: 20%;
+  margin: 3rem 2rem 0 0;
+
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+}
+
+.card_number {
+  width: 100%;
+  padding-top: 5rem;
+  margin-bottom: 3rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.card_holder {
+  width: 50%;
+}
+
+.card_expires {
+  width: 30%;
+}
+
+.card_number label,
+.card_holder label,
+.card_expires label,
+.card__right__2 label {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+}
+
+.card_number input,
+.card_holder input,
+.card_expires input,
+.card__right__2 input {
+  width: 100%;
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 1);
+  background-color: #f8f8f8;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  outline: none;
+  padding: 0.2rem;
+}
+
+/* .card__right__2 input::-webkit-outer-spin-button,
+.card__right__2 input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+ // Firefox 
+.card__right__2 input[type="number"] {
+  -moz-appearance: textfield;
+} */
+
+.card_number input::placeholder,
+.card_holder input::placeholder,
+.card_expires input::placeholder,
+.card__right__2 input::placeholder {
+  color: rgba(0, 0, 0, 0.2);
 }

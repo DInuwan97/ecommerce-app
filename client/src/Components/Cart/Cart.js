@@ -1,63 +1,89 @@
 import React, { Component } from 'react';
 
-
+import jwt_decode from 'jwt-decode'
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
 import Summary from './Summary/Summary';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 
 import classes from "./Cart.module.css";
-
-const $ =require('jquery')
+import axios from 'axios';
+const $ = require('jquery')
 
 class Cart extends Component {
-  state = {
-    totalItems: 3,
-    isAllItemsSelected: false,
-    items: [
-      {
-        id: 1,
-        itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        stockQuantity: 10,
-        color: 'red',
-        size: 'XL',
-        price: 1200.30,
-        discount: 10,
-        itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        totalPrice: 0,
-        quantity: 1,
-        isSelected: false
-      },
-      {
-        id: 2,
-        itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        stockQuantity: 20,
-        color: 'red',
-        size: 'XL',
-        price: 1200.30,
-        discount: 7,
-        itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        totalPrice: 0,
-        quantity: 1,
-        isSelected: false
-      },
-    ],
-    cartSummary: {
-      subtotal: 0,
-      totalDiscount: 0,
-      total: 0,
-      isDisabled: true
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      addedUserFirstName: '',
+      addedUserLastName: '',
+      addedUserEmail: '',
+      totalItems: '',
+      isAllItemsSelected: false,
+
+      items: [],
+
+      cartSummary: {
+        subtotal: 0,
+        totalDiscount: 0,
+        total: 0,
+        isDisabled: true
+      }
+
+
     }
-  };
+  }
 
   /////////////////////////////////////////// functions ///////////////////////////////////////////////////////
   // select all items in the cart
+  componentDidMount = () => {
+    const token = localStorage.userLoginToken;
+    const decoded = jwt_decode(token);
+
+    if (localStorage.getItem("userLoginToken") !== null) { 
+      this.setState({
+        addedUserFirstName: decoded.firstName,
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
+      })
+      console.log('Decoded Email in Cart : ', decoded.email);
+    }
+
+
+    this.getCartItems(decoded.email);
+
+  }
+
+  getCartItems = (email) => {
+    axios({
+      method: 'get',
+      url: `/api/cart/view/${email}`
+    })
+      .then(res => {
+        let cartProducts = res.data;
+        cartProducts.forEach((product, index) => {
+          console.log(product);
+
+        });
+
+
+        this.setState({
+          items: res.data,
+          totalItems: cartProducts.length
+        })
+        console.log('Items details : ', this.state.items);
+      })
+  }
+
+
   selectAllHandler = () => {
     let tempItems = [...this.state.items];
 
     tempItems.forEach(item => {
-      item.isSelected = !this.state.isAllItemsSelected;
+      item.isSelectedItem = !this.state.isAllItemsSelected;
     });
+
+    console.log(tempItems);
 
     // set summary
     let summary = this.setSummary(tempItems);
@@ -71,9 +97,9 @@ class Cart extends Component {
     let tempItems = [...this.state.items];
     let allItemsSelected = true;
     tempItems.forEach(item => {
-      if (item.id === id) {
-        item.isSelected = !item.isSelected;
-        if (!item.isSelected) {
+      if (item._id === id) {
+        item.isSelectedItem = !item.isSelectedItem;
+        if (!item.isSelectedItem) {
           allItemsSelected = false;
         }
       }
@@ -96,7 +122,17 @@ class Cart extends Component {
     console.log(id);
     let tempItems;
     tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+      if (item._id !== id) {
+        axios({
+          method:'delete',
+          url:`/api/cart/remove/${id}`,
+        })
+        // .then(res=>{
+        //   return item;
+        // })
+        // .catch(err=>{
+        //   console.log(err);
+        // })
         return item;
       }
     });
@@ -116,7 +152,7 @@ class Cart extends Component {
     let tempItems;
     let moveItem;
     tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+      if (item._id !== id) {
         return item;
       } else {
         moveItem = item;
@@ -142,15 +178,15 @@ class Cart extends Component {
     let isDisabled = true;
 
     tempItems.forEach(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item.quantity = quantity;
         item.totalPrice = item.price * quantity;
-        if (item.isSelected) {
+        if (item.isSelectedItem) {
           subAmount += item.price * quantity;
           discount += (item.price * quantity) * (item.discount / 100.0);
         }
       } else {
-        if (item.isSelected) {
+        if (item.isSelectedItem) {
           subAmount += item.price * item.quantity;
           discount += (item.price * item.quantity) * (item.discount / 100.0);
         }
@@ -177,7 +213,7 @@ class Cart extends Component {
     let isDisabled = true;
 
     tempItems.forEach(item => {
-      if (item.isSelected) {
+      if (item.isSelectedItem) {
         subAmount += item.price * item.quantity;
         discount += (item.price * item.quantity) * (item.discount / 100.0);
       }
@@ -229,7 +265,7 @@ class Cart extends Component {
           <div className={classes.cartItems}>
             {this.state.items.map(item =>
               <CartItem
-                key={item.id}
+                key={item._id}
                 item={item}
                 allSelected={this.state.isAllItemsSelected}
                 select={this.itemSelectHandler}
@@ -284,5 +320,3 @@ $(document).ready(function () {
 
 
 export default Cart;
-
-

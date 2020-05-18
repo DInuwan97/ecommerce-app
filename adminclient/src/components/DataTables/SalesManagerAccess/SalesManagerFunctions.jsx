@@ -3,6 +3,9 @@ import SalesServicersList from './SalesServicersList';
 
 import axios from 'axios';
 
+
+const $ = require('jquery');
+$.DataTable = require('datatables.net');
 export default class SalesManagerFunctions extends Component {
 
     
@@ -28,6 +31,7 @@ export default class SalesManagerFunctions extends Component {
           this.setState({
             salesServicersList: users,
           });
+          $('#salesServicersList-table').DataTable()
         });
         //console.log(this.state.user);
       }
