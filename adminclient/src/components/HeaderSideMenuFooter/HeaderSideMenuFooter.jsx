@@ -226,7 +226,7 @@ export default class HeaderSideMenuFooter extends Component {
              
                   </li>
                   <li className="nav-item">
-                    <a href="salesManagerapprove" className="nav-link">
+                    <a href="/salesManagerapprove" className="nav-link">
                       <i className="nav-icon fas fa-th"></i>
                       <p>
                        Sales Approvals
@@ -235,7 +235,7 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
                   <li className="nav-item has-treeview">
-                    <a href="salesServicersList" className="nav-link">
+                    <a href="/salesServicersList" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                         Sales Servicers List   
@@ -245,7 +245,7 @@ export default class HeaderSideMenuFooter extends Component {
 
                                 
                   <li className="nav-item has-treeview">
-                    <a href="ActiveSalesManagers" className="nav-link">
+                    <a href="/ActiveSalesManagers" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                        ActiveSalesManagers
@@ -254,7 +254,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
 
                   <li className="nav-item has-treeview">
-                    <a href="itemApprove" className="nav-link">
+                    <a href="/itemApprove" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                         Product Approvals
@@ -263,7 +263,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
 
                   <li className="nav-item has-treeview">
-                    <a href="addCategory" className="nav-link">
+                    <a href="/addCategory" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                        Product Categories
@@ -274,7 +274,7 @@ export default class HeaderSideMenuFooter extends Component {
                   
                                                    
                   <li className="nav-item has-treeview">
-                    <a href="addDiscount" className="nav-link">
+                    <a href="/addDiscount" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                       AddDiscount
@@ -283,7 +283,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
 
                   <li className="nav-item has-treeview">
-                    <a href="AdminPackage" className="nav-link">
+                    <a href="/AdminPackage" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                       Packages
@@ -293,7 +293,7 @@ export default class HeaderSideMenuFooter extends Component {
 
 
                   <li className="nav-item has-treeview">
-                    <a href="Compose" className="nav-link">
+                    <a href="/Compose" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                         Compose
@@ -303,7 +303,7 @@ export default class HeaderSideMenuFooter extends Component {
 
                   
                   <li className="nav-item has-treeview">
-                    <a href="Reviews" className="nav-link">
+                    <a href="/Reviews" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                          Reviews
@@ -313,7 +313,7 @@ export default class HeaderSideMenuFooter extends Component {
 
                                     
                   <li className="nav-item has-treeview">
-                    <a href="ReviewReplies" className="nav-link">
+                    <a href="/ReviewReplies" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
                         ReviewReplies
@@ -450,9 +450,9 @@ export default class HeaderSideMenuFooter extends Component {
         
           <footer className="main-footer">
             <div className="float-right d-none d-sm-block">
-              <b>Version</b> 3.0.3-pre
+              <b>Version</b> 1.0.0
             </div>
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+            <strong>Copyright &copy; 2020 <a href="/">Team Bionics</a>.</strong> All rights
             reserved.
           </footer>
         

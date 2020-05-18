@@ -284,7 +284,7 @@ class ReviewReplyTable extends Component {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" onClick={() => this.sendEmailToAdmin()} class="btn btn-secondary" data-dismiss="modal">Send Email</button>
-                                <button type="button" class="btn btn-primary">Close</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

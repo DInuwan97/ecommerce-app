@@ -147,9 +147,33 @@ class SingleItemReview extends Component {
 
     goToRepliedReviews = () => {
         const id = this.props.match.params.id;
-        this.props.history.push({
-            pathname: `/ReviewReplies/${id}`,
+        swal({
+            title:'Redirect',
+            text:'Do you want to see the review replys?',
+            buttons:{
+                cancel: {
+                    text: "No",
+                    value: null,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                  },
+                  confirm: {
+                    text: "Yes",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true
+                  }
+            }
+        }).then(value=>{
+            if(value){
+                this.props.history.push({
+                    pathname: `/ReviewReplies/${id}`,
+                })
+            }
         })
+        
     }
 
 
