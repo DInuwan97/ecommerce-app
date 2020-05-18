@@ -12,13 +12,14 @@ router.post('/add',(req,res)=>{
         email:req.body.email
     }
 
-    Company.create(company,(err)=>{
+    setTimeout(async function(){Company.create(company,(err)=>{
         if(err){
             return res.status(400).send({ msg: err });
         }else{
             return res.status(201).send(company);
         }
-    })
+    })},3000);
+  
   
 });
 

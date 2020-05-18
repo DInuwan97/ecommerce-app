@@ -8,7 +8,8 @@ router.post('/add', (req,res)=>{
     let packageName = {
         packageName:req.body.packageName,
         maxNoOfSalesServicers:req.body.maxNoOfSalesServicers,
-        packageIconImage:req.body.packageIconImage
+        packageIconImage:req.body.packageIconImage,
+        packageDscription:req.body.packageDscription
     }
 
     PackageName.create(packageName,(err)=>{

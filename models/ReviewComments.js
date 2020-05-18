@@ -30,12 +30,14 @@ const ReviewCommentSchema = mongoose.Schema({
     reviewHelpfulCount:{
         type:Number,
         default:0,
-        required:true
+        required:true,
+        min: 0
     },
     reviewNotHelpfulCount:{
         type:Number,
         default:0,
-        required:true
+        required:true,
+        min: 0
     },
     reviewerEmail:{
         type:String,
@@ -59,6 +61,10 @@ const ReviewCommentSchema = mongoose.Schema({
     },
     adminsReplyTime:{
         type:Date,
+    },
+    repliedAdmin:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
     }
 });
 

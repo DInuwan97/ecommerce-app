@@ -11,14 +11,9 @@ const ReviewHelpfulSchema = mongoose.Schema({
         ref:"reviewComment",
         required:true
     },
-    reviewWasHelpful:{
-        type:Boolean,
-        default:false
-
-    },
-    reviewWasNotHelpful:{
-        type:Boolean,
-        default:false
+    reviewLikeStatus:{
+        type:Number,
+        default:0
     },
     item: {
         type: mongoose.Schema.Types.ObjectId,

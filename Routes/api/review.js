@@ -11,27 +11,26 @@ const authenticateUser = require("../../middleware/ReviewMiddleware").authentica
 
 const verifyItem = require("../../middleware/ReviewMiddleware").verifyItem;
 const verifyReview = require("../../middleware/ReviewMiddleware").verifyReview;
-const verifyUserSecureCode = require("../../middleware/ReviewMiddleware").verifyUserSecureCode;
 
 const nodemailer = require('nodemailer');
 
 //new review
 //user can have multiple reviews
-router.post("/newReviewComment/:id", authenticateUser, verifyUserSecureCode, verifyItem, (req, res) => {
+router.post("/newReviewComment/:id", authenticateUser, verifyItem, (req, res) => {
     var itemID = req.params.id;
     if (req.body.reviewMessage) {
         reviewMessageFromBody = req.body.reviewMessage;
         console.log(req.authData);
 
         var ReviewDetails = {
-            reviewedUser: req.authData.user._id,
+            reviewedUser: req.authData._id,
             item: itemID,
             reviewMessage: reviewMessageFromBody,
-            reviewUserFirstName: req.authData.user.firstName,
-            reviewUserLastName: req.authData.user.lastName,
-            reviewerEmail: req.authData.user.email,
+            reviewUserFirstName: req.authData.firstName,
+            reviewUserLastName: req.authData.lastName,
+            reviewerEmail: req.authData.email,
             itemCompany: req.company,
-            userImageUrl: req.authData.user.userImageUrl
+            userImageUrl: req.authData.userImageUrl
         };
         ReviewComments.create(ReviewDetails, (err) => {
             if (err) {
@@ -50,11 +49,11 @@ router.post("/newReviewComment/:id", authenticateUser, verifyUserSecureCode, ver
 //new Rating
 //each user get only 1 chance to rate a item
 // the second time the previous rating gets updated
-router.patch("/newRating/:id", authenticateUser, verifyUserSecureCode, verifyItem, (req, res) => {
+router.patch("/newRating/:id", authenticateUser, verifyItem, (req, res) => {
     var itemID = req.params.id;
     if (0 <= req.body.starRating && req.body.starRating <= 5) {
         ReviewRating.findOne({
-            reviewedUser: req.authData.user._id,
+            reviewedUser: req.authData._id,
             item: itemID
         }, (err, ReviewData) => {
             if (err) {
@@ -70,23 +69,20 @@ router.patch("/newRating/:id", authenticateUser, verifyUserSecureCode, verifyIte
                             }
                         });
                 } else {
-                    if (req.body.starRating) {
-                        var ReviewRatingDetails = {
-                            reviewedUser: req.authData.user._id,
-                            item: itemID,
-                            starRating: req.body.starRating
-                        }
-                        console.log(ReviewRatingDetails);
-                        ReviewRating.create(ReviewRatingDetails, (err) => {
-                            if (err) {
-                                return res.status(400).send({ msg: err });
-                            } else {
-                                return res.status(201).send({ msg: "Successfull rating" });
-                            }
-                        })
-                    } else {
-                        return res.status(400).send({ msg: "Star Rating is Empty" });
+                    var ReviewRatingDetails = {
+                        reviewedUser: req.authData._id,
+                        item: itemID,
+                        starRating: req.body.starRating
                     }
+                    console.log(ReviewRatingDetails);
+                    ReviewRating.create(ReviewRatingDetails, (err) => {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            return res.status(201).send({ msg: "Successfull rating" });
+                        }
+                    })
+
                 }
             }
         })
@@ -96,190 +92,97 @@ router.patch("/newRating/:id", authenticateUser, verifyUserSecureCode, verifyIte
 });
 
 
-const updateLike = require('../../middleware/ReviewMiddleware').updateLikeCount;
-const updateDisLike = require('../../middleware/ReviewMiddleware').updateDislikeCount;
-router.post('/updateHelpfuls/:id', async (req, res) => {
-    await updateLike(req);
-    await updateDisLike(req);
-    return res.status(200).send({ msg: "updated" })
-});
+
 
 
 //liking and unliking a comment by other user. only one time for a comment per a user.
 //need to add a method to delete useless data from the DB
 //reviewhelpful and reviewnothelful both false data are useless and therefor no need to keep them inside
 //the DB
-router.patch("/newHelpfulReview/:id", authenticateUser, verifyUserSecureCode, verifyItem, verifyReview, async (req, res) => {
+router.put("/newHelpfulReview/:id", authenticateUser, verifyItem, verifyReview, async (req, res) => {
     var itemId = req.params.id;
-    var reviewWasHelpful = false;
-    var reviewWasNotHelpful = false;
+    var reviewId = req.body.reviewID;
+    var reviewLikeStatus = req.body.reviewLikeStatus;
 
-    if (req.body.reviewWasHelpful == true && req.body.reviewWasNotHelpful == false) {
-        reviewWasHelpful = true;
-    } else if (req.body.reviewWasHelpful == false && req.body.reviewWasNotHelpful == false) {
-        reviewWasHelpful = false;
-    } else if (req.body.reviewWasNotHelpful == true && req.body.reviewWasHelpful == false) {
-        reviewWasNotHelpful = true;
-    } else if (req.body.reviewWasHelpful == true && req.body.reviewWasNotHelpful == true) {
-        return res.status(400).send({ msg: "Invalid details" });
-    } else {
-        return res.status(400).send({ msg: "Invalid details" });
+    if (!(reviewLikeStatus >= -1 && reviewLikeStatus <= 1)) {
+        return res.status(400).send({ msg: "Invalid Review Like Status" });
     }
-    ReviewHelpful.findOne({ reviewViewesUser: req.authData.user._id, reviewID: req.body.reviewID },
-        async (err, review) => {
-            if (err) {
-                res.send({ msg: err });
-            }
-            // let update = false;
-            if (review) {
-                await ReviewHelpful.findByIdAndUpdate({ _id: review._id }, { reviewWasHelpful: reviewWasHelpful, reviewWasNotHelpful: reviewWasNotHelpful },
-                    { new: true }, (err, data) => {
-                        if (err) {
+    let updateData;
+    if (reviewLikeStatus == -1) {
+        updateData = {
+            reviewLikeStatus: -1,
+            reviewID: reviewId,
+            reviewViewesUser: req.authData._id,
+            item: itemId
+        }
+    } else if (reviewLikeStatus == 1) {
+        updateData = {
+            reviewLikeStatus: 1,
+            reviewID: reviewId,
+            reviewViewesUser: req.authData._id,
+            item: itemId
+        }
+    } else {
+        updateData = {
+            reviewLikeStatus: 0,
+            reviewID: reviewId,
+            reviewViewesUser: req.authData._id,
+            item: itemId
+        }
+    }
+    ReviewHelpful.findOneAndUpdate({ item: itemId, reviewViewesUser: req.authData._id, reviewID: reviewId }, updateData, { upsert: true }, async (err, prev) => {
+        if (err) {
+            return res.status(400).send({ msg: err });
+        } else {
+            if (prev) {
+                if (prev.reviewLikeStatus == 0) {
+                    if (reviewLikeStatus == 1) {
+                        await ReviewComments.findByIdAndUpdate(reviewId, { $inc: { reviewHelpfulCount: 1 } }).catch(err => {
                             return res.status(400).send({ msg: err });
-                        } else {
-                            // update = true;
-                            return res.status(200).send({ msg: "Helpful updated", data })
-                        }
-                    });
-            } else {
-                reviewHelpfulData = {
-                    reviewViewesUser: req.authData.user._id,
-                    reviewID: req.body.reviewID,
-                    reviewWasHelpful: reviewWasHelpful,
-                    reviewWasNotHelpful: reviewWasNotHelpful,
-                    item: itemId
-                }
-                await ReviewHelpful.create(reviewHelpfulData, (err) => {
-                    if (err) {
-                        return res.status(400).send({ msg: err });
-                    } else {
-                        return res.status(200).send({ msg: "Helpful created" })
-
+                        });
+                    } else if (reviewLikeStatus == -1) {
+                        await ReviewComments.findByIdAndUpdate(reviewId, { $inc: { reviewNotHelpfulCount: 1 } }).catch(err => {
+                            return res.status(400).send({ msg: err });
+                        });
                     }
-                })
+                } else if (prev.reviewLikeStatus == -1) {
+                    if (reviewLikeStatus == 1) {
+                        await ReviewComments.update({ _id: reviewId, reviewNotHelpfulCount: { $gte: 1 } }, { $inc: { reviewHelpfulCount: 1, reviewNotHelpfulCount: -1 } }).catch(err => {
+                            return res.status(400).send({ msg: err });
+                        });
+                    } else if (reviewLikeStatus == 0) {
+                        await ReviewComments.update({ _id: reviewId, reviewNotHelpfulCount: { $gte: 1 } }, { $inc: { reviewNotHelpfulCount: -1 } }).catch(err => {
+                            return res.status(400).send({ msg: err });
+                        });
+                    }
+                } else if (prev.reviewLikeStatus == 1) {
+                    if (reviewLikeStatus == -1) {
+                        await ReviewComments.update({ _id: reviewId, reviewHelpfulCount: { $gte: 1 } }, { $inc: { reviewNotHelpfulCount: 1, reviewHelpfulCount: -1 } }).catch(err => {
+                            return res.status(400).send({ msg: err });
+                        });
+                    } else if (reviewLikeStatus == 0) {
+                        await ReviewComments.update({ _id: reviewId, reviewHelpfulCount: { $gte: 1 } }, { $inc: { reviewHelpfulCount: -1 } }).catch(err => {
+                            return res.status(400).send({ msg: err });
+                        });
+                    }
+                }
+            } else {
+                if (reviewLikeStatus == 1) {
+                    await ReviewComments.findByIdAndUpdate(reviewId, { $inc: { reviewHelpfulCount: 1 } }).catch(err => {
+                        return res.status(400).send({ msg: err });
+                    });
+                } else if (reviewLikeStatus == -1) {
+                    await ReviewComments.findByIdAndUpdate(reviewId, { $inc: { reviewNotHelpfulCount: 1 } }).catch(err => {
+                        return res.status(400).send({ msg: err });
+                    });
+                }
             }
-            // if (update == true) {
-            //     console.log(review);
-            //     if (review.reviewWasHelpful == true && reviewWasHelpful == false) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewHelpfulCount: -1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     } else if (review.reviewWasNotHelpful == true && reviewWasNotHelpful == false) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewNotHelpfulCount: -1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     } else if (review.reviewWasHelpful == false && reviewWasHelpful == true) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewHelpfulCount: +1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     } else if (reviewWasNotHelpful == false && reviewWasNotHelpful == true) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewNotHelpfulCount: +1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     } else if (review.reviewWasHelpful == true && reviewWasNotHelpful == true) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewHelpfulCount: -1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewNotHelpfulCount: +1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     } else if (review.reviewWasNotHelpful == true && reviewWasHelpful == true) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewHelpfulCount: +1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewNotHelpfulCount: -1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     }
-            // } else {
-            //     if (reviewWasHelpful == true) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewHelpfulCount: +1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     } else if (reviewWasNotHelpful == true) {
-            //         ReviewComments.update({ _id: req.body.reviewID }, { $inc: { reviewNotHelpfulCount: +1 } }, (err, data) => {
-            //             if (err) {
-            //                 return res.status(400).send({ msg: err });
-            //             }
-            //         });
-            //     }
-            // }
-        });
-    await updateLike(req);
-    await updateDisLike(req);
+            return res.status(200).send({ msg: "Successfull" });
+
+        }
+    })
+
 });
-// //middleware to update like count of reviews
-helpfulCount = (req, res, next) => {
-    verifyItem(req, res, () => {
-        var itemId = req.params.id;
-        ReviewComments.find({ item: itemId }, (err, data) => {
-            if (err) {
-                return res.status(400).send({ msg: err });
-            } else {
-                data.forEach(element => {
-                    ReviewHelpful.find({ reviewID: element._id, reviewWasHelpful: true }, (err, helpfulData) => {
-                        if (err) {
-                            return res.status(400).send({ msg: err });
-                        } else {
-                            ReviewComments.update({ _id: element._id }, { reviewHelpfulCount: helpfulData.length }, (err) => {
-                                if (err) {
-                                    return res.status(400).send({ msg: err });
-                                }
-                            })
-                        }
-                    });
-                });
-                next();
-
-            }
-        });
-    });
-}
-
-helpfulNotCount = (req, res, next) => {
-    verifyItem(req, res, () => {
-        var itemId = req.params.id;
-        ReviewComments.find({ item: itemId }, (err, data) => {
-            if (err) {
-                return res.status(400).send({ msg: err });
-            } else {
-                data.forEach(element => {
-                    ReviewHelpful.find({ reviewID: element._id, reviewWasNotHelpful: true }, (err, helpfulNotData) => {
-                        if (err) {
-                            return res.status(400).send({ msg: err });
-                        } else {
-                            ReviewComments.update({ _id: element._id }, { reviewNotHelpfulCount: helpfulNotData.length }, (err) => {
-                                if (err) {
-                                    return res.status(400).send({ msg: err });
-                                }
-                            })
-                        }
-                    });
-                });
-
-                next();
-            }
-        });
-    });
-}
 
 
 router.get("/getRating/:id", verifyItem, (req, res) => {
@@ -333,7 +236,6 @@ router.get("/MyRating/:id", authenticateUser, verifyItem, (req, res) => {
 //publicaly accessible 
 //can see all the ratings 
 
-// router.get("/:id", verifyItem, helpfulCount, helpfulNotCount, (req, res) => {
 router.get("/:id", verifyItem, async (req, res) => {
     //     await updateLike(req);
     //     await updateDisLike(req);
@@ -352,8 +254,8 @@ router.get("/:id", verifyItem, async (req, res) => {
                     return res.status(200).send({ msg: "No Reviews to Display" });
                 }
             }
-            // }).sort({ reviewHelpfulCount: -1 });
-        });
+        }).sort({ AddedTime: -1 });
+        // });
     } else {
         req.token = (userHeader.split(" "))[1];
         jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -370,7 +272,7 @@ router.get("/:id", verifyItem, async (req, res) => {
                         if (commentData) {
                             var myCommentID = [];
                             commentData.forEach(element => {
-                                if (element.reviewedUser == authData.user._id) {
+                                if (element.reviewedUser == authData._id) {
                                     myCommentID.push(element._id);
                                 }
                             });
@@ -378,33 +280,34 @@ router.get("/:id", verifyItem, async (req, res) => {
                                 response.myCommentID = myCommentID;
                             }
                             response.CommentDocuments = commentData;
-                            if (authData.user.isAdmin) {
+                            if (authData.isAdmin) {
                                 response.userType = "Admin";
-                            } else if (authData.user.isCustomer) {
+                            } else if (authData.isCustomer) {
                                 response.userType = "Customer";
-                            } else if (authData.user.isSalesManager) {
+                            } else if (authData.isSalesManager) {
                                 response.userType = "SalesManager";
-                            } else if (authData.user.isSalesServicer) {
+                            } else if (authData.isSalesServicer) {
                                 response.userType = "SalesServicer";
                             } else {
                                 response.userType = "Customer"
                             }
 
-                            ReviewHelpful.find({ reviewViewesUser: authData.user._id, item: itemId }, (err, data) => {
+                            ReviewHelpful.find({ reviewViewesUser: authData._id, item: itemId }, (err, data) => {
                                 if (err) {
                                     return res.status(400).send({ msg: err });
                                 } else {
                                     if (data) {
+
                                         const MyLiked = [];
                                         let dataForLike;
                                         data.forEach(element => {
                                             dataForLike = {
                                                 reviewId: element.reviewID,
-                                                liked: element.reviewWasHelpful,
-                                                disliked: element.reviewWasNotHelpful
+                                                status: element.reviewLikeStatus,
                                             }
                                             MyLiked.push(dataForLike);
                                         });
+
                                         if (MyLiked.length > 0) {
                                             response.myLiked = MyLiked;
                                         }
@@ -416,8 +319,8 @@ router.get("/:id", verifyItem, async (req, res) => {
                             return res.status(200).send({ msg: "No Reviews to Display" });
                         }
                     }
-                    // }).sort({ reviewHelpfulCount: -1 });
-                });
+                }).sort({ AddedTime: -1 });
+                // });
             }
         });
 
@@ -436,7 +339,8 @@ verifyUserIsTheReviewPoster = (req, res, next) => {
                         if (err) {
                             return res.status(400).send({ msg: err });
                         } else {
-                            if (authData.user._id == data.reviewedUser) {
+                            if (authData._id == data.reviewedUser) {
+                                console.log("posted");
                                 next();
                             } else {
                                 return res.status(400).send({ msg: "This client didn't posted the review" });
@@ -444,6 +348,7 @@ verifyUserIsTheReviewPoster = (req, res, next) => {
                         }
                     });
                 } else {
+                    console.log("ByPassed");
                     next()
                 }
             }
@@ -457,21 +362,19 @@ router.patch("/updateReviceComment/:id", authenticateUser, verifyItem, verifyRev
         if (err) {
             return res.status(400).send({ msg: err })
         } else {
-            if (authData.user.secureKeyVerifyStatus == true) {
-                if (req.body.reviewMessage) {
-                    ReviewComments.update({ _id: req.body.reviewID, reviewedUser: authData.user._id, item: itemId }, { reviewMessage: req.body.reviewMessage }, (err) => {
-                        if (err) {
-                            return res.status(400).send({ msg: err })
-                        } else {
-                            return res.status(200).send({ msg: "Updated Successfully" })
-                        }
-                    })
-                } else {
-                    return res.status(400).send({ msg: "Review Message is not defined" })
-                }
+
+            if (req.body.reviewMessage) {
+                ReviewComments.update({ _id: req.body.reviewID, reviewedUser: authData._id, item: itemId }, { reviewMessage: req.body.reviewMessage }, (err) => {
+                    if (err) {
+                        return res.status(400).send({ msg: err })
+                    } else {
+                        return res.status(200).send({ msg: "Updated Successfully" })
+                    }
+                })
             } else {
-                return res.status(401).send({ msg: "Verify Secure code first" });
+                return res.status(400).send({ msg: "Review Message is not defined" })
             }
+
         }
     })
 });
@@ -482,29 +385,27 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
         if (err) {
             return res.status(400).send({ msg: err })
         } else {
-            if (authData.user.secureKeyVerifyStatus == true) {
-                ReviewComments.deleteOne({ _id: req.body.reviewID, item: itemId },
-                    function (err) {
-                        if (err) {
-                            return res.status(400).send({ msg: err });
-                        } else {
-                            ReviewHelpful.deleteMany({ reviewID: req.body.reviewID }, (err) => {
-                                if (err) {
-                                    return res.status(400).send({ msg: err });
-                                } else {
 
-                                    return res.status(200).send({ msg: "Deleted" });
+            ReviewComments.deleteOne({ _id: req.body.reviewID, item: itemId },
+                function (err) {
+                    if (err) {
+                        return res.status(400).send({ msg: err });
+                    } else {
+                        ReviewHelpful.deleteMany({ reviewID: req.body.reviewID }, (err) => {
+                            if (err) {
+                                return res.status(400).send({ msg: err });
+                            } else {
 
-
-                                }
-                            });
-                        }
-                    });
+                                return res.status(200).send({ msg: "Deleted" });
 
 
-            } else {
-                return res.status(401).send({ msg: "Verify Secure code first" });
-            }
+                            }
+                        });
+                    }
+                });
+
+
+
         }
     });
 });
@@ -602,7 +503,8 @@ router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) 
                 let reviewUpdate = {
                     adminsReplyTime: new Date(),
                     adminsReply: msg,
-                    didAdminReplied: true
+                    didAdminReplied: true,
+                    repliedAdmin: req.authData._id
                 }
                 await ReviewComments.findByIdAndUpdate(reviewId, reviewUpdate, (err, previous) => {
                     if (err) {
@@ -665,14 +567,109 @@ router.patch('/admin/markAsRead/:id', authenticateUser, verifyAdmin, (req, res) 
     ReviewComments.findByIdAndUpdate(req.params.id, {
         adminsReplyTime: new Date(),
         adminsReply: "Marked as Reviewed",
-        didAdminReplied: true
+        didAdminReplied: true,
+        repliedAdmin:req.authData._id
     }, (err, prev) => {
-        if(err){
-            return res.status(400).send({msg:err});
-        }else{
-            return res.status(200).send({msg:"Marked as Reviewd"})
+        if (err) {
+            return res.status(400).send({ msg: err });
+        } else {
+            return res.status(200).send({ msg: "Marked as Reviewed" })
         }
     })
 });
+
+
+
+router.get('/admin/getAdminReplyItems/', authenticateUser, verifyAdmin, (req, res) => {
+    const company = req.authData.company;
+    ReviewComments.find({ didAdminReplied: true, itemCompany: company }, (err, data) => {
+        if (err) {
+            res.status(400).send({ msg: err });
+        } else {
+            if (data) {
+                const itemIds = [];
+                data.sort((a, b) => {
+                    var x = a.item.toString();
+                    var y = b.item.toString();
+                    if (x < y) { return -1 }
+                    else if (x > y) { return 1 }
+                    else { return 0 }
+                })
+                let uniqueItems = [], itemCount = [], prev;
+                data.forEach(element => {
+                    if (element.item.toString() != prev) {
+                        uniqueItems.push(element.item);
+                        itemCount.push(1);
+                    } else {
+                        itemCount[uniqueItems.length - 1]++;
+                    }
+                    prev = element.item.toString();
+                });
+                let responses = [];
+
+                uniqueItems.forEach(async (element, index) => {
+                    await Items.findById(element, { _id: 0, itemName: 1 }).then(itemName => {
+                        responses.push({
+                            item: element,
+                            itemName: itemName.itemName,
+                            count: itemCount[index]
+                        });
+                        if (uniqueItems.length - 1 == index) {
+                            setTimeout(()=>{
+                                res.status(200).send({ data: responses })
+                            },100)
+                            
+                        }
+                    }).catch(err=>{
+                        res.status(400).send({ msg: err })
+                    })
+
+                });
+
+            } else {
+                res.status(200).send({ data: [] })
+            }
+        }
+    })
+});
+
+
+router.get('/admin/getAdminReplies/:id',authenticateUser,verifyAdmin,(req,res)=>{
+    const itemId = req.params.id;
+    ReviewComments.find({item:itemId,didAdminReplied:true,itemCompany:req.authData.company},(err,data)=>{
+        if(err){
+            return res.status(400).send({msg:err});
+        }else{
+            if(data){
+                return res.status(200).send(data)
+            }else{
+                return res.status(200).send({data:[]})
+            }
+        }
+    })
+})
+
+
+
+router.get('/admin/viewUser/:id',authenticateUser,verifyAdmin,(req,res)=>{
+    let id = req.params.id;
+    User.findById(id,(err,data)=>{
+        if(err){
+            return res.status(400).send({msg:err});
+        }else{
+            if(data){
+                jwt.sign({data}, 'secretkey',{expiresIn:'3m'},(err,token)=>{
+                    if(err){
+                        return res.status(400).send({msg:err});
+                    }else{
+                        return res.status(200).send({data:token})
+                    }
+                })
+            }else{
+                return res.send(200).send({data:""})
+            }
+        }
+    })
+})
 
 module.exports = router;

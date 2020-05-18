@@ -17,8 +17,12 @@ import AddDiscount from '../SalesManagerAddDiscount/AddDiscount'
 import ReviewTable from '../ReviewDataTable/ReviewDataTable';
 import Compose from '../ReviewDataTable/SendEmail';
 import SingleReviews from '../ReviewDataTable/SingleItemReview';
+import ReviewReplyData from '../ReviewDataTable/ReviewReply/ReviewReplyDataTable';
+import ReviewReplyTable from '../ReviewDataTable/ReviewReply/ReviewReplyTable';
 
 import MyProfile from '../AdminOrientation/MyProfile';
+
+import AdminPackage from '../AdminOrientation/AdminPackage';
 
 export default class HeaderSideMenuFooter extends Component {
 
@@ -754,13 +758,18 @@ export default class HeaderSideMenuFooter extends Component {
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
                <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
              
-                <Route path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
+                <Route exact path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
                 <Route path='/Compose' component={Compose}/>
-                <Route path='/SingleReviews/:id' component={SingleReviews}/>
+                <Route exact path='/Reviews/:id' component={SingleReviews}/>
+                <Route exact path='/ReviewReplies' component = {()=> <ReviewReplyData company={this.state.company}/>}/>
+                <Route exact path='/ReviewReplies/:id' component={()=> <ReviewReplyTable company={this.state.company}/>}/>
 
                <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
+                
+
+                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company}/>}/>
 
               </div>
             </section>

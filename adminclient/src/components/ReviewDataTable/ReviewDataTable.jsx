@@ -14,7 +14,6 @@ class ReviewDataTable extends Component {
             UnasweredReviewCount: 0,
             TotalReviewCount: 0
         }
-
     }
 
     getTableData = () => {
@@ -60,12 +59,12 @@ class ReviewDataTable extends Component {
 
                         <div className="small-box bg-info">
                             <div className="inner">
-                                <h3>150</h3>
+                                <h3>{this.state.TotalReviewCount}</h3>
 
-                                <p>New Orders</p>
+                                <p>All Reviews </p>
                             </div>
                             <div className="icon">
-                                <i className="ion ion-bag"></i>
+                                <i className="ion ion-email"></i>
                             </div>
                         </div>
                     </div>
@@ -74,12 +73,12 @@ class ReviewDataTable extends Component {
 
                         <div className="small-box bg-success">
                             <div className="inner">
-                                <h3>53<sup style={{ fontSize: 20 }}>%</sup></h3>
+                                <h3>{this.state.UnasweredReviewCount}</h3>
 
-                                <p>Bounce Rate</p>
+                                <p>Unanswered Reviews</p>
                             </div>
                             <div className="icon">
-                                <i className="ion ion-stats-bars"></i>
+                                <i className="ion ion-email-unread"></i>
                             </div>
                         </div>
                     </div>
@@ -88,12 +87,12 @@ class ReviewDataTable extends Component {
 
                         <div className="small-box bg-warning">
                             <div className="inner">
-                                <h3>44</h3>
+                                <h3>{this.state.TotalReviewCount - this.state.UnasweredReviewCount}</h3>
 
-                                <p>User Registrations</p>
+                                <p>Answered Reviews</p>
                             </div>
                             <div className="icon">
-                                <i className="ion ion-person-add"></i>
+                                <i class="far fa-envelope-open"></i>
                             </div>
                         </div>
                     </div>
@@ -102,13 +101,18 @@ class ReviewDataTable extends Component {
                         <div className="info-box bg-danger">
                             <span className="info-box-icon"><i className="fas fa-comments" /></span>
                             <div className="info-box-content">
-                                <span className="info-box-text">Reviews to Reply</span>
-                                <span className="info-box-number">{this.state.UnasweredReviewCount}</span>
+                                <span className="info-box-text">Reply Rate</span>
+                                <span className="info-box-number">{this.state.UnasweredReviewCount+" / "+this.state.TotalReviewCount}</span>
                                 <div className="progress">
-                                    <div className="progress-bar" style={{ width: 100- this.state.UnasweredReviewCount/this.state.TotalReviewCount*100+"%" }} />
+                                    <div className="progress-bar" style={{ width:  this.state.TotalReviewCount !=0  ? 100 - this.state.UnasweredReviewCount / this.state.TotalReviewCount * 100 + "%" : '100%'}} />
                                 </div>
                                 <span className="progress-description">
-                                   {"Reply Rate is "+(100- this.state.UnasweredReviewCount/this.state.TotalReviewCount*100)+"%"}
+                                    {
+                                    this.state.TotalReviewCount !=0 ?
+                                        "Reply Rate is " + (100 - this.state.UnasweredReviewCount / this.state.TotalReviewCount * 100).toFixed(2) + "%"
+                                    :
+                                    "Reply Rate is " + "100%"
+                                    }
                                 </span>
                             </div>
                         </div>

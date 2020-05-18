@@ -28,6 +28,8 @@ import Wishlist from './Components/Wishlist/Wishlist';
 import ContactUs from './Components/Contacts/Contacts';
 import UserProfile from './Components/UserProfile/UserProfile';
 
+
+
 class App extends Component {
 
   constructor(props) {
@@ -85,12 +87,14 @@ class App extends Component {
       <Router>
         <div className="App">
 
-          <Header />
-          <Route path="/" exact component={Home} />
-          <Route path="/register" component={Register} />
-          <Route path="/login" component={Login} />
-          <Route exact path='/testImage' component={TestImage} />
-          <Route path="/verifysecurecode" component={VerifySecureCode} />
+     
+        <Header />
+        <Route path="/" exact component={Home} />
+        <Route path="/register" component={Register} />
+        <Route path="/login" component={Login} />
+        <Route exact path='/testImage' component={TestImage} />
+        <Route path="/verifysecurecode" component={VerifySecureCode} />
+
 
           <Route path="/:type/:id" component={SingleProduct} />
           <Route path="/salesManager" component={SalesManager} />
