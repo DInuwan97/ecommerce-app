@@ -25,7 +25,15 @@ export default class MyProfileUserFunctions extends Component {
 
             oldPassword:'',
             newPassword:'',
-            confirmPassword:''
+            confirmPassword:'',
+
+            reviewList:[],
+            reviewUserFirstName:'',
+            reviewUserLastName:'',
+            reviewedUserId:'',
+            AddedTime:'',
+            userImageUrlReview:'',
+            reviewMessage:''
 
         };
 
@@ -100,6 +108,7 @@ export default class MyProfileUserFunctions extends Component {
     componentDidMount(){
         this.getUser();
         this.getItemstoYourCompany();
+        this.getReviewsByCompany();
     }
 
     
@@ -218,17 +227,45 @@ export default class MyProfileUserFunctions extends Component {
       }
 
 
+
+      getReviewsByCompany=()=>{
+        axios({
+          method:'get',
+          url:`/api/review/reviews/view/${this.props.companyName}`
+        })
+        .then((res)=>{
+          let review = res.data;
+
+          this.setState({
+            reviewList:review,
+            reviewUserFirstName:review.reviewUserFirstName,
+            reviewUserLastName:review.reviewUserLastName,
+            reviewedUserId:review.reviewedUserId,
+            AddedTime:review.AddedTime,
+            userImageUrlReview:review.userImageUrl,
+            reviewMessage:review.reviewMessage
+          })
+
+          console.log('review data' ,review[0].userImageUrl);
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+      }
+
+
       
     render() {
-
-        const{loggedEmail,companyName} = this.props;
-        console.log('Logged User Email is : ' ,loggedEmail);
-        console.log('Logged User FirstName is : ' ,this.state.firstName);
-
+  
+      const options = {
+        month: "long", day: "numeric", year: "numeric",
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        hour12: true,
+    };
 
       let imgPreview;
       if (this.state.file) {
-          imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
+        imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
       }else{
         imgPreview = <img src="../../dist/img/user4-128x128.jpg" alt='' style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
       }
@@ -255,17 +292,16 @@ export default class MyProfileUserFunctions extends Component {
                <center><p class="badge badge-warning">{this.props.companyName}</p></center> 
                 <ul className="list-group list-group-unbordered mb-3">
                   <li className="list-group-item">
-                    <b>Followers</b> <a className="float-right">1,322</a>
+                  <i class="fas fa-envelope-open-text"></i><b> Email</b> <b><a className="float-right">{this.props.loggedEmail}</a></b>
                   </li>
                   <li className="list-group-item">
-                    <b>Following</b> <a className="float-right">543</a>
+                  <i class="fas fa-phone-square-alt"></i><b> Mobile</b><b><a className="float-right">{this.state.mobile}</a></b>
                   </li>
-                  <li className="list-group-item">
-                    <b>Friends</b> <a className="float-right">13,287</a>
-                  </li>
+                  
                 </ul>
 
-                <a href="#" className="btn btn-primary btn-block"><b>Follow</b></a>
+                <a href="#" className="btn btn-success btn-block"><b>Voice</b></a>
+                <a href="#" className="btn btn-dark btn-block"><b>Mail</b></a>
               </div>
 
             </div>
@@ -276,35 +312,13 @@ export default class MyProfileUserFunctions extends Component {
               </div>
      
               <div className="card-body">
-                <strong><i className="fas fa-book mr-1"></i> Education</strong>
-
-                <p className="text-muted">
-                  B.S. in Computer Science from the University of Tennessee at Knoxville
-                </p>
-
-                <hr/>
 
                 <strong><i className="fas fa-map-marker-alt mr-1"></i> Location</strong>
 
-                <p className="text-muted">Malibu, California</p>
+                <p className="text-muted">{this.state.address}</p>
 
                 <hr/>
 
-                <strong><i className="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-                <p className="text-muted">
-                  <span className="tag tag-danger">UI Design</span>
-                  <span className="tag tag-success">Coding</span>
-                  <span className="tag tag-info">Javascript</span>
-                  <span className="tag tag-warning">PHP</span>
-                  <span className="tag tag-primary">Node.js</span>
-                </p>
-
-                <hr/>
-
-                <strong><i className="far fa-file-alt mr-1"></i> Notes</strong>
-
-                <p className="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
               </div>
 
             </div>
@@ -424,75 +438,43 @@ export default class MyProfileUserFunctions extends Component {
               <div className="card-body">
                 <div className="tab-content">
                   <div className="active tab-pane" id="activity">
- 
-                    <div className="post">
-                      <div className="user-block">
-                        <img className="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
-                        <span className="username">
-                          <a href="#">Jonathan Burke Jr.</a>
-                          <a href="#" className="float-right btn-tool"><i className="fas fa-times"></i></a>
-                        </span>
-                        <span className="description">Shared publicly - 7:30 PM today</span>
-                      </div>
-             
-                      <p>
-                        Lorem ipsum represents a long-held tradition for designers,
-                        typographers and the like. Some people hate it and argue for
-                        its demise, but others ignore the hate as they create awesome
-                        tools to help create filler text for everyone from bacon lovers
-                        to Charlie Sheen fans.
-                      </p>
+                    
+                  {this.state.reviewList.slice(0,3).map((rev) => (
 
-                      <p>
-                        <a href="#" className="link-black text-sm mr-2"><i className="fas fa-share mr-1"></i> Share</a>
-                        <a href="#" className="link-black text-sm"><i className="far fa-thumbs-up mr-1"></i> Like</a>
-                        <span className="float-right">
-                          <a href="#" className="link-black text-sm">
-                            <i className="far fa-comments mr-1"></i> Comments (5)
-                          </a>
-                        </span>
-                      </p>
-
-                      <input className="form-control form-control-sm" type="text" placeholder="Type a comment"/>
-                    </div>
-
-                    <div className="post clearfix">
-                      <div className="user-block">
-                        <img className="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image"/>
-                        <span className="username">
-                          <a href="#">Sarah Ross</a>
-                          <a href="#" className="float-right btn-tool"><i className="fas fa-times"></i></a>
-                        </span>
-                        <span className="description">Sent you a message - 3 days ago</span>
-                      </div>
-
-                      <p>
-                        Lorem ipsum represents a long-held tradition for designers,
-                        typographers and the like. Some people hate it and argue for
-                        its demise, but others ignore the hate as they create awesome
-                        tools to help create filler text for everyone from bacon lovers
-                        to Charlie Sheen fans.
-                      </p>
-
-                      <form className="form-horizontal">
-                        <div className="input-group input-group-sm mb-0">
-                          <input className="form-control form-control-sm" placeholder="Response"/>
-                          <div className="input-group-append">
-                            <button  className="btn btn-danger">Send</button>
+                       <div className="post">
+                            <div className="user-block">
+                              <img className="img-circle img-bordered-sm" src={rev.userImageUrl} />
+                              <span className="username">
+                                <a href="#">{rev.reviewUserFirstName} {rev.reviewUserLastName}</a>
+                                <a href="#" className="float-right btn-tool"><i className="fas fa-times"></i></a>
+                              </span>
+                              <span className="description">Shared publicly - {new Intl.DateTimeFormat("en-US",options).format(new Date(Date.parse(rev.AddedTime)))}</span>
+                            </div>
+                   
+                            <p>
+                             {rev.reviewMessage}
+                            </p>
+      
+                            <p>
+                              <a href="#" className="link-black text-sm mr-2"><i className="fas fa-share mr-1"></i> Share</a>
+                              <a href="#" className="link-black text-sm"><i className="far fa-thumbs-up mr-1"></i> Like</a>
+                              <span className="float-right">
+                                <a href="#" className="link-black text-sm">
+                                  <i className="far fa-comments mr-1"></i> Comments (5)
+                                </a>
+                              </span>
+                            </p>
+   
                           </div>
-                        </div>
-                      </form>
-                    </div>
+                 
+                   ))}
+ 
+           
+
+             
 
                     <div className="post">
-                      <div className="user-block">
-                        <img className="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image"/>
-                        <span className="username">
-                          <a href="#">Adam Jones</a>
-                          <a href="#" className="float-right btn-tool"><i className="fas fa-times"></i></a>
-                        </span>
-                        <span className="description">Posted 5 photos - 5 days ago</span>
-                      </div>
+                 
 
                       <div className="row mb-3">
                         <div className="col-sm-6">

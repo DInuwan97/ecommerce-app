@@ -1,6 +1,27 @@
 import React, { Component } from 'react';
-
+import {Doughnut} from 'react-chartjs-2';
 export default class DonutChart extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            donutData:{
+                labels: [
+                    'Chrome',
+                    'IE',
+                    'FireFox',
+                    'Safari',
+                    'Opera',
+                    'Navigator',
+                ],
+                datasets: [{
+                    data: [700, 500, 400, 600, 300, 100],
+                    backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                }]
+            }
+        }
+    }
+
   render() {
     return (
         <div className="card card-danger">
@@ -14,7 +35,7 @@ export default class DonutChart extends Component {
           </div>
         </div>
         <div className="card-body">
-          <canvas id="donutChart" style={{minHeight: 250, height: 250, maxHeight: 250, maxWidth: '100%'}}></canvas>
+        <Doughnut data={this.state.donutData} />
         </div>
       </div>
     );
