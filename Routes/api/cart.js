@@ -103,5 +103,24 @@ router.patch('/setQuantity', async (req, res) => {
 });
 
 
+router.delete('/removeAllMyItemsFromCart/:email',(req,res)=>{
+  try{
+    CartItem.deleteMany({ addedUserEmail: req.params.email }, (err) => {
+      if (err) {
+          res.status(400).send({ msg: err });
+      } else {
+          res.status(200).send({ msg: "Deleted" });
+      }
+  });
+  
+  }catch(err){
+    console.log(err);
+  }
+})
+
+
+
+
+
 
 module.exports = router;

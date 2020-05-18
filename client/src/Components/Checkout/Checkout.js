@@ -6,6 +6,7 @@ import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
 import axios from 'axios';
+import swal from 'sweetalert';
 const $ =require('jquery')
 class Checkout extends Component {
 
@@ -14,8 +15,16 @@ class Checkout extends Component {
     super(props);
 
     this.state = {
+
     items: this.props.location.state.items,
     summary: this.props.location.state.summary,
+    buyerDetails:{
+      firstName:'',
+      lastName:'',
+      email:'',
+      mobile:''
+    },
+
     buyer: {
       addedUserFirstName:'',
       addedUserLastName: '',
@@ -23,15 +32,20 @@ class Checkout extends Component {
       addedUserAddress:'',
       addedUserMobile:'',
     },
+
+
     detailActive: false,
     card_number: '',
     card_holder: '',
     card_expire: '',
     card_cw: '',
     orderError: false,
-    isSpinnerActive: false
-  };
+    isSpinnerActive: false,
+
+
     
+  };
+  
     this.changeCard = this.changeCard.bind(this);
   }
 
@@ -42,13 +56,17 @@ class Checkout extends Component {
 
     if (localStorage.getItem("userLoginToken") !== null) { 
       this.setState({
-
         addedUserLastName: decoded.lastName,
         addedUserEmail: decoded.email,
         addedUserMobile:decoded.mobile
       })
       console.log('Decoded Email in Cart : ', decoded.email);
+      console.log('location buyer details email : ',this.state.summary);
+      console.log('location buyer details email : ',this.state.items);
     }
+   
+
+    
 
    this.getPurchasedCurrentUserDetails(decoded.email);
    // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
@@ -73,8 +91,18 @@ class Checkout extends Component {
         buyer:userBuyer
       })
 
-    
-      console.log("Check out firstname : ",this.state.buyer);
+      const userDetails = {
+        firstName:res.data.firstName,
+        lastName:res.data.lastName,
+        address:res.data.address,
+        mobile:res.data.mobile
+      }
+      this.setState({
+        buyerDetails:userDetails
+      })
+
+      console.log("Check out firstname : ",this.state.buyer.addedUserEmail);
+
     })
   }
 
@@ -162,9 +190,42 @@ class Checkout extends Component {
       // place order, calling payment gateway and other fucking stuff
       setTimeout(() => {
         alert("Your order has been placed");
-        this.props.history.push({
-          pathname: '/',
-        });
+        // this.props.history.push({
+        //   pathname: '/',
+        // });
+
+        axios({
+          method:'post',
+          url:`/api/pruchase/add`,
+          data:{
+            buyerDetails:this.state.buyerDetails,
+            items:this.state.items,
+            summary:this.state.summary
+          }
+        })
+        .then(res=>{
+          swal({
+            icon:"success",
+            title:"Done",
+            text:"Order Completed"       
+          })
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+
+        axios({
+          method:'delete',
+          url:`/api/cart/removeAllMyItemsFromCart/${this.state.buyerDetails.email}`
+        })
+        .then({
+
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+
+ 
       }, 3000);
     }
 
