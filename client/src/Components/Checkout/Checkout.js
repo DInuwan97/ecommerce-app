@@ -18,12 +18,6 @@ class Checkout extends Component {
 
       items: this.props.location.state.items,
       summary: this.props.location.state.summary,
-      buyerDetails: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        mobile: ''
-      },
 
       buyer: {
         addedUserFirstName: '',
@@ -61,9 +55,6 @@ class Checkout extends Component {
       console.log('location buyer details email : ', this.state.items);
     }
 
-
-
-
     this.getPurchasedCurrentUserDetails(decoded.email);
     // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
 
@@ -87,17 +78,7 @@ class Checkout extends Component {
           buyer: userBuyer
         });
 
-
-        const userDetails = {
-          firstName: res.data.firstName,
-          lastName: res.data.lastName,
-          address: res.data.address,
-          mobile: res.data.mobile
-        }
-        this.setState({
-          buyerDetails: userDetails
-        })
-
+        console.log(this.state.buyer);
         console.log("Check out firstname : ", this.state.buyer.addedUserEmail);
 
       })
