@@ -6,47 +6,37 @@ import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
 import axios from 'axios';
+
 import swal from 'sweetalert';
-const $ =require('jquery')
+const $ = require('jquery')
+
 class Checkout extends Component {
 
   constructor(props) {
-
     super(props);
-
     this.state = {
 
-    items: this.props.location.state.items,
-    summary: this.props.location.state.summary,
-    buyerDetails:{
-      firstName:'',
-      lastName:'',
-      email:'',
-      mobile:''
-    },
+      items: this.props.location.state.items,
+      summary: this.props.location.state.summary,
 
-    buyer: {
-      addedUserFirstName:'',
-      addedUserLastName: '',
-      addedUserEmail: '',
-      addedUserAddress:'',
-      addedUserMobile:'',
-    },
+      buyer: {
+        addedUserFirstName: '',
+        addedUserLastName: '',
+        addedUserEmail: '',
+        addedUserAddress: '',
+        addedUserMobile: '',
+      },
 
+      card_number: '',
+      card_holder: '',
+      card_expire: '',
+      card_cw: '',
+      orderError: false,
+      isSpinnerActive: false
+    }
 
-    detailActive: false,
-    card_number: '',
-    card_holder: '',
-    card_expire: '',
-    card_cw: '',
-    orderError: false,
-    isSpinnerActive: false,
-
-
-    
-  };
-  
     this.changeCard = this.changeCard.bind(this);
+
   }
 
   componentDidMount() {
@@ -54,29 +44,26 @@ class Checkout extends Component {
     const token = localStorage.userLoginToken;
     const decoded = jwt_decode(token);
 
-    if (localStorage.getItem("userLoginToken") !== null) { 
+    if (localStorage.getItem("userLoginToken") !== null) {
       this.setState({
         addedUserLastName: decoded.lastName,
         addedUserEmail: decoded.email,
-        addedUserMobile:decoded.mobile
+        addedUserMobile: decoded.mobile
       })
       console.log('Decoded Email in Cart : ', decoded.email);
-      console.log('location buyer details email : ',this.state.summary);
-      console.log('location buyer details email : ',this.state.items);
+      console.log('location buyer details email : ', this.state.summary);
+      console.log('location buyer details email : ', this.state.items);
     }
-   
 
-    
+    this.getPurchasedCurrentUserDetails(decoded.email);
+    // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
 
-   this.getPurchasedCurrentUserDetails(decoded.email);
-   // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
   }
 
-
-  getPurchasedCurrentUserDetails = (loggedEmail) =>{
+  getPurchasedCurrentUserDetails = (loggedEmail) => {
     axios({
-      method:'get',
-      url:`/api/users/singleUser/${loggedEmail}`
+      method: 'get',
+      url: `/api/users/singleUser/${loggedEmail}`
     })
     .then(res=>{
       ////console.log('Chekc oUT USER DATA : ',res.data);
@@ -105,7 +92,7 @@ class Checkout extends Component {
 
       console.log("Check out firstname : ",this.state.buyerDetails.email);
 
-    })
+
   }
 
   //////////////////////////////// functions /////////////////////////////////////
@@ -114,15 +101,6 @@ class Checkout extends Component {
     console.log(buyer);
     this.setState({ buyer: buyer, detailActive: false });
   }
-
-  changeActive = () => {
-    console.log("called");
-    if (this.state.detailActive) {
-      this.setState({ detailActive: false });
-    } else {
-      this.setState({ detailActive: true });
-    }
-  };
 
   changeCard = (field, value) => {
     console.log(field);
@@ -197,49 +175,50 @@ class Checkout extends Component {
         // });
 
         axios({
-          method:'post',
-          url:`/api/pruchase/add`,
-          data:{
-            buyerDetails:this.state.buyerDetails,
-            items:this.state.items,
-            summary:this.state.summary
+          method: 'post',
+          url: `/api/pruchase/add`,
+          data: {
+            buyerDetails: this.state.buyerDetails,
+            items: this.state.items,
+            summary: this.state.summary
           }
         })
-        .then(res=>{
-          swal({
-            icon:"success",
-            title:"Done",
-            text:"Order Completed"       
+          .then(res => {
+            swal({
+              icon: "success",
+              title: "Done",
+              text: "Order Completed"
+            })
           })
-        })
-        .catch(err=>{
-          console.log(err);
-        })
+          .catch(err => {
+            console.log(err);
+          })
 
         axios({
-          method:'delete',
-          url:`/api/cart/removeAllMyItemsFromCart/${this.state.buyerDetails.email}`
+          method: 'delete',
+          url: `/api/cart/removeAllMyItemsFromCart/${this.state.buyerDetails.email}`
         })
-        .then({
+          .then({
 
-        })
-        .catch(err=>{
-          console.log(err);
-        })
+          })
+          .catch(err => {
+            console.log(err);
+          })
 
- 
+
       }, 3000);
     }
 
   };
 
+
   render() {
-  
+
     return (
       <div className={classes.container}>
         <div className={classes.leftPanel}>
           <div className={classes.deliveryInfo}>
-            <DeliveryInfo buyer={this.state.buyer} change={this.changeDetails} isActive={this.state.detailActive} changeActive={this.changeActive} />
+            <DeliveryInfo buyer={this.state.buyer} change={this.changeDetails} />
           </div>
           <div className={classes.paymentInfo}>
             <PaymentInfo change={this.changeCard}

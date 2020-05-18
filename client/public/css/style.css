@@ -195,9 +195,10 @@ button.search {
     background-color:#000;
     border:none;
 }
-.cart-wthree .fa {
-    font-size: 34px;
-    margin-top: 7px;
+.cart-wthree svg {
+    transform: scale(1.3);
+		margin-top: 9px;
+		cursor: pointer;
 }
 button.w3view-cart {
     background: transparent;

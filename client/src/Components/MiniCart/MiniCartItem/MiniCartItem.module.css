@@ -1,0 +1,37 @@
+.container {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  display: flex;
+}
+
+.name {
+  flex: 0 0 44%;
+  word-wrap: break-word;
+}
+
+.name span {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.price {
+  flex: 0 0 30%;
+}
+
+.price span {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.actions {
+  flex: 0 0 1;
+  display: flex;
+}
+
+.actions__q {
+  flex: 0 0 60%;
+}
+
+.actions__r {
+  flex: 0 0 1;
+}
