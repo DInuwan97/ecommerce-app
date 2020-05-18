@@ -30,7 +30,7 @@ const CartItem = props => {
   //console.log(props.item);
   console.log('rendered cartitem');
 
-  let isChecked = props.item.isSelected;
+  let isChecked = props.item.isSelectedItem;
 
   //////////////////////////////// methods ////////////////////////////////
   // open popup to add to wishlist
@@ -59,10 +59,10 @@ const CartItem = props => {
   const moveOrRemove = () => {
     if (popupModal.activeModal == 'wishlist') {
       closePopup();
-      props.move(props.item.id);
+      props.move(props.item._id);
     } else {
       closePopup();
-      props.remove(props.item.id);
+      props.remove(props.item._id);
     }
   };
 
@@ -75,20 +75,20 @@ const CartItem = props => {
 
   // increase quantity of a item
   const increaseQuantity = () => {
-    if (quantity === props.item.stockQuantity) {
+    if (quantity == props.item.stockQuantity) {
       return;
     }
     let number = quantity + 1;
-    props.changeQuantity(props.item.id, number);
+    props.changeQuantity(props.item._id, number);
   };
 
   // decrease quantity of a item
   const decreaseQuantity = () => {
-    if (quantity === 1) {
+    if (quantity <= 1) {
       return;
     }
     let number = quantity - 1;
-    props.changeQuantity(props.item.id, number);
+    props.changeQuantity(props.item._id, number);
   };
 
   // change item quantity using input field
@@ -100,7 +100,7 @@ const CartItem = props => {
     } else if (isNaN(number)) {
       number = 1;
     }
-    props.changeQuantity(props.item.id, number);
+    props.changeQuantity(props.item._id, number);
   };
 
   // redirect to single item
@@ -111,10 +111,10 @@ const CartItem = props => {
   return (
     <div className={classes.container}>
       <div className={classes.check}>
-        <input className={classes.styledCheckbox} id={props.item.id} type="checkbox" value=""
+        <input className={classes.styledCheckbox} id={props.item._id} type="checkbox" value=""
           checked={isChecked}
-          onChange={() => props.select(props.item.id)} />
-        <label for={props.item.id}></label>
+          onChange={() => props.select(props.item._id)} />
+        <label for={props.item._id}></label>
       </div>
 
       <div className={classes.picture}>

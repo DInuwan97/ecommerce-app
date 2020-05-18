@@ -8,69 +8,71 @@ import PaymentDetail from './PaymentDetail/PaymentDetail';
 
 import classes from "./Cart.module.css";
 import axios from 'axios';
-const $ =require('jquery')
-const decoded = '';
+const $ = require('jquery')
+
 class Cart extends Component {
 
-constructor(props){
-  super(props);
-  this.state = {
+  constructor(props) {
+    super(props);
+    this.state = {
+      addedUserFirstName: '',
+      addedUserLastName: '',
+      addedUserEmail: '',
+      totalItems: '',
+      isAllItemsSelected: false,
 
-    
-    addedUserFirstName:'',
-    addedUserLastName:'',
-    addedUserEmail:'',
-    totalItems:'',
-    isAllItemsSelected: false,
-    items: [
- 
-    ],
-    cartSummary: {
-      subtotal: 0,
-      totalDiscount: 0,
-      total: 0,
-      isDisabled: true
+      items: [],
+
+      cartSummary: {
+        subtotal: 0,
+        totalDiscount: 0,
+        total: 0,
+        isDisabled: true
+      }
+
+
     }
-
-
   }
-}
-
- 
 
   /////////////////////////////////////////// functions ///////////////////////////////////////////////////////
   // select all items in the cart
-  componentDidMount = () =>{
+  componentDidMount = () => {
     const token = localStorage.userLoginToken;
     const decoded = jwt_decode(token);
-    if (localStorage.getItem("userLoginToken") !== null) {
 
+    if (localStorage.getItem("userLoginToken") !== null) { 
       this.setState({
-        addedUserFirstName:decoded.firstName,
-        addedUserLastName:decoded.lastName,
-        addedUserEmail:decoded.email,
+        addedUserFirstName: decoded.firstName,
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
       })
-      console.log('Decoded Email in Cart : ',decoded.email);
+      console.log('Decoded Email in Cart : ', decoded.email);
     }
 
-   
+
     this.getCartItems(decoded.email);
 
   }
 
-  getCartItems = (email) =>{
+  getCartItems = (email) => {
     axios({
-      method:'get',
-      url:`/api/cart/view/${email}`
+      method: 'get',
+      url: `/api/cart/view/${email}`
     })
-    .then(res=>{
-      let cartProducts = res.data
-      this.setState({
-        items:res.data,
-        totalItems:cartProducts.length
+      .then(res => {
+        let cartProducts = res.data;
+        cartProducts.forEach((product, index) => {
+          console.log(product);
+
+        });
+
+
+        this.setState({
+          items: res.data,
+          totalItems: cartProducts.length
+        })
+        console.log('Items details : ', this.state.items);
       })
-      console.log('Items details : ',this.state.items);
-    })
   }
 
 
@@ -80,6 +82,8 @@ constructor(props){
     tempItems.forEach(item => {
       item.isSelectedItem = !this.state.isAllItemsSelected;
     });
+
+    console.log(tempItems);
 
     // set summary
     let summary = this.setSummary(tempItems);
@@ -93,7 +97,7 @@ constructor(props){
     let tempItems = [...this.state.items];
     let allItemsSelected = true;
     tempItems.forEach(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item.isSelectedItem = !item.isSelectedItem;
         if (!item.isSelectedItem) {
           allItemsSelected = false;
@@ -118,7 +122,17 @@ constructor(props){
     console.log(id);
     let tempItems;
     tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+      if (item._id !== id) {
+        axios({
+          method:'delete',
+          url:`/api/cart/remove/${id}`,
+        })
+        // .then(res=>{
+        //   return item;
+        // })
+        // .catch(err=>{
+        //   console.log(err);
+        // })
         return item;
       }
     });
@@ -138,7 +152,7 @@ constructor(props){
     let tempItems;
     let moveItem;
     tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+      if (item._id !== id) {
         return item;
       } else {
         moveItem = item;
@@ -164,7 +178,7 @@ constructor(props){
     let isDisabled = true;
 
     tempItems.forEach(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item.quantity = quantity;
         item.totalPrice = item.price * quantity;
         if (item.isSelectedItem) {
@@ -291,7 +305,7 @@ constructor(props){
   }
 }
 
-export default Cart;
+
 $(window).scroll(function () {
   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()));
 });
@@ -305,6 +319,4 @@ $(document).ready(function () {
 // });
 
 
-
-
-
+export default Cart;

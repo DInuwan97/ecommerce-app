@@ -70,14 +70,21 @@ console.log('Add req body : ',req.body);
 /////////////////////////////////////////// remove items from the cartItemsSchema ////////////////////////////////////////////////
 /* user can remove item from shopping cart */
 router.delete('/remove/:id', async (req, res) => {
-  try {
-    console.log("remove a item from cart");
-    console.log(req.params.id);
-    // rest
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: "Sever Error" });
-  }
+  
+  console.log('Delete Cart Item : ', req.params);
+    try {
+      const cartItemExists = await CartItem.findOne({ _id: req.params.id });
+      if (!cartItemExists) {
+        return res.status(400).json({ msg: "CartItem does not exist" });
+      }
+      res.status(200).json(cartItemExists);
+      await cartItemExists.remove();
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ msg: "Server Error" });
+    }
+ 
 });
 
 // optional
