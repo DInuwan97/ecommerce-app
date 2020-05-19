@@ -78,13 +78,22 @@ class Checkout extends Component {
           buyer: userBuyer
         });
 
-        console.log(this.state.buyer);
-        console.log("Check out firstname : ", this.state.buyer.addedUserEmail);
-
+       const userDetails = {
+        firstName:res.data.firstName,
+        lastName:res.data.lastName,
+        address:res.data.address,
+        mobile:res.data.mobile,
+        email:res.data.email
+      }
+  
+  `    this.setState({
+        buyerDetails:userDetails
       })
 
-  }
+      console.log("Check out firstname : ",this.state.buyerDetails.email);
+  })
 
+  }
   //////////////////////////////// functions /////////////////////////////////////
 
   changeDetails = (buyer) => {
@@ -165,12 +174,13 @@ class Checkout extends Component {
         // });
 
         axios({
-          method: 'post',
-          url: `/api/pruchase/add`,
-          data: {
-            buyerDetails: this.state.buyerDetails,
-            items: this.state.items,
-            summary: this.state.summary
+          method:'post',
+          url:`/api/pruchase/add`,
+          data:{
+            purchasedUserEmail:this.state.buyerDetails.email,
+            buyerDetails:this.state.buyerDetails,
+            items:this.state.items,
+            summary:this.state.summary
           }
         })
           .then(res => {

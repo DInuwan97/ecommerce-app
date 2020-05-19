@@ -9,6 +9,7 @@ router.post('/add', async (req, res) => {
   try {
     
   let purchasedItem = {
+    purchasedUserEmail:req.body.purchasedUserEmail,
     buyerDetails:req.body.buyerDetails,
     items:req.body.items,
     summary:req.body.summary
@@ -39,14 +40,30 @@ router.delete('/remove/:id', async (req, res) => {
   }
 });
 
-///////////////////////////////////// remove a purchase records /////////////////////////////////////////////
-router.get('/view/:id', async (req, res) => {
+
+router.get('/viewByOrder/:id', async (req, res) => {
   try {
     let purchasedItems = await PurchasedItem.find({ _id:req.params.id})
     if(!purchasedItems)
       res.status(404).json({msg:'Order Bot Found'})
       else{
         res.status(200).json(purchasedItems)
+      }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Sever Error" });
+  }
+});
+
+
+
+router.get('/viewByUser/:email', async (req, res) => {
+  try {
+    let purchasedOrders = await PurchasedItem.find({ purchasedUserEmail:req.params.email})
+    if(!purchasedOrders)
+      res.status(404).json({msg:'Order Bot Found'})
+      else{
+        res.status(200).json(purchasedOrders)
       }
   } catch (err) {
     console.log(err);
