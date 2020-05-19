@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 
 //Import routes
-const Users = require("./Routes/api/Users");
+const Users = require("./Routes/api/users");
 const Items = require("./Routes/api/items");
 const Category = require("./Routes/api/category");
 const Review = require("./Routes/api/review");
@@ -12,7 +12,7 @@ const Cart = require("./Routes/api/cart");
 const Purchase = require("./Routes/api/purchased");
 const PackageNames = require('./Routes/api/packageName');
 const Companies = require('./Routes/api/companies');
-const ContactUs = require('./Routes/api/ContactUs');
+const ContactUs = require('./Routes/api/contactUs');
 //middlewear
 const app = express();
 
