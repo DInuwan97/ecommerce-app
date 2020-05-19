@@ -11,7 +11,7 @@ import * as actionTypes from '../../Store/Actions';
 import classes from "./Cart.module.css";
 
 import axios from 'axios';
-const $ = require('jquery')
+const $ = require('jquery');
 
 
 class Cart extends Component {
@@ -61,7 +61,12 @@ class Cart extends Component {
       console.log('Decoded Email in Cart : ', decoded.email);
     }
 
-    this.getCartItems(decoded.email);
+    // check if cart item already have
+    if (this.props.theItems.length == 0) {
+      console.log("reloaded cart");
+      this.getCartItems(decoded.email);
+    }
+
 
   }
 
@@ -256,16 +261,9 @@ class Cart extends Component {
     console.log('buy');
 
     setTimeout(() => {
-      if (this.state.cartSummary.subtotal > 0) {
-        let object = {
-          items: this.state.items,
-          summary: this.state.cartSummary,
-          buyerDetails: this.state.buyerDetails
-        };
-        console.log(object);
+      if (this.props.summary.subtotal > 0) {
         this.props.history.push({
           pathname: '/checkout',
-          state: object
         });
       }
     }, 3000);

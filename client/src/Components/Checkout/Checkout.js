@@ -6,6 +6,8 @@ import PaymentInfo from "./PaymentInfo/PaymentInfo";
 import Summary from "./Summary/Summary";
 import classes from "./Checkout.module.css";
 import axios from 'axios';
+import { connect } from 'react-redux';
+import * as actionTypes from '../../Store/Actions';
 
 import swal from 'sweetalert';
 const $ = require('jquery')
@@ -15,9 +17,6 @@ class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
-      items: this.props.location.state.items,
-      summary: this.props.location.state.summary,
 
       buyer: {
         addedUserFirstName: '',
@@ -55,6 +54,7 @@ class Checkout extends Component {
       console.log('location buyer details email : ', this.state.items);
     }
 
+
     this.getPurchasedCurrentUserDetails(decoded.email);
     // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
 
@@ -78,20 +78,20 @@ class Checkout extends Component {
           buyer: userBuyer
         });
 
-       const userDetails = {
-        firstName:res.data.firstName,
-        lastName:res.data.lastName,
-        address:res.data.address,
-        mobile:res.data.mobile,
-        email:res.data.email
-      }
-  
-  `    this.setState({
-        buyerDetails:userDetails
-      })
+        const userDetails = {
+          firstName: res.data.firstName,
+          lastName: res.data.lastName,
+          address: res.data.address,
+          mobile: res.data.mobile,
+          email: res.data.email
+        }
 
-      console.log("Check out firstname : ",this.state.buyerDetails.email);
-  })
+        this.setState({
+          buyerDetails: userDetails
+        })
+
+        console.log("Check out firstname : ", this.state.buyerDetails.email);
+      })
 
   }
   //////////////////////////////// functions /////////////////////////////////////
@@ -174,13 +174,13 @@ class Checkout extends Component {
         // });
 
         axios({
-          method:'post',
-          url:`/api/pruchase/add`,
-          data:{
-            purchasedUserEmail:this.state.buyerDetails.email,
-            buyerDetails:this.state.buyerDetails,
-            items:this.state.items,
-            summary:this.state.summary
+          method: 'post',
+          url: `/api/pruchase/add`,
+          data: {
+            purchasedUserEmail: this.state.buyerDetails.email,
+            buyerDetails: this.state.buyerDetails,
+            items: this.state.items,
+            summary: this.state.summary
           }
         })
           .then(res => {
@@ -231,8 +231,8 @@ class Checkout extends Component {
         </div>
         <div id="rightPanel" className={classes.rightPanel}>
           <Summary
-            summary={this.state.summary}
-            noOfItems={this.state.items.length}
+            summary={this.props.summary}
+            noOfItems={this.props.theItems.length}
             order={this.order}
             orderError={this.state.orderError}
             isSpinnerActive={this.state.isSpinnerActive}
@@ -251,4 +251,20 @@ $(document).ready(function () {
   $(this).scrollTop(0);
 });
 
-export default Checkout;
+const mapStateToProps = state => {
+  return {
+    theItems: state.items,
+    summary: state.cartSummary,
+    isAllItemsSelected: state.isAllItemsSelected,
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateItems: (newItems) => dispatch({ type: actionTypes.UPDATE_ITEMS, newItems: newItems }),
+    select: (items, isAllItemsSelected, summary) => dispatch({ type: actionTypes.SELECT, items: items, isAllItemsSelected: isAllItemsSelected, summary: summary }),
+    updateItemSummary: (items, summary) => dispatch({ type: actionTypes.UPDATE_ITEMS_SUMMARY, items: items, summary: summary })
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
