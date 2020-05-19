@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 
 import Minicart from "../MiniCart/Minicart";
 import jwt_decode from "jwt-decode";
@@ -18,6 +18,7 @@ export class Header extends Component {
       isSalesManager: false,
       isSalesServicer: false,
       isMinicartActive: false,
+      search: ""
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -68,6 +69,23 @@ export class Header extends Component {
     console.log("close");
     this.setState({ isMinicartActive: false });
   };
+
+
+  searchOnChange = (e) => {
+    if (e.key === 'Enter') {
+      this.SearchItem();
+    }
+
+    this.setState({
+      search: e.target.value
+    });
+
+  }
+
+  SearchItem = () => {
+    this.props.history.push(`/${this.state.search}`);
+    window.location.reload(true);
+  }
 
   render() {
     const loginRegLink = (
@@ -173,23 +191,23 @@ export class Header extends Component {
               className="col-md-4 search-agileinfo"
               style={{ float: "right" }}
             >
-              <form action="#" method="post">
-                <input
-                  type="search"
-                  name="Search"
-                  placeholder="Search for a Product..."
-                  required=""
-                />
-                <button
-                  type="submit"
-                  className="btn btn-default search"
-                  aria-label="Left Align"
-                >
-                  <i className="fa fa-search" aria-hidden="true">
-                    {" "}
-                  </i>
-                </button>
-              </form>
+
+              <input onKeyUp={(e) => this.searchOnChange(e)}
+                type="search"
+                name="Search"
+                placeholder="Search for a Product..."
+                required=""
+              />
+              <button onSubmit={(e) => this.SearchItem(e)}
+                type="submit"
+                className="btn btn-default search"
+                aria-label="Left Align"
+              >
+                <i className="fa fa-search" aria-hidden="true">
+                  {" "}
+                </i>
+              </button>
+
             </div>
 
             <div className="col-md-1 cart-wthree" style={{ float: "right" }}>

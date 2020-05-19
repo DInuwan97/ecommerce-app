@@ -15,7 +15,7 @@ export default class ProductListCard extends Component {
     };
   }
 
-  componentDidMount() {
+  getItemDetails=()=>{
     let type;
     let url='/api/items/'
     if((type=this.props.match.params.type)){
@@ -35,6 +35,9 @@ export default class ProductListCard extends Component {
     })
     
     
+  }
+  componentDidMount() {
+    this.getItemDetails();
   }
 
   render() {
