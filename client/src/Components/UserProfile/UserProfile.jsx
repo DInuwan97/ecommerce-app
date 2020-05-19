@@ -134,7 +134,7 @@ onChangeHandler = e =>{
       <div className={classes.header}>
         <center>
         {imgPreview}
-        <center><h2 style={{color:'black'}}>{this.state.firstName} {this.state.lastName}</h2></center>
+             <center><h2 style={{color:'black'}}>{this.state.firstName} {this.state.lastName}</h2></center>
              <p style={{color:'black'}}>{this.state.userDesignation}</p>
              <span class="label label-primary">{this.props.companyName}</span>
         </center>

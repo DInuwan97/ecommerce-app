@@ -7,7 +7,7 @@ export default class Footer extends Component {
       <div className="footer">
         <div className="container">
           <div className="col-md-3 footer-grids fgd1">
-            <a href="index.html">
+            <a href="/">
               <img src="/images/logo2.png" alt=" " />
               <h3>
                 FASHION<span>CLUB</span>
@@ -17,18 +17,18 @@ export default class Footer extends Component {
               <li>1234k Avenue, 4th block,</li>
               <li>Colombo.</li>
               <li>
-                <a href="mailto:info@example.com">info@bionics.com</a>
+                <a href="mailto:FashionStoreBionics@gmail.com">FashionStoreBionics@gmail.com</a>
               </li>
-              <a href="#">
+              <a href="https://www.twitter.com">
                 <i className="fa fa-twitter" aria-hidden="true"></i>
               </a>
-              <a href="#">
+              <a href="https://www.dribble.com">
                 <i className="fa fa-dribbble" aria-hidden="true"></i>
               </a>
-              <a href="#">
+              <a href="https://www.facebook.com">
                 <i className="fa fa-facebook" aria-hidden="true"></i>
               </a>
-              <a href="#">
+              <a href="https://www.linkedin.com">
                 <i className="fa fa-linkedin" aria-hidden="true"></i>
               </a>
             </ul>
@@ -37,16 +37,10 @@ export default class Footer extends Component {
             <h4>Information</h4>
             <ul>
               <li>
-                <a href="contact.html">Contact Us</a>
+                <a href="/contactus">Contact Us</a>
               </li>
               <li>
-                <a href="icons.html">Web Icons</a>
-              </li>
-              <li>
-                <a href="typography.html">Typography</a>
-              </li>
-              <li>
-                <a href="faq.html">FAQ's</a>
+                <a href="/faq">FAQ's</a>
               </li>
             </ul>
           </div>
@@ -54,16 +48,16 @@ export default class Footer extends Component {
             <h4>Shop</h4>
             <ul>
               <li>
-                <a href="jewellery.html">Jewellery</a>
+                <a href="/jewellery">Jewellery</a>
               </li>
               <li>
-                <a href="cosmetics.html">Cosmetics</a>
+                <a href="/cosmetics">Cosmetics</a>
               </li>
               <li>
-                <a href="Shoes.html">Shoes</a>
+                <a href="/Shoes">Shoes</a>
               </li>
               <li>
-                <a href="deos.html">Deos</a>
+                <a href="/deos">Deos</a>
               </li>
             </ul>
           </div>
@@ -71,16 +65,13 @@ export default class Footer extends Component {
             <h4>My Account</h4>
             <ul>
               <li>
-                <a href="login.html">Login</a>
+                <a href="/login">Login</a>
               </li>
               <li>
-                <a href="register.html">Register</a>
+                <a href="/register">Register</a>
               </li>
               <li>
-                <a href="recommended.html">Recommended </a>
-              </li>
-              <li>
-                <a href="payment.html">Payments</a>
+                <a href="/cart">Cart</a>
               </li>
             </ul>
           </div>

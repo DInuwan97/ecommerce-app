@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import classes from "./Summary.module.css";
+import spinnerClasses from './Spinner.module.css';
 
 const Summary = props => {
-  console.log(props.summary);
+  // console.log(props.summary);
+  const [spinner, setSpinner] = useState(false);
+
+  const order = () => {
+    if (!props.orderError) {
+      setSpinner(true);
+    }
+    props.order();
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -27,8 +37,16 @@ const Summary = props => {
       </div>
 
       <div className={classes.button}>
-        <button className={classes.button_buy}>ORDER</button>
+        {spinner ? <div className={spinnerClasses.loader}>Loading...</div> :
+          <button className={classes.button_buy} onClick={order} >ORDER</button>
+        }
       </div>
+
+      {props.orderError ?
+        <div className={classes.error}>
+          Please fill all selected details.
+      </div> : null}
+
     </div>
   );
 

@@ -4,7 +4,14 @@ import SalesServicersDataRow from './SalesServicersDataRow';
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
+
 export default class SalesServicersList extends Component {
+
+  
+componentDidUpdate = () => {
+  $('#salesServicersList-table').DataTable()
+}
+
   render() {
 
     const { approveSalesServicer,companyName } = this.props;
@@ -16,7 +23,7 @@ export default class SalesServicersList extends Component {
         </div>
        
         <div className="card-body">
-          <table id="example1" className="table table-bordered table-striped">
+          <table id="salesServicersList" className="table table-bordered table-striped">
             <thead>
             <tr>
               <th>Username</th>

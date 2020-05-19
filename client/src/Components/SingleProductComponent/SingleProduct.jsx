@@ -3,6 +3,7 @@ import ReviewMain from '../Review/ReviewMain/ReviewMain';
 import './assets/css/single.css';
 import swal from 'sweetalert';
 import Axios from 'axios';
+import jwt_decode from 'jwt-decode'
 
 class SingleProduct extends Component {
   constructor(props) {
@@ -16,22 +17,80 @@ class SingleProduct extends Component {
       MyLiked: [],
       MyDisliked: [],
       Rating: [0, 0, 0, 0, 0],
+      userType: "Customer",
+
+      itemImage: "",//
+      itemColors: [],//
+      StockQuantity: 0,
+      discount: 10,//
+      description: "",
+      company: "",//
+      itemId: "",
+      itemName: "",//
+      price: 0,//
+      category: "",//
+      size: "",//
+      Brand: "",//
+
+      addedUserFirstName:'',
+      addedUserLastName:'',
+      addedUserEmail:'',
+      addedDate:'',
+      quantity:1,
+      isSelectedItem: false,
+      totalPrice: 0
+
     }
 
   }
   componentDidMount = () => {
+
+
+    if (localStorage.getItem("userLoginToken") !== null) {
+      const token = localStorage.userLoginToken;
+      const decoded = jwt_decode(token);
+      this.setState({
+        addedUserFirstName: decoded.firstName,
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
+      })
+    }
+
+    
+    this.getItemDetails();
     this.getCommentData();
     this.getStarRating();
     this.getMyRating();
-    
+
   }
 
+  getItemDetails = () => {
+    const itemId = this.props.match.params.id;
+    const url = `/api/items/${itemId}`;
+    Axios.get(url).then(res => {
+      this.setState({
+        itemImage: res.data.itemImage,
+        itemColors: res.data.color,
+        StockQuantity: res.data.stockQuantity,
+        discount: res.data.discount,
+        description: res.data.description,
+        company: res.data.company,
+        itemId: res.data._id,
+        itemName: res.data.itemName,
+        price: res.data.price,
+        category: res.data.category,
+        size: res.data.size,
+        Brand: res.data.Brand
+      })
 
+    }).catch(err => {
+      console.log(err);
 
-
+    })
+  }
 
   getStarRating = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/getRating/${id}`;
     Axios.get(url).then(res => {
       console.log(res.data);
@@ -47,17 +106,19 @@ class SingleProduct extends Component {
           AverageStarRating.push(0);
         }
       }
+
       this.setState({
         AverageStarRating,
         AverageRating
       });
+
 
     });
 
   }
 
   getMyRating = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/MyRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -71,7 +132,7 @@ class SingleProduct extends Component {
           console.log(res.data.MyRating);
           const MyRating = [0, 0, 0, 0, 0];
           if (res.data.MyRating >= 1 && res.data.MyRating <= 5) {
-            MyRating[5 - res.data.MyRating] = 1;
+            MyRating[res.data.MyRating-1] = 1;
             this.setState({
               Rating: MyRating
             })
@@ -106,7 +167,7 @@ class SingleProduct extends Component {
     }
   }
   confirmRate = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/newRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -120,6 +181,10 @@ class SingleProduct extends Component {
           break;
         }
       }
+      if (data.starRating == 0) {
+        return;
+      }
+
       Axios.patch(url, data,
         {
           headers: {
@@ -148,7 +213,7 @@ class SingleProduct extends Component {
     }
   }
   getCommentData = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/review/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -165,14 +230,19 @@ class SingleProduct extends Component {
         const MyLikedData = res.data.myLiked;
         const MyLiked = [];
         const MyDisliked = [];
-        console.log(MyLikedData);
+        const userType = res.data.userType;
+        if (userType) {
+          this.setState({
+            userType
+          });
+        }
 
         if (MyLikedData) {
           for (let index = 0; index < MyLikedData.length; index++) {
-            if (MyLikedData[index].liked) {
+            if (MyLikedData[index].status == 1) {
               MyLiked.push(MyLikedData[index].reviewId);
             }
-            if (MyLikedData[index].disliked) {
+            if (MyLikedData[index].status == (-1)) {
               MyDisliked.push(MyLikedData[index].reviewId);
             }
           }
@@ -195,6 +265,7 @@ class SingleProduct extends Component {
       })
     } else {
       Axios.get(url).then(res => {
+
         const CommentDocuments = res.data.CommentDocuments;
         const Size = res.data.CommentDocuments.length;
         this.setState({
@@ -214,7 +285,7 @@ class SingleProduct extends Component {
 
 
   addReview = () => {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     const url = `/api/Review/newReviewComment/${id}`;
     const token = localStorage.getItem('userLoginToken');
     if (token) {
@@ -297,7 +368,7 @@ class SingleProduct extends Component {
       });
     }
   }
-  DeleteComment = async (id) => {
+  DeleteComment = async (id, adminAccess) => {
     const itemId = this.props.match.params.id;
     const url = `/api/Review/deleteReviewComment/${itemId}`;
 
@@ -310,6 +381,7 @@ class SingleProduct extends Component {
         },
         data: {
           reviewID: id,
+          adminAccess
         }
       }).then(res => {
         console.log(res.data);
@@ -341,6 +413,43 @@ class SingleProduct extends Component {
     this.props.history.push("/cart");
   };
 
+
+  addProductintoCart=()=>{
+    Axios({
+      method:'post',
+      url:`/api/cart/add`,
+      data:{
+          itemName:this.state.itemName,
+          price:this.state.price,
+          category:this.state.category,
+          itemImage:this.state.itemImage,
+          size:this.state.size,
+          brand:this.state.brand,
+          discount:this.state.discount,
+          addedUserFirstName:this.state.addedUserFirstName,
+          addedUserLastName: this.state.addedUserLastName,
+          addedUserEmail:this.state.addedUserEmail,
+          rating:this.state.rating,
+          quantity:this.state.quantity,
+          company:this.state.company,
+          isSelectedItem: false,
+          totalPrice: 0
+      }
+    })
+    .then(()=>{
+      swal({
+        title: "Status",
+        text: "Done",
+        icon: 'success'
+      });
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+
+
   render() {
     return (
       <div className="products">
@@ -350,11 +459,11 @@ class SingleProduct extends Component {
               <div className="col-md-6 single-top-left">
                 <div className="flexslider">
                   <ul className="slides">
-                    <li data-thumb={require("./assets/images/s1.jpg")}>
+                    <li data-thumb={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}>
                       <div className="thumb-image detail_images">
                         {" "}
                         <img
-                          src={require("./assets/images/s1.jpg")}
+                          src={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}
                           data-imagezoom="true"
                           className="img-responsive"
                           alt=""
@@ -387,7 +496,7 @@ class SingleProduct extends Component {
                 </div>
               </div>
               <div className="col-md-6 single-top-right">
-                <h3 className="item_name"> Black Handbag</h3>
+                <h3 className="item_name"> {this.state.itemName}</h3>
                 <p>
                   Processing Time: Item will be shipped out within 2-3 working
                 days.{" "}
@@ -396,7 +505,7 @@ class SingleProduct extends Component {
                   <ul>
                     {
                       this.state.AverageStarRating.map((element) => (
-                        <li>
+                        <li data-toggle="modal" data-target="#myModal">
                           <i className={element == 1 ? "fa fa-star" : element == 0.5 ? "fa fa-star-half-o" : "fa fa-star-o"} aria-hidden="true"></i>
                         </li>
                       ))
@@ -414,14 +523,19 @@ class SingleProduct extends Component {
                 </div>
                 <div className="single-price">
                   <ul>
-                    <li>$54</li>
-                    <li>
-                      <del>$60</del>
-                    </li>
-                    <li>
-                      <span className="w3off">10% OFF</span>
-                    </li>
-                    <li>Ends on: Oct,15th</li>
+                    <li>{"$" + (this.state.price - this.state.price * this.state.discount / 100)}</li>
+                    {this.state.discount == 0 ? "" :
+                      <Fragment>
+                        <li>
+                          <del>{"$" + this.state.price}</del>
+                        </li>
+
+                        <li>
+                          <span className="w3off">{this.state.discount + "%"} OFF</span>
+                        </li>
+                        <li>Ends on: Oct,15th</li>
+                      </Fragment>
+                    }
                     <li>
                       <a href="#">
                         <i className="fa fa-gift" aria-hidden="true"></i> Coupon
@@ -441,14 +555,15 @@ class SingleProduct extends Component {
                   <input type="hidden" name="w3ls1_item" value="Handbag" />
                   <input type="hidden" name="amount" value="540.00" />
                 </form>
-                <button
-                  type="submit"
-                  onClick={() => this.redirectToCart()}
+
+                
+                <button onClick={this.addProductintoCart}
                   className="w3ls-cart"
                 >
                   <i className="fa fa-cart-plus" aria-hidden="true"></i> Add to
                 cart
               </button>
+             
                 <button className="w3ls-cart w3ls-cart-like">
                   <i className="fa fa-heart-o" aria-hidden="true"></i> Add to
                 Wishlist
@@ -501,18 +616,8 @@ class SingleProduct extends Component {
                   aria-labelledby="headingOne"
                 >
                   <div className="panel-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life
-                    accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                    non cupidatat skateboard dolor brunch. Food truck quinoa
-                    nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                    aliqua put a bird on it squid single-origin coffee nulla
-                    assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                    beer labore wes anderson cred nesciunt sapiente ea proident.
-                    Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                    beer farm-to-table, raw denim aesthetic synth nesciunt you
-                    probably haven't heard of them accusamus labore sustainable
-                    VHS.
-                </div>
+                    {this.state.description}
+                  </div>
                 </div>
               </div>
               <div className="panel panel-default">
@@ -608,6 +713,9 @@ class SingleProduct extends Component {
                       MyLiked={this.state.MyLiked}
                       MyDisliked={this.state.MyDisliked}
                       itemId={this.props.match.params.id}
+                      userType={this.state.userType}
+                      getCommentData={this.getCommentData}
+                      company={this.state.company}
                     />
                   </div>
                 </div>
@@ -669,6 +777,7 @@ class SingleProduct extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
                 {/* <h2 className="modal-title" id="myModalLabel">Please rate:</h2> */}
                 <div class="swal-title" >Please rate</div>
               </div>

@@ -26,6 +26,7 @@ button:disabled {
 
 .imageFig {
   width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .image {
@@ -48,6 +49,7 @@ button:disabled {
   font-weight: 400;
   font-size: 1.5rem;
   word-wrap: break-word;
+  cursor: pointer;
 }
 
 .details__stockq {
@@ -184,9 +186,10 @@ button:disabled {
   fill: #ec2f16;
 }
 
-.plus {
-  background-color: #dad8d8;
-  border-radius: 100px;
+.minus {
+  align-items: center;
+  background-color: rgb(242, 242, 242);
+  border-radius: 60px;
   cursor: pointer;
   width: 2.5rem;
   height: 2.5rem;
@@ -195,13 +198,20 @@ button:disabled {
 
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-.plus__btn {
+.minus:disabled {
+  background-color: rgb(231, 229, 229);
+}
+
+.minus__btn {
   transform: scale(1.2);
-  fill: #737574;
+  fill: rgb(49, 49, 49);
   z-index: 50;
+}
+
+.minus__btn_deactive {
+  fill: rgb(122, 122, 122);
 }
 
 .quantity {
@@ -238,10 +248,9 @@ button:disabled {
   -moz-appearance: textfield;
 }
 
-.minus {
-  align-items: center;
-  background-color: #dad8d8;
-  border-radius: 60px;
+.plus {
+  background-color: rgb(218, 216, 216);
+  border-radius: 100px;
   cursor: pointer;
   width: 2.5rem;
   height: 2.5rem;
@@ -250,12 +259,21 @@ button:disabled {
 
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.minus__btn {
+.plus:disabled {
+  background-color: rgb(231, 229, 229);
+}
+
+.plus__btn {
   transform: scale(1.2);
-  fill: #737574;
+  fill: rgb(49, 49, 49);
   z-index: 50;
+}
+
+.plus__btn_deactive {
+  fill: rgb(122, 122, 122);
 }
 
 /******************************** custom check box ***********************************/
@@ -318,117 +336,4 @@ button:disabled {
     4px -6px 0 white, 4px -8px 0 white;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-}
-
-/***************************************** popup modal ****************************************/
-.popupModal_active {
-  display: block;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  z-index: 100;
-}
-
-.popupModal_deactive {
-  display: none;
-}
-
-/* Modal Content */
-.popupModal__content {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  filter: blur(0);
-  margin: auto;
-  padding: 20px;
-  border: 1px solid rgb(0, 229, 139);
-  box-shadow: 0px 0px 5px 0px rgba(0, 229, 139.75);
-  border-radius: 1rem;
-  width: 30%;
-  transition: all 1s ease-in;
-  animation-name: fadeIn;
-  animation-duration: 0.5s;
-  animation-delay: 0s;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.popupModal__content_1 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.popupModal__content_2 {
-  font-size: 1.5rem;
-  font-weight: 400;
-}
-
-.popupModal__content_3 {
-  margin-top: 1.8rem;
-  display: flex;
-  justify-content: start;
-}
-
-/* The Close Button */
-.popupModal__close {
-  color: #aaaaaa;
-  font-size: 2.8rem;
-  font-weight: bold;
-  transform: translateY(-0.8rem);
-}
-
-.popupModal__close:hover,
-.popupModal__close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.popupModal__btnOk {
-  font-size: 1.6rem;
-  border: none;
-  outline: none;
-  padding: 0.5rem 2rem;
-  margin-right: 1rem;
-  border-radius: 0.8rem;
-  color: #fff;
-  background-color: rgb(0, 229, 139);
-}
-
-.popupModal__btnOk:hover {
-  background-color: #3aeca5;
-}
-
-.popupModal__btnCancel {
-  font-size: 1.6rem;
-  border: none;
-  outline: none;
-  padding: 0.5rem 2rem;
-  border-radius: 0.8rem;
-  color: #000;
-  background-color: #f1eded;
-}
-
-.popupModal__btnCancel:hover {
-  background-color: #f8f8f8;
-}
-
-@keyframes fadeIn {
-  0% {
-    transform: translate(-50%, -100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(-50%, -50%);
-    opacity: 1;
-  }
 }

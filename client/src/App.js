@@ -23,67 +23,72 @@ import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 
 import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
+import Wishlist from './Components/Wishlist/Wishlist';
 
 import ContactUs from './Components/Contacts/Contacts';
+import Faq from './Components/Contacts/Faq';
 import UserProfile from './Components/UserProfile/UserProfile';
+
+
 
 class App extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
 
-		this.state ={
-			 firstName: '',
-			 lastName: '',
-			 email:'',
-			 mobile:'',
-			 isAdmin:false,
-			 isCustomer:false,
-			 isSalesManager:false,
-       isSalesServicer:false,
-       company:''
+    this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      mobile: '',
+      isAdmin: false,
+      isCustomer: false,
+      isSalesManager: false,
+      isSalesServicer: false,
+      company: ''
     }
 
-   // console.log('localstorage login token :' ,localStorage.userLoginToken);
+    // console.log('localstorage login token :' ,localStorage.userLoginToken);
   }
-  
-  componentDidMount(){
-    
-		if(localStorage.getItem("userLoginToken") !== null){
-			const token = localStorage.userLoginToken;
-			const decoded = jwt_decode(token);
-			this.setState({
-				firstName:decoded.firstName,
-				lastName:decoded.lastName,
-				email:decoded.email,
-				mobile:decoded.mobile,
-				isAdmin:decoded.isAdmin,
-				isCustomer:decoded.isCustomer,
-				isSalesManager:decoded.isSalesManager,
-        isSalesServicer:decoded.isSalesServicer,
-        company:decoded.company
-       })
-       
-       if(this.setState.isSalesManager){
-         this.setState({
-           company:decoded.company
-         })
-       }
-       //console.log('Decoded token is : ' ,decoded)
+
+  componentDidMount() {
+
+    if (localStorage.getItem("userLoginToken") !== null) {
+      const token = localStorage.userLoginToken;
+      const decoded = jwt_decode(token);
+      this.setState({
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+        email: decoded.email,
+        mobile: decoded.mobile,
+        isAdmin: decoded.isAdmin,
+        isCustomer: decoded.isCustomer,
+        isSalesManager: decoded.isSalesManager,
+        isSalesServicer: decoded.isSalesServicer,
+        company: decoded.company
+      })
+
+      if (this.setState.isSalesManager) {
+        this.setState({
+          company: decoded.company
+        })
+      }
+      //console.log('Decoded token is : ' ,decoded)
       // console.log('Decoded Company is : ' ,this.state.company)
     }
-   
 
 
-	}
 
-  render(){
+  }
 
-  console.log('Client Token : ', localStorage.userLoginToken)
-  return (
-    <Router>
-      <div className="App">
+  render() {
 
+    console.log('Client Token : ', localStorage.userLoginToken)
+    return (
+      <Router>
+        <div className="App">
+
+     
         <Header />
         <Route path="/" exact component={Home} />
         <Route path="/register" component={Register} />
@@ -91,30 +96,32 @@ class App extends Component {
         <Route exact path='/testImage' component={TestImage} />
         <Route path="/verifysecurecode" component={VerifySecureCode} />
 
-        <Route path="/:type/:id" component={SingleProduct} />
-        <Route path="/salesManager" component={SalesManager} />
-        <Route path="/itemApprove" component={itemApprove} />
-        <Route path="/category" component={Category} />
 
-        <Route path="/testb" component={TestB} />
+          <Route path="/:type/:id" component={SingleProduct} />
+          <Route path="/salesManager" component={SalesManager} />
+          <Route path="/itemApprove" component={itemApprove} />
+          <Route path="/category" component={Category} />
 
-        <Route path="/ProductCardList" component={ProductCardList} />
+          <Route path="/testb" component={TestB} />
 
-        <Route path="/ResendEmail" component={ResendEmail} />
+          <Route path="/ProductCardList" component={ProductCardList} />
 
-        <Route path="/cart" component={Cart} />
-        <Route path="/checkout" component={Checkout} />
-        
+          <Route path="/ResendEmail" component={ResendEmail} />
 
-        <Route path="/contactus" component={ContactUs} />
-        <Route path="/editMyprofile" component = {() => <UserProfile loggedEmail = {this.state.email} companyName={this.state.company}/>}/>
+          <Route path="/cart" component={Cart} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/wishlist" component={Wishlist} />
 
-        <Newsletter />
-        <Footer />
+          <Route path="/contactus" component={ContactUs} />
+          <Route path='/faq' component={Faq}/>
+          <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
 
-      </div>
-    </Router>
-  );
+          <Newsletter />
+          <Footer />
+
+        </div>
+      </Router>
+    );
 
   }
 }

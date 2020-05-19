@@ -14,16 +14,22 @@ class SendEmail extends Component {
             cc: "",
             bcc: "",
             msg: "",
-            reviewId:""
+            reviewId: "",
+            contactUsMsg: false,
+            contactUsId: ""
         }
     }
     componentDidMount() {
         if (this.props.location.state) {
             this.setState({
-                to:this.props.location.state.email,
-                subject:`Regarding the Review on our item`,
-                msg:`Your Review : ${this.props.location.state.review}`,
-                reviewId:this.props.location.state.reviewId
+                to: this.props.location.state.to,
+                subject: this.props.location.state.subject,
+                msg: this.props.location.state.msg,
+                cc: this.props.location.state.cc,
+                bcc: this.props.location.state.bcc,
+                reviewId: this.props.location.state.reviewId,
+                contactUsMsg: this.props.location.state.contactUsMsg,
+                contactUsId: this.props.location.state.contactUsId
             })
         }
 
@@ -34,7 +40,7 @@ class SendEmail extends Component {
             msg: content
         })
         console.log(editor);
-        
+
     }
 
     sendMail = () => {
@@ -50,39 +56,69 @@ class SendEmail extends Component {
                 reviewId: this.state.reviewId
             }
             const url = "/api/review/admin/sendMail"
+            swal({
+                title: "Sending...",
+                text: "1..2..3..",
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            })
             Axios.post(url, data, {
                 headers: {
                     Authorization: `bearer ${token}`
                 }
-            }).then(async res=>{
+            }).then(async res => {
+                if (this.state.contactUsMsg) {
+                    const url2 = `/api/contactus/replied/${this.state.contactUsId}`;
+                    let putData = {
+                        reply: data.msg
+                    }
+                    await Axios.put(url2, putData, {
+                        headers: {
+                            Authorization: `bearer ${token}`
+                        }
+                    }).then(res => {
+                        console.log(res.data.msg);
+                        this.setState({
+                            contactUsMsg: false,
+                            contactUsId: ""
+                        })
+                    }).catch(err => {
+                        console.log(err);
+
+                    })
+                    
+                }
                 await swal({
-                    title:"Success",
-                    text:res.data.msg,
-                    icon:'success'
+                    title: "Success",
+                    text: res.data.msg,
+                    icon: 'success'
                 });
                 this.setState({
-                    to:"",
-                    cc:"",
-                    bcc:"",
-                    msg:"",
-                    subject:"",
-                    reviewId:""
+                    to: "",
+                    cc: "",
+                    bcc: "",
+                    msg: "",
+                    subject: "",
+                    reviewId: ""
                 });
-                
-            }).catch(err=>{
+
+            }).catch(err => {
                 swal({
-                    title:"Error!",
-                    text:err.message,
-                    icon:'error'
+                    title: "Error!",
+                    text: err.message,
+                    icon: 'error'
                 })
             });
-        }else{
+
+        } else {
             swal({
-                title:"Error!",
-                text:'To/CC/Bcc , Subject and message must be filled',
-                icon:'error'
+                title: "Error!",
+                text: 'To/CC/Bcc , Subject and message must be filled',
+                icon: 'error'
             })
         }
+
 
     }
 
@@ -108,13 +144,13 @@ class SendEmail extends Component {
                             <input className="form-control" name='to' placeholder="To:" onChange={(e) => this.inputChange(e)} value={this.state.to} />
                         </div>
                         <div className="form-group">
-                            <input className="form-control" name='cc' placeholder="CC:" onChange={(e) => this.inputChange(e)}  value={this.state.cc}  />
+                            <input className="form-control" name='cc' placeholder="CC:" onChange={(e) => this.inputChange(e)} value={this.state.cc} />
                         </div>
                         <div className="form-group">
-                            <input className="form-control" name='bcc' placeholder="Bcc:" onChange={(e) => this.inputChange(e)}  value={this.state.bcc}/>
+                            <input className="form-control" name='bcc' placeholder="Bcc:" onChange={(e) => this.inputChange(e)} value={this.state.bcc} />
                         </div>
                         <div className="form-group">
-                            <input className="form-control" name='subject' placeholder="Subject:" onChange={(e) => this.inputChange(e)}value={this.state.subject} />
+                            <input className="form-control" name='subject' placeholder="Subject:" onChange={(e) => this.inputChange(e)} value={this.state.subject} />
                         </div>
                         <div className="form-group">
                             <Editor
@@ -146,7 +182,7 @@ class SendEmail extends Component {
                     {/* /.card-body */}
                     <div className="card-footer">
                         <div className="float-right">
-                            <button type="submit" className="btn btn-primary" onClick={() => this.sendMail()}><i className="far fa-envelope"  /> Send</button>
+                            <button type="submit" className="btn btn-primary" onClick={() => this.sendMail()}><i className="far fa-envelope" /> Send</button>
                         </div>
                         <button className="btn btn-default"><i className="fas fa-times" />
                             <a href="/Reviews" style={{ textDecoration: 'none', color: '#444' }}>

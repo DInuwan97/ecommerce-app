@@ -1,7 +1,7 @@
 const Item = require("../models/Item");
 const ReviewComments = require("../models/ReviewComments");
 const jwt = require("jsonwebtoken");
-
+const ReviewHelpful = require("../models/ReviewHelpful");
 module.exports = {
 
     authenticateUser: (req, res, next) => {
@@ -10,27 +10,20 @@ module.exports = {
             const bearer = bearerHeader.split(" ");
             const bearerToken = bearer[1];
             req.token = bearerToken;
-            next();
+            jwt.verify(req.token, "secretkey", (err, authData) => {
+                if (err) {
+                    return res.status(400).send({ msg: err });
+                } else {
+                    req.authData = authData;
+                    next();
+                };
+            })
         } else {
-            return res.status(400).send({msg:"Login/Signup token expired"})
+            return res.status(400).send({ msg: "Login/Signup token expired" })
         }
     },
 
-    //middleware to verify security code
-    verifyUserSecureCode: (req, res, next) => {
-        jwt.verify(req.token, "secretkey", (err, authData) => {
-            if (err) {
-                return res.status(400).send({ msg: err });
-            } else {
-                if (authData.user.secureKeyVerifyStatus == true) {
-                    req.authData = authData;
-                    next();
-                } else {
-                    return res.status(401).send({ msg: "Verify Secure Key First." })
-                }
-            };
-        })
-    },
+
 
     //middleware to check item id is valid
     verifyItem: (req, res, next) => {
@@ -65,58 +58,26 @@ module.exports = {
 
     },
 
-    updateLikeCount: (req) => {
-        var itemId = req.params.id;
-        ReviewComments.find({ item: itemId }, (err, data) => {
-            if (err) {
-                return;
-            } else {
-                data.forEach(element => {
-                    ReviewHelpful.find({ reviewID: element._id, reviewWasHelpful: true }, (err, helpfulData) => {
-                        if (err) {
-                            return;
-                        } else {
-                            ReviewComments.update({ _id: element._id }, { reviewHelpfulCount: helpfulData.length }, (err) => {
-                                if (err) {
-                                    return;
-                                }
-                            });
-                        }
-                    });
-                });
-            }
-        });
-    },
-
-    updateDislikeCount: (req) => {
-        var itemId = req.params.id;
-        ReviewComments.find({ item: itemId }, (err, data) => {
-            if (err) {
-                return;
-            } else {
-                data.forEach(element => {
-                    ReviewHelpful.find({ reviewID: element._id, reviewWasNotHelpful: true }, (err, helpfulNotData) => {
-                        if (err) {
-                            return;
-                        } else {
-                            ReviewComments.update({ _id: element._id }, { reviewNotHelpfulCount: helpfulNotData.length }, (err) => {
-                                if (err) {
-                                    return;
-                                }
-                            });
-                        }
-                    });
-                });
-            }
-        });
-    },
-
     verifyAdmin: (req, res, next) => {
         jwt.verify(req.token, "secretkey", (err, authData) => {
             if (err) {
                 return res.status(400).send({ msg: err });
             } else {
                 if (authData.isAdmin || authData.isSalesManager || authData.isSalesServicer) {
+                    req.authData = authData;
+                    next();
+                } else {
+                    return res.status(403).send({ msg: "No Authorization" })
+                }
+            };
+        })
+    },
+    verifyOnlyAdmin: (req, res, next) => {
+        jwt.verify(req.token, "secretkey", (err, authData) => {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                if (authData.isAdmin) {
                     req.authData = authData;
                     next();
                 } else {

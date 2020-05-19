@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import classes from "./CartItem.module.css";
+import PopupMessage from '../../PopupMessage/PopupMessage';
 
 const CartItem = props => {
   const [popupModal, setPopupModal] = useState({
-    class: 'popupModal_deactive',
+    isActive: false,
     activeModal: '',
     text: ''
   });
@@ -15,30 +16,39 @@ const CartItem = props => {
     price = props.item.totalPrice;
   }
 
+  // set disable styles for increse and decrease quantity buttons
+  let plusBtnStyle = 'plus__btn';
+  let minusBtnStyle = 'minus__btn';
+  if (props.item.quantity <= 1) {
+    minusBtnStyle = 'minus__btn_deactive';
+  }
+  if (props.item.quantity === props.item.stockQuantity) {
+    plusBtnStyle = 'plus__btn_deactive';
+  }
+
   //console.log(props.item.isSelected + ' ' + props.item.id);
   //console.log(props.item);
   console.log('rendered cartitem');
 
-  let isChecked = props.item.isSelected;
+  let isChecked = props.item.isSelectedItem;
 
   //////////////////////////////// methods ////////////////////////////////
   // open popup to add to wishlist
   const moveToWishlistHandler = () => {
-    if (popupModal.class == 'popupModal_deactive') {
+    if (!popupModal.isActive) {
       setPopupModal({
-        class: 'popupModal_active',
+        isActive: true,
         activeModal: 'wishlist',
         text: 'This action will move this item to the wishlist.'
       });
     }
-
   };
 
   // open popup to remove item
   const removeItemHandler = () => {
-    if (popupModal.class == 'popupModal_deactive') {
+    if (!popupModal.isActive) {
       setPopupModal({
-        class: 'popupModal_active',
+        isActive: true,
         activeModal: 'remove',
         text: 'This action will remove this item from your shopping cart.'
       });
@@ -49,36 +59,36 @@ const CartItem = props => {
   const moveOrRemove = () => {
     if (popupModal.activeModal == 'wishlist') {
       closePopup();
-      props.move(props.item.id);
+      props.move(props.item._id);
     } else {
       closePopup();
-      props.remove(props.item.id);
+      props.remove(props.item._id);
     }
   };
 
   // close popup
   const closePopup = () => {
-    if (popupModal.class == 'popupModal_active') {
-      setPopupModal({ class: 'popupModal_deactive', activeModal: '', text: '' });
+    if (popupModal.isActive) {
+      setPopupModal({ isActive: false, activeModal: '', text: '' });
     }
   };
 
   // increase quantity of a item
   const increaseQuantity = () => {
-    if (quantity === props.item.stockQuantity) {
+    if (quantity == props.item.stockQuantity) {
       return;
     }
     let number = quantity + 1;
-    props.changeQuantity(props.item.id, number);
+    props.changeQuantity(props.item._id, number);
   };
 
   // decrease quantity of a item
   const decreaseQuantity = () => {
-    if (quantity === 1) {
+    if (quantity <= 1) {
       return;
     }
     let number = quantity - 1;
-    props.changeQuantity(props.item.id, number);
+    props.changeQuantity(props.item._id, number);
   };
 
   // change item quantity using input field
@@ -90,16 +100,21 @@ const CartItem = props => {
     } else if (isNaN(number)) {
       number = 1;
     }
-    props.changeQuantity(props.item.id, number);
+    props.changeQuantity(props.item._id, number);
+  };
+
+  // redirect to single item
+  const redirectToSingleItem = (item) => {
+    console.log(item);
   };
 
   return (
     <div className={classes.container}>
       <div className={classes.check}>
-        <input className={classes.styledCheckbox} id={props.item.id} type="checkbox" value=""
+        <input className={classes.styledCheckbox} id={props.item._id} type="checkbox" value=""
           checked={isChecked}
-          onChange={() => props.select(props.item.id)} />
-        <label for={props.item.id}></label>
+          onChange={() => props.select(props.item._id)} />
+        <label for={props.item._id}></label>
       </div>
 
       <div className={classes.picture}>
@@ -110,7 +125,7 @@ const CartItem = props => {
       </div>
 
       <div className={classes.details}>
-        <div className={classes.details__name}>
+        <div className={classes.details__name} onClick={() => redirectToSingleItem(props.item)}>
           {props.item.itemName}
         </div>
         <div className={classes.details__stockq}>
@@ -152,7 +167,7 @@ const CartItem = props => {
 
         <div className={classes.actions_2}>
           <button className={classes.minus} onClick={decreaseQuantity} disabled={props.item.quantity === 1}>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" className={classes.minus__btn}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" className={classes[minusBtnStyle]}>
               <path d="M16 10c0 0.553-0.048 1-0.601 1h-10.798c-0.552 0-0.601-0.447-0.601-1s0.049-1 0.601-1h10.799c0.552 0 0.6 0.447 0.6 1z"></path>
             </svg>
           </button>
@@ -164,7 +179,7 @@ const CartItem = props => {
             </span> */}
           </div>
           <button className={classes.plus} onClick={increaseQuantity} disabled={props.item.quantity === props.item.stockQuantity}>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className={classes.plus__btn}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className={classes[plusBtnStyle]}>
               <path d="M18.984 12.984h-6v6h-1.969v-6h-6v-1.969h6v-6h1.969v6h6v1.969z"></path>
             </svg>
           </button>
@@ -172,21 +187,8 @@ const CartItem = props => {
       </div>
 
       {/*******  pop up modal ***********/}
-      <div className={classes[popupModal.class]}>
-        <div className={classes.popupModal__content}>
-          <div className={classes.popupModal__content_1}>
-            <h3>Are you sure about this?</h3>
-            <span id="close" className={classes.popupModal__close} onClick={closePopup}>&times;</span>
-          </div>
-          <div className={classes.popupModal__content_2}>
-            {popupModal.text}
-          </div>
-          <div className={classes.popupModal__content_3}>
-            <button className={classes.popupModal__btnOk} onClick={moveOrRemove}>OK</button>
-            <button className={classes.popupModal__btnCancel} onClick={closePopup}>Cancel</button>
-          </div>
-        </div>
-      </div>
+      {popupModal.isActive ? <PopupMessage content={popupModal.text} close={closePopup} action={moveOrRemove} /> : null}
+
     </div >
   );
 };
