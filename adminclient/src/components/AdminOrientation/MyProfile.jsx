@@ -2,11 +2,21 @@ import React, { Component } from 'react'
 import DashbordCardPanel from '../DashbordCardPannel/DashobordCardPanel';
 import MyProfileFunctions from '../UserProfile/MyProfileUserFunctions';
 export default class MyProfile extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+          usersList:[],
+          loggedUserDetails:''
+        }
+      }
+    
+
     render() {
-        const{loggedEmail,companyName} = this.props;
+        const{loggedEmail,companyName,usersList,loggedUserDetails} = this.props;
         return (
             <div>
-                 <DashbordCardPanel/>
+                 <DashbordCardPanel loggedUserDetails={loggedUserDetails} usersList={usersList}/>
                  <MyProfileFunctions loggedEmail={loggedEmail} companyName = {companyName}/>/>
             </div>
         )

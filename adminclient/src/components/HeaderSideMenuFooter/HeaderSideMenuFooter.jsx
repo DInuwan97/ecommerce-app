@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
 
 import {Link,withRouter} from 'react-router-dom';
-
+import axios from 'axios';
 
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
@@ -32,6 +32,9 @@ export default class HeaderSideMenuFooter extends Component {
     super(props)
 
 		this.state ={
+
+       loggedUserDetails:[],
+
 			 firstName: '',
 			 lastName: '',
 			 email:'',
@@ -41,7 +44,12 @@ export default class HeaderSideMenuFooter extends Component {
 			 isSalesManager:false,
        isSalesServicer:false,
        company:'',
-       userImageUrl:''
+       userImageUrl:'',
+
+
+       usersList:[],
+
+       noOfSalesManagersToBeApprove:[]
     }
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
@@ -60,7 +68,11 @@ export default class HeaderSideMenuFooter extends Component {
     
 		if(localStorage.getItem("userLoginToken") !== null){
 			const token = localStorage.userLoginToken;
-			const decoded = jwt_decode(token);
+      const decoded = jwt_decode(token);
+      
+      this.setState({
+        loggedUserDetails:decoded
+      })
 			this.setState({
 				firstName:decoded.firstName,
 				lastName:decoded.lastName,
@@ -82,6 +94,22 @@ export default class HeaderSideMenuFooter extends Component {
        }
        console.log('Decoded token is : ' ,decoded)
        console.log('Decoded Company is : ' ,this.state.company)
+
+    axios({
+      method:'get',
+      url:'/api/users/viewusers',
+      headers: {
+          "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+      }
+    })
+    .then((res) => {
+      const users = res.data;
+      console.log(users);
+        this.setState({
+          usersList: users,
+        });
+    });
+      console.log(this.state.user);
     }
     
     if(this.state.isCustomer === true){
@@ -89,12 +117,37 @@ export default class HeaderSideMenuFooter extends Component {
     }
 
 
-	}
+  }
+
+  getNoOfSalesManagersToBeApprove(){
+    let willApproveSalasManagersCount = 0;
+    for (let index = 0; index < this.state.usersList.length; index++) {
+      if( this.state.usersList[index].isSalesManager === true && this.state.usersList[index].adminVerification === false && this.state.usersList[index].secureKeyVerifyStatus === true){
+        willApproveSalasManagersCount++
+      } 
+    }
+    return willApproveSalasManagersCount;
+  }
+  
+  
+  
 
 
 
 
   render() {
+
+    // {this.state.usersList.map(({
+    //   _id,
+    //   isSalesManager,
+    //   adminVerification
+    // })=>{
+    //   if(isSalesManager === true && adminVerification === false){
+    //       this.setState({
+    //         noOfSalesManagersToBeApprove:noOfSalesManagersToBeApprove+1
+    //       })
+    //   }
+    // })}
     return (
 
         <div className="wrapper">
@@ -232,7 +285,10 @@ export default class HeaderSideMenuFooter extends Component {
                       <i className="nav-icon fas fa-th"></i>
                       <p>
                        Sales Approvals
-                        <span className="right badge badge-danger">New 6</span>
+                       {(this.getNoOfSalesManagersToBeApprove() > 0)&&
+                          <span className="right badge badge-danger">New {this.getNoOfSalesManagersToBeApprove()}</span>
+                       }
+                         
                       </p>
                     </a>
                   </li>
@@ -432,12 +488,12 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company}/>} />
-               <Route path ='/home' component= {HomePage}/>
+               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>} />
+              <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/itemApprove' component= {AdminItemApprove}/>
                <Route path ='/addCategory' component= {Category}/>
-               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
-               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
+               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
              
                 <Route exact path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
                 <Route path='/Compose' component={Compose}/>
@@ -447,12 +503,12 @@ export default class HeaderSideMenuFooter extends Component {
 
                 <Route exact path='/ContactUs' component={ContactUsDT}/>
 
-               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company}/>}/>
+               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
 
-                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company}/>}/>
+                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
                 
               </div>
             </section>

@@ -7,11 +7,13 @@ export default class AdminPackage extends Component {
 
     
   render() {
+
+    const{loggedEmail,companyName,usersList,loggedUserDetails} = this.props;
     return (
       <div>
           <section className="content-header">
               <div className="container-fluid">
-                    <DashbordCardPanel/>  
+                    <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails}/>  
               </div>
             </section>
 
