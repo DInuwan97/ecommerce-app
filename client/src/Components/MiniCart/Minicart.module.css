@@ -1,0 +1,65 @@
+.container {
+  width: 31vw;
+  position: fixed;
+  top: 17%;
+  right: 23%;
+  padding: 0.5rem;
+  z-index: 100;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  border: 3px solid rgba(158, 156, 156, 0.3);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(179, 176, 176, 0.5);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(179, 176, 176, 0.5);
+  box-shadow: 0px 0px 5px 0px rgba(179, 176, 176, 0.5);
+  transition: all 0.2s ease;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.container:hover {
+  border: 3px solid rgba(158, 156, 156, 0.3);
+  -webkit-box-shadow: 0px 0px 8px 0px rgba(179, 176, 176, 1);
+  -moz-box-shadow: 0px 0px 8px 0px rgba(179, 176, 176, 1);
+  box-shadow: 0px 0px 8px 0px rgba(179, 176, 176, 1);
+}
+
+.closeBtn {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.closeBtn svg {
+  margin-left: 1rem;
+  transform: scale(0.7);
+  float: right;
+  cursor: pointer;
+}
+
+.empty {
+  text-align: center;
+  font-weight: 600;
+  padding: 0 0 1rem 0;
+}
+
+.content {
+  padding: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.items {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.footer {
+  display: flex;
+}
+
+.summary {
+}
+
+.action {
+}

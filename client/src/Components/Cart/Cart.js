@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 
+
+
 import jwt_decode from 'jwt-decode'
+
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
 import Summary from './Summary/Summary';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 
 import classes from "./Cart.module.css";
+
 import axios from 'axios';
 const $ = require('jquery')
+
 
 class Cart extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+
       addedUserFirstName: '',
       addedUserLastName: '',
       addedUserEmail: '',
@@ -28,8 +34,19 @@ class Cart extends Component {
         totalDiscount: 0,
         total: 0,
         isDisabled: true
-      }
+      },
 
+      buyerDetails: {
+        firstName: 'Dinuan',
+        lastName: 'kakakd',
+        mobile: '76273',
+        email: 'sjhsud'
+      },
+
+      diliverAddress: '',
+      subPrice: '',
+      totalPrice: '',
+      totalDiscount: ''
 
     }
   }
@@ -40,11 +57,20 @@ class Cart extends Component {
     const token = localStorage.userLoginToken;
     const decoded = jwt_decode(token);
 
-    if (localStorage.getItem("userLoginToken") !== null) { 
+    if (localStorage.getItem("userLoginToken") !== null) {
+
+      const userBuyer = {
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+        mobile: decoded.mobile,
+        email: decoded.email
+      }
+
       this.setState({
         addedUserFirstName: decoded.firstName,
         addedUserLastName: decoded.lastName,
         addedUserEmail: decoded.email,
+        buyerDetails: userBuyer
       })
       console.log('Decoded Email in Cart : ', decoded.email);
     }
@@ -121,8 +147,8 @@ class Cart extends Component {
     tempItems = this.state.items.filter(item => {
       if (item._id !== id) {
         axios({
-          method:'delete',
-          url:`/api/cart/remove/${id}`,
+          method: 'delete',
+          url: `/api/cart/remove/${id}`,
         })
         // .then(res=>{
         //   return item;
@@ -236,8 +262,10 @@ class Cart extends Component {
       if (this.state.cartSummary.subtotal > 0) {
         let object = {
           items: this.state.items,
-          summary: this.state.cartSummary
+          summary: this.state.cartSummary,
+          buyerDetails: this.state.buyerDetails
         };
+        console.log(object);
         this.props.history.push({
           pathname: '/checkout',
           state: object

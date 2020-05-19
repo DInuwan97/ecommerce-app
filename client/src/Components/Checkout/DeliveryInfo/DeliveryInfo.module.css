@@ -59,48 +59,77 @@
 
 .editDetail label {
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.editDetail__1 {
+.editDetail__names {
   padding: 0 1rem 2rem 1rem;
 
   display: flex;
 }
 
-.editDetail__1__name {
+.editDetail__names__firstName {
+  padding: 0 1rem 2rem 1rem;
+  flex: 0 0 50%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.editDetail__names__lastName {
+  padding: 0 1rem 2rem 1rem;
+  flex: 0 0 50%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.editDetail__names__firstName input,
+.editDetail__names__lastName input,
+.editDetail__names__phone__input input {
   flex: 1;
-  padding: 0.2rem 1rem;
-  margin: 0 1rem;
+  padding: 0.5rem 1rem;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.6rem;
+  outline: none;
   transition: all 0.2s;
 }
 
-.editDetail__1__name input,
-.editDetail__1__phone__2 input {
-  width: 95%;
-  height: 100%;
-  padding: 0.8rem;
-  border: none;
-  outline: none;
-  align-self: center;
-  justify-self: center;
-}
-
-.editDetail__1__name:hover,
-.editDetail__1__phone__2:hover {
-  border: 1px solid rgba(0, 0, 0, 0.3);
+.editDetail__names__firstName input:hover,
+.editDetail__names__lastName input:hover,
+.editDetail__names__phone__input input:hover {
+  border: 1px solid rgba(0, 0, 0, 0.5);
   box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
 }
 
-.editDetail__1__phone {
+.editDetail__contacts {
   flex: 1;
   margin: 0 1rem;
   display: flex;
 }
 
-.editDetail__1__phone__1 {
+.editDetail__contacts__phone {
+  flex: 0 0 50%;
+  padding: 0 1rem 2rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.editDetail__names__phone__input {
+  width: 100%;
+  display: flex;
+}
+
+.editDetail__contacts__address {
+  flex: 1;
+  padding: 0 1rem 2rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.editDetail__names__phone__1 {
   padding: 0.8rem;
   flex: 0 0 20%;
   position: relative;
@@ -110,7 +139,7 @@
   box-sizing: border-box;
 }
 
-.editDetail__1__phone__1 span {
+.editDetail__names__phone__1 span {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -118,33 +147,31 @@
   align-self: center;
 }
 
-.editDetail__1__phone__2 {
+.editDetail__names__phone__2 {
   flex: 1;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0 0.6rem 0.6rem 0;
   transition: all 0.2s;
 }
 
-.editDetail__1__phone__2 input::-webkit-outer-spin-button,
-.editDetail__1__phone__2 input::-webkit-inner-spin-button {
+.editDetail__names__phone__input input::-webkit-outer-spin-button,
+.editDetail__names__phone__input input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-.editDetail__1__phone__2 input[type="number"] {
+.editDetail__names__phone__input input[type="number"] {
   -moz-appearance: textfield;
 }
 
-.editDetail__2 {
-  width: 55%;
-  padding: 0 1rem 2rem 1rem;
+.editDetail__contacts__address__textarea {
+  width: 100%;
 }
 
-.editDetail__2 textarea {
+.editDetail__contacts__address__textarea textarea {
   width: 100%;
-  margin: 0 1rem;
-  padding: 1rem 1.6rem;
+  padding: 0.5rem 1rem;
   outline: none;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.6rem;
@@ -152,14 +179,14 @@
   resize: vertical;
 }
 
-.editDetail__2 textarea:hover {
+.editDetail__contacts__address__textarea textarea:hover {
   border: 1px solid rgba(0, 0, 0, 0.3);
   box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
 }
 
 .editDetail__3 {
   width: 50%;
-  padding: 0 1rem 2rem 1rem;
+  padding: 1rem;
 }
 
 .editDetail__3 button {
