@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-
-
-
-import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode';
+import { connect } from 'react-redux';
 
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
 import Summary from './Summary/Summary';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
+import * as actionTypes from '../../Store/Actions';
 
 import classes from "./Cart.module.css";
 
@@ -20,21 +19,9 @@ class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       addedUserFirstName: '',
       addedUserLastName: '',
       addedUserEmail: '',
-      totalItems: '',
-      isAllItemsSelected: false,
-
-      items: [],
-
-      cartSummary: {
-        subtotal: 0,
-        totalDiscount: 0,
-        total: 0,
-        isDisabled: true
-      },
 
       buyerDetails: {
         firstName: 'Dinuan',
@@ -42,7 +29,6 @@ class Cart extends Component {
         mobile: '76273',
         email: 'sjhsud'
       },
-
       diliverAddress: '',
       subPrice: '',
       totalPrice: '',
@@ -79,6 +65,7 @@ class Cart extends Component {
 
   }
 
+  // USED REDUX
   getCartItems = (email) => {
     axios({
       method: 'get',
@@ -90,34 +77,34 @@ class Cart extends Component {
           console.log(product);
 
         });
-        this.setState({
-          items: res.data,
-          totalItems: cartProducts.length
-        })
-        console.log('Items details : ', this.state.items);
+        this.props.updateItems(res.data);
+        // this.setState({
+        //   items: res.data
+        // })
+        console.log('Items details : ', this.props.theItems);
       })
   }
 
 
   selectAllHandler = () => {
-    let tempItems = [...this.state.items];
+    let tempItems = [...this.props.theItems];
 
     tempItems.forEach(item => {
-      item.isSelectedItem = !this.state.isAllItemsSelected;
+      item.isSelectedItem = !this.props.isAllItemsSelected;
     });
-
     console.log(tempItems);
 
     // set summary
     let summary = this.setSummary(tempItems);
 
-    this.setState({ items: tempItems, isAllItemsSelected: !this.state.isAllItemsSelected, cartSummary: summary });
+    this.props.select(tempItems, !this.props.isAllItemsSelected, summary);
+    //this.setState({ items: tempItems, isAllItemsSelected: !this.state.isAllItemsSelected, cartSummary: summary });
   };
 
-  // select single item in the cart
+  // select single item in the cart - USED REDUX
   itemSelectHandler = (id) => {
     console.log(id);
-    let tempItems = [...this.state.items];
+    let tempItems = [...this.props.theItems];
     let allItemsSelected = true;
     tempItems.forEach(item => {
       if (item._id === id) {
@@ -130,21 +117,25 @@ class Cart extends Component {
 
     // set summary
     let summary = this.setSummary(tempItems);
+    console.log("change " + summary);
 
     if (!allItemsSelected) {
-      this.setState({ items: tempItems, isAllItemsSelected: false, cartSummary: summary });
+      this.props.select(tempItems, false, summary);
+      // this.setState({ items: tempItems, isAllItemsSelected: false, cartSummary: summary });
       return;
     }
 
-    console.log(this.state.items);
-    this.setState({ items: tempItems, cartSummary: summary });
+    console.log(this.props.theItems);
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
   };
 
-  // remove an item from the cart
+
+  // remove an item from the cart - REDUX
   removeItem = (id) => {
     console.log(id);
     let tempItems;
-    tempItems = this.state.items.filter(item => {
+    tempItems = this.props.theItems.filter(item => {
       if (item._id !== id) {
         axios({
           method: 'delete',
@@ -166,15 +157,17 @@ class Cart extends Component {
 
     // set summary
     let summary = this.setSummary(tempItems);
-    this.setState({ items: tempItems, cartSummary: summary });
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
+
   };
 
-  // add an item to wishlist
+  // add an item to wishlist - REDUX
   moveToWishList = (id) => {
     console.log(id);
     let tempItems;
     let moveItem;
-    tempItems = this.state.items.filter(item => {
+    tempItems = this.props.theItems.filter(item => {
       if (item._id !== id) {
         return item;
       } else {
@@ -188,17 +181,18 @@ class Cart extends Component {
 
     // set summary
     let summary = this.setSummary(tempItems);
-    this.setState({ items: tempItems, cartSummary: summary });
-    this.setState({ items: tempItems, cartSummary: summary });
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
+
   };
 
-  // change quantity of an item
+  // change quantity of an item - REDUX
   changeQuantity = (id, quantity) => {
-    console.log(id + ' ' + quantity);
-    let tempItems = [...this.state.items];
+    let tempItems = [...this.props.theItems];
     let subAmount = 0;
     let discount = 0;
     let isDisabled = true;
+    let summary = {};
 
     tempItems.forEach(item => {
       if (item._id === id) {
@@ -219,14 +213,16 @@ class Cart extends Component {
     if (subAmount > 0) {
       isDisabled = false;
     }
-    let summary = {
+
+    summary = {
       subtotal: subAmount,
       totalDiscount: discount,
       total: subAmount - discount,
       isDisabled: isDisabled
     };
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
 
-    this.setState({ items: tempItems, cartSummary: summary });
   };
 
   setSummary = (tempItems) => {
@@ -250,6 +246,7 @@ class Cart extends Component {
       total: subAmount - discount,
       isDisabled: isDisabled
     };
+
     return summary;
   };
 
@@ -281,18 +278,17 @@ class Cart extends Component {
         <div className={classes.leftPanel}>
           <div className={classes.selectAll}>
             <SelectAll
-              totalItems={this.totalItems}
               clicked={this.selectAllHandler}
-              selected={this.state.isAllItemsSelected}
-              totalItems={this.state.items.length} />
+              selected={this.props.isAllItemsSelected}
+              totalItems={this.props.theItems.length} />
           </div>
 
           <div className={classes.cartItems}>
-            {this.state.items.map(item =>
+            {this.props.theItems.map(item =>
               <CartItem
                 key={item._id}
                 item={item}
-                allSelected={this.state.isAllItemsSelected}
+                allSelected={this.props.isAllItemsSelected}
                 select={this.itemSelectHandler}
                 move={this.moveToWishList}
                 remove={this.removeItem}
@@ -308,13 +304,13 @@ class Cart extends Component {
         </div>
 
         <div id="rightPanel" className={classes.rightPanel} >
-          <Summary details={this.state.cartSummary} buy={this.buy} />
+          <Summary buy={this.buy} />
         </div>
       </div>
     );
 
     // check cart is empty
-    if (this.state.items.length == 0) {
+    if (this.props.theItems.length == 0) {
       content = (
         <div className={classes.emptyCart}>
           <img src={require('./assets/images/emptyCart.jpeg')} alt="Empty cart" />
@@ -343,5 +339,20 @@ $(document).ready(function () {
 //   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()))
 // });
 
+const mapStateToProps = state => {
+  return {
+    theItems: state.items,
+    summary: state.cartSummary,
+    isAllItemsSelected: state.isAllItemsSelected,
+  };
+}
 
-export default Cart;
+const mapDispatchToProps = dispatch => {
+  return {
+    updateItems: (newItems) => dispatch({ type: actionTypes.UPDATE_ITEMS, newItems: newItems }),
+    select: (items, isAllItemsSelected, summary) => dispatch({ type: actionTypes.SELECT, items: items, isAllItemsSelected: isAllItemsSelected, summary: summary }),
+    updateItemSummary: (items, summary) => dispatch({ type: actionTypes.UPDATE_ITEMS_SUMMARY, items: items, summary: summary })
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
