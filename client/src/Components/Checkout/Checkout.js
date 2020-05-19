@@ -86,7 +86,7 @@ class Checkout extends Component {
         email:res.data.email
       }
   
-  `    this.setState({
+     this.setState({
         buyerDetails:userDetails
       })
 
