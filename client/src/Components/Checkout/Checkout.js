@@ -79,17 +79,17 @@ class Checkout extends Component {
         });
 
 
-       const userDetails = {
-        firstName:res.data.firstName,
-        lastName:res.data.lastName,
-        address:res.data.address,
-        mobile:res.data.mobile,
-        email:res.data.email
-      }
-  
-     this.setState({
-        buyerDetails:userDetails
-      })
+        const userDetails = {
+          firstName: res.data.firstName,
+          lastName: res.data.lastName,
+          address: res.data.address,
+          mobile: res.data.mobile,
+          email: res.data.email
+        }
+
+        this.setState({
+          buyerDetails: userDetails
+        })
 
 
         console.log("Check out firstname : ", this.state.buyerDetails.email);
@@ -181,8 +181,8 @@ class Checkout extends Component {
           data: {
             purchasedUserEmail: this.state.buyerDetails.email,
             buyerDetails: this.state.buyerDetails,
-            items: this.state.items,
-            summary: this.state.summary
+            items: this.props.theItems,
+            summary: this.props.summary
           }
         })
           .then(res => {

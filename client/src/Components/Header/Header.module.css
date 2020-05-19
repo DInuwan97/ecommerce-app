@@ -1,0 +1,133 @@
+.usernav {
+  font-family: sans-serif;
+  float: right;
+  margin-right: 1%;
+  max-width: 15vw;
+  height: 5.2rem;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.usernav:hover {
+  background-color: #00e58b;
+}
+
+.usernav:hover .username span,
+.usernav:hover .icon span {
+  color: #ffffff;
+}
+
+.usernav:hover .icon {
+  transform: translateY(0.2rem) rotate(0);
+}
+
+.usernav:hover .links {
+  display: block;
+  visibility: visible;
+  height: auto;
+}
+
+.userimage {
+  align-self: stretch;
+  padding-left: 0.3rem;
+
+  display: flex;
+  align-items: center;
+}
+
+.imageFig {
+  height: 6.5vh;
+  width: 6.5vh;
+}
+
+.imageFig img {
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
+}
+
+.username {
+  padding-left: 0.5rem;
+}
+
+.username span {
+  justify-self: stretch;
+  font-size: 1.4rem;
+  font-weight: 100;
+  color: rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.icon {
+  padding: 0 0.5rem;
+  transform: translateY(-0.5rem) rotate(180deg);
+  transition: all 0.1s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon span {
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.7);
+  transition: all 0.2s ease;
+}
+
+.links {
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 0.5rem 0.5rem;
+  background-color: #ffffff;
+  display: none;
+  visibility: 0;
+  height: 0;
+  transition: all 10s ease-out;
+
+  /* animation-name: fadeIn;
+  animation-duration: 1s; */
+}
+
+.linksList {
+  list-style: none;
+}
+
+.link {
+  padding: 0.4rem 1rem;
+}
+
+.link:last-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  margin-top: 0.6rem;
+}
+
+.link:hover {
+  background-color: #f0ecec;
+}
+
+.link a {
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+}
+
+@keyframes fadeIn {
+  0% {
+    height: 0;
+    display: none;
+  }
+
+  100% {
+    height: auto;
+    display: block;
+  }
+}
