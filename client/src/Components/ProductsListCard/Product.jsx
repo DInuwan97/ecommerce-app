@@ -22,7 +22,7 @@ export default class Product extends Component {
         className="col-md-4 women-grids wp1 animated wow slideInUp"
         data-wow-delay=".5s"
       >
-        <a href="single.html">
+        <a href={`/${this.props.category}/${this.props.id}`}>
           <div className="product-img">
             <img src={itemImage} alt="" />
             <div className="p-mask">

@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:type", async (req, res) => {
+router.get("/ItemList/:type", async (req, res) => {
   try {
     const type=req.params.type.toLowerCase();
     const Items = await Item.find({category:type});

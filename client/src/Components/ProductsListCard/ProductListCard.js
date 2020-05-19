@@ -19,7 +19,7 @@ export default class ProductListCard extends Component {
     let type;
     let url='/api/items/'
     if((type=this.props.match.params.type)){
-      url=`/api/items/${type}`;
+      url=`/api/items/ItemList/${type}`;
     }
     axios.get(url).then((res) => {
       console.log(res.data,url);
