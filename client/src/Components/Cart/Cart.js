@@ -26,15 +26,6 @@ class Cart extends Component {
       totalItems: '',
       isAllItemsSelected: false,
 
-      items: [],
-
-      cartSummary: {
-        subtotal: 10,
-        totalDiscount: 0,
-        total: 0,
-        isDisabled: true
-      },
-
       buyerDetails: {
         firstName: 'Dinuan',
         lastName: 'kakakd',
@@ -271,8 +262,7 @@ class Cart extends Component {
   // when user clicked buy
   buy = () => {
     // selected items move to the checkout component
-    console.log('buy : ',this.state.cartSummary);
-
+   
     setTimeout(() => {
       if (this.props.summary.subtotal > 0) {
         this.props.history.push({
