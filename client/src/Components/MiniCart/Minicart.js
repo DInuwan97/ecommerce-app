@@ -60,8 +60,10 @@ class Minicart extends Component {
       console.log('Decoded Email in Cart : ', decoded.email);
     }
 
-    this.getCartItems(decoded.email);
-
+    // check if cart item already have
+    if (this.props.theItems.length == 0) {
+      this.getCartItems(decoded.email);
+    }
 
   }
 
@@ -179,7 +181,6 @@ class Minicart extends Component {
   toCart = () => {
     let finalItems = this.props.theItems;
     console.log(finalItems);
-
     // save to database and navigate to cart
     //
     //
