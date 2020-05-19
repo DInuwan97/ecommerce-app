@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './ReviewCard.css';
 import swal from 'sweetalert';
 import jwt_decode from 'jwt-decode'
+import Avatar from 'react-avatar';
 
 class ReviewCard extends Component {
     constructor(props) {
@@ -153,7 +154,9 @@ class ReviewCard extends Component {
                                     <div className="user-image col-xs-4">
                                         {
                                             this.props.commentDocument.userImageUrl == "" ?
-                                                <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> :
+                                            <Avatar name={`${this.props.commentDocument.reviewUserFirstName} ${this.props.commentDocument.reviewUserLastName}`}  round="50%" size='50' />
+                                                // <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> 
+                                                :
                                                 <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
                                         }
 

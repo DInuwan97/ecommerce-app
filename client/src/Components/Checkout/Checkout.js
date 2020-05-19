@@ -65,23 +65,33 @@ class Checkout extends Component {
       method: 'get',
       url: `/api/users/singleUser/${loggedEmail}`
     })
-      .then(res => {
-        console.log('Chekc oUT USER DATA : ', res.data);
-        const user = res.data;
-        const userBuyer = {
-          addedUserFirstName: res.data.firstName,
-          addedUserLastName: res.data.lastName,
-          addedUserAddress: res.data.address,
-          addedUserMobile: res.data.mobile
-        }
-        this.setState({
-          buyer: userBuyer
-        });
-
-        console.log(this.state.buyer);
-        console.log("Check out firstname : ", this.state.buyer.addedUserEmail);
-
+    .then(res=>{
+      ////console.log('Chekc oUT USER DATA : ',res.data);
+      const user = res.data;
+      const userBuyer = {
+        addedUserFirstName:res.data.firstName,
+        addedUserLastName:res.data.lastName,
+        addedUserAddress:res.data.address,
+        addedUserMobile:res.data.mobile,
+        addedUserEmail:res.data.email
+      }
+      this.setState({
+        buyer:userBuyer
       })
+
+      const userDetails = {
+        firstName:res.data.firstName,
+        lastName:res.data.lastName,
+        address:res.data.address,
+        mobile:res.data.mobile,
+        email:res.data.email
+      }
+      this.setState({
+        buyerDetails:userDetails
+      })
+
+      console.log("Check out firstname : ",this.state.buyerDetails.email);
+
 
   }
 
