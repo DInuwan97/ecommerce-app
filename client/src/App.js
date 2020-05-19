@@ -86,40 +86,44 @@ class App extends Component {
     console.log('Client Token : ', localStorage.userLoginToken)
     return (
       <Router>
+
         <div className="App">
 
-     
-        <Header />
-        <Route path="/" exact component={Home} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route exact path='/testImage' component={TestImage} />
-        <Route path="/verifysecurecode" component={VerifySecureCode} />
+
+          <Header />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <Route exact path='/testImage' component={TestImage} />
+            <Route path="/verifysecurecode" component={VerifySecureCode} />
 
 
-          <Route path="/:type/:id" component={SingleProduct} />
-          <Route path="/salesManager" component={SalesManager} />
-          <Route path="/itemApprove" component={itemApprove} />
-          <Route path="/category" component={Category} />
+            <Route path="/:type/:id" component={SingleProduct} />
+            <Route path="/salesManager" component={SalesManager} />
+            <Route path="/itemApprove" component={itemApprove} />
+            <Route path="/category" component={Category} />
 
-          <Route path="/testb" component={TestB} />
+            <Route path="/testb" component={TestB} />
 
-          <Route path="/ProductCardList" component={ProductCardList} />
 
-          <Route path="/ResendEmail" component={ResendEmail} />
 
-          <Route path="/cart" component={Cart} />
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/wishlist" component={Wishlist} />
+            <Route path="/ResendEmail" component={ResendEmail} />
 
-          <Route path="/contactus" component={ContactUs} />
-          <Route path='/faq' component={Faq}/>
-          <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/wishlist" component={Wishlist} />
 
+            <Route path="/contactus" component={ContactUs} />
+            <Route path='/faq' component={Faq} />
+            <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+            <Route path="/:type" component={ProductCardList} />
+          </Switch>
           <Newsletter />
           <Footer />
 
         </div>
+
       </Router>
     );
 
