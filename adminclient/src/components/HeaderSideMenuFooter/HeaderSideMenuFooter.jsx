@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
-
+import Avatar from 'react-avatar';
 import {Link,withRouter} from 'react-router-dom';
 import axios from 'axios';
 
@@ -148,6 +148,16 @@ export default class HeaderSideMenuFooter extends Component {
     //       })
     //   }
     // })}
+
+
+    
+    let imgPreviewMainMenu;
+    if (this.state.userImageUrl != '') {
+      imgPreviewMainMenu = <img src={this.state.userImageUrl} alt=''  style={{width:'40px',height:'40px',borderRadius:'100px'}}/>;
+    }else{
+      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} className="img-circle elevation-2"/>;
+    }
+    
     return (
 
         <div className="wrapper">
@@ -260,7 +270,10 @@ export default class HeaderSideMenuFooter extends Component {
              
               <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div className="image">
-                  <img src={this.state.userImageUrl} className="img-circle elevation-2" />
+                  <div className="img-circle elevation-2" >
+                    {imgPreviewMainMenu}
+                  </div>
+                 
                 </div>
                 <div className="info">
                   <a href="/MyProfile" className="d-block">{this.state.firstName}{' '}{this.state.lastName}</a>
