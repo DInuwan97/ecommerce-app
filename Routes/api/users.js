@@ -350,6 +350,10 @@ router.get("/profile", authenticateUser, (req, res) => {
 
 //have to authorixation middleweare
 router.get('/viewusers', authenticateUser,async (req,res)=>{
+
+  console.log('User lITS : ');
+
+
   try {
     const users = await User.find();
     if (!users) {

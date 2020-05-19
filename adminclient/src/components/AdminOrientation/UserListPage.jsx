@@ -5,12 +5,12 @@ export default class UserListPage extends React.Component {
   
   render(){
 
-    const{companyName} = this.props;
+    const{companyName,usersList,loggedUserDetails,getNoOfSalesManagersToBeApprove} = this.props;
     return (
     
       <div>
-          <DashbordCardPanel/>
-          <UserListDataTable companyName={companyName}/>
+          <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails}/>
+          <UserListDataTable companyName={companyName} /*getNoOfSalesManagersToBeApprove={getNoOfSalesManagersToBeApprove}*/ />
       </div>
     );
   }

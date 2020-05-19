@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from "react";
 
 import DashbordCardPanel from '../DashbordCardPannel/DashobordCardPanel'
 import FlaotAreaChart from '../FloatDataSet/AreaChart';
@@ -8,12 +8,28 @@ import SalesGraph from '../SalesGraph/SalesGraph'
 import AreaChart from '../ChartJSDataset/AreaChart';
 import DonutChart from '../ChartJSDataset/DonutChart';
 import BarChart from '../ChartJSDataset/BarChart';
-export default function HomePage() {
+
+import axios from 'axios';
+export default class HomePage extends Component{
+
+
+  constructor(props){
+    super(props);
+    this.state = {
+      usersList:[],
+      loggedUserDetails:''
+    }
+  }
+
+
+
+render(){
+
   return (
     <div>
             <section className="content-header">
               <div className="container-fluid">
-                    <DashbordCardPanel/>  
+                    <DashbordCardPanel usersList={this.props.usersList} loggedUserDetails={this.props.loggedUserDetails}/>  
               </div>
             </section>
 
@@ -66,4 +82,6 @@ export default function HomePage() {
             </section>
     </div>
   );
+
+}
 }

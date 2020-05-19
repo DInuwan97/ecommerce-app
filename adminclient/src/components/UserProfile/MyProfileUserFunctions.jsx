@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './assets/css/imageUploadPreview.css';
 import swal from 'sweetalert';
 import axios from 'axios';
+import Avatar from 'react-avatar';
 
 export default class MyProfileUserFunctions extends Component {
 
@@ -267,7 +268,7 @@ export default class MyProfileUserFunctions extends Component {
       if (this.state.file) {
         imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
       }else{
-        imgPreview = <img src="../../dist/img/user4-128x128.jpg" alt='' style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
+        imgPreview = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} />;
       }
 
   
