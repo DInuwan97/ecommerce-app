@@ -63,7 +63,18 @@ export default class VerifySecureCode extends Component {
                 title: "Congratulations!",
                 text: "Verified Successfully!",
                 icon: "success",
-                button: "Back to Login",
+                buttons: {
+                    confirm: {
+                        text: "Back to Login",
+                        value: true,
+                        visible: true,
+                        closeModal: true
+                    }
+                }
+            }).then(value=>{
+                if(value){
+                    this.props.history.push('/login');
+                }
             })
         })
         .catch(err=>{

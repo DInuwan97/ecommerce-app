@@ -26,6 +26,7 @@ import Checkout from './Components/Checkout/Checkout';
 import Wishlist from './Components/Wishlist/Wishlist';
 
 import ContactUs from './Components/Contacts/Contacts';
+import Faq from './Components/Contacts/Faq';
 import UserProfile from './Components/UserProfile/UserProfile';
 
 
@@ -112,6 +113,7 @@ class App extends Component {
           <Route path="/wishlist" component={Wishlist} />
 
           <Route path="/contactus" component={ContactUs} />
+          <Route path='/faq' component={Faq}/>
           <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
 
           <Newsletter />

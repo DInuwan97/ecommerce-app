@@ -93,7 +93,7 @@ export default class Login extends Component {
           <a href="#" className="forg-left">
             Forgot Password
           </a>
-          <a href="register.html" className="forg-right">
+          <a href="/register" className="forg-right">
             Register
           </a>
           <div className="clearfix"></div>

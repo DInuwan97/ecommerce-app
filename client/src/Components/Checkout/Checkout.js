@@ -78,17 +78,19 @@ class Checkout extends Component {
           buyer: userBuyer
         });
 
-        const userDetails = {
-          firstName: res.data.firstName,
-          lastName: res.data.lastName,
-          address: res.data.address,
-          mobile: res.data.mobile,
-          email: res.data.email
-        }
 
-        this.setState({
-          buyerDetails: userDetails
-        })
+       const userDetails = {
+        firstName:res.data.firstName,
+        lastName:res.data.lastName,
+        address:res.data.address,
+        mobile:res.data.mobile,
+        email:res.data.email
+      }
+  
+     this.setState({
+        buyerDetails:userDetails
+      })
+
 
         console.log("Check out firstname : ", this.state.buyerDetails.email);
       })

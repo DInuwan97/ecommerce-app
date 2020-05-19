@@ -19,9 +19,21 @@ class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      
       addedUserFirstName: '',
       addedUserLastName: '',
       addedUserEmail: '',
+      totalItems: '',
+      isAllItemsSelected: false,
+
+      items: [],
+
+      cartSummary: {
+        subtotal: 10,
+        totalDiscount: 0,
+        total: 0,
+        isDisabled: true
+      },
 
       buyerDetails: {
         firstName: 'Dinuan',
@@ -29,6 +41,7 @@ class Cart extends Component {
         mobile: '76273',
         email: 'sjhsud'
       },
+
       diliverAddress: '',
       subPrice: '',
       totalPrice: '',
@@ -258,7 +271,7 @@ class Cart extends Component {
   // when user clicked buy
   buy = () => {
     // selected items move to the checkout component
-    console.log('buy');
+    console.log('buy : ',this.state.cartSummary);
 
     setTimeout(() => {
       if (this.props.summary.subtotal > 0) {
