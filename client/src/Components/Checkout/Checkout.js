@@ -181,8 +181,8 @@ class Checkout extends Component {
           data: {
             purchasedUserEmail: this.state.buyerDetails.email,
             buyerDetails: this.state.buyerDetails,
-            items: this.state.items,
-            summary: this.state.summary
+            items: this.props.theItems,
+            summary: this.props.summary
           }
         })
           .then(res => {
