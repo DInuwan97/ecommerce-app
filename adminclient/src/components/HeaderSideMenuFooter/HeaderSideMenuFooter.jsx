@@ -49,7 +49,8 @@ export default class HeaderSideMenuFooter extends Component {
 
        usersList:[],
 
-       noOfSalesManagersToBeApprove:[]
+       noOfSalesManagersToBeApprove:[],
+       itemsList:[]
     }
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
@@ -111,6 +112,22 @@ export default class HeaderSideMenuFooter extends Component {
     });
       console.log(this.state.user);
     }
+
+
+    axios({
+      method:'get',
+      url:`/api/items` 
+    })
+    .then(res=>{
+      let items = res.data;
+      this.setState({
+          itemsList:items
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+ 
     
     if(this.state.isCustomer === true){
       //window.location.replace('/login');
@@ -129,7 +146,28 @@ export default class HeaderSideMenuFooter extends Component {
     return willApproveSalasManagersCount;
   }
   
-  
+  getNoOfSalesServicersToBeApproveInCompany(){
+    let willApproveSalasServicersCount = 0;
+    for (let index = 0; index < this.state.usersList.length; index++) {
+      if( this.state.usersList[index].isSalesServicer=== true && this.state.usersList[index].salasManagerVerification
+      === false && this.state.usersList[index].secureKeyVerifyStatus === true && this.state.usersList[index].company === this.state.company){
+        willApproveSalasServicersCount++
+      }
+    }
+
+    return willApproveSalasServicersCount;
+  }
+
+  getnoOfItemsToBeApproved(){
+    let noOfItemsToBeApproved = 0;
+    for (let index = 0; index < this.state.itemsList.length; index++) {
+        if(this.state.itemsList[index].company ===  this.state.company && this.state.itemsList[index].isApproved === false){
+          noOfItemsToBeApproved++
+        }
+    }
+    return noOfItemsToBeApproved;
+  }
+
   
 
 
@@ -293,27 +331,35 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
              
                   </li>
-                  <li className="nav-item">
-                    <a href="/salesManagerapprove" className="nav-link">
-                      <i className="nav-icon fas fa-th"></i>
-                      <p>
-                       Sales Approvals
-                       {(this.getNoOfSalesManagersToBeApprove() > 0)&&
-                          <span className="right badge badge-danger">New {this.getNoOfSalesManagersToBeApprove()}</span>
-                       }
-                         
-                      </p>
-                    </a>
-                  </li>
-                  <li className="nav-item has-treeview">
-                    <a href="/salesServicersList" className="nav-link">
-                      <i className="nav-icon fas fa-copy"></i>
-                      <p>
-                        Sales Servicers List   
-                      </p>
-                    </a>
-                  </li>
 
+                  {(this.state.isAdmin === true) &&
+                      <li className="nav-item">
+                             <a href="/salesManagerapprove" className="nav-link">
+                               <i className="nav-icon fas fa-th"></i>
+                               <p>
+                                Sales Approvals
+                                {(this.getNoOfSalesManagersToBeApprove() > 0)&&
+                                   <span className="right badge badge-danger">New {this.getNoOfSalesManagersToBeApprove()}</span>
+                                }
+                                  
+                               </p>
+                             </a>
+                     </li>
+                  }
+             
+                  {(this.state.isSalesManager === true) &&
+                      <li className="nav-item has-treeview">
+                          <a href="/salesServicersList" className="nav-link">
+                            <i className="nav-icon fas fa-copy"></i>
+                              <p>
+                                Sales Servicers  
+                                {(this.getNoOfSalesServicersToBeApproveInCompany() > 0) &&
+                                    <span className="right badge badge-info">New {this.getNoOfSalesServicersToBeApproveInCompany()}</span>
+                                }
+                              </p>
+                          </a>
+                      </li>
+                  }
                                 
                   <li className="nav-item has-treeview">
                     <a href="/ActiveSalesManagers" className="nav-link">
@@ -324,15 +370,19 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
+  {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/itemApprove" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
-                        Product Approvals
+                        Item Approvals
+                        {(this.getnoOfItemsToBeApproved() > 0) &&
+                          <span className="right badge badge-warning">New {this.getnoOfItemsToBeApproved()}</span>
+                        }
                       </p>
                     </a>
                   </li>
-
+  }
                   <li className="nav-item has-treeview">
                     <a href="/addCategory" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -503,7 +553,7 @@ export default class HeaderSideMenuFooter extends Component {
 
                <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>} />
               <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
-               <Route path ='/itemApprove' component= {AdminItemApprove}/>
+               <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/addCategory' component= {Category}/>
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
