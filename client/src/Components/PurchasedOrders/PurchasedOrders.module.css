@@ -17,26 +17,21 @@ blue : #0280e1
   display: flex;
 }
 
-.leftPanel {
-  margin-right: 1.29rem;
-  width: 70%;
+.sub_container {
+  width: 66%;
+  background-color: #fff;
+  padding: 1rem;
+  margin: 0 auto;
+  border-radius: 0.57rem;
 }
 
-.rightPanel {
-  flex: 1;
-  background-color: #fff;
-  border-radius: 0.57rem;
-  padding: 2rem;
-  position: fixed;
-  right: 10vw;
-  width: 22%;
-  z-index: 0;
+.header {
+  width: 100%;
+  padding: 1rem 1rem 2rem 1rem;
 }
 
-.deliveryInfo,
-.paymentInfo {
-  background-color: #fff;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  border-radius: 0.57rem;
+.header h2 {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: start;
 }

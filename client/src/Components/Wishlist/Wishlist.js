@@ -76,7 +76,7 @@ class Watchlist extends Component {
 
   render() {
     let content = (
-      < div className={classes.content} >
+      <div className={classes.content} >
         {this.state.items.map((item, index) => {
           return <WishlistItem
             key={index}
