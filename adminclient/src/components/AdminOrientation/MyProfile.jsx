@@ -16,7 +16,7 @@ export default class MyProfile extends Component {
         const{loggedEmail,companyName,usersList,loggedUserDetails} = this.props;
         return (
             <div>
-                 <DashbordCardPanel loggedUserDetails={loggedUserDetails} usersList={usersList}/>
+                 <DashbordCardPanel loggedUserDetails={loggedUserDetails} usersList={usersList} itemsList={this.props.itemsList}/>
                  <MyProfileFunctions loggedEmail={loggedEmail} companyName = {companyName}/>/>
             </div>
         )

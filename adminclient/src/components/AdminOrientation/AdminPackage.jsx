@@ -13,7 +13,7 @@ export default class AdminPackage extends Component {
       <div>
           <section className="content-header">
               <div className="container-fluid">
-                    <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails}/>  
+                    <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} itemsList={this.props.itemsList}/>  
               </div>
             </section>
 

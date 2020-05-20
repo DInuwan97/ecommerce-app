@@ -522,8 +522,8 @@ export default class HeaderSideMenuFooter extends Component {
               <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
                <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/addCategory' component= {Category}/>
-               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
-               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
              
                 <Route exact path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
                 <Route path='/Compose' component={Compose}/>
@@ -533,12 +533,12 @@ export default class HeaderSideMenuFooter extends Component {
 
                 <Route exact path='/ContactUs' component={ContactUsDT}/>
 
-               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
 
-                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
                 
               </div>
             </section>
