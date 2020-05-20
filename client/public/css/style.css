@@ -3182,3 +3182,7 @@ p.w3-agile{
 	}
 }
 /*-- //responsive--*/
+
+.mce-notification {
+	display: none !important;
+}

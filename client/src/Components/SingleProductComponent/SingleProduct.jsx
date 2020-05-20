@@ -32,11 +32,11 @@ class SingleProduct extends Component {
       size: "",
       Brand: "",
 
-      addedUserFirstName:'',
-      addedUserLastName:'',
-      addedUserEmail:'',
-      addedDate:'',
-      quantity:1,
+      addedUserFirstName: '',
+      addedUserLastName: '',
+      addedUserEmail: '',
+      addedDate: '',
+      quantity: 1,
       isSelectedItem: false,
       totalPrice: 0
 
@@ -56,7 +56,7 @@ class SingleProduct extends Component {
       })
     }
 
-    
+
     this.getItemDetails();
     this.getCommentData();
     this.getStarRating();
@@ -132,7 +132,7 @@ class SingleProduct extends Component {
           console.log(res.data.MyRating);
           const MyRating = [0, 0, 0, 0, 0];
           if (res.data.MyRating >= 1 && res.data.MyRating <= 5) {
-            MyRating[res.data.MyRating-1] = 1;
+            MyRating[res.data.MyRating - 1] = 1;
             this.setState({
               Rating: MyRating
             })
@@ -414,38 +414,38 @@ class SingleProduct extends Component {
   };
 
 
-  addProductintoCart=()=>{
+  addProductintoCart = () => {
     Axios({
-      method:'post',
-      url:`/api/cart/add`,
-      data:{
-          itemName:this.state.itemName,
-          price:this.state.price,
-          category:this.state.category,
-          itemImage:this.state.itemImage,
-          size:this.state.size,
-          brand:this.state.brand,
-          discount:this.state.discount,
-          addedUserFirstName:this.state.addedUserFirstName,
-          addedUserLastName: this.state.addedUserLastName,
-          addedUserEmail:this.state.addedUserEmail,
-          rating:this.state.rating,
-          quantity:this.state.quantity,
-          company:this.state.company,
-          isSelectedItem: false,
-          totalPrice: 0
+      method: 'post',
+      url: `/api/cart/add`,
+      data: {
+        itemName: this.state.itemName,
+        price: this.state.price,
+        category: this.state.category,
+        itemImage: this.state.itemImage,
+        size: this.state.size,
+        brand: this.state.brand,
+        discount: this.state.discount,
+        addedUserFirstName: this.state.addedUserFirstName,
+        addedUserLastName: this.state.addedUserLastName,
+        addedUserEmail: this.state.addedUserEmail,
+        rating: this.state.rating,
+        quantity: this.state.quantity,
+        company: this.state.company,
+        isSelectedItem: false,
+        totalPrice: 0
       }
     })
-    .then(()=>{
-      swal({
-        title: "Status",
-        text: "Done",
-        icon: 'success'
-      });
-    })
-    .catch(err=>{
-      console.log(err);
-    })
+      .then(() => {
+        swal({
+          title: "Status",
+          text: "Done",
+          icon: 'success'
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
 
@@ -464,28 +464,6 @@ class SingleProduct extends Component {
                         {" "}
                         <img
                           src={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}
-                          data-imagezoom="true"
-                          className="img-responsive"
-                          alt=""
-                        />{" "}
-                      </div>
-                    </li>
-                    <li data-thumb={require("./assets/images/s2.jpg")}>
-                      <div className="thumb-image">
-                        {" "}
-                        <img
-                          src={require("./assets/images/s2.jpg")}
-                          data-imagezoom="true"
-                          className="img-responsive"
-                          alt=""
-                        />{" "}
-                      </div>
-                    </li>
-                    <li data-thumb={require("./assets/images/s3.jpg")}>
-                      <div className="thumb-image">
-                        {" "}
-                        <img
-                          src={require("./assets/images/s3.jpg")}
                           data-imagezoom="true"
                           className="img-responsive"
                           alt=""
@@ -544,10 +522,7 @@ class SingleProduct extends Component {
                   </ul>
                 </div>
                 <p className="single-price-text">
-                  Fusce a egestas nibh, eget ornare erat. Proin placerat, urna et
-                  consequat efficitur, sem odio blandit enim, sit amet euismod
-                  turpis est mattis lectus. Vestibulum maximus quam et quam
-                egestas imperdiet. In dignissim auctor viverra.{" "}
+                  {this.state.description}{" "}
                 </p>
                 <form action="#" method="post">
                   <input type="hidden" name="cmd" value="_cart" />
@@ -556,14 +531,14 @@ class SingleProduct extends Component {
                   <input type="hidden" name="amount" value="540.00" />
                 </form>
 
-                
+
                 <button onClick={this.addProductintoCart}
                   className="w3ls-cart"
                 >
                   <i className="fa fa-cart-plus" aria-hidden="true"></i> Add to
                 cart
               </button>
-             
+
                 <button className="w3ls-cart w3ls-cart-like">
                   <i className="fa fa-heart-o" aria-hidden="true"></i> Add to
                 Wishlist
@@ -620,55 +595,7 @@ class SingleProduct extends Component {
                   </div>
                 </div>
               </div>
-              <div className="panel panel-default">
-                <div className="panel-heading" role="tab" id="headingTwo">
-                  <h4 className="panel-title">
-                    <a
-                      className="collapsed pa_italic"
-                      role="button"
-                      data-toggle="collapse"
-                      data-parent="#accordion"
-                      href="#collapseTwo"
-                      aria-expanded="false"
-                      aria-controls="collapseTwo"
-                    >
-                      <i
-                        className="fa fa-info-circle fa-icon"
-                        aria-hidden="true"
-                      ></i>{" "}
-                    additional information{" "}
-                      <span
-                        className="fa fa-angle-down fa-arrow"
-                        aria-hidden="true"
-                      ></span>{" "}
-                      <i
-                        className="fa fa-angle-up fa-arrow"
-                        aria-hidden="true"
-                      ></i>
-                    </a>
-                  </h4>
-                </div>
-                <div
-                  id="collapseTwo"
-                  className="panel-collapse collapse"
-                  role="tabpanel"
-                  aria-labelledby="headingTwo"
-                >
-                  <div className="panel-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life
-                    accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                    non cupidatat skateboard dolor brunch. Food truck quinoa
-                    nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                    aliqua put a bird on it squid single-origin coffee nulla
-                    assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                    beer labore wes anderson cred nesciunt sapiente ea proident.
-                    Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                    beer farm-to-table, raw denim aesthetic synth nesciunt you
-                    probably haven't heard of them accusamus labore sustainable
-                    VHS.
-                </div>
-                </div>
-              </div>
+              
               <div className="panel panel-default">
                 <div className="panel-heading" role="tab" id="headingThree">
                   <h4 className="panel-title">
