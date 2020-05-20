@@ -21,7 +21,6 @@ class ReviewCard extends Component {
 
     }
     componentDidMount() {
-        // console.log(this.props.commentDocument);
         const token = localStorage.getItem('userLoginToken');
         let userData;
         let company;
@@ -116,7 +115,6 @@ class ReviewCard extends Component {
                 closeOnClickOutside: false,
             }).then(data => {
                 let editedData = textBar.value;
-                console.log(editedData, data);
 
                 if (editedData != "" && data && editedData) {
                     if (editedData !== this.props.commentDocument.reviewMessage) {

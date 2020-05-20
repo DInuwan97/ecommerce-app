@@ -141,7 +141,6 @@ class ReviewMain extends Component {
                 Authorization: "bearer " + token,
             }
         }).catch((err) => {
-            console.log(err);
             swal({
                 title: "Error!",
                 text: err.message,

@@ -84,7 +84,6 @@ class SingleProduct extends Component {
       })
 
     }).catch(err => {
-      console.log(err);
 
     })
   }
@@ -93,7 +92,6 @@ class SingleProduct extends Component {
     const { id } = this.props.match.params;
     const url = `/api/review/getRating/${id}`;
     Axios.get(url).then(res => {
-      console.log(res.data);
 
       const AverageRating = res.data.AverageStarRating.toFixed(1);
       const AverageStarRating = [];
@@ -129,7 +127,6 @@ class SingleProduct extends Component {
             Authorization: `bearer ${token}`
           }
         }).then(res => {
-          console.log(res.data.MyRating);
           const MyRating = [0, 0, 0, 0, 0];
           if (res.data.MyRating >= 1 && res.data.MyRating <= 5) {
             MyRating[res.data.MyRating - 1] = 1;
@@ -143,7 +140,6 @@ class SingleProduct extends Component {
           }
 
         }).catch(err => {
-          console.log(err);
         });
     }
 
@@ -158,7 +154,6 @@ class SingleProduct extends Component {
         MyRating.push(0);
       }
     }
-    console.log(MyRating);
 
     if (MyRating.length == 5) {
       this.setState({
@@ -222,7 +217,6 @@ class SingleProduct extends Component {
           Authorization: `Bearer ${token}`
         }
       }).then(res => {
-        console.log(res.data);
 
         const MyComments = res.data.myCommentID;
         const CommentDocuments = res.data.CommentDocuments;
@@ -255,7 +249,6 @@ class SingleProduct extends Component {
           MyDisliked
         });
       }).catch(err => {
-        console.log(err);
 
         // swal({
         //   title: "Error",
@@ -384,7 +377,6 @@ class SingleProduct extends Component {
           adminAccess
         }
       }).then(res => {
-        console.log(res.data);
 
         swal({
           title: "Status",
@@ -409,7 +401,6 @@ class SingleProduct extends Component {
   }
 
   redirectToCart = () => {
-    console.log(this.props);
     this.props.history.push("/cart");
   };
 
@@ -444,7 +435,6 @@ class SingleProduct extends Component {
         });
       })
       .catch(err => {
-        console.log(err);
       })
   }
 
