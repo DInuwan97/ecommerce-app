@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter, Redirect } from "react-router-dom";
 
+import classes from "./Header.module.css";
 import Minicart from "../MiniCart/Minicart";
 import jwt_decode from "jwt-decode";
 //import { decode } from 'punycode';
@@ -191,59 +192,69 @@ export class Header extends Component {
     );
 
     const userLink = (
-      <div
-        className="collapse navbar-collapse"
-        id="bs-megadropdown-tabs"
-        style={{ float: "right" }}
-      >
-        <ul className="nav navbar-nav ">
-          <div className="dropdown">
-            <button
-              style={{
-                backgroundColor: "0",
-                textDecoration: "none",
-                marginTop: 8,
-                fontSize: 16,
-              }}
-              className="btn btn-link dropdown-toggle"
-              type="button"
-              id="dropdownMenu1"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="true"
-            >
-              <i
-                className="fa fa-user"
-                aria-hidden="true"
-                style={{ marginRight: 5 }}
-              ></i>
-              Hello {this.state.firstName}
-              <span style={{ marginLeft: 5 }} className="caret"></span>
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li>
-                <Link to="/editMyProfile" className="hyper">
-                  <span>My Profile</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="#">Security Policies</Link>
-              </li>
-              <li>
-                <Link to="#">Privacy Change</Link>
-              </li>
-              <li role="separator" className="divider"></li>
-              <li>
-                <Link onClick={this.logOut.bind(this)} to="#">
-                  Logout
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </ul>
+      <div className={classes.usernav}>
+        <div className={classes.userimage}>
+          <figure className={classes.imageFig}>
+            <img
+              src={require("./assets/images/user.jpg")}
+              alt="Product Image"
+              className={classes.image}
+            />
+          </figure>
+        </div>
+
+        <div className={classes.username}>
+          <span>Hello Sachin</span>
+        </div>
+
+        <div className={classes.icon}>
+          <span>&#94;</span>
+        </div>
+
+        <div className={classes.links}>
+          <ul className={classes.linksList}>
+            <li className={classes.link}>
+              <Link to="/editMyProfile" className="hyper">
+                <span>My Profile</span>
+              </Link>
+            </li>
+            <li className={classes.link}>
+              <Link to="#" className="hyper">
+                <span>My Orders</span>
+              </Link>
+            </li>
+            <li className={classes.link}>
+              <Link to="/wishlist" className="hyper">
+                <span>Wishlist</span>
+              </Link>
+            </li>
+            <li className={classes.link}>
+              <a href="#">Security Policies</a>
+            </li>
+            <li className={classes.link}>
+              <a href="#">Privacy Change</a>
+            </li>
+            <li className={classes.link}>
+              <a onClick={this.logOut.bind(this)} href="#">
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     );
-
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
     return (
       <div>
         {this.state.isMinicartActive ? (

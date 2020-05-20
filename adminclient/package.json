@@ -12,6 +12,7 @@
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
     "react": "^16.13.1",
+    "react-avatar": "^3.9.6",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
     "react-router": "^5.2.0",

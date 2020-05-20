@@ -54,7 +54,7 @@ componentDidUpdate = () => {
                     packageName  
                   }) =>{
                       if((isSalesServicer) && (secureKeyVerifyStatus)){
-                        if(company === companyName){
+                        if(company === companyName && salasManagerVerification === false){
                         return(
                         <SalesServicersDataRow
                             id={_id}
