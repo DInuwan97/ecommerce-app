@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
-
+import Avatar from 'react-avatar';
 import {Link,withRouter} from 'react-router-dom';
-
+import axios from 'axios';
 
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
@@ -32,6 +32,9 @@ export default class HeaderSideMenuFooter extends Component {
     super(props)
 
 		this.state ={
+
+       loggedUserDetails:[],
+
 			 firstName: '',
 			 lastName: '',
 			 email:'',
@@ -41,7 +44,13 @@ export default class HeaderSideMenuFooter extends Component {
 			 isSalesManager:false,
        isSalesServicer:false,
        company:'',
-       userImageUrl:''
+       userImageUrl:'',
+
+
+       usersList:[],
+
+       noOfSalesManagersToBeApprove:[],
+       itemsList:[]
     }
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
@@ -60,7 +69,11 @@ export default class HeaderSideMenuFooter extends Component {
     
 		if(localStorage.getItem("userLoginToken") !== null){
 			const token = localStorage.userLoginToken;
-			const decoded = jwt_decode(token);
+      const decoded = jwt_decode(token);
+      
+      this.setState({
+        loggedUserDetails:decoded
+      })
 			this.setState({
 				firstName:decoded.firstName,
 				lastName:decoded.lastName,
@@ -82,19 +95,107 @@ export default class HeaderSideMenuFooter extends Component {
        }
        console.log('Decoded token is : ' ,decoded)
        console.log('Decoded Company is : ' ,this.state.company)
+
+    axios({
+      method:'get',
+      url:'/api/users/viewusers',
+      headers: {
+          "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+      }
+    })
+    .then((res) => {
+      const users = res.data;
+      console.log(users);
+        this.setState({
+          usersList: users,
+        });
+    });
+      console.log(this.state.user);
     }
+
+
+    axios({
+      method:'get',
+      url:`/api/items` 
+    })
+    .then(res=>{
+      let items = res.data;
+      this.setState({
+          itemsList:items
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+ 
     
     if(this.state.isCustomer === true){
       //window.location.replace('/login');
     }
 
 
-	}
+  }
+
+  getNoOfSalesManagersToBeApprove(){
+    let willApproveSalasManagersCount = 0;
+    for (let index = 0; index < this.state.usersList.length; index++) {
+      if( this.state.usersList[index].isSalesManager === true && this.state.usersList[index].adminVerification === false && this.state.usersList[index].secureKeyVerifyStatus === true){
+        willApproveSalasManagersCount++
+      } 
+    }
+    return willApproveSalasManagersCount;
+  }
+  
+  getNoOfSalesServicersToBeApproveInCompany(){
+    let willApproveSalasServicersCount = 0;
+    for (let index = 0; index < this.state.usersList.length; index++) {
+      if( this.state.usersList[index].isSalesServicer=== true && this.state.usersList[index].salasManagerVerification
+      === false && this.state.usersList[index].secureKeyVerifyStatus === true && this.state.usersList[index].company === this.state.company){
+        willApproveSalasServicersCount++
+      }
+    }
+
+    return willApproveSalasServicersCount;
+  }
+
+  getnoOfItemsToBeApproved(){
+    let noOfItemsToBeApproved = 0;
+    for (let index = 0; index < this.state.itemsList.length; index++) {
+        if(this.state.itemsList[index].company ===  this.state.company && this.state.itemsList[index].isApproved === false){
+          noOfItemsToBeApproved++
+        }
+    }
+    return noOfItemsToBeApproved;
+  }
+
+  
 
 
 
 
   render() {
+
+    // {this.state.usersList.map(({
+    //   _id,
+    //   isSalesManager,
+    //   adminVerification
+    // })=>{
+    //   if(isSalesManager === true && adminVerification === false){
+    //       this.setState({
+    //         noOfSalesManagersToBeApprove:noOfSalesManagersToBeApprove+1
+    //       })
+    //   }
+    // })}
+
+
+    
+    let imgPreviewMainMenu;
+    if (this.state.userImageUrl != '') {
+      imgPreviewMainMenu = <img src={this.state.userImageUrl} alt=''  style={{width:'40px',height:'40px',borderRadius:'100px'}}/>;
+    }else{
+      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} className="img-circle elevation-2"/>;
+    }
+    
     return (
 
         <div className="wrapper">
@@ -207,7 +308,10 @@ export default class HeaderSideMenuFooter extends Component {
              
               <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div className="image">
-                  <img src={this.state.userImageUrl} className="img-circle elevation-2" />
+                  <div className="img-circle elevation-2" >
+                    {imgPreviewMainMenu}
+                  </div>
+                 
                 </div>
                 <div className="info">
                   <a href="/MyProfile" className="d-block">{this.state.firstName}{' '}{this.state.lastName}</a>
@@ -227,24 +331,35 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
              
                   </li>
-                  <li className="nav-item">
-                    <a href="/salesManagerapprove" className="nav-link">
-                      <i className="nav-icon fas fa-th"></i>
-                      <p>
-                       Sales Approvals
-                        <span className="right badge badge-danger">New 6</span>
-                      </p>
-                    </a>
-                  </li>
-                  <li className="nav-item has-treeview">
-                    <a href="/salesServicersList" className="nav-link">
-                      <i className="nav-icon fas fa-copy"></i>
-                      <p>
-                        Sales Servicers List   
-                      </p>
-                    </a>
-                  </li>
 
+                  {(this.state.isAdmin === true) &&
+                      <li className="nav-item">
+                             <a href="/salesManagerapprove" className="nav-link">
+                               <i className="nav-icon fas fa-th"></i>
+                               <p>
+                                Sales Approvals
+                                {(this.getNoOfSalesManagersToBeApprove() > 0)&&
+                                   <span className="right badge badge-danger">New {this.getNoOfSalesManagersToBeApprove()}</span>
+                                }
+                                  
+                               </p>
+                             </a>
+                     </li>
+                  }
+             
+                  {(this.state.isSalesManager === true) &&
+                      <li className="nav-item has-treeview">
+                          <a href="/salesServicersList" className="nav-link">
+                            <i className="nav-icon fas fa-copy"></i>
+                              <p>
+                                Sales Servicers  
+                                {(this.getNoOfSalesServicersToBeApproveInCompany() > 0) &&
+                                    <span className="right badge badge-info">New {this.getNoOfSalesServicersToBeApproveInCompany()}</span>
+                                }
+                              </p>
+                          </a>
+                      </li>
+                  }
                                 
                   <li className="nav-item has-treeview">
                     <a href="/ActiveSalesManagers" className="nav-link">
@@ -255,15 +370,19 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
+  {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/itemApprove" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
-                        Product Approvals
+                        Item Approvals
+                        {(this.getnoOfItemsToBeApproved() > 0) &&
+                          <span className="right badge badge-warning">New {this.getnoOfItemsToBeApproved()}</span>
+                        }
                       </p>
                     </a>
                   </li>
-
+  }
                   <li className="nav-item has-treeview">
                     <a href="/addCategory" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -432,12 +551,12 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company}/>} />
-               <Route path ='/home' component= {HomePage}/>
-               <Route path ='/itemApprove' component= {AdminItemApprove}/>
+               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>} />
+              <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/addCategory' component= {Category}/>
-               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company}/>}/>
-               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company}/>}/>
+               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
              
                 <Route exact path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
                 <Route path='/Compose' component={Compose}/>
@@ -447,12 +566,12 @@ export default class HeaderSideMenuFooter extends Component {
 
                 <Route exact path='/ContactUs' component={ContactUsDT}/>
 
-               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company}/>}/>
+               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
 
-                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company}/>}/>
+                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
                 
               </div>
             </section>

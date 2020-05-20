@@ -19,18 +19,18 @@ class SingleProduct extends Component {
       Rating: [0, 0, 0, 0, 0],
       userType: "Customer",
 
-      itemImage: "",//
-      itemColors: [],//
+      itemImage: "",
+      itemColors: [],
       StockQuantity: 0,
-      discount: 10,//
+      discount: 0,
       description: "",
-      company: "",//
+      company: "",
       itemId: "",
-      itemName: "",//
-      price: 0,//
-      category: "",//
-      size: "",//
-      Brand: "",//
+      itemName: "",
+      price: 0,
+      category: "",
+      size: "",
+      Brand: "",
 
       addedUserFirstName:'',
       addedUserLastName:'',

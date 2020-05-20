@@ -47,6 +47,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/ItemList/:type", async (req, res) => {
+  try {
+    const type=req.params.type.toLowerCase();
+    const Items = await Item.find({category:type});
+    if (!Items) {
+      return res.status(400).json({ msg: "No Items Found" });
+    }
+
+    res.json(Items);
+    console.log(Items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
 //getting a specific item
 //publuic access
 router.get("/:id", async (req, res) => {
@@ -122,6 +138,7 @@ router.post(
       addedBy,
       company
     } = req.body;
+    category = category.toLowerCase();
     const checkItemExist = await Item.findOne({ itemName });
     let result = null;
     let newItem = null;
