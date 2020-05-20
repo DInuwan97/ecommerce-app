@@ -268,7 +268,7 @@ export default class MyProfileUserFunctions extends Component {
       if (this.state.file) {
         imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
       }else{
-        imgPreview = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} />;
+        imgPreview = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} round="50%" size='120'/>;
       }
 
   
@@ -445,8 +445,8 @@ export default class MyProfileUserFunctions extends Component {
                        <div className="post">
                             <div className="user-block">
 
-                            {(rev.userImageUrl == '') &&
-                              <Avatar name={rev.reviewUserFirstName+ ' ' +rev.reviewUserLastName} className="img-circle img-bordered-sm"/>
+                            {(rev.userImageUrl == '') &&                               
+                                <Avatar name={rev.reviewUserFirstName+ ' ' +rev.reviewUserLastName} round="50%" size='40' className="img-circle elevation-2"/>
                             }
 
                             {(rev.userImageUrl != '') &&
