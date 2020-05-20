@@ -440,11 +440,19 @@ export default class MyProfileUserFunctions extends Component {
                 <div className="tab-content">
                   <div className="active tab-pane" id="activity">
                     
-                  {this.state.reviewList.slice(0,3).map((rev) => (
+                  {this.state.reviewList.slice(0,9).map((rev) => (
 
                        <div className="post">
                             <div className="user-block">
+
+                            {(rev.userImageUrl == '') &&
+                              <Avatar name={rev.reviewUserFirstName+ ' ' +rev.reviewUserLastName} className="img-circle img-bordered-sm"/>
+                            }
+
+                            {(rev.userImageUrl != '') &&
                               <img className="img-circle img-bordered-sm" src={rev.userImageUrl} />
+                            }
+
                               <span className="username">
                                 <a href="#">{rev.reviewUserFirstName} {rev.reviewUserLastName}</a>
                                 <a href="#" className="float-right btn-tool"><i className="fas fa-times"></i></a>
