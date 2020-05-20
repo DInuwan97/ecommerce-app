@@ -3,7 +3,10 @@ const nodemailer = require('nodemailer');
 const contactUs = require('../../models/ContactUs');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+
+const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
+const authenticateUser = require("../../middleware/ReviewMiddleware").authenticateUser;
+router.get('/',authenticateUser,verifyAdmin, (req, res) => {
     contactUs.find((err, data) => {
         if (err) {
             res.status(400).send({ msg: err });
@@ -62,9 +65,9 @@ router.post('/', async (req, res) => {
     }
 });
 
-const authenticateUser = require("../../middleware/ReviewMiddleware").authenticateUser;
+
 const verifyOnlyAdmin = require('../../middleware/ReviewMiddleware').verifyOnlyAdmin;
-const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
+
 router.put('/replied/:id', authenticateUser, verifyAdmin, async (req, res) => {
     const id = req.params.id;
     const reply = req.body.reply;
