@@ -29,8 +29,8 @@ import AdminPackage from '../AdminOrientation/AdminPackage';
 
 export default class HeaderSideMenuFooter extends Component {
 
-  constructor(props){
-    super(props)
+  constructor(props,location){
+    super(props,location)
 
 		this.state ={
 
@@ -519,12 +519,13 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-
-              {(this.state.isAdmin === true)?
-               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} /> :
-               <Route path = '/404NotFound' component = {()=> <NotFound404/>}/>
+              <Route path = '/404NotFound' component = {()=> <NotFound404/>}/>
+              {((this.state.isSalesManager === true))&&
+               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} />
+              
+        
               }
-<Route exact path ='/' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+              <Route exact path ='/' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
 
             
                <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
