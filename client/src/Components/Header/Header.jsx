@@ -72,6 +72,8 @@ export class Header extends Component {
     this.setState({ isMinicartActive: false });
   };
 
+  openChangePassword = () => {};
+
   render() {
     let imgPreviewMainMenu;
     if (this.state.userImageUrl != "") {
@@ -80,7 +82,11 @@ export class Header extends Component {
           src={this.state.userImageUrl}
           alt="Product Image"
           className={classes.image}
-          style={{ width: "40px", height: "40px", borderRadius: "100px" }}
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "100px",
+          }}
         />
       );
     } else {
@@ -131,7 +137,7 @@ export class Header extends Component {
           <span>&#94;</span>
         </div>
 
-        <div className={classes.links}>
+        <div id="links" className={classes.links}>
           <ul className={classes.linksList}>
             <li className={classes.link}>
               <Link to="/editMyProfile">
@@ -153,6 +159,11 @@ export class Header extends Component {
             </li>
             <li className={classes.link}>
               <a href="#">Privacy Change</a>
+            </li>
+            <li className={classes.link}>
+              <a href="#" onClick={this.openChangePassword}>
+                Change Password
+              </a>
             </li>
             <li className={classes.link}>
               <a onClick={this.logOut.bind(this)} href="#">
