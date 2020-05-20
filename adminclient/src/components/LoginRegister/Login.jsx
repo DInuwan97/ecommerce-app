@@ -42,13 +42,16 @@ export default class Login extends Component {
             if(res){
               console.log('Login Res is :', res.token);
               if(res.isSalesManager === true || res.isAdmin === true){
-                window.location.replace('/home');
+                window.location.replace('/');
               }else{
                 swal({
                   title: "Oops!!!",
                   text: "Your are Not Authorized to Admin Panel",
                   icon: "error",
                   button: true,
+                })
+                .then(res=>{
+                  localStorage.removeItem("userLoginToken");
                 })
               }
              

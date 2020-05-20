@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route,Switch,Redirect} from "react-router-dom";
 import Avatar from 'react-avatar';
 import {Link,withRouter} from 'react-router-dom';
 import axios from 'axios';
+
 
 import jwt_decode from 'jwt-decode'
 import HomePage from '../AdminOrientation/HomePage';
@@ -13,7 +14,7 @@ import SalesServicersList from '../AdminOrientation/SalesServicersApproveList';
 import ActiveSalesManagers from '../AdminOrientation/ActiveSalesManagers';
 import AddDiscount from '../SalesManagerAddDiscount/AddDiscount'
 
-
+import NotFound404 from './../NotFound404';
 import ReviewTable from '../ReviewDataTable/ReviewDataTable';
 import Compose from '../ReviewDataTable/SendEmail';
 import SingleReviews from '../ReviewDataTable/SingleItemReview';
@@ -518,8 +519,14 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} />
-              <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+
+              {(this.state.isAdmin === true)?
+               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} /> :
+               <Route path = '/404NotFound' component = {()=> <NotFound404/>}/>
+              }
+<Route exact path ='/' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+
+            
                <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/addCategory' component= {Category}/>
                <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
