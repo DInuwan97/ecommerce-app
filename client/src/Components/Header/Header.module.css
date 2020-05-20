@@ -111,7 +111,10 @@
 }
 
 .link {
-  padding: 0.4rem 1rem;
+  width: 100%;
+
+  display: flex;
+  justify-content: stretch;
 }
 
 .link:last-child {
@@ -124,6 +127,8 @@
 }
 
 .link a {
+  width: 100%;
+  padding: 0.4rem 1rem;
   color: rgba(0, 0, 0, 0.5);
   text-decoration: none;
 }

@@ -9,12 +9,12 @@ const WishlistItem = props => {
     <div className={classes.container}>
       <div className={classes.image}>
         <figure className={classes.imageFig}>
-          <img src={props.item.itemImage} alt="Product Image" />
+          <img src={props.item.itemImage} alt="Product Image" onClick={() => props.goto(props.item)} />
         </figure>
       </div>
 
       <div className={classes.description}>
-        <div className={classes.description__name}>
+        <div className={classes.description__name} onClick={() => props.goto(props.item)}>
           {props.item.itemName}
         </div>
         <div className={classes.description__price}>

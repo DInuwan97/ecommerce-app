@@ -119,8 +119,7 @@ const CartItem = props => {
 
       <div className={classes.picture}>
         <figure className={classes.imageFig}>
-          {/* <img src={require('./tp3.jpg')} alt="Product Image" className={classes.image} /> */}
-          <img src={props.item.itemImage} alt="Product Image" className={classes.image} />
+          <img src={props.item.itemImage} alt="Product Image" className={classes.image} onClick={() => redirectToSingleItem(props.item)} />
         </figure>
       </div>
 
