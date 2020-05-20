@@ -1,0 +1,134 @@
+.container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/******************************************** header *************************************/
+.header {
+  padding: 1rem;
+  background-color: #f8f8f8;
+  margin-bottom: 1rem;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__1 {
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.header__1__orderId {
+  padding: 0.2rem;
+  display: flex;
+}
+
+.header__1__orderDate {
+  padding: 0.2rem;
+  display: flex;
+}
+
+.header__topic {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.header__value {
+  margin-left: 0.5rem;
+}
+
+.header__2 {
+  display: flex;
+  align-items: center;
+}
+
+.header__2__orderAmount {
+  font-size: 1.3rem;
+  margin-right: 4rem;
+  display: flex;
+}
+
+.header__topic2 {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.header__value2 {
+  color: orangered;
+  margin-left: 0.6rem;
+}
+
+.header__2__delete svg {
+  fill: rgba(0, 0, 0, 0.6);
+  transform: scale(0.6);
+  cursor: pointer;
+}
+
+.header__2__delete svg:hover {
+  fill: orangered;
+  transform: scale(0.7);
+}
+
+/*********************************************** items *******************************************/
+
+.items {
+  width: 85%;
+  margin: 0 auto;
+  padding: 0 2rem 1rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.item {
+  width: 100%;
+  padding: 0.6rem 0;
+  display: flex;
+}
+
+.item:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.image {
+  flex: 0 0 15%;
+}
+
+.image img {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  scale: 1;
+}
+
+.details1 {
+  flex: 1;
+  padding: 0 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.details1__name {
+  word-wrap: break-word;
+  cursor: pointer;
+}
+
+.details2 {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.details__topic {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
+  margin-right: 0.4rem;
+}
+
+.details__value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+}
