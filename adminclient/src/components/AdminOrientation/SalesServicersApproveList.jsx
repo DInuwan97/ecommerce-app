@@ -7,7 +7,7 @@ export default class SalesServicersApproveList extends Component {
     const{companyName,usersList,loggedUserDetails} = this.props;
     return (
       <div>
-        <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails}/>
+        <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} itemsList={this.props.itemsList}/>
         <SalesManagerSalesServicersApprovalFunctions companyName={companyName}/>
       </div>
     );

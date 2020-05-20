@@ -29,7 +29,7 @@ render(){
     <div>
             <section className="content-header">
               <div className="container-fluid">
-                    <DashbordCardPanel usersList={this.props.usersList} loggedUserDetails={this.props.loggedUserDetails}/>  
+                    <DashbordCardPanel usersList={this.props.usersList} loggedUserDetails={this.props.loggedUserDetails} itemsList={this.props.itemsList}/>  
               </div>
             </section>
 

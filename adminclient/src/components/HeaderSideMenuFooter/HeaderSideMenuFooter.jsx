@@ -50,7 +50,9 @@ export default class HeaderSideMenuFooter extends Component {
        usersList:[],
 
        noOfSalesManagersToBeApprove:[],
-       itemsList:[]
+       itemsList:[],
+
+       reviewList:[]
     }
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
@@ -127,14 +129,44 @@ export default class HeaderSideMenuFooter extends Component {
     .catch(err=>{
       console.log(err);
     })
- 
-    
+
+
+    this.getReviewsOnCompany();
+    console.log('Lngth of revies: ',this.state.reviewList.length)
     if(this.state.isCustomer === true){
       //window.location.replace('/login');
     }
 
 
   }
+
+
+  getReviewsOnCompany(){
+    axios({
+      method:'get',
+      url:`/api/review/admin/itemsReviews/`,
+      headers: {
+        Authorization: `bearer ${localStorage.userLoginToken}`
+      }
+    })
+    .then(res=>{
+        let review = res.data.data;
+
+        this.setState({
+          reviewList:review
+        })
+        
+    })
+    
+  }
+
+
+  // getItems(){
+  //   axios({
+  //     method:'get',
+  //     url:''
+  //   })
+  // }
 
   getNoOfSalesManagersToBeApprove(){
     let willApproveSalasManagersCount = 0;
@@ -168,7 +200,16 @@ export default class HeaderSideMenuFooter extends Component {
     return noOfItemsToBeApproved;
   }
 
-  
+  getNoOfRevies(){
+    let noOfReviews = 0;
+    for (let index = 0; index < this.state.reviewList.length; index++) {
+     // if(this.state.itemsList[index].company ===  this.state.company && this.state.itemsList[index].isApproved === false){
+      noOfReviews++
+      //}
+     }
+
+     return noOfReviews;
+  }
 
 
 
@@ -433,7 +474,11 @@ export default class HeaderSideMenuFooter extends Component {
                     <a href="/Reviews" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
+             
                          Reviews
+                         {(this.getNoOfRevies() > 0) &&
+                          <span className="right badge badge-danger" style={{borderRadius:'50%',width:20,height:20}}>{this.getNoOfRevies()}</span>
+                        }
                       </p>
                     </a>
                   </li>
@@ -460,92 +505,6 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
 }
  
-                  <li className="nav-item has-treeview">
-            
-                    <ul className="nav nav-treeview">
-                
-
-                      <li className="nav-item">
-                        <a href="../UI/timeline.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>Timeline</p>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="../UI/ribbons.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>Ribbons</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="nav-item has-treeview">
-                    <a href="#" className="nav-link">
-                      <i className="nav-icon fas fa-edit"></i>
-                      <p>
-                        Forms
-                        <i className="fas fa-angle-left right"></i>
-                      </p>
-                    </a>
-                    <ul className="nav nav-treeview">
-                      <li className="nav-item">
-                        <a href="../forms/general.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>General Elements</p>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="../forms/advanced.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>Advanced Elements</p>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="../forms/editors.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>Editors</p>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="../forms/validation.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>Validation</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="nav-item has-treeview">
-                    <a href="#" className="nav-link">
-                      <i className="nav-icon fas fa-table"></i>
-                      <p>
-                        Tables
-                        <i className="fas fa-angle-left right"></i>
-                      </p>
-                    </a>
-                    <ul className="nav nav-treeview">
-                      <li className="nav-item">
-                        <a href="../tables/simple.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>Simple Tables</p>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="../tables/data.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>DataTables</p>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="../tables/jsgrid.html" className="nav-link">
-                          <i className="far fa-circle nav-icon"></i>
-                          <p>jsGrid</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-              
-         
-
                 </ul>
               </nav>
             
@@ -559,12 +518,12 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 
-               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>} />
-              <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} />
+              <Route path ='/home' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
                <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/addCategory' component= {Category}/>
-               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
-               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+               <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
              
                 <Route exact path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
                 <Route path='/Compose' component={Compose}/>
@@ -574,12 +533,12 @@ export default class HeaderSideMenuFooter extends Component {
 
                 <Route exact path='/ContactUs' component={ContactUsDT}/>
 
-               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+               <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
 
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
 
-                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails}/>}/>
+                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
                 
               </div>
             </section>
