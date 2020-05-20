@@ -7,12 +7,12 @@ export default class Footer extends Component {
       <div className="footer">
         <div className="container">
           <div className="col-md-3 footer-grids fgd1">
-            <a href="/">
+            <Link to="/">
               <img src="/images/logo2.png" alt=" " />
               <h3>
                 FASHION<span>CLUB</span>
               </h3>
-            </a>
+            </Link>
             <ul>
               <li>1234k Avenue, 4th block,</li>
               <li>Colombo.</li>
@@ -37,10 +37,10 @@ export default class Footer extends Component {
             <h4>Information</h4>
             <ul>
               <li>
-                <a href="/contactus">Contact Us</a>
+                <Link to="/contactus">Contact Us</Link>
               </li>
               <li>
-                <a href="/faq">FAQ's</a>
+                <Link to="/faq">FAQ's</Link>
               </li>
             </ul>
           </div>
@@ -48,16 +48,16 @@ export default class Footer extends Component {
             <h4>Shop</h4>
             <ul>
               <li>
-                <a href="/jewellery">Jewellery</a>
+                <Link to="/jewellery">Jewellery</Link>
               </li>
               <li>
-                <a href="/cosmetics">Cosmetics</a>
+                <Link to="/cosmetics">Cosmetics</Link>
               </li>
               <li>
-                <a href="/Shoes">Shoes</a>
+                <Link to="/Shoes">Shoes</Link>
               </li>
               <li>
-                <a href="/deos">Deos</a>
+                <Link to="/deos">Deos</Link>
               </li>
             </ul>
           </div>
@@ -65,20 +65,20 @@ export default class Footer extends Component {
             <h4>My Account</h4>
             <ul>
               <li>
-                <a href="/login">Login</a>
+                <Link to="/login">Login</Link>
               </li>
               <li>
-                <a href="/register">Register</a>
+                <Link to="/register">Register</Link>
               </li>
               <li>
-                <a href="/cart">Cart</a>
+                <Link to="/cart">Cart</Link>
               </li>
             </ul>
           </div>
           <div className="clearfix"></div>
           <p className="copy-right">
             © 2020 Fashion Club . All rights reserved | Design by{" "}
-            <a href=""> Bionics.</a>
+            <Link to=""> Bionics.</Link>
           </p>
         </div>
       </div>

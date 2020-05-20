@@ -20,32 +20,39 @@ class ContactusDT extends Component {
 
     getMessages = () => {
         const url = '/api/contactus/';
-        Axios.get(url).then(async res => {
-            let repliedCount = 0;
-            let totalCount = res.data.data.length;
-            await res.data.data.forEach(element => {
-                if (element.replied) {
-                    repliedCount++;
+        const token = localStorage.getItem('userLoginToken');
+        if (token) {
+            Axios.get(url, {
+                headers: {
+                    Authorization: `bearer ${token}`
                 }
-            });
-            let notRepliedCount = totalCount - repliedCount;
-            let replyRate;
-            if (totalCount != 0)
-                replyRate = ((repliedCount / totalCount) * 100).toFixed(2);
-            else
-                replyRate = 100
-            await this.setState({
-                notRepliedCount,
-                replyRate,
-                repliedCount,
-                totalCount,
-                messages: res.data.data
-            })
-            $('#message-table').DataTable();
-        }).catch(err => {
-            console.log(err);
+            }).then(async res => {
+                let repliedCount = 0;
+                let totalCount = res.data.data.length;
+                await res.data.data.forEach(element => {
+                    if (element.replied) {
+                        repliedCount++;
+                    }
+                });
+                let notRepliedCount = totalCount - repliedCount;
+                let replyRate;
+                if (totalCount != 0)
+                    replyRate = ((repliedCount / totalCount) * 100).toFixed(2);
+                else
+                    replyRate = 100
+                await this.setState({
+                    notRepliedCount,
+                    replyRate,
+                    repliedCount,
+                    totalCount,
+                    messages: res.data.data
+                })
+                $('#message-table').DataTable();
+            }).catch(err => {
+                console.log(err);
 
-        })
+            })
+        }
     }
 
     componentDidMount = () => {

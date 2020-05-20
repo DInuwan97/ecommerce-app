@@ -9,9 +9,9 @@ export default function HomePage() {
         <div>
             <Banner/>
             <Offer/>
-            <TopProducts/>
-            <Services/>
-            <TopBrands/>
+            {/* <TopProducts/> */}
+            {/* <Services/>
+            <TopBrands/> */}
         </div>
     )
 }

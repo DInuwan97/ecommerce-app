@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Rating from "./ratings";
+import {Link} from 'react-router-dom';
+
 export default class Product extends Component {
   getDiscountPrice() {
     if (this.props.discount > 0 && this.props.discount <= 100) {
@@ -22,10 +24,10 @@ export default class Product extends Component {
         className="col-md-4 women-grids wp1 animated wow slideInUp"
         data-wow-delay=".5s"
       >
-        <a href={`/${this.props.category}/${this.props.id}`}>
+        <Link to={`/${this.props.category}/${this.props.id}`}>
           <div className="product-img">
             <img src={itemImage} alt="" />
-            <div className="p-mask">
+            {/* <div className="p-mask">
               <form action="#" method="post">
                 <input type="hidden" name="cmd" value="_cart" />
                 <input type="hidden" name="add" value="1" />
@@ -36,9 +38,9 @@ export default class Product extends Component {
                   cart
                 </button>
               </form>
-            </div>
+            </div> */}
           </div>
-        </a>
+        </Link>
 
         <Rating itemId={this.props.id} />
         <h4>{itemName}</h4>

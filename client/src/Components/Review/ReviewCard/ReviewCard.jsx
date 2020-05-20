@@ -16,20 +16,25 @@ class ReviewCard extends Component {
             bcc: "",
             msg: "",
             reviewId: "",
-            userCompany:''
+            userCompany: ''
         }
 
     }
     componentDidMount() {
-        // console.log(this.props.commentDocument);
         const token = localStorage.getItem('userLoginToken');
-        const userData = jwt_decode(token);
-        const company = userData.company;
-        
+        let userData;
+        let company;
+        if (token) {
+            userData = jwt_decode(token);
+            company = userData.company;
+        }
+
+
+
         this.setState({
             MyLiked: this.props.MyLiked,
             MyDisliked: this.props.MyDisliked,
-            userCompany:company,
+            userCompany: company,
             to: this.props.commentDocument.reviewerEmail,
             subject: `Regarding the Review on our item`,
             cc: "",
@@ -110,7 +115,6 @@ class ReviewCard extends Component {
                 closeOnClickOutside: false,
             }).then(data => {
                 let editedData = textBar.value;
-                console.log(editedData, data);
 
                 if (editedData != "" && data && editedData) {
                     if (editedData !== this.props.commentDocument.reviewMessage) {
@@ -154,7 +158,7 @@ class ReviewCard extends Component {
                                     <div className="user-image col-xs-4">
                                         {
                                             this.props.commentDocument.userImageUrl == "" ?
-                                            <Avatar name={`${this.props.commentDocument.reviewUserFirstName} ${this.props.commentDocument.reviewUserLastName}`}  round="50%" size='50' />
+                                                <Avatar name={`${this.props.commentDocument.reviewUserFirstName} ${this.props.commentDocument.reviewUserLastName}`} round="50%" size='50' />
                                                 // <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> 
                                                 :
                                                 <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
@@ -205,7 +209,7 @@ class ReviewCard extends Component {
                             </div>
                         </div>
                         <div className="col-md-1 col-xs-6 settings-button-col">
-                            {this.props.userType == "Customer" || this.state.userCompany !== this.props.company?
+                            {this.props.userType == "Customer" || this.state.userCompany !== this.props.company ?
                                 this.props.MyComment ?
                                     <div class="btn-group">
                                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -220,7 +224,7 @@ class ReviewCard extends Component {
                                 :
                                 this.props.MyComment ?
                                     <div class="btn-group" >
-                                        <button type="button"  class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="glyphicon glyphicon-option-vertical"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right">

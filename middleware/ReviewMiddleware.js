@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 const ReviewHelpful = require("../models/ReviewHelpful");
 module.exports = {
 
+    // Pre-requisites : Authorization Header - 'Bearer token' 
+    // This Middleware is used to Decode the User Token and add it to the request object so the 
+    //    Next method can use it
+    // If the user token is not provided or expired this method will end the request and return a response
     authenticateUser: (req, res, next) => {
         const bearerHeader = req.headers["authorization"];
         if (typeof bearerHeader !== "undefined") {
@@ -23,9 +27,9 @@ module.exports = {
         }
     },
 
-
-
-    //middleware to check item id is valid
+    // Pre-requisites : Params - itemId
+    // This Middleware Checks if an Item Id exist in the Database
+    // If not it stops the pipeline and sends the response 
     verifyItem: (req, res, next) => {
         var itemID = req.params.id;
         Item.find({ _id: itemID }, (err, itemDocuments) => {
@@ -42,7 +46,9 @@ module.exports = {
         });
     },
 
-    //middleware to check reviewID is correct
+    // Pre-requisites :Request Body - reviewId
+    // This Middleware Checks if an Review Id exist in the Database
+    // If not it stops the pipeline and sends the response 
     verifyReview: (req, res, next) => {
         ReviewComments.find({ _id: req.body.reviewID }, (err, data) => {
             if (err) {
@@ -57,7 +63,10 @@ module.exports = {
         });
 
     },
-
+    // Pre-requisites : authenticateUser middleware
+    // This Middleware verifys if the logged user token belongs to an admin, a Sales Maner or a 
+    // Sales Servicer.
+    // If not it stops the pipeline and sends the response 
     verifyAdmin: (req, res, next) => {
         jwt.verify(req.token, "secretkey", (err, authData) => {
             if (err) {
@@ -72,6 +81,9 @@ module.exports = {
             };
         })
     },
+    // Pre-requisites : authenticateUser middleware
+    // This Middleware verifys if the logged user token belongs to an admin
+    // If not it stops the pipeline and sends the response
     verifyOnlyAdmin: (req, res, next) => {
         jwt.verify(req.token, "secretkey", (err, authData) => {
             if (err) {
@@ -84,6 +96,40 @@ module.exports = {
                     return res.status(403).send({ msg: "No Authorization" })
                 }
             };
+        })
+    },
+    // Pre-requisites : authenticateUser middleware
+    //                  Request Body  - adminAccess - Optional
+    //                                  reviewID
+    // This Middleware verifys if the review posters user id matches the 
+    // logged in users user id. 
+    // If not it stops the pipeline and sends the response
+    // This method can be by passed by providing the bypass variable in the request body
+    verifyUserIsTheReviewPoster: (req, res, next) => {
+        authenticateUser(req, res, () => {
+            jwt.verify(req.token, "secretkey", (err, authData) => {
+                if (err) {
+                    return res.status(400).send({ msg: err });
+                } else {
+                    if (!req.body.adminAccess) {
+                        ReviewComments.findOne({ _id: req.body.reviewID }, (err, data) => {
+                            if (err) {
+                                return res.status(400).send({ msg: err });
+                            } else {
+                                if (authData._id == data.reviewedUser) {
+                                    console.log("posted");
+                                    next();
+                                } else {
+                                    return res.status(400).send({ msg: "This client didn't posted the review" });
+                                }
+                            }
+                        });
+                    } else {
+                        console.log("ByPassed");
+                        next()
+                    }
+                }
+            });
         })
     }
 }
