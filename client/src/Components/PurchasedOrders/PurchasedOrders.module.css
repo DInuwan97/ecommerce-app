@@ -1,0 +1,37 @@
+/* 
+light grey : #f8f8f8
+green : #00e58b
+blue : #0280e1
+
+1rem = 10px
+*/
+
+/************************************** basic structure ********************************************/
+
+.container {
+  width: 100%;
+  margin: 1.43rem 0;
+  padding: 1.43rem 10%;
+  background-color: #f8f8f8;
+
+  display: flex;
+}
+
+.sub_container {
+  width: 66%;
+  background-color: #fff;
+  padding: 1rem;
+  margin: 0 auto;
+  border-radius: 0.57rem;
+}
+
+.header {
+  width: 100%;
+  padding: 1rem 1rem 2rem 1rem;
+}
+
+.header h2 {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: start;
+}
