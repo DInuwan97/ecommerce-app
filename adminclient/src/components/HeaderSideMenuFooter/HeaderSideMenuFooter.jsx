@@ -383,6 +383,8 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
   }
+
+{(this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/addCategory" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -392,7 +394,7 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
-                  
+}                  
                                                    
                   <li className="nav-item has-treeview">
                     <a href="/addDiscount" className="nav-link">
@@ -403,6 +405,8 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
+
+{(this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/AdminPackage" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -412,7 +416,9 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
+}
 
+{(this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/Compose" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -421,7 +427,7 @@ export default class HeaderSideMenuFooter extends Component {
                       </p>
                     </a>
                   </li>
-
+}
                   
                   <li className="nav-item has-treeview">
                     <a href="/Reviews" className="nav-link">
@@ -442,6 +448,8 @@ export default class HeaderSideMenuFooter extends Component {
                     </a>
                   </li>
 
+
+{(this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/ContactUs" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -450,7 +458,7 @@ export default class HeaderSideMenuFooter extends Component {
                       </p>
                     </a>
                   </li>
-
+}
  
                   <li className="nav-item has-treeview">
             
