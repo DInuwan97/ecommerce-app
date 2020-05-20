@@ -16,13 +16,23 @@ export default class ProductListCard extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/items").then((res) => {
+    let type;
+    let url='/api/items/'
+    if((type=this.props.match.params.type)){
+      url=`/api/items/ItemList/${type}`;
+    }
+    axios.get(url).then((res) => {
+      console.log(res.data,url);
+      
       const items = res.data;
       this.setState({ items,isLoading:false });
 
 
       
-    });
+    }).catch(err=>{
+      console.log(err);
+      
+    })
     
     
   }

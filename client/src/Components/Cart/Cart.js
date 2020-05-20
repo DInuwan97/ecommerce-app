@@ -260,7 +260,6 @@ class Cart extends Component {
   // when user clicked buy
   buy = () => {
     // selected items move to the checkout component
-    console.log('buy : ', this.state.cartSummary);
 
     setTimeout(() => {
       if (this.props.summary.subtotal > 0) {
