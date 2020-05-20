@@ -6,7 +6,7 @@ export default class ActiveSalesManagers extends Component {
         const{companyName,usersList,loggedUserDetails} = this.props;
         return (
             <div>
-                 <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} />
+                 <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} itemsList={this.props.itemsList} />
                  <ActiveSalesManagersList/>
             </div>
         )

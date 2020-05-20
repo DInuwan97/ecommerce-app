@@ -559,7 +559,8 @@ export default class MyProfileUserFunctions extends Component {
 
                           <p>
                             <a href="#" className="link-black text-sm mr-2">
-                              <i className="fas fa-share mr-1"></i> Share
+                              <i className="fas fa-share mr-1" ></i> Share
+
                             </a>
                             <a href="#" className="link-black text-sm">
                               <i className="far fa-thumbs-up mr-1"></i> Like
@@ -567,7 +568,7 @@ export default class MyProfileUserFunctions extends Component {
                             <span className="float-right">
                               <a href="#" className="link-black text-sm">
                                 <i className="far fa-comments mr-1"></i>{" "}
-                                Comments (5)
+                                {rev.itemName}
                               </a>
                             </span>
                           </p>

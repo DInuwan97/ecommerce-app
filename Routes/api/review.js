@@ -457,6 +457,8 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
 //              : Then it takes all the unique item ids and take a count of unique ids and duplicates
 //              : Simply it takes the count of reviews for an item.
 router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => {
+
+    console.log('This is executing');
     ReviewComments.find({ itemCompany: req.authData.company }, { item: 1, _id: 0, didAdminReplied: 1 }, async (err, data) => {
         if (err) {
             return res.status(400).send({ msg: err });

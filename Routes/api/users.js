@@ -233,7 +233,11 @@ router.post("/login", (req, res) => {
                 'secureKeyVerifyStatus':user.secureKeyVerifyStatus,
                 'email':user.email,
                 'firstName':user.firstName,
-                'lastName':user.lastName});
+                'lastName':user.lastName,
+                'isSalesManager':user.isSalesManager,
+                'isSalesServicer':user.isSalesServicer,
+                'isAdmin':user.isAdmin,
+                'isCustomer':user.isCustomer });
               }
             );
           } else {
