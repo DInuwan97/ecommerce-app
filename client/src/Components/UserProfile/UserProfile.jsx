@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import classes from './Summary.module.css';
 import axios from 'axios';
+import Avatar from 'react-avatar';
 export default class UserProfile extends Component {
 
 
@@ -111,12 +112,12 @@ onChangeHandler = e =>{
 
     render() {
 
-        let imgPreview;
-        if (this.state.file) {
-            imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
-        }else{
-          imgPreview = <img src="https://res.cloudinary.com/dsuhs6bf5/image/upload/v1589448087/zozjadcms7g1kezmrc.png" alt='' style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
-        }
+      let imgPreview;
+      if (this.state.file) {
+        imgPreview = <img src={this.state.file} alt=''  style={{width:'160px',height:'160px',borderRadius:'100px'}}/>;
+      }else{
+        imgPreview = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} />;
+      }
 
 
         return (
