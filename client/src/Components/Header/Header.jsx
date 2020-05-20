@@ -173,7 +173,7 @@ export class Header extends Component {
     if (this.state.userImageUrl != '') {
       imgPreviewMainMenu = <img src={this.state.userImageUrl}  alt="Product Image" className={classes.image}  style={{width:'40px',height:'40px',borderRadius:'100px'}}/>;
     }else{
-      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} className={classes.avatarimg}/>;
+      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} className={classes.avatarimg} round="50%" size='40'/>;
     }
 
 

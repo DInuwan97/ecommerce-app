@@ -193,7 +193,7 @@ export default class HeaderSideMenuFooter extends Component {
     if (this.state.userImageUrl != '') {
       imgPreviewMainMenu = <img src={this.state.userImageUrl} alt=''  style={{width:'40px',height:'40px',borderRadius:'100px'}}/>;
     }else{
-      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} className="img-circle elevation-2"/>;
+      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} round="50%" size='40' className="img-circle elevation-2"/>;
     }
     
     return (
