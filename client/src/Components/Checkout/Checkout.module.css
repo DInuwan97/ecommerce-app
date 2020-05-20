@@ -34,8 +34,7 @@ blue : #0280e1
 }
 
 .deliveryInfo,
-.paymentInfo,
-.itemReview {
+.paymentInfo {
   background-color: #fff;
   padding: 2rem;
   margin-bottom: 2rem;

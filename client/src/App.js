@@ -24,6 +24,7 @@ import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
 import Wishlist from './Components/Wishlist/Wishlist';
+import PurchasedOrders from './Components/PurchasedOrders/PurchasedOrders';
 
 import ContactUs from './Components/Contacts/Contacts';
 import Faq from './Components/Contacts/Faq';
@@ -88,13 +89,13 @@ class App extends Component {
       <Router>
         <div className="App">
 
-     
-        <Header />
-        <Route path="/" exact component={Home} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route exact path='/testImage' component={TestImage} />
-        <Route path="/verifysecurecode" component={VerifySecureCode} />
+
+          <Header />
+          <Route path="/" exact component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route exact path='/testImage' component={TestImage} />
+          <Route path="/verifysecurecode" component={VerifySecureCode} />
 
 
           <Route path="/:type/:id" component={SingleProduct} />
@@ -111,9 +112,10 @@ class App extends Component {
           <Route path="/cart" component={Cart} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/wishlist" component={Wishlist} />
+          <Route path="/purchasedOrders" component={PurchasedOrders} />
 
           <Route path="/contactus" component={ContactUs} />
-          <Route path='/faq' component={Faq}/>
+          <Route path='/faq' component={Faq} />
           <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
 
           <Newsletter />

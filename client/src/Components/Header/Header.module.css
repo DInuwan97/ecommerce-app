@@ -42,12 +42,13 @@
 }
 
 .imageFig {
-  height: 6.5vh;
-  width: 6.5vh;
+  height: 4.8rem;
+  width: 4.8rem;
 }
 
 .imageFig img {
   height: 100%;
+  width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 100px;
 }
@@ -75,8 +76,8 @@
 }
 
 .icon span {
-  font-size: 2rem;
-  color: rgba(0, 0, 0, 0.7);
+  font-size: 1.8rem;
+  color: rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
 
@@ -86,13 +87,14 @@
   position: absolute;
   top: 100%;
   right: 0;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0.5rem 0.5rem;
   background-color: #ffffff;
   display: none;
   visibility: 0;
   height: 0;
   transition: all 10s ease-out;
+  z-index: 500;
 
   /* animation-name: fadeIn;
   animation-duration: 1s; */
