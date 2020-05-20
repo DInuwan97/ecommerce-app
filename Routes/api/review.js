@@ -1,26 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const nodemailer = require('nodemailer');
+
+//-------------------------------Mongoose Schema Imports--------------------------------------
 const User = require("../../models/User");
 const ReviewComments = require("../../models/ReviewComments");
 const ReviewHelpful = require("../../models/ReviewHelpful");
 const ReviewRating = require("../../models/Reviews");
-const Item = require("../../models/Item");
+const Items = require('../../models/Item');
 
+//-------------------------------Middleware Imports---------------------------------------------
+const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
 const authenticateUser = require("../../middleware/ReviewMiddleware").authenticateUser;
-
 const verifyItem = require("../../middleware/ReviewMiddleware").verifyItem;
 const verifyReview = require("../../middleware/ReviewMiddleware").verifyReview;
+const verifyUserIsTheReviewPoster = require('../../middleware/ReviewMiddleware').verifyUserIsTheReviewPoster;
 
-const nodemailer = require('nodemailer');
+//-------------------------------NodeMailer Credentials Imports--------------------------------------
+const email = require('../../config/mailCredentials').email;
+const password = require('../../config/mailCredentials').password;
 
-//new review
-//user can have multiple reviews
+//-------------------------------User Actions--------------------------------------------------------
+
+// Method         : POST
+// Header         : Authorization - 'bearer token'
+// Params         : itemId
+// Body           : reviewMessage
+// Validation     : User Validation, Item Validation
+// Return         : msg
+// Description    : Add a  new Review to an item
+//                : User can have multiple reviews
 router.post("/newReviewComment/:id", authenticateUser, verifyItem, (req, res) => {
     var itemID = req.params.id;
     if (req.body.reviewMessage) {
         reviewMessageFromBody = req.body.reviewMessage;
-        console.log(req.authData);
 
         var ReviewDetails = {
             reviewedUser: req.authData._id,
@@ -46,9 +60,16 @@ router.post("/newReviewComment/:id", authenticateUser, verifyItem, (req, res) =>
 
 });
 
-//new Rating
-//each user get only 1 chance to rate a item
-// the second time the previous rating gets updated
+
+// Method          : Patch
+// Headers         : Authorization - 'bearer token'
+// Params          : itemId
+// Body            : starRating( 0<= startRating <= 5)
+// Validation      : User Validation, Item Validation, Star Rating inside the limit validation
+// Return          : msg
+// Description     : Rating an item based on a 0-5 scale
+//                 : One user can only give the rating one time
+//                 : Next time the previous rating get updated
 router.patch("/newRating/:id", authenticateUser, verifyItem, (req, res) => {
     var itemID = req.params.id;
     if (0 <= req.body.starRating && req.body.starRating <= 5) {
@@ -74,7 +95,6 @@ router.patch("/newRating/:id", authenticateUser, verifyItem, (req, res) => {
                         item: itemID,
                         starRating: req.body.starRating
                     }
-                    console.log(ReviewRatingDetails);
                     ReviewRating.create(ReviewRatingDetails, (err) => {
                         if (err) {
                             return res.status(400).send({ msg: err });
@@ -95,10 +115,15 @@ router.patch("/newRating/:id", authenticateUser, verifyItem, (req, res) => {
 
 
 
-//liking and unliking a comment by other user. only one time for a comment per a user.
-//need to add a method to delete useless data from the DB
-//reviewhelpful and reviewnothelful both false data are useless and therefor no need to keep them inside
-//the DB
+// Method       : Put
+// Headers      : Authorization - 'bearer token'
+// Params       : itemId
+// Body         : reviewId, reviewLikeStatus (reviewLikeStatus === 1,0,-1)
+// Validation   : User Validation, Item Validation, Review Validation, Like Status Validation
+// Return       : msg
+// Description  : Like/Unlike a review message posted by a user.
+//              : First time the data gets added to the database
+//              : Next time the previous data get reset
 router.put("/newHelpfulReview/:id", authenticateUser, verifyItem, verifyReview, async (req, res) => {
     var itemId = req.params.id;
     var reviewId = req.body.reviewID;
@@ -184,7 +209,13 @@ router.put("/newHelpfulReview/:id", authenticateUser, verifyItem, verifyReview, 
 
 });
 
-
+// Method       : Get
+// Headers      : None
+// Params       : itemId
+// Body         : None
+// Validation   : Item Validation
+// Return       : msg - if Error , AverageStarRating - if Success
+// Description  : Getting the Star rating of an item
 router.get("/getRating/:id", verifyItem, (req, res) => {
     const itemId = req.params.id;
     ReviewRating.find({ item: itemId }, (err, data) => {
@@ -210,6 +241,15 @@ router.get("/getRating/:id", verifyItem, (req, res) => {
     });
 });
 
+
+
+// Method       : Get
+// Headers      : Authorization - 'Bearer token'
+// Params       : itemId
+// Body         : None
+// Validation   : Item Validation
+// Return       : msg - if error, MyRating - if success
+// Description  : Getting an user's rating for an item
 router.get("/MyRating/:id", authenticateUser, verifyItem, (req, res) => {
     const itemId = req.params.id;
     jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -233,12 +273,17 @@ router.get("/MyRating/:id", authenticateUser, verifyItem, (req, res) => {
 });
 
 
-//publicaly accessible 
-//can see all the ratings 
 
+// Method       : Get
+// Headers      : 'Authorization 'Bearer token' -Not Required
+// Params       : itemId
+// Body         : None
+// Validation   : Item Validation
+// Return       : msg - if error, response - if success
+// Description  : Getting the reviews for an item
+//              : If the Authorization token is retunred the user's reviews and like/unlikes
+//                   are provided along with the response
 router.get("/:id", verifyItem, async (req, res) => {
-    //     await updateLike(req);
-    //     await updateDisLike(req);
     const userHeader = req.headers["authorization"];
     var itemId = req.params.id;
     if (typeof userHeader == "undefined") {
@@ -262,7 +307,6 @@ router.get("/:id", verifyItem, async (req, res) => {
             if (err) {
                 res.status(400).send({ msg: err });
             } else {
-                console.log(authData)
                 var response = {};
 
                 ReviewComments.find({ item: itemId }, (err, commentData) => {
@@ -327,35 +371,13 @@ router.get("/:id", verifyItem, async (req, res) => {
     }
 });
 
-//middleware to verify the review is posted by the same person
-verifyUserIsTheReviewPoster = (req, res, next) => {
-    authenticateUser(req, res, () => {
-        jwt.verify(req.token, "secretkey", (err, authData) => {
-            if (err) {
-                return res.status(400).send({ msg: err });
-            } else {
-                if (!req.body.adminAccess) {
-                    ReviewComments.findOne({ _id: req.body.reviewID }, (err, data) => {
-                        if (err) {
-                            return res.status(400).send({ msg: err });
-                        } else {
-                            if (authData._id == data.reviewedUser) {
-                                console.log("posted");
-                                next();
-                            } else {
-                                return res.status(400).send({ msg: "This client didn't posted the review" });
-                            }
-                        }
-                    });
-                } else {
-                    console.log("ByPassed");
-                    next()
-                }
-            }
-        });
-    })
-}
-
+// Method       : Patch
+// Headers      : Authorization - 'Bearer token'
+// Params       : ItemId
+// Body         : reviewMessage, reviewID
+// Validations  : User Validation, Item Validation,  Review Validation, Review Posted User Validation
+// Return       : msg 
+// Description  : Update a Review
 router.patch("/updateReviceComment/:id", authenticateUser, verifyItem, verifyReview, verifyUserIsTheReviewPoster, (req, res) => {
     var itemId = req.params.id;
     jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -379,6 +401,15 @@ router.patch("/updateReviceComment/:id", authenticateUser, verifyItem, verifyRev
     })
 });
 
+// Method       : Delete
+// Headers      : Authorization - 'Bearer token'
+// Params       : ItemId
+// Body         : reviewID , (AdminAccess - Optional)
+// Validations  : User Validation, Item Validation, Item Validation, Review Validation, Review Posted User Validation
+// Return       : msg 
+// Description  : Delete a Review
+// Optional     : This method can be bypassed by an admin, The Review Posted User Validation Can be
+//                   ByPassed by send the AdminAccess valus as true in the request body
 router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyReview, verifyUserIsTheReviewPoster, (req, res) => {
     var itemId = req.params.id;
     jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -410,9 +441,21 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
     });
 });
 
-const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
-const Items = require('../../models/Item');
+//-------------------------------Administrator Actions--------------------------------------
 
+// Method       : Get
+// Headers      : Authorization - 'Bearer token'
+// Params       : None
+// Body         : None
+// Validations  : User Validation, Admin Validation ( Currently Admin, Sales Manger, Sales Servicer Accounts)
+// Return       : msg -if Error , Data - if Success
+// Description  : Getting the Reviews For all items in the current users company
+//              : The Company name is decoded by the authorization token
+//              : This method is used to take the count of Admin replied reviews and the all the review count for all items
+// Additional   : This Method Operates Like this
+//              : First the method takes all the item reviews for the company
+//              : Then it takes all the unique item ids and take a count of unique ids and duplicates
+//              : Simply it takes the count of reviews for an item.
 router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => {
     ReviewComments.find({ itemCompany: req.authData.company }, { item: 1, _id: 0, didAdminReplied: 1 }, async (err, data) => {
         if (err) {
@@ -458,7 +501,6 @@ router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => 
                     before = data[index].item.toString();
                 }
                 response = [];
-                console.log(unique);
 
                 unique.forEach((element, index) => {
                     response.push({ item: element.item, itemName: items[index], count: count[index], replyCount: element.replyCount })
@@ -472,8 +514,16 @@ router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => 
     })
 });
 
-const email = require('../../config/mailCredentials').email;
-const password = require('../../config/mailCredentials').password;
+// Method       : Post
+// Headers      : Authorization - 'Bearer token'
+// Params       : None
+// Body         : to, cc, bcc, subject, msg, reviewId - Optional 
+// Validation   : User Validation
+// Return       : msg , +data - if success
+// Description  : This Method sends an Email if the user haves the permission 
+//                  and the valid details are provided
+// Optional     : If the ReviedId is provided the method updates the review tables relavent id as Admin Replied
+//                  and sets the replied message, and time
 router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) => {
     const msg = req.body.msg;
     const to = req.body.to;
@@ -481,7 +531,6 @@ router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) 
     const cc = req.body.cc;
     const bcc = req.body.bcc;
     const reviewId = req.body.reviewId;
-    console.log(msg);
     
     if (msg && subject && (to || cc || bcc)) {
         const transporter = await nodemailer.createTransport({
@@ -526,7 +575,14 @@ router.post('/admin/sendMail/', authenticateUser, verifyAdmin, async (req, res) 
 });
 
 
-
+// Method       : Post
+// Headers      : None
+// Params       : None
+// Body         : None 
+// Validation   : None
+// Return       : msg
+// Description  : This methods Refresh all the User names and Profile Pictures in the Review Table
+//              : This method is called after a Username or Profile picture change in the User Account
 router.post('/admin/changeUserData', (req, res) => {
     ReviewComments.find((err, allReviews) => {
         if (err) {
@@ -563,7 +619,13 @@ router.post('/admin/changeUserData', (req, res) => {
     });
 });
 
-
+// Method       : Post
+// Headers      : Authorization - 'Bearer token'
+// Params       : ItemId
+// Body         : None 
+// Validation   : User Validation, Admin Validation
+// Return       : msg
+// Description  : This methods updates a user review as Mark As Read.
 router.patch('/admin/markAsRead/:id', authenticateUser, verifyAdmin, (req, res) => {
     ReviewComments.findByIdAndUpdate(req.params.id, {
         adminsReplyTime: new Date(),
@@ -580,7 +642,14 @@ router.patch('/admin/markAsRead/:id', authenticateUser, verifyAdmin, (req, res) 
 });
 
 
-
+// Method       : Get
+// Headers      : Authorization - 'Bearer token'
+// Params       : None
+// Body         : None 
+// Validation   : User Validation, Admin Validation
+// Return       : msg - if error, data - if success
+// Description  : This method gets the reviews which are replied by the admin and send the 
+//                  item name and the reply count for each item and also the total review count for each item
 router.get('/admin/getAdminReplyItems/', authenticateUser, verifyAdmin, (req, res) => {
     const company = req.authData.company;
     ReviewComments.find({ didAdminReplied: true, itemCompany: company }, (err, data) => {
@@ -634,7 +703,14 @@ router.get('/admin/getAdminReplyItems/', authenticateUser, verifyAdmin, (req, re
     })
 });
 
-
+// Method       : Get
+// Headers      : Authorization - 'Bearer token'
+// Params       : ItemId
+// Body         : None 
+// Validation   : User Validatiob, Admin Validation
+// Return       : msg -if error , data - if success
+// Description  : This Methods returns the reviews which got a reply or the reviews which are marked as read
+//                  in the database.
 router.get('/admin/getAdminReplies/:id',authenticateUser,verifyAdmin,(req,res)=>{
     const itemId = req.params.id;
     ReviewComments.find({item:itemId,didAdminReplied:true,itemCompany:req.authData.company},(err,data)=>{
@@ -651,7 +727,13 @@ router.get('/admin/getAdminReplies/:id',authenticateUser,verifyAdmin,(req,res)=>
 })
 
 
-
+// Method       : Get
+// Headers      : Authorization - 'Bearer token'
+// Params       : UserId
+// Body         : None 
+// Validation   : User Validatiob, Admin Validation
+// Return       : msg -if error , data - if success
+// Description  : This methods returns a user's details if the user Id is provided.
 router.get('/admin/viewUser/:id',authenticateUser,verifyAdmin,(req,res)=>{
     let id = req.params.id;
     User.findById(id,(err,data)=>{
@@ -673,7 +755,13 @@ router.get('/admin/viewUser/:id',authenticateUser,verifyAdmin,(req,res)=>{
     })
 })
 
-
+// Method       : Get
+// Headers      : None
+// Params       : Company Name
+// Body         : None 
+// Validation   : None
+// Return       : msg , review - if success
+// Description  : This methods returns all the reviews for items for a company
 router.get('/reviews/view/:company',async(req,res)=>{
     let review = await ReviewComments.find({itemCompany:req.params.company})
 

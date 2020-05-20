@@ -1,27 +1,33 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
-const contactUs = require('../../models/ContactUs');
 const router = express.Router();
 
+//-------------------------------Mongoose Schema Imports--------------------------------------
+const contactUs = require('../../models/ContactUs');
 
+
+//-------------------------------Middleware Imports---------------------------------------------
+const verifyOnlyAdmin = require('../../middleware/ReviewMiddleware').verifyOnlyAdmin;
 const verifyAdmin = require('../../middleware/ReviewMiddleware').verifyAdmin;
 const authenticateUser = require("../../middleware/ReviewMiddleware").authenticateUser;
-router.get('/',authenticateUser,verifyAdmin, (req, res) => {
-    contactUs.find((err, data) => {
-        if (err) {
-            res.status(400).send({ msg: err });
-        } else {
-            if (data) {
-                res.status(200).send({ data });
-            } else {
-                res.status(200).send({ data: [] });
-            }
-        }
-    })
-});
 
+
+//-------------------------------NodeMailer Credentials Imports--------------------------------------
 const mailEmail = require('../../config/mailCredentials').email;
 const password = require('../../config/mailCredentials').password;
+
+
+//-------------------------------User Actions--------------------------------------------------------
+
+// Method       : Post
+// Headers      : None
+// Params       : None
+// Body         : name, email, subject, phoneNumber, msg
+// Validations  : Empty fields Validation
+// Return       : msg
+// Description  : Sending a Message to the administrators of the System
+// Additional   : This method sends a Email to the provided email address
+//                     stating to wait until an admin replies
 router.post('/', async (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
@@ -66,8 +72,39 @@ router.post('/', async (req, res) => {
 });
 
 
-const verifyOnlyAdmin = require('../../middleware/ReviewMiddleware').verifyOnlyAdmin;
+//-------------------------------Administrator Actions--------------------------------------
 
+// Method       : Get
+// Headers      : Authorization - 'Bearer token'
+// Params       : None
+// Body         : None
+// Validations  : User Validation, Admin Validation
+// Return       : msg -if Error , Data - if Success
+// Description  : Getting the all the messages sent using contact us form
+router.get('/',authenticateUser,verifyAdmin, (req, res) => {
+    contactUs.find((err, data) => {
+        if (err) {
+            res.status(400).send({ msg: err });
+        } else {
+            if (data) {
+                res.status(200).send({ data });
+            } else {
+                res.status(200).send({ data: [] });
+            }
+        }
+    })
+});
+
+
+// Method       : Put
+// Headers      : Authorization - 'Bearer token'
+// Params       : messageId
+// Body         : reply
+// Validations  : User Validation, Admin Validation
+// Return       : msg
+// Description  : Replying to messages from contact us from.
+// Additional   : The Mail Method in review.js can be used to send an Email to the User
+//                After sending the email using that method this method can be called to update the status
 router.put('/replied/:id', authenticateUser, verifyAdmin, async (req, res) => {
     const id = req.params.id;
     const reply = req.body.reply;
@@ -93,6 +130,13 @@ router.put('/replied/:id', authenticateUser, verifyAdmin, async (req, res) => {
 
 });
 
+// Method       : Delete
+// Headers      : Authorization - 'Bearer token'
+// Params       : messageId
+// Body         : None
+// Validations  : User Validation, Admin Validation (Only Admins)
+// Return       : msg
+// Description  : Deleting a Message came through the Contact us Form
 router.delete('/delete/:id',authenticateUser,verifyOnlyAdmin,(req,res)=>{
     const id = req.params.id;
     contactUs.findByIdAndDelete(id,(err)=>{
