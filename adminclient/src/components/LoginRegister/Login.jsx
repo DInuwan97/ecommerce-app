@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { login }  from './UserFucntions';
+import swal from 'sweetalert';
+
 export default class Login extends Component {
 
     constructor(props){
@@ -36,8 +38,20 @@ export default class Login extends Component {
     
         login(frmData)
         .then(res =>{
+
             if(res){
-              window.location.replace('/home');
+              console.log('Login Res is :', res.token);
+              if(res.isSalesManager === true || res.isAdmin === true){
+                window.location.replace('/home');
+              }else{
+                swal({
+                  title: "Oops!!!",
+                  text: "Your are Not Authorized to Admin Panel",
+                  icon: "error",
+                  button: true,
+                })
+              }
+             
             }
         })
     
