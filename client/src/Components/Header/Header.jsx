@@ -5,7 +5,7 @@ import classes from "./Header.module.css";
 import Minicart from "../MiniCart/Minicart";
 import jwt_decode from "jwt-decode";
 //import { decode } from 'punycode';
-import Avatar from 'react-avatar';
+import Avatar from "react-avatar";
 export class Header extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ export class Header extends Component {
       isSalesManager: false,
       isSalesServicer: false,
       isMinicartActive: false,
-      userImageUrl:''
+      userImageUrl: "",
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -50,7 +50,7 @@ export class Header extends Component {
         isCustomer: decoded.isCustomer,
         isSalesManager: decoded.isSalesManager,
         isSalesServicer: decoded.isSalesServicer,
-        userImageUrl:decoded.userImageUrl
+        userImageUrl: decoded.userImageUrl,
       });
       console.log("Decoded token is : ", decoded);
     }
@@ -73,14 +73,24 @@ export class Header extends Component {
   };
 
   render() {
-
     let imgPreviewMainMenu;
-    if (this.state.userImageUrl != '') {
-      imgPreviewMainMenu = <img src={this.state.userImageUrl}  alt="Product Image" className={classes.image}  style={{width:'40px',height:'40px',borderRadius:'100px'}}/>;
-    }else{
-      imgPreviewMainMenu = <Avatar name={this.state.firstName+ ' ' +this.state.lastName} className={classes.avatarimg} round="50%" size='40'/>;
+    if (this.state.userImageUrl != "") {
+      imgPreviewMainMenu = (
+        <img
+          src={this.state.userImageUrl}
+          alt="Product Image"
+          className={classes.image}
+          style={{ width: "40px", height: "40px", borderRadius: "100px" }}
+        />
+      );
+    } else {
+      imgPreviewMainMenu = (
+        <Avatar
+          name={this.state.firstName + " " + this.state.lastName}
+          className={classes.avatarimg}
+        />
+      );
     }
-
 
     const loginRegLink = (
       <div
@@ -110,12 +120,7 @@ export class Header extends Component {
     const userLink = (
       <div className={classes.usernav}>
         <div className={classes.userimage}>
-          <figure className={classes.imageFig}>
-            <div className={classes.avatarimgdiv}>
-              {imgPreviewMainMenu}
-            </div>
-           
-          </figure>
+          <figure className={classes.imageFig}>{imgPreviewMainMenu}</figure>
         </div>
 
         <div className={classes.username}>

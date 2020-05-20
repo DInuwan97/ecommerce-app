@@ -74,6 +74,11 @@ class Watchlist extends Component {
     this.setState({ items: tempItems });
   }
 
+  // goto single product page
+  gotoItem = (item) => {
+    console.log(item);
+  }
+
   render() {
     let content = (
       <div className={classes.content} >
@@ -81,6 +86,7 @@ class Watchlist extends Component {
           return <WishlistItem
             key={index}
             item={item}
+            goto={this.gotoItem}
             remove={this.remove}
             add={this.addToCart} />
         })}

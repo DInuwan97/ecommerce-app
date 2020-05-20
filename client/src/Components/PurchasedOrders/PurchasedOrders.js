@@ -64,7 +64,10 @@ class PurchasedOrders extends Component {
             totalPrice: 0,
             __v: 0
           },
-        ]
+        ],
+        purchasedDate: "2020-05-19T14:32:08.815Z",
+        _id: "5ec3ee1db40ecd1b1c7daa65",
+        purchasedUserEmail: "dinuwan@gmail.com",
       },
       {
         buyerDetails: {
@@ -123,7 +126,10 @@ class PurchasedOrders extends Component {
             totalPrice: 0,
             __v: 0
           },
-        ]
+        ],
+        purchasedDate: "2020-05-19T14:32:08.815Z",
+        _id: "5ec3ee1db40ecd1b1c7daa65",
+        purchasedUserEmail: "dinuwan@gmail.com",
       }
     ]
   }
@@ -132,15 +138,12 @@ class PurchasedOrders extends Component {
     console.log(id);
   }
 
-  goToItem = (item) => {
-    console.log(item);
-  }
-
   render() {
+
     let content = (
       <div className={classes.content} >
         {this.state.orders.map((order, index) => {
-          return <POrderCart key={index} order={order} />
+          return <POrderCart key={index} order={order} remove={this.remove} />
         })}
       </div >
     );
