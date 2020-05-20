@@ -14,28 +14,68 @@ const PaymentInfo = props => {
 
     setTimeout(() => {
       let value = valueA;
-      if (key == "Backspace") {
 
-        if (field == "number") {
-          value = "";
-          props.change("number_b", value);
-          return;
-        }
-        if (field == "expire") {
-          if (value.length == 4) {
-            value = "";
-            props.change("expire_b", value);
-            return;
-          } else {
-            props.change(field, value);
-            return;
-          }
-
-        }
-      } else {
-        props.change(field, value);
+      if (value == undefined) {
+        return;
       }
 
+      switch (field) {
+        case "number":
+          if (key == "Backspace") {
+            value = "";
+            props.change(field, value);
+          } else {
+            if (isNaN(value[value.length - 1]) || value.length > 19) {
+              // do nothing
+              return;
+            } else {
+              if (value.length == 4 || value.length == 9 || value.length == 14) {
+                value += " ";
+                props.change(field, value);
+              } else {
+                props.change(field, value);
+              }
+            }
+          }
+          break;
+
+        case "holder":
+          props.change(field, value);
+          break;
+
+        case "expire":
+          if (key == "Backspace") {
+            if (value.length == 4) {
+              value = "";
+              props.change(field, value);
+            } else {
+              props.change(field, value);
+            }
+          } else {
+            if (isNaN(value[value.length - 1]) || value.length > 5) {
+              // do nothing
+              return;
+            } else {
+              if (value.length == 2) {
+                value += "/";
+              }
+              props.change(field, value);
+            }
+          }
+          break;
+
+        case "cw":
+          console.log(value.length);
+          if (isNaN(value) || value.length > 3) {
+            // do nothing
+            return;
+          }
+          props.change(field, value);
+          break;
+
+        default:
+          console.log("actions no match");
+      }
     }, 10);
   };
 

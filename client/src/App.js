@@ -24,6 +24,7 @@ import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
 import Wishlist from './Components/Wishlist/Wishlist';
+import PurchasedOrders from './Components/PurchasedOrders/PurchasedOrders';
 
 import ContactUs from './Components/Contacts/Contacts';
 import Faq from './Components/Contacts/Faq';
@@ -103,16 +104,13 @@ class App extends Component {
             <Route path="/salesManager" component={SalesManager} />
             <Route path="/itemApprove" component={itemApprove} />
             <Route path="/category" component={Category} />
-
             <Route path="/testb" component={TestB} />
-
-
-
             <Route path="/ResendEmail" component={ResendEmail} />
 
             <Route path="/cart" component={Cart} />
             <Route path="/checkout" component={Checkout} />
             <Route path="/wishlist" component={Wishlist} />
+            <Route path="/purchasedOrders" component={PurchasedOrders} />
 
             <Route path="/contactus" component={ContactUs} />
             <Route path='/faq' component={Faq} />

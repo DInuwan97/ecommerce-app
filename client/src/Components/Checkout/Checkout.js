@@ -104,55 +104,25 @@ class Checkout extends Component {
   };
 
   changeCard = (field, value) => {
-    console.log(field);
-    if (field == "number") {
-      if (isNaN(value[value.length - 1]) || value.length > 19) {
-        console.log(value);
-        //return;
-      } else {
-        if (value.length == 4 || value.length == 9 || value.length == 14) {
-          value += " ";
-          this.setState({ card_number: value });
-          return;
-        } else {
-          this.setState({ card_number: value });
-          return;
-        }
-      }
-
-    }
-    if (field == "number_b") {
-      this.setState({ card_number: value });
-      return;
-    }
-    if (field == "holder") {
-      if (value.trim().length != 0) {
+    switch (field) {
+      case "number":
+        this.setState({ card_number: value });
+        break;
+      case "holder":
         this.setState({ card_holder: value });
-      }
-      return;
-    }
-    if (field == "expire") {
-      if (isNaN(value[value.length - 1]) || value.length > 5) {
-        return;
-      } else {
-        if (value.length == 2) {
-          console.log("ffffffffff");
-          value += "/";
-        }
+        break;
+      case "expire":
         this.setState({ card_expire: value });
-        return;
-      }
-
-    }
-    if (field == "expire_b") {
-      this.setState({ card_expire: value });
-      return;
-    }
-    if (field == "cw") {
-      if (isNaN(value[value.length - 1]) || value.length > 3) {
-      } else {
+        break;
+      case "cw":
         this.setState({ card_cw: value });
-      }
+        break;
+      default:
+        console.log("no actions match");
+    }
+
+    if (field == "cw") {
+
 
     }
 
@@ -229,7 +199,7 @@ class Checkout extends Component {
               expire={this.state.card_expire}
               cw={this.state.card_cw} />
           </div>
-          <div className={classes.itemReview}>item reviews</div>
+
         </div>
         <div id="rightPanel" className={classes.rightPanel}>
           <Summary

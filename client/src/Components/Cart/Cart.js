@@ -298,8 +298,6 @@ class Cart extends Component {
           <div className={classes.paymentDetail}>
             <PaymentDetail />
           </div>
-
-          <div className={classes.moreItems}>more items</div>
         </div>
 
         <div id="rightPanel" className={classes.rightPanel} >

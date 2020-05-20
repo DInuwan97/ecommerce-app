@@ -47,10 +47,6 @@ blue : #0280e1
   background-color: #fff;
 }
 
-.moreItems {
-  background-color: #fff;
-}
-
 .emptyCart {
   flex: 0 0 100%;
   padding: 3rem;

@@ -224,12 +224,12 @@ export class Header extends Component {
         <div className={classes.links}>
           <ul className={classes.linksList}>
             <li className={classes.link}>
-              <Link to="/editMyProfile" className="hyper">
+              <Link to="/editMyProfile">
                 <span>My Profile</span>
               </Link>
             </li>
             <li className={classes.link}>
-              <Link to="#" className="hyper">
+              <Link to="/purchasedOrders">
                 <span>My Orders</span>
               </Link>
             </li>
