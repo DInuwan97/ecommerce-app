@@ -1,6 +1,6 @@
 import axios from 'axios';
 import swal from 'sweetalert';
-import jwt_decode from 'jwt-decode'
+
 
 export const login = loggedUser =>{
     return axios
