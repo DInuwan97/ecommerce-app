@@ -84,7 +84,7 @@ class SingleProduct extends Component {
       })
 
     }).catch(err => {
-
+      this.props.history.push("/");
     })
   }
 
