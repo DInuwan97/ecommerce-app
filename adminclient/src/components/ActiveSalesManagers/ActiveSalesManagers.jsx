@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Avatar from 'react-avatar';
+import { Link, withRouter } from "react-router-dom";
 export default class ActiveSalesManagers extends Component {
 
     constructor(props){
@@ -53,7 +54,7 @@ export default class ActiveSalesManagers extends Component {
               mobile,
               regDate
           }) => {
-              if(adminVerification === true || adminVerification === false){
+              if(adminVerification === true){
                         
                     return (
                        
@@ -68,8 +69,9 @@ export default class ActiveSalesManagers extends Component {
                     <h2 className="lead"><b>{firstName} {lastName}</b></h2>
                     <p className="text-muted text-sm"><b>Date of Joined: </b> {regDate} </p>
                     <ul className="ml-4 mb-0 fa-ul text-muted">
-                      <li className="small"><span class="fa-li"><i className="fas fa-lg fa-building"></i></span> Address: {address}</li>
-                      <li className="small"><span class="fa-li"><i className="fas fa-lg fa-phone"></i></span> Phone #: {mobile}</li>
+                      <li className="small"><span class="fa-li"><i className="fas fa-lg fa-phone"></i></span> {mobile}</li>
+                      <li className="small"><span class="fa-li"><i className="fas fa-lg fa-envelope"></i></span>  {email}</li>
+                      <li className="small"><span class="fa-li"><i className="fas fa-lg fa-building"></i></span> {address}</li>
                     </ul>
                   </div>
                   <div className="col-5 text-center">
@@ -91,9 +93,9 @@ export default class ActiveSalesManagers extends Component {
                   <a href="#" className="btn btn-sm bg-teal">
                     <i className="fas fa-envelope"></i>
                   </a>
-                  <a href="#" className="btn btn-sm btn-primary" style={{marginLeft:5}}>
+                  <Link to={"/SalesManagerProfile/" +email}  className="btn btn-sm btn-primary" style={{marginLeft:5}}>
                     <i className="fas fa-user"></i> View Profile
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
