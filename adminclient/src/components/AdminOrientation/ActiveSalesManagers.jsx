@@ -7,7 +7,7 @@ export default class ActiveSalesManagers extends Component {
         return (
             <div>
                  <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} itemsList={this.props.itemsList} />
-                 <ActiveSalesManagersList/>
+                 <ActiveSalesManagersList usersList={usersList}/>
             </div>
         )
     }
