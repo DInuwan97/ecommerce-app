@@ -26,7 +26,7 @@ import ContactUsDT from '../ContactUs/ContactusDT';
 import MyProfile from '../AdminOrientation/MyProfile';
 
 import AdminPackage from '../AdminOrientation/AdminPackage';
-
+import {ProtectedRoutesAdmin,ProtectedRoutesIsSalesManager} from '../ProtectedRoutes/ProtectedRoutes';
 export default class HeaderSideMenuFooter extends Component {
 
   constructor(props,location){
@@ -278,25 +278,25 @@ export default class HeaderSideMenuFooter extends Component {
                 </a> */}
 
                 <a className="nav-link" data-toggle="dropdown" href="#">
-                  <span style={{fontStyle:'bold',marginRight:5}}>Welcome {this.state.firstName}</span><i className="far fa-user"></i>
+                  <span style={{fontStyle:'bold',marginRight:5}}>Welcome {this.state.firstName}</span><i className="fas fa-chevron-down"></i>
                   
                 </a>
 
                 <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                   <a href='/MyProfile' className="dropdown-item">
-                        <i className="fas fa-envelope mr-2"></i>                         
-                        My Profile
+                        <i className="fas fa-user"></i> My Profile                       
+                       
                   </a>
                   <div className="dropdown-divider"></div>
                   <a href="#" className="dropdown-item">
-                        <i className="fas fa-settings"></i> Settings
+                  <i className="fas fa-cogs"></i> Settings
                   </a>
                   <div className="dropdown-divider"></div>
                   <a href="#" className="dropdown-item"  onClick={this.logOut.bind(this)}>
-                        <i className="fas fa-settings"></i> Logout
+                    <i className="fas fa-sign-out-alt"></i> Logout
                   </a>
                   <div className="dropdown-divider"></div>
-                  <a href="#" className="dropdown-item dropdown-footer">See All Messages</a>
+                
                 </div>
               </li>
              
@@ -338,12 +338,7 @@ export default class HeaderSideMenuFooter extends Component {
         
           <aside className="main-sidebar sidebar-dark-primary elevation-4">
 
-            <a href="../../index3.html" className="brand-link">
-              <img src="/dist/img/AdminLTELogo.png"
-                   alt="AdminLTE Logo"
-                   className="brand-image img-circle elevation-3"/>
-              <b><span className="brand-text font-weight-light" style={{fontWeight:'bold'}}>FASHION Club</span></b>
-            </a>
+        
         
            
             <div className="sidebar">
@@ -365,7 +360,7 @@ export default class HeaderSideMenuFooter extends Component {
                 <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                  
                   <li className="nav-item has-treeview">
-                    <a href="/home" className="nav-link">
+                    <a href="/" className="nav-link">
                       <i className="nav-icon fas fa-tachometer-alt"></i>
                       <p>
                         Dashboard
@@ -453,14 +448,13 @@ export default class HeaderSideMenuFooter extends Component {
                     <a href="/AdminPackage" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
                       <p>
-                      Packages
+                        Packages
                       </p>
                     </a>
                   </li>
 
 }
 
-{(this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/Compose" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -469,7 +463,7 @@ export default class HeaderSideMenuFooter extends Component {
                       </p>
                     </a>
                   </li>
-}
+
                   
                   <li className="nav-item has-treeview">
                     <a href="/Reviews" className="nav-link">
@@ -495,7 +489,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
 
 
-{(this.state.isAdmin === true) &&
+{(this.state.isAdmin === true || this.state.isSalesManager === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/ContactUs" className="nav-link">
                       <i className="nav-icon fas fa-copy"></i>
@@ -513,24 +507,24 @@ export default class HeaderSideMenuFooter extends Component {
           
           </aside>
         
-            <Router> 
+         
            <div className="content-wrapper">
             
             <section className="content-header">
               <div className="container-fluid">
+<Router> 
+              <Switch>
 
-              <Route path = '/404NotFound' component = {()=> <NotFound404/>}/>
-              {((this.state.isSalesManager === true))&&
-               <Route path = '/salesManagerapprove' component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} />
+
+              <ProtectedRoutesAdmin exact path = '/salesManagerapprove' token={localStorage.getItem("userLoginToken")} salesManager = {this.state.isSalesManager} component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} /> 
               
-        
-              }
+                <Route path = '/404NotFound' component = {()=> <NotFound404/>}/>
               <Route exact path ='/' component= {()=> <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
 
             
                <Route path ='/itemApprove' component={()=><AdminItemApprove loggedUserDetails={this.state.loggedUserDetails}/>}/>
                <Route path ='/addCategory' component= {Category}/>
-               <Route path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+               <ProtectedRoutesIsSalesManager path='/salesServicersList' component = {()=> <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
                <Route path='/ActiveSalesManagers' component={()=><ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
              
                 <Route exact path='/Reviews' component={()=><ReviewTable companyName={this.state.company} />}/>
@@ -546,13 +540,15 @@ export default class HeaderSideMenuFooter extends Component {
                 <Route path = '/AddDiscount' component = {() => <AddDiscount companyName = {this.state.company}/>}/>
                 
 
-                <Route path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
-                
+                <ProtectedRoutesAdmin isAdmin={this.state.isAdmin} path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+              </Switch>
+</Router>
+              
               </div>
             </section>
 
            </div>
-          </Router>  
+          
         
           <footer className="main-footer">
             <div className="float-right d-none d-sm-block">
