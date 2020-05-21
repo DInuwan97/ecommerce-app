@@ -189,18 +189,7 @@ export class Header extends Component {
         </div>
       </div>
     );
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
+
     return (
       <div>
         {this.state.isMinicartActive ? (
