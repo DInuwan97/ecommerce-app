@@ -6,6 +6,8 @@ import Minicart from "../MiniCart/Minicart";
 import jwt_decode from "jwt-decode";
 //import { decode } from 'punycode';
 import Avatar from "react-avatar";
+import PasswordChangePopup from "../PopupWindows/PasswordChangePopup/PasswordChangePopup";
+
 export class Header extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +22,7 @@ export class Header extends Component {
       isSalesServicer: false,
       isMinicartActive: false,
       userImageUrl: "",
+      isPasswordPopupActive: false,
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -72,7 +75,19 @@ export class Header extends Component {
     this.setState({ isMinicartActive: false });
   };
 
-  openChangePassword = () => {};
+  // open password chage popup
+  openChangePassword = () => {
+    if (!this.state.isPasswordPopupActive) {
+      this.setState({ isPasswordPopupActive: true });
+    }
+  };
+
+  // close password chage popup
+  closeChangePassword = () => {
+    if (this.state.isPasswordPopupActive) {
+      this.setState({ isPasswordPopupActive: false });
+    }
+  };
 
   render() {
     let imgPreviewMainMenu;
@@ -530,7 +545,11 @@ export class Header extends Component {
           </div>
         </div>
 
-        <script src="js/minicart.js"></script>
+        {/*******  password change popup ***********/}
+        {this.state.isPasswordPopupActive ? (
+          <PasswordChangePopup close={this.closeChangePassword} />
+        ) : null}
+        {/* <script src="js/minicart.js"></script> */}
       </div>
     );
   }
