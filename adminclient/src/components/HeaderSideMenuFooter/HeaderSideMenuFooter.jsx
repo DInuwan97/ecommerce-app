@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route,Switch,Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route,Switch,Redirect,Link} from "react-router-dom";
 import Avatar from 'react-avatar';
-import {Link,withRouter} from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -20,6 +19,7 @@ import Compose from '../ReviewDataTable/SendEmail';
 import SingleReviews from '../ReviewDataTable/SingleItemReview';
 import ReviewReplyData from '../ReviewDataTable/ReviewReply/ReviewReplyDataTable';
 import ReviewReplyTable from '../ReviewDataTable/ReviewReply/ReviewReplyTable';
+import SalesMAnagerUserProfile from '../AdminOrientation/SalesMAnagersProfile';
 
 import ContactUsDT from '../ContactUs/ContactusDT';
 
@@ -53,7 +53,9 @@ export default class HeaderSideMenuFooter extends Component {
        noOfSalesManagersToBeApprove:[],
        itemsList:[],
 
-       reviewList:[]
+       reviewList:[],
+
+       paramEmail:''
     }
 
     console.log('localstorage login token :' ,localStorage.userLoginToken);
@@ -89,6 +91,10 @@ export default class HeaderSideMenuFooter extends Component {
         company:decoded.company,
         userImageUrl:decoded.userImageUrl
        })
+
+      //  this.setState({
+      //    paramEmail:this
+      //  })
        
        if(this.setState.isSalesManager){
          this.setState({
@@ -513,8 +519,8 @@ export default class HeaderSideMenuFooter extends Component {
             <section className="content-header">
               <div className="container-fluid">
 <Router> 
-              <Switch>
 
+<Switch>
 
               <ProtectedRoutesAdmin exact path = '/salesManagerapprove' token={localStorage.getItem("userLoginToken")} salesManager = {this.state.isSalesManager} component = {()=> <UserListpage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>} /> 
               
@@ -533,7 +539,9 @@ export default class HeaderSideMenuFooter extends Component {
                 <Route exact path='/ReviewReplies' component = {()=> <ReviewReplyData company={this.state.company}/>}/>
                 <Route exact path='/ReviewReplies/:id' component={()=> <ReviewReplyTable company={this.state.company}/>}/>
 
-                <Route exact path='/ContactUs' component={ContactUsDT}/>
+                <Route path = '/SalesManagerProfile/:email' component={()=><SalesMAnagerUserProfile  loggedEmail={this.state.email} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
+               
+               <Route exact path='/ContactUs' component={ContactUsDT}/>
 
                <Route path='/MyProfile' component={()=><MyProfile loggedEmail={this.state.email} companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
 
@@ -541,7 +549,7 @@ export default class HeaderSideMenuFooter extends Component {
                 
 
                 <ProtectedRoutesAdmin isAdmin={this.state.isAdmin} path = '/AdminPackage' component = {() => <AdminPackage companyName = {this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList}/>}/>
-              </Switch>
+                </Switch>            
 </Router>
               
               </div>
