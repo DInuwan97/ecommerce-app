@@ -21,11 +21,16 @@ export default class ratings extends Component {
   }
 
   getRating() {
-    this.state.rating = Math.ceil(this.state.rating);
+    let floor = Math.floor(this.state.rating);
     const rate = [];
-    const unrate = 5 - this.state.rating;
-    for (let index = 0; index < this.state.rating; index++) {
+    let unrate = 5 - floor;
+    const half = this.state.rating - floor;
+    for (let index = 0; index < floor; index++) {
       rate.push(<i className="fa fa-star yellow-star" aria-hidden="true"></i>);
+    }
+    if(half>=0.5){
+      rate.push(<i className="fa fa-star-half-o yellow-star" aria-hidden="true"></i>);
+      unrate--;
     }
     for (let index = 0; index < unrate; index++) {
       rate.push(<i className="fa fa-star gray-star" aria-hidden="true"></i>);
