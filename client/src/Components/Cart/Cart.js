@@ -284,7 +284,7 @@ class Cart extends Component {
 
 
     let content = (
-      <div className={classes.container}>
+      <div className={classes.subContainer}>
         <div className={classes.leftPanel}>
           <div className={classes.selectAll}>
             <SelectAll
@@ -331,7 +331,7 @@ class Cart extends Component {
     }
 
     return (
-      <div>
+      <div className={classes.container}>
         {this.state.isCartLoading ?
           <div className={classes.cartLoading}>
             <WindowLoadingSpinner />

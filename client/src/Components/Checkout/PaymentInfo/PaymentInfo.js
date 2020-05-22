@@ -4,47 +4,6 @@ import classes from "./PaymentInfo.module.css";
 
 const PaymentInfo = props => {
 
-  const changeBack = (field, event) => {
-    setTimeout(() => {
-      let value = '';
-      let key = '';
-      switch (field) {
-        case "expire":
-          if (key == "Backspace") {
-            if (value.length == 4) {
-              value = "";
-              props.change(field, value);
-            } else {
-              props.change(field, value);
-            }
-          } else {
-            if (isNaN(value[value.length - 1]) || value.length > 5) {
-              // do nothing
-              return;
-            } else {
-              if (value.length == 2) {
-                value += "/";
-              }
-              props.change(field, value);
-            }
-          }
-          break;
-
-        case "cw":
-          console.log(value.length);
-          if (isNaN(value) || value.length > 3) {
-            // do nothing
-            return;
-          }
-          props.change(field, value);
-          break;
-
-        default:
-          console.log("actions no match");
-      }
-    }, 10);
-  };
-
   let special = false;
   const changeFieldHandler = event => {
     const numberField = document.getElementById("numberField");
