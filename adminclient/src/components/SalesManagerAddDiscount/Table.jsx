@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import TableRow from "./TableRow";
 
+const $ = require('jquery');
+$.DataTable = require('datatables.net');
+
 export default class Table extends Component {
   getRow() {
     return this.props.items.map(
@@ -33,6 +36,11 @@ export default class Table extends Component {
     );
   }
 
+  
+  componentDidUpdate = () => {
+    $('#discount-table').DataTable()
+}
+
   render() {
     return (
       <div className="card ">
@@ -41,7 +49,7 @@ export default class Table extends Component {
         </div>
 
         <div className="card-body">
-          <table id="example1" className="table table-bordered table-striped">
+          <table id="discount-table" className="table table-bordered table-striped">
             <thead>
               <tr>
                 <th>Added By</th>
