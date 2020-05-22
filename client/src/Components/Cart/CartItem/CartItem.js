@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import classes from "./CartItem.module.css";
-import PopupMessage from '../../PopupMessage/PopupMessage';
+import PopupMessage from '../../PopupWindows/CartItemPopup/CartItemPopup';
 
 const CartItem = props => {
   const [popupModal, setPopupModal] = useState({
