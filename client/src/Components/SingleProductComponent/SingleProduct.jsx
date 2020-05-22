@@ -708,11 +708,11 @@ class SingleProduct extends Component {
             <div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div className="modal-dialog">
                 <div className="modal-content">
-                  <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <div className="modal-header" style={{textAlign:"right"}}> 
+                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true" style={{float:"initial"}}>&times;</button>
 
                     {/* <h2 className="modal-title" id="myModalLabel">Please rate:</h2> */}
-                    <div class="swal-title" >Please rate</div>
+                    <div class="swal-title" style={{paddingTop:"0"}} >Please rate</div>
                   </div>
                   <div className="modal-body">
                     <fieldset className="rating-stars">
