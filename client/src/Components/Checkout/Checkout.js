@@ -26,10 +26,6 @@ class Checkout extends Component {
         addedUserMobile: '',
       },
 
-      card_number: '',
-      card_holder: '',
-      card_expire: '',
-      card_cw: '',
       orderError: false,
       isSpinnerActive: false
     }
@@ -120,69 +116,59 @@ class Checkout extends Component {
       default:
         console.log("no actions match");
     }
-
-    if (field == "cw") {
-
-
-    }
-
   };
 
   order = () => {
-    if (this.state.card_number.trim() == 0 || this.state.card_holder.trim() == 0 || this.state.card_expire.trim() == 0
-      || this.state.card_cw.trim() == 0) {
+    const numberField = document.getElementById("numberField");
+    const holderField = document.getElementById("holderField");
+    const expireField = document.getElementById("expireField");
+    const cwField = document.getElementById("cwField");
+
+    if (numberField.value.trim() == 0 || numberField.style.border == "1px solid red" ||
+      holderField.value.trim() == 0 || holderField.style.border == "1px solid red" ||
+      expireField.value.trim() == 0 || expireField.style.border == "1px solid red" ||
+      cwField.value.trim() == 0 || cwField.style.border == "1px solid red") {
       this.setState({ orderError: true, isSpinnerActive: false });
     } else {
-      console.log(this.state.card_number);
-      console.log(this.state.card_holder);
-      console.log(this.state.card_expire);
-      console.log(this.state.card_cw);
-
+      this.setState({ orderError: true, isSpinnerActive: true });
       // place order, calling payment gateway and other fucking stuff
-      setTimeout(() => {
-        alert("Your order has been placed");
-        // this.props.history.push({
-        //   pathname: '/',
-        // });
 
-        axios({
-          method: 'post',
-          url: `/api/pruchase/add`,
-          data: {
-            purchasedUserEmail: this.state.buyerDetails.email,
-            buyerDetails: this.state.buyerDetails,
-            items: this.props.theItems,
-            summary: this.props.summary
-          }
+      axios({
+        method: 'post',
+        url: `/api/pruchase/add`,
+        data: {
+          purchasedUserEmail: this.state.buyerDetails.email,
+          buyerDetails: this.state.buyerDetails,
+          items: this.props.theItems,
+          summary: this.props.summary
+        }
+      })
+        .then(res => {
+          this.setState({ orderError: true, isSpinnerActive: false });
+          swal({
+            icon: "success",
+            title: "Done",
+            text: "Order Completed"
+          })
         })
-          .then(res => {
-            swal({
-              icon: "success",
-              title: "Done",
-              text: "Order Completed"
-            })
-          })
-          .catch(err => {
-            console.log(err);
-          })
-
-        axios({
-          method: 'delete',
-          url: `/api/cart/removeAllMyItemsFromCart/${this.state.buyerDetails.email}`
+        .catch(err => {
+          console.log(err);
         })
-          .then({
 
-          })
-          .catch(err => {
-            console.log(err);
-          })
+      axios({
+        method: 'delete',
+        url: `/api/cart/removeAllMyItemsFromCart/${this.state.buyerDetails.email}`
+      })
+        .then({
 
+        })
+        .catch(err => {
+          console.log(err);
+        })
 
-      }, 3000);
     }
 
   };
-
 
   render() {
 
@@ -193,11 +179,7 @@ class Checkout extends Component {
             <DeliveryInfo buyer={this.state.buyer} change={this.changeDetails} />
           </div>
           <div className={classes.paymentInfo}>
-            <PaymentInfo change={this.changeCard}
-              number={this.state.card_number}
-              holder={this.state.card_holder}
-              expire={this.state.card_expire}
-              cw={this.state.card_cw} />
+            <PaymentInfo change={this.changeCard} />
           </div>
 
         </div>

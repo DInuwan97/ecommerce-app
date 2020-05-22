@@ -106,7 +106,7 @@ class DeliveryInfo extends Component {
 
     return (
       <div className={classes.container}>
-        <span className={classes.step}>Step 1 of 3</span>
+        <span className={classes.step}>Step 1 of 2</span>
         <h3 className={classes.header}>Delivery Information</h3>
 
         {this.state.detailActive ?
