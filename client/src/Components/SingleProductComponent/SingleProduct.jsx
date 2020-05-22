@@ -4,6 +4,7 @@ import './assets/css/single.css';
 import swal from 'sweetalert';
 import Axios from 'axios';
 import jwt_decode from 'jwt-decode'
+import Spinner from '../WindowLoadingSpinner/WindowLoadingSpinner';
 
 class SingleProduct extends Component {
   constructor(props) {
@@ -197,6 +198,7 @@ class SingleProduct extends Component {
             title: "Status",
             text: res.data.msg,
             icon: "success"
+
           })
         }).catch(err => {
           swal({
@@ -453,8 +455,9 @@ class SingleProduct extends Component {
         <div>
           <div className="container">
             <div className="row">
-              <div className="col-md-12">
-                <div class="loader"></div>
+              <div className="col-md-12" style={{margin:"10% auto"}}>
+                <Spinner/>
+                {/* <div class="loader"></div> */}
                 {/* <img src={require('./assets/images/loading2.gif')} type="image/gif" style={{ width: "50%", height: "25%", textAlign: "center" }} /> */}
               </div>
             </div>
@@ -500,8 +503,8 @@ class SingleProduct extends Component {
 
                         <li className="rating">{this.state.AverageRating}</li>
                         <li className="rating"><a href="#headingThree">Reviews</a></li>
-                        <li className="rating add-rating" data-toggle="modal" data-target="#myModal">
-                          <p>Rate Item</p>
+                        <li className="rating add-rating" data-toggle="modal" data-target="#myModal" > 
+                          <a>Rate Item</a>
                         </li>
                         <li>
                           <p className="add-review" onClick={() => this.addReview()}>Add your review</p>
@@ -510,24 +513,18 @@ class SingleProduct extends Component {
                     </div>
                     <div className="single-price">
                       <ul>
-                        <li>{"$" + (this.state.price - this.state.price * this.state.discount / 100)}</li>
+                        <li>{"LKR" + (this.state.price - this.state.price * this.state.discount / 100)}</li>
                         {this.state.discount == 0 ? "" :
                           <Fragment>
                             <li>
-                              <del>{"$" + this.state.price}</del>
+                              <del>{"LKR" + this.state.price}</del>
                             </li>
 
                             <li>
                               <span className="w3off">{this.state.discount + "%"} OFF</span>
                             </li>
-                            <li>Ends on: Oct,15th</li>
                           </Fragment>
                         }
-                        <li>
-                          <a href="#">
-                            <i className="fa fa-gift" aria-hidden="true"></i> Coupon
-                    </a>
-                        </li>
                       </ul>
                     </div>
                     <p className="single-price-text">
@@ -734,7 +731,7 @@ class SingleProduct extends Component {
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.confirmRate()}>Confirm</button>
+                    <button type="button" className="btn btn-success" data-dismiss="modal" onClick={() => this.confirmRate()}>Confirm</button>
                   </div>
                 </div>
               </div>

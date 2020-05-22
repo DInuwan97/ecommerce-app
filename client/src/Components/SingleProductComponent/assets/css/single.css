@@ -88,3 +88,59 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+
+
+
+  .swal-button--confirm,.btn-success{
+    background-color:#00E58B
+  }
+  .btn-success:hover{
+    background-color:#00BA6F
+  }
+
+
+   /* .swal-footer{
+      text-align: left;
+  } */
+
+  .swal-overlay--show-modal{
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    /* z-index: 100; */
+    transition: all 0.5s ease-in;
+  }
+  .modal{
+    backdrop-filter: blur(5px);
+  }
+  
+  .swal-modal,.modal-content{
+    border: 1px solid rgb(0, 229, 139);
+    box-shadow: 0px 0px 5px 0px rgba(0, 229, 139.75);
+    filter:blue(0px)
+  }
+
+  .swal-button--confirm.swal-button:not([disabled]):hover{background-color:#00BA6F}
+
+  .swal-button--confirm.swal-button:not([disabled]):focus{background-color:#00BA6F}
+
+  .modal-header .close {
+    font-size: 40px;
+  }
+
+  .swal-content__input:focus,.swal-content__textarea:focus{
+      outline:none;
+      border-color:#00BA6F
+    }
+
+    .swal-button:focus{
+        outline:none;
+        box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(0, 229, 139.75)
+    }

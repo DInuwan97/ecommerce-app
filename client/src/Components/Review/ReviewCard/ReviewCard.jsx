@@ -136,7 +136,8 @@ class ReviewCard extends Component {
 
     DeleteComment = (byPass) => {
         if (this.props.MyComment || byPass) {
-            swal("Are you sure?", {
+            swal( {
+                title:"Are you sure?",
                 dangerMode: true,
                 buttons: true,
             }).then(res => {
