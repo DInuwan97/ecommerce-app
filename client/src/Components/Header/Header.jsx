@@ -614,7 +614,7 @@ export class Header extends Component {
                     </li>
 
                     <li className={this.state.path === "about" ? " active":""}>
-                      <Link to="/contactus" className="hyper">
+                      <Link to="/about" className="hyper">
                         <span>About</span>
                       </Link>
                     </li>

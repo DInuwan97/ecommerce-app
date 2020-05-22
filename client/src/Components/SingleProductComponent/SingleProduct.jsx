@@ -5,6 +5,7 @@ import swal from 'sweetalert';
 import Axios from 'axios';
 import jwt_decode from 'jwt-decode'
 import Spinner from '../WindowLoadingSpinner/WindowLoadingSpinner';
+import { Redirect } from 'react-router';
 
 class SingleProduct extends Component {
   constructor(props) {
@@ -91,7 +92,8 @@ class SingleProduct extends Component {
       })
 
     }).catch(err => {
-      this.props.history.push("/");
+      window.location.href="/404.html"
+     
     })
   }
 

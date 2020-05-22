@@ -30,7 +30,7 @@ import ContactUs from './Components/Contacts/Contacts';
 import Faq from './Components/Contacts/Faq';
 import UserProfile from './Components/UserProfile/UserProfile';
 
-
+import About from './Components/About/about';
 
 class App extends Component {
 
@@ -115,6 +115,9 @@ class App extends Component {
             <Route path="/contactus" component={ContactUs} />
             <Route path='/faq' component={Faq} />
             <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+            
+            <Route path="/about" component={About} />
+            
             <Route path="/:type" component={ProductCardList} />
           </Switch>
           <Newsletter />
