@@ -17,7 +17,6 @@ class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       buyer: {
         addedUserFirstName: '',
         addedUserLastName: '',
@@ -30,8 +29,6 @@ class Checkout extends Component {
       isSpinnerActive: false
     }
 
-    this.changeCard = this.changeCard.bind(this);
-
   }
 
   componentDidMount() {
@@ -40,6 +37,7 @@ class Checkout extends Component {
     const decoded = jwt_decode(token);
 
     if (localStorage.getItem("userLoginToken") !== null) {
+
       this.setState({
         addedUserLastName: decoded.lastName,
         addedUserEmail: decoded.email,
@@ -49,7 +47,6 @@ class Checkout extends Component {
       console.log('location buyer details email : ', this.state.summary);
       console.log('location buyer details email : ', this.state.items);
     }
-
 
     this.getPurchasedCurrentUserDetails(decoded.email);
     // console.log('Chekc oUT USER DATA 11 : ',this.state.buyer.addedUserFirstName);
@@ -74,21 +71,6 @@ class Checkout extends Component {
           buyer: userBuyer
         });
 
-
-        const userDetails = {
-          firstName: res.data.firstName,
-          lastName: res.data.lastName,
-          address: res.data.address,
-          mobile: res.data.mobile,
-          email: res.data.email
-        }
-
-        this.setState({
-          buyerDetails: userDetails
-        })
-
-
-        console.log("Check out firstname : ", this.state.buyerDetails.email);
       })
 
   }
@@ -97,25 +79,6 @@ class Checkout extends Component {
   changeDetails = (buyer) => {
     console.log(buyer);
     this.setState({ buyer: buyer, detailActive: false });
-  };
-
-  changeCard = (field, value) => {
-    switch (field) {
-      case "number":
-        this.setState({ card_number: value });
-        break;
-      case "holder":
-        this.setState({ card_holder: value });
-        break;
-      case "expire":
-        this.setState({ card_expire: value });
-        break;
-      case "cw":
-        this.setState({ card_cw: value });
-        break;
-      default:
-        console.log("no actions match");
-    }
   };
 
   order = () => {
@@ -197,10 +160,6 @@ class Checkout extends Component {
   }
 }
 
-// $(window).scroll(function () {
-//   $("#rightPanel").css("top", Math.max(15, 169 - $(this).scrollTop()));
-// });
-
 $(document).ready(function () {
   $(this).scrollTop(0);
 });
@@ -217,7 +176,7 @@ const mapDispatchToProps = dispatch => {
   return {
     updateItems: (newItems) => dispatch({ type: actionTypes.UPDATE_ITEMS, newItems: newItems }),
     select: (items, isAllItemsSelected, summary) => dispatch({ type: actionTypes.SELECT, items: items, isAllItemsSelected: isAllItemsSelected, summary: summary }),
-    updateItemSummary: (items, summary) => dispatch({ type: actionTypes.UPDATE_ITEMS_SUMMARY, items: items, summary: summary })
+    updateItemSummary: (items, summary) => dispatch({ type: actionTypes.UPDATE_ITEMS_SUMMARY, items: items, summary: summary }),
   };
 }
 

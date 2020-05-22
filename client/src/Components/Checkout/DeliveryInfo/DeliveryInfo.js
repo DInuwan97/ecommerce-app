@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import classes from "./DeliveryInfo.module.css";
+import WindowLoadingSpinner from '../../WindowLoadingSpinner/WindowLoadingSpinner';
 
 class DeliveryInfo extends Component {
   constructor(props) {
@@ -10,7 +11,9 @@ class DeliveryInfo extends Component {
       lastName: this.props.buyer.addedUserLastName,
       phone: this.props.buyer.addedUserMobile,
       address: this.props.buyer.addedUserAddress,
+
       isWarning: false,
+      isLoading: true,
 
       detailActive: false,
 
@@ -22,6 +25,7 @@ class DeliveryInfo extends Component {
       },
 
       interval: setInterval(() => {
+        //this.render();
         this.setState({
           firstName: this.props.buyer.addedUserFirstName,
           lastName: this.props.buyer.addedUserLastName,
@@ -33,7 +37,6 @@ class DeliveryInfo extends Component {
             phone: this.props.buyer.addedUserMobile,
             address: this.props.buyer.addedUserAddress
           }
-
         });
       }, 1000),
 
@@ -100,7 +103,7 @@ class DeliveryInfo extends Component {
   };
 
   render() {
-    if (this.state.firstName.length != 0 || this.state.lastName.length != 0) {
+    if (this.state.firstName.length != 0) {
       clearInterval(this.state.interval);
     }
 
@@ -158,11 +161,16 @@ class DeliveryInfo extends Component {
           </div>
         }
 
+        {this.state.initialObj.firstName.length == 0 ?
+          <div className={classes.loading}>
+            <WindowLoadingSpinner />
+          </div>
+          : null}
+
       </div>
     );
 
   }
-
 
 };
 
