@@ -119,20 +119,34 @@
   padding: 0.2rem;
 }
 
-/* .card__right__2 input::-webkit-outer-spin-button,
-.card__right__2 input::-webkit-inner-spin-button {
+.card input[type="number"]::-webkit-outer-spin-button,
+.card input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
- // Firefox 
-.card__right__2 input[type="number"] {
+/* Firefox  */
+.card input[type="number"] {
   -moz-appearance: textfield;
-} */
+}
 
-.card_number input::placeholder,
-.card_holder input::placeholder,
-.card_expires input::placeholder,
-.card__right__2 input::placeholder {
+.card input::placeholder {
   color: rgba(0, 0, 0, 0.2);
+}
+
+.warnings {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem 6%;
+}
+
+.warningList {
+  list-style: none;
+}
+
+.warningList li {
+  color: orangered;
+  font-size: 1.2rem;
+  font-weight: 500;
 }

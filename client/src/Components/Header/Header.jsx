@@ -6,6 +6,8 @@ import Minicart from "../MiniCart/Minicart";
 import jwt_decode from "jwt-decode";
 //import { decode } from 'punycode';
 import Avatar from "react-avatar";
+import PasswordChangePopup from "../PopupWindows/PasswordChangePopup/PasswordChangePopup";
+
 export class Header extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,8 @@ export class Header extends Component {
       isMinicartActive: false,
       search: "",
       path: "/",
-      userImageUrl:''
+      userImageUrl:'',
+      isPasswordPopupActive: false,
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -172,6 +175,20 @@ export class Header extends Component {
 
 
 
+  // open password chage popup
+  openChangePassword = () => {
+    if (!this.state.isPasswordPopupActive) {
+    }
+      this.setState({ isPasswordPopupActive: true });
+  };
+
+  closeChangePassword = () => {
+  // close password chage popup
+    if (this.state.isPasswordPopupActive) {
+      this.setState({ isPasswordPopupActive: false });
+    }
+  };
+
   render() {
     let imgPreviewMainMenu;
     if (this.state.userImageUrl != "") {
@@ -180,7 +197,11 @@ export class Header extends Component {
           src={this.state.userImageUrl}
           alt="Product Image"
           className={classes.image}
-          style={{ width: "40px", height: "40px", borderRadius: "100px" }}
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "100px",
+          }}
         />
       );
     } else {
@@ -268,18 +289,7 @@ export class Header extends Component {
         </div>
       </div>
     );
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
+
     return (
       <div>
         {this.state.isMinicartActive ? (
@@ -311,7 +321,7 @@ export class Header extends Component {
                 placeholder="Search for a Product..."
                 required=""
               />
-              <button onSubmit={(e) => this.SearchItem(e)}
+              <button onClick={() => this.SearchItem()}
                 type="submit"
                 className="btn btn-default search"
                 aria-label="Left Align"
@@ -624,7 +634,11 @@ export class Header extends Component {
           </div>
         </div>
 
-        <script src="js/minicart.js"></script>
+        {/*******  password change popup ***********/}
+        {this.state.isPasswordPopupActive ? (
+          <PasswordChangePopup close={this.closeChangePassword} />
+        ) : null}
+        {/* <script src="js/minicart.js"></script> */}
       </div>
     );
   }
