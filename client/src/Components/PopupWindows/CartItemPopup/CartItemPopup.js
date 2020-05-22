@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import classes from './PopupMessage.module.css';
+import classes from './CartItemPopup.module.css';
 
 const PopupMessage = props => {
 

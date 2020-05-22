@@ -16,7 +16,8 @@ class ReviewCard extends Component {
             bcc: "",
             msg: "",
             reviewId: "",
-            userCompany: ''
+            userCompany: '',
+            ReviewButtons: (<div></div>)
         }
 
     }
@@ -42,6 +43,8 @@ class ReviewCard extends Component {
             msg: `Your Review : ${this.props.commentDocument.reviewMessage}`,
             reviewId: this.props.commentDocument._id
         });
+
+        // this.ReviewButtonsFunc()
     }
 
     componentWillReceiveProps = (props) => {
@@ -139,6 +142,115 @@ class ReviewCard extends Component {
     }
 
 
+    // ReviewButtonsFunc = () => {
+    //     var buttons;
+    //     if (this.props.userType === "Customer"||(this.props.userType !=="Customer" && this.state.userCompany !== this.props.company)) {
+    //         if (this.props.MyComment) {
+    //             buttons = (
+    //                 <div class="btn-group">
+    //                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                         <span class="glyphicon glyphicon-option-vertical"></span>
+    //                     </button>
+    //                     <ul class="dropdown-menu dropdown-menu-right">
+    //                         <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+    //                         <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+    //                     </ul>
+    //                 </div>);
+    //             this.setState({
+    //                 ReviewButtons: buttons
+    //             })
+    //         } else {
+    //             buttons = (<div></div>);
+    //             this.setState({
+    //                 ReviewButtons: buttons
+    //             })
+    //         }
+    //     } else if (this.state.userCompany === this.props.company) {
+    //         if (this.props.MyComment) {
+    //             if (this.props.commentDocument.didAdminReplied) {
+    //                 buttons = (
+    //                     <div class="btn-group" >
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+    //                             <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+    //                             <li role="separator" class="divider"></li>
+    //                             <li><p data-toggle="modal"
+    //                                 onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                     this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply Again</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             } else {
+    //                 buttons = (
+    //                     <div class="btn-group" >
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+    //                             <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+    //                             <li><p onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)}>Mark As Read</p></li>
+    //                             <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                 this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             }
+    //         } else {
+    //             if (this.props.commentDocument.didAdminReplied) {
+    //                 buttons = (
+    //                     <div class="btn-group">
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.DeleteComment(true)}>Delete Review</p></li>
+    //                             <li role="separator" class="divider"></li>
+    //                             <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                 this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply Again</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             } else {
+    //                 buttons = (
+    //                     <div class="btn-group">
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.DeleteComment(true)}>Delete Review</p></li>
+    //                             <li><p onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)}>Mark As Read</p></li>
+    //                             <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                 this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             }
+    //         }
+    //     } else {
+    //         buttons = (<div></div>);
+    //         this.setState({
+    //             ReviewButtons: buttons
+    //         })
+    //     }
+    // }
+
+
     render() {
         const options = {
             month: "long", day: "numeric", year: "numeric",
@@ -209,7 +321,10 @@ class ReviewCard extends Component {
                             </div>
                         </div>
                         <div className="col-md-1 col-xs-6 settings-button-col">
-                            {this.props.userType == "Customer" || this.state.userCompany !== this.props.company ?
+                            {/* {
+                                this.state.ReviewButtons
+                            } */}
+                            {this.props.userType == "Customer" || (this.props.userType !== "Customer" && this.state.userCompany !== this.props.company) ?
                                 this.props.MyComment ?
                                     <div class="btn-group">
                                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
