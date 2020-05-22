@@ -7,6 +7,7 @@ import CartItem from './CartItem/CartItem';
 import Summary from './Summary/Summary';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 import * as actionTypes from '../../Store/Actions';
+import WindowLoadingSpinner from '../WindowLoadingSpinner/WindowLoadingSpinner';
 
 import classes from "./Cart.module.css";
 
@@ -25,6 +26,7 @@ class Cart extends Component {
       addedUserEmail: '',
       totalItems: '',
       isAllItemsSelected: false,
+      isCartLoading: true,
 
       buyerDetails: {
         firstName: 'Dinuan',
@@ -85,6 +87,7 @@ class Cart extends Component {
           console.log(product);
         });
         this.props.updateItems(res.data);
+        this.setState({ isCartLoading: false });
         // this.setState({
         //   items: res.data
         // })
@@ -272,6 +275,14 @@ class Cart extends Component {
   };
 
   render() {
+    const body = document.body;
+    if (this.state.isCartLoading) {
+      body.style.overflow = "hidden";
+    } else {
+      body.style.overflow = "visible";
+    }
+
+
     let content = (
       <div className={classes.container}>
         <div className={classes.leftPanel}>
@@ -303,11 +314,13 @@ class Cart extends Component {
         <div id="rightPanel" className={classes.rightPanel} >
           <Summary buy={this.buy} />
         </div>
+
+
       </div>
     );
 
     // check cart is empty
-    if (this.props.theItems.length == 0) {
+    if (this.props.theItems.length == 0 && !this.state.isCartLoading) {
       content = (
         <div className={classes.emptyCart}>
           <img src={require('./assets/images/emptyCart.jpeg')} alt="Empty cart" />
@@ -318,7 +331,16 @@ class Cart extends Component {
     }
 
     return (
-      content
+      <div>
+        {this.state.isCartLoading ?
+          <div className={classes.cartLoading}>
+            <WindowLoadingSpinner />
+          </div>
+          : null
+        }
+        {content}
+      </div>
+
     );
   }
 }
