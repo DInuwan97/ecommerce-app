@@ -40,7 +40,6 @@ export default class Login extends Component {
         .then(res =>{
 
             if(res){
-              console.log('Login Res is :', res.token);
               if(res.isSalesManager === true || res.isAdmin === true){
                 window.location.replace('/');
               }else{

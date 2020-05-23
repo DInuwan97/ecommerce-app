@@ -49,7 +49,6 @@ class ContactusDT extends Component {
                 })
                 $('#message-table').DataTable();
             }).catch(err => {
-                console.log(err);
 
             })
         }
@@ -64,7 +63,6 @@ class ContactusDT extends Component {
     // }
 
     showReply = (index) => {
-        // console.log(index);
 
         this.setState({
             showReply: this.state.messages[index].reply
@@ -180,7 +178,7 @@ class ContactusDT extends Component {
                                 <span className="info-box-text">Reply Rate</span>
                                 <span className="info-box-number">{this.state.repliedCount + " / " + this.state.totalCount}</span>
                                 <div className="progress">
-                                    <div className="progress-bar" style={{ width: this.state.totalCount != 0 ? this.state.replyRate * 100 + "%" : '100%' }} />
+                                    <div className="progress-bar" style={{ width: this.state.totalCount != 0 ? this.state.replyRate + "%" : '100%' }} />
                                 </div>
                                 <span className="progress-description">
                                     {

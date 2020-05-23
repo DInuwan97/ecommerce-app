@@ -14,7 +14,6 @@ export default class CardList extends Component {
   getAllItems = () => {
     axios.get("api/items").then((res) => {
       const Items = res.data;
-      console.log(Items);
       this.setState({ Items });
 
       let count = 0;
@@ -36,7 +35,6 @@ export default class CardList extends Component {
   }
 
   getNumber = () => {
-    console.log("Hey its here");
   };
 
   render() {

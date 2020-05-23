@@ -89,7 +89,7 @@ class ContactusDTRow extends Component {
                             this.state.admin ?
                                 <button className='btn btn-danger' title="Delete Message" onClick={() => this.props.deleteReply(this.props.message._id)}><i class="fa fa-trash"></i></button>
                                 :
-                                ""
+                                <button className='btn btn-danger' title="Delete Message" onClick={() =>{swal({title:"Error!",text:"No Permission",icon:"error"})} }><i class="fa fa-trash"></i></button>
                         }
                     </div>
                 </td>

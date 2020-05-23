@@ -14,7 +14,6 @@ export default class MyProfile extends Component {
         this.upload = this.upload.bind(this)
        // this.setFirstName = this.setFirstName.bind(this);
         //this.setEmail = this.setEmail.bind(this);
-        console.log('Profile DATA : ' ,this.props.fName);
     }
 
     componentDidMount() {
@@ -26,7 +25,6 @@ export default class MyProfile extends Component {
         firstName:this.props.fName
       })
 
-      console.log('Profile DATA First NAME: ' ,this.props.fName);
 
     }
 
@@ -39,7 +37,6 @@ export default class MyProfile extends Component {
 
     upload(e) {
       e.preventDefault()
-      console.log(this.state.file)
     }
 
     render() {

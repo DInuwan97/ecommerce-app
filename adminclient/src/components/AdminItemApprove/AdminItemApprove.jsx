@@ -16,7 +16,6 @@ export default class AdminItemApprove extends Component {
   componentDidMount() {
     axios.get(`/api/items`).then((res) => {
       const items = res.data;
-      console.log("hello world");
 
       this.setState({ items });
     });
@@ -29,13 +28,10 @@ export default class AdminItemApprove extends Component {
     });
 
     axios.delete(`/api/items/${id}`).then((res) => {
-      console.log(res);
-      console.log(res.data);
     });
   };
 
   approveItem = (id, addedBy, itemName) => {
-    console.log(id);
     this.setState({
       items: [...this.state.items.filter((item) => item._id !== id)],
     });
@@ -46,8 +42,6 @@ export default class AdminItemApprove extends Component {
         addedBy: addedBy,
         itemName: itemName,
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
   };
 
   render() {

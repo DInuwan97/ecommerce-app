@@ -39,6 +39,10 @@ export class Header extends Component {
   logOut(e) {
     e.preventDefault();
     localStorage.removeItem("userLoginToken");
+    setTimeout(() => {
+      window.location.reload(true);
+    }, 50);
+
     this.props.history.push("/login");
   }
 
@@ -68,6 +72,9 @@ export class Header extends Component {
         case "/contactus":
           path = "contactus";
           break;
+        case "/about":
+          path = "about";
+          break;
         case "/women":
         case "/men":
         case "/kids":
@@ -81,7 +88,7 @@ export class Header extends Component {
         case "/jewellery":
         case "/watches":
         case "/cosmetics":
-        case "/deos":
+        case "/Perfume":
         case "/haircare":
         case "/shoes":
         case "/handbags":
@@ -142,6 +149,9 @@ export class Header extends Component {
         case "/contactus":
           path = "contactus";
           break;
+        case "/about":
+          path = "about";
+          break;
         case "/women":
         case "/men":
         case "/kids":
@@ -155,7 +165,7 @@ export class Header extends Component {
         case "/jewellery":
         case "/watches":
         case "/cosmetics":
-        case "/deos":
+        case "/Perfume":
         case "/haircare":
         case "/shoes":
         case "/handbags":
@@ -556,7 +566,7 @@ export class Header extends Component {
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/deos">
+                                <Link to="/Perfume">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
@@ -640,6 +650,19 @@ export class Header extends Component {
                         <span>Contact Us</span>
                       </Link>
                     </li>
+                    {(this.state.isSalesManager === true ||
+                      this.state.isAdmin === true ||
+                      this.state.isSalesServicer === true) && (
+                      <li
+                        className={
+                          this.state.path === "salesManager" ? " active" : ""
+                        }
+                      >
+                        <Link to="/salesManager" className="hyper">
+                          <span>Publish Add</span>
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </nav>

@@ -166,11 +166,50 @@ class ReviewMain extends Component {
                 msg: msg,
                 reviewId: reviewId
             }
+            if (data.to !== "" && data.to) {
+                var ToEmails = data.to.split(",");
+                for (var i = 0; i < ToEmails.length; i++) {
+                    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(ToEmails[i]))) {
+                        swal({
+                            text: `Invalid Email -${ToEmails[i]} in to field`,
+                            title: "Error!",
+                            icon: 'error'
+                        })
+                        return;
+                    }
+                }
+            }
+            if (data.cc !== "" && data.cc) {
+                var CcEmails = data.cc.split(",");
+                for (var i = 0; i < CcEmails.length; i++) {
+                    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(CcEmails[i]))) {
+                        swal({
+                            text: `Invalid Email -${CcEmails[i]} in cc field`,
+                            title: "Error!",
+                            icon: 'error'
+                        })
+                        return;
+                    }
+                }
+            }
+            if (data.bcc !== "" && data.bcc) {
+                var BccEmails = data.bcc.split(",");
+                for (var i = 0; i < BccEmails.length; i++) {
+                    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(BccEmails[i]))) {
+                        swal({
+                            text: `Invalid Email -${BccEmails[i]} in bcc field`,
+                            title: "Error!",
+                            icon: 'error'
+                        })
+                        return;
+                    }
+                }
+            }
             const url = "/api/review/admin/sendMail";
             swal({
-                title:"Sending...",
-                text:"1..2..3..",
-                buttons:false,
+                title: "Sending...",
+                text: "1..2..3..",
+                buttons: false,
                 closeOnClickOutside: false,
                 closeOnEsc: false,
             })
@@ -330,9 +369,9 @@ class ReviewMain extends Component {
                 <div className="modal fade" id='composeModal' tabindex="-1" role="dialog" aria-labelledby="composeModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <div className="modal-header" style={{textAlign:"right"}}>
-                                <button type="button" className="close" data-dismiss="modal" aria-hidden="true" style={{float:"none"}}>&times;</button>
-                                <div class="swal-title" style={{paddingTop:"0"}}>Send Message</div>
+                            <div className="modal-header" style={{ textAlign: "right" }}>
+                                <button type="button" className="close" data-dismiss="modal" aria-hidden="true" style={{ float: "none" }}>&times;</button>
+                                <div class="swal-title" style={{ paddingTop: "0" }}>Send Message</div>
                             </div>
                             <div className="modal-body">
                                 <div className="form-group">
@@ -376,7 +415,7 @@ class ReviewMain extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-success"  data-dismiss="modal" onClick={() => this.ReplyProduct()}>Confirm</button>
+                                <button type="button" className="btn btn-success" data-dismiss="modal" onClick={() => this.ReplyProduct()}>Confirm</button>
                             </div>
                         </div>
                     </div>
