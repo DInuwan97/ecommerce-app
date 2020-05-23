@@ -94,7 +94,7 @@ class Checkout extends Component {
       this.setState({ orderError: true, isSpinnerActive: false });
     } else {
       this.setState({ orderError: true, isSpinnerActive: true });
-      // place order, calling payment gateway and other fucking stuff
+      // place order, calling payment gateway and other fucking stuffy
 
       axios({
         method: 'post',
