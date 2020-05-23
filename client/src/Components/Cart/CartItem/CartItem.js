@@ -29,6 +29,7 @@ const CartItem = props => {
   //console.log(props.item.isSelected + ' ' + props.item.id);
   //console.log(props.item);
   console.log('rendered cartitem');
+  console.log(props.item);
 
   let isChecked = props.item.isSelectedItem;
 
@@ -177,7 +178,7 @@ const CartItem = props => {
               {props.item.quantity < 1 ? 1 : props.item.quantity}
             </span> */}
           </div>
-          <button className={classes.plus} onClick={increaseQuantity} disabled={props.item.quantity === props.item.stockQuantity}>
+          <button className={classes.plus} onClick={increaseQuantity} disabled={props.item.quantity >= props.item.stockQuantity}>
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className={classes[plusBtnStyle]}>
               <path d="M18.984 12.984h-6v6h-1.969v-6h-6v-1.969h6v-6h1.969v6h6v1.969z"></path>
             </svg>

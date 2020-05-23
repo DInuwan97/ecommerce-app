@@ -67,7 +67,16 @@ export default class AreaChart extends Component {
         </div>
         <div className="card-body">
           <div className="chart">
-            <Line data={this.state.chartData} />
+            <Line
+              data={this.state.chartData}
+              options={{
+                title: {
+                  display: "",
+                  text: "sachin",
+                  fontSize: 25,
+                },
+              }}
+            />
           </div>
         </div>
       </div>
