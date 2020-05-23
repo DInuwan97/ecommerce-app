@@ -146,18 +146,18 @@ class Minicart extends Component {
     //
 
     //change minicart quatity
-    const changeQuantity = (cartItemId,quantity) => {
+    const changeQuantity = (cartItemId, quantity) => {
       if (quantity <= 1) {
         return;
       }
       let number = quantity - 1;
-     
-  
+
+
       axios({
-        method:'patch',
-        url:`/api/cart/setQuantity/${cartItemId}`,
-        data:{
-          quantity:quantity
+        method: 'patch',
+        url: `/api/cart/setQuantity/${cartItemId}`,
+        data: {
+          quantity: quantity
         }
       })
     };
@@ -192,15 +192,6 @@ class Minicart extends Component {
     };
 
     return summary;
-  };
-
-  toCart = () => {
-    let finalItems = this.props.theItems;
-    console.log(finalItems);
-   // this.props.history.push("/cart");
-    // save to database and navigate to cart
-    //
-    //
   };
 
   render() {
