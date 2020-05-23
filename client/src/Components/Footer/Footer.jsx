@@ -73,6 +73,11 @@ export default class Footer extends Component {
               <li>
                 <Link to="/cart">Cart</Link>
               </li>
+              {localStorage.getItem('userLoginToken') ?
+                <li>
+                  <Link to="/Wishlist">Wishlist</Link>
+                </li> : ""
+              }
             </ul>
           </div>
           <div className="clearfix"></div>
