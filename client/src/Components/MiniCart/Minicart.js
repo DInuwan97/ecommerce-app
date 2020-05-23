@@ -197,6 +197,7 @@ class Minicart extends Component {
   toCart = () => {
     let finalItems = this.props.theItems;
     console.log(finalItems);
+   // this.props.history.push("/cart");
     // save to database and navigate to cart
     //
     //
@@ -218,7 +219,7 @@ class Minicart extends Component {
           </div>
 
           <div className={classes.action}>
-            <button onClick={this.toCart}>Go to cart</button>
+            <a href={'/cart'}>Go to cart</a>
           </div>
         </div>
       </div>
