@@ -23,13 +23,13 @@ class SingleProduct extends Component {
 
       itemImage: "",
       itemColors: [],
-      StockQuantity: 0,
+      StockQuantity:'',
       discount: 0,
       description: "",
       company: "",
       itemId: "",
       itemName: "",
-      price: 0,
+      price:'',
       category: "",
       size: "",
       Brand: "",
@@ -86,8 +86,7 @@ class SingleProduct extends Component {
         category: res.data.category,
         size: res.data.size,
         Brand: res.data.Brand,
-
-
+        stockQuantity:res.data.stockQuantity,
         isLoading: false
       })
 
@@ -434,7 +433,9 @@ class SingleProduct extends Component {
         quantity: this.state.quantity,
         company: this.state.company,
         isSelectedItem: false,
-        totalPrice: 0
+        totalPrice: 0,
+        stockQuantity:this.state.stockQuantity,
+        itemId:this.props.match.params.id,
       }
     })
       .then(() => {
@@ -471,7 +472,8 @@ class SingleProduct extends Component {
         company: this.state.company,
         isSelectedItem: false,
         totalPrice: 0,
-        itemId:this.props.match.params.id
+        itemId:this.props.match.params.id,
+        stockQuantity:this.state.stockQuantity
       }
     })
     .then(() => {

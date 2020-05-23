@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classes from "./UserProfile.module.css";
 import axios from "axios";
 import Avatar from "react-avatar";
-
+import swal from 'sweetalert';
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +31,48 @@ export default class UserProfile extends Component {
 
     this.uploadSingleFile = this.uploadSingleFile.bind(this);
   }
+
+  updateMyProfile = (email) => {
+    console.log("Sales Servicer Email : ", email);
+    axios({
+      method: "patch",
+      url: `/api/users/updatemyProfile/${email}`,
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("userLoginToken"),
+      },
+      data: {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        mobile: this.state.mobile,
+        address: this.state.address,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    let formData = new FormData();
+    formData.append("image", this.state.userImageUrl);
+    axios({
+      method: "patch",
+      url: `/api/users/updateImage/${this.props.loggedEmail}`,
+      data: formData,
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+
+
+    axios({
+      method:'',
+      url:'/api/review/admin/changeUserData'
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.error(err));
+
+  };
 
   getUser = () => {
     axios({
@@ -336,7 +378,18 @@ export default class UserProfile extends Component {
                 </div>
 
                 <div className={classes.send}>
-                  <input type="submit" value="Send message" />
+                  <input
+                   type="submit" 
+                   value="Update"
+                   onClick={() => {
+                    swal({
+                      title: "Done",
+                      text: "Profile was Updated",
+                      icon: "success",
+                    }).then(() => {
+                      this.updateMyProfile(this.props.loggedEmail);
+                    });
+                  }}  />
                 </div>
               </div>
             </div>

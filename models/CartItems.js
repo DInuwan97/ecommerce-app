@@ -73,7 +73,11 @@ const cartItemsSchema = mongoose.Schema({
  },
  totalPrice:{
   type:Number
- }
+ },
+ itemId:{
+  type:String,
+  required:true
+}
 
 });
 

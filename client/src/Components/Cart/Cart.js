@@ -88,6 +88,7 @@ class Cart extends Component {
         });
         this.props.updateItems(res.data);
         this.setState({ isCartLoading: false });
+        console.log('Item Data : ',res.data)
         // this.setState({
         //   items: res.data
         // })
@@ -194,7 +195,9 @@ class Cart extends Component {
         company: item.company,
         isSelectedItem: false,
         totalPrice: 0,
-        itemId:itemId
+        itemId:item.itemId,
+        stockQuantity:item.stockQuantity
+
       }
     })
     .then(res=>{
