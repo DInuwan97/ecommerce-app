@@ -4,10 +4,17 @@ import SalesServicersDataRow from './SalesServicersDataRow';
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
+
 export default class SalesServicersList extends Component {
+
+  
+componentDidUpdate = () => {
+  $('#salesServicersList-table').DataTable()
+}
+
   render() {
 
-    const { approveSalesServicer,companyName } = this.props;
+    const { approveSalesServicer,companyName,deleteSalesServicer} = this.props;
 
     return (
         <div className="card">
@@ -16,7 +23,7 @@ export default class SalesServicersList extends Component {
         </div>
        
         <div className="card-body">
-          <table id="example1" className="table table-bordered table-striped">
+          <table id="salesServicersList" className="table table-bordered table-striped">
             <thead>
             <tr>
               <th>Username</th>
@@ -47,7 +54,7 @@ export default class SalesServicersList extends Component {
                     packageName  
                   }) =>{
                       if((isSalesServicer) && (secureKeyVerifyStatus)){
-                        if(company === companyName){
+                        if(company === companyName && salasManagerVerification === false){
                         return(
                         <SalesServicersDataRow
                             id={_id}
@@ -65,6 +72,7 @@ export default class SalesServicersList extends Component {
                             company = {company}
                             packageName = {packageName}
                             approveSalesServicer = {approveSalesServicer}
+                            deleteSalesServicer = {deleteSalesServicer}
                         />
                         )
                         }

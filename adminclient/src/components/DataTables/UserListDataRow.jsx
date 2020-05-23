@@ -8,7 +8,8 @@ export default function({id,
     adminVerification,
     company,
     packageName,
-    approveSalesManagerRequest}) {
+    approveSalesManagerRequest,
+    deleteSalesManager}) {
 
     
         return (
@@ -65,7 +66,33 @@ export default function({id,
                              class="btn btn-info btn-sm mr-1">
                                  Approve
                             </button>
-                            <button class="btn btn-danger btn-sm">Decline</button>
+                            <button 
+                             onClick={() =>
+                              swal({
+                                title: "Are you sure?",
+                                text: "Do you want to Delete?",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                              })
+                              .then((willDelete) => {
+                                if (willDelete) {
+
+                                  swal("The Sales Manager has been Deleted", {
+                                    icon: "success",
+                                    button:true
+                                  }).then(() => {
+                                    deleteSalesManager(email)
+                                  })
+                              
+                                } else {
+                                  swal("The Sales Manager Not Yet Approved");
+                                }
+                              })
+                            }
+                            class="btn btn-danger btn-sm"
+                            
+                            >Decline</button>
                         </td>
                 </tr>
       

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './ReviewCard.css';
 import swal from 'sweetalert';
 import jwt_decode from 'jwt-decode'
+import Avatar from 'react-avatar';
 
 class ReviewCard extends Component {
     constructor(props) {
@@ -15,20 +16,26 @@ class ReviewCard extends Component {
             bcc: "",
             msg: "",
             reviewId: "",
-            userCompany:''
+            userCompany: '',
+            ReviewButtons: (<div></div>)
         }
 
     }
     componentDidMount() {
-        // console.log(this.props.commentDocument);
         const token = localStorage.getItem('userLoginToken');
-        const userData = jwt_decode(token);
-        const company = userData.company;
-        
+        let userData;
+        let company;
+        if (token) {
+            userData = jwt_decode(token);
+            company = userData.company;
+        }
+
+
+
         this.setState({
             MyLiked: this.props.MyLiked,
             MyDisliked: this.props.MyDisliked,
-            userCompany:company,
+            userCompany: company,
             to: this.props.commentDocument.reviewerEmail,
             subject: `Regarding the Review on our item`,
             cc: "",
@@ -36,14 +43,22 @@ class ReviewCard extends Component {
             msg: `Your Review : ${this.props.commentDocument.reviewMessage}`,
             reviewId: this.props.commentDocument._id
         });
+
+        // this.ReviewButtonsFunc()
     }
 
     componentWillReceiveProps = (props) => {
         this.setState({
             MyLiked: props.MyLiked,
-            MyDisliked: props.MyDisliked
-        });
+            MyDisliked: props.MyDisliked,
 
+            to: props.commentDocument.reviewerEmail,
+            subject: `Regarding the Review on our item`,
+            cc: "",
+            bcc: "",
+            msg: `Your Review : ${props.commentDocument.reviewMessage}`,
+            reviewId: props.commentDocument._id
+        });
 
     }
 
@@ -109,7 +124,6 @@ class ReviewCard extends Component {
                 closeOnClickOutside: false,
             }).then(data => {
                 let editedData = textBar.value;
-                console.log(editedData, data);
 
                 if (editedData != "" && data && editedData) {
                     if (editedData !== this.props.commentDocument.reviewMessage) {
@@ -122,7 +136,8 @@ class ReviewCard extends Component {
 
     DeleteComment = (byPass) => {
         if (this.props.MyComment || byPass) {
-            swal("Are you sure?", {
+            swal( {
+                title:"Are you sure?",
                 dangerMode: true,
                 buttons: true,
             }).then(res => {
@@ -132,6 +147,115 @@ class ReviewCard extends Component {
             })
         }
     }
+
+
+    // ReviewButtonsFunc = () => {
+    //     var buttons;
+    //     if (this.props.userType === "Customer"||(this.props.userType !=="Customer" && this.state.userCompany !== this.props.company)) {
+    //         if (this.props.MyComment) {
+    //             buttons = (
+    //                 <div class="btn-group">
+    //                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                         <span class="glyphicon glyphicon-option-vertical"></span>
+    //                     </button>
+    //                     <ul class="dropdown-menu dropdown-menu-right">
+    //                         <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+    //                         <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+    //                     </ul>
+    //                 </div>);
+    //             this.setState({
+    //                 ReviewButtons: buttons
+    //             })
+    //         } else {
+    //             buttons = (<div></div>);
+    //             this.setState({
+    //                 ReviewButtons: buttons
+    //             })
+    //         }
+    //     } else if (this.state.userCompany === this.props.company) {
+    //         if (this.props.MyComment) {
+    //             if (this.props.commentDocument.didAdminReplied) {
+    //                 buttons = (
+    //                     <div class="btn-group" >
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+    //                             <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+    //                             <li role="separator" class="divider"></li>
+    //                             <li><p data-toggle="modal"
+    //                                 onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                     this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply Again</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             } else {
+    //                 buttons = (
+    //                     <div class="btn-group" >
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.EditComment()}>Edit Review</p></li>
+    //                             <li><p onClick={() => this.DeleteComment()}>Delete Review</p></li>
+    //                             <li><p onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)}>Mark As Read</p></li>
+    //                             <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                 this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             }
+    //         } else {
+    //             if (this.props.commentDocument.didAdminReplied) {
+    //                 buttons = (
+    //                     <div class="btn-group">
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.DeleteComment(true)}>Delete Review</p></li>
+    //                             <li role="separator" class="divider"></li>
+    //                             <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                 this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply Again</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             } else {
+    //                 buttons = (
+    //                     <div class="btn-group">
+    //                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                             <span class="glyphicon glyphicon-option-vertical"></span>
+    //                         </button>
+    //                         <ul class="dropdown-menu dropdown-menu-right">
+    //                             <li><p onClick={() => this.DeleteComment(true)}>Delete Review</p></li>
+    //                             <li><p onClick={() => this.props.MarkAsRead(this.props.commentDocument._id)}>Mark As Read</p></li>
+    //                             <li><p data-toggle="modal" onClick={() => this.props.triggerModal(this.state.to, this.state.cc,
+    //                                 this.state.bcc, this.state.subject, this.state.msg, this.state.reviewId)}
+    //                                 data-target={`#composeModal`}>Reply</p></li>
+    //                         </ul>
+    //                     </div>)
+    //                 this.setState({
+    //                     ReviewButtons: buttons
+    //                 })
+    //             }
+    //         }
+    //     } else {
+    //         buttons = (<div></div>);
+    //         this.setState({
+    //             ReviewButtons: buttons
+    //         })
+    //     }
+    // }
 
 
     render() {
@@ -153,7 +277,9 @@ class ReviewCard extends Component {
                                     <div className="user-image col-xs-4">
                                         {
                                             this.props.commentDocument.userImageUrl == "" ?
-                                                <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> :
+                                                <Avatar name={`${this.props.commentDocument.reviewUserFirstName} ${this.props.commentDocument.reviewUserLastName}`} round="50%" size='50' />
+                                                // <img src={require("./assets/images/avatar.png")} alt="Avatar" class="avatar" /> 
+                                                :
                                                 <img src={this.props.commentDocument.userImageUrl} alt="Avatar" class="avatar" />
                                         }
 
@@ -202,7 +328,10 @@ class ReviewCard extends Component {
                             </div>
                         </div>
                         <div className="col-md-1 col-xs-6 settings-button-col">
-                            {this.props.userType == "Customer" || this.state.userCompany !== this.props.company?
+                            {/* {
+                                this.state.ReviewButtons
+                            } */}
+                            {this.props.userType == "Customer" || (this.props.userType !== "Customer" && this.state.userCompany !== this.props.company) ?
                                 this.props.MyComment ?
                                     <div class="btn-group">
                                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -217,7 +346,7 @@ class ReviewCard extends Component {
                                 :
                                 this.props.MyComment ?
                                     <div class="btn-group" >
-                                        <button type="button"  class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="glyphicon glyphicon-option-vertical"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right">

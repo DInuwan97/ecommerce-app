@@ -1,14 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Banner() {
     return (
-        <div class="banner-agile">
-        <div class="container">
-            <h2>WELCOME TO</h2>
-            <h3>FASHION <span>CLUB</span></h3>
-            <p>Suspendisse sed tellus id libero pretium interdum. Suspendisse potenti. Quisque consectetur elit sit amet vehicula tristique. </p>
-            <a href="about.html">Read More</a>
-        </div>
+        <div className="banner-agile">
+            <div className="container">
+                <h2>WELCOME TO</h2>
+                <h3>FASHION <span>CLUB</span></h3>
+                <p>STAY HOME AND SHOP ONLINE</p>
+                <Link to="/about">About Us</Link>
+            </div>
         </div>
     )
 }

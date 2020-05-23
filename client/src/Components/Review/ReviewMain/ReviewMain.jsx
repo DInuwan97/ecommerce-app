@@ -141,7 +141,6 @@ class ReviewMain extends Component {
                 Authorization: "bearer " + token,
             }
         }).catch((err) => {
-            console.log(err);
             swal({
                 title: "Error!",
                 text: err.message,
@@ -331,10 +330,9 @@ class ReviewMain extends Component {
                 <div className="modal fade" id='composeModal' tabindex="-1" role="dialog" aria-labelledby="composeModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                                <div class="swal-title" >Send Message</div>
+                            <div className="modal-header" style={{textAlign:"right"}}>
+                                <button type="button" className="close" data-dismiss="modal" aria-hidden="true" style={{float:"none"}}>&times;</button>
+                                <div class="swal-title" style={{paddingTop:"0"}}>Send Message</div>
                             </div>
                             <div className="modal-body">
                                 <div className="form-group">
@@ -378,7 +376,7 @@ class ReviewMain extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary"  data-dismiss="modal" onClick={() => this.ReplyProduct()}>Confirm</button>
+                                <button type="button" className="btn btn-success"  data-dismiss="modal" onClick={() => this.ReplyProduct()}>Confirm</button>
                             </div>
                         </div>
                     </div>

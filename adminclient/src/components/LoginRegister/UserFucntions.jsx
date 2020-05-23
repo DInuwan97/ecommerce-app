@@ -10,14 +10,9 @@ export const login = loggedUser =>{
     })
     .then(res =>{
         
-        localStorage.setItem('userLoginToken',res.data.token); //create the login session
-      //  localStorage.setItem('loggedUserFirstName',res.data.firstName);
+        localStorage.setItem('userLoginToken',res.data.token); 
 
-        //console.log("Fisrt Name :" +res.data.firstName)
-        //console.log("Login Token :" +localStorage.userLoginToken);
-        //console.log("SecurtyKeyStatus :" +res.data.secureKeyVerifyStatus);
-
-        return res.data.token
+        return res.data;
     })
     .catch(err =>{
         if(err.response.status === 400){

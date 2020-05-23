@@ -8,7 +8,8 @@ export default function SalesServicersDataRow({id,
   mobile,
   company,
   packageName,
-  approveSalesServicer}) {
+  approveSalesServicer,
+  deleteSalesServicer }) {
 
     return (
         <tr>
@@ -49,9 +50,41 @@ export default function SalesServicersDataRow({id,
            
           }
         }
-            class="btn btn-info btn-sm mr-1">
+          class="btn btn-info btn-sm mr-1">
           Approve</button>
-          <button class="btn btn-danger btn-sm">Decline</button>
+          <button class="btn btn-danger btn-sm"
+           onClick={()=>{
+            swal({
+              title: "Are you sure?",
+              text: "Do you want to  Delete",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willDelete)=>{
+              if(willDelete){
+
+                  swal({
+                    icon:"success",
+                    text:"Sales Servicer Deleted",
+                    button:true
+                  })
+                  .then(()=>{
+                    deleteSalesServicer(email)
+                  })
+              }
+              else{
+                swal({
+                  icon:"warning",
+                  text:"Sales Servicer Not Approved",
+                  button: true,
+                })
+              }
+            })
+         
+        }
+      }
+      >Decline</button>
         </td>
 
         

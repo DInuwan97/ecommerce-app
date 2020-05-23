@@ -4,10 +4,10 @@ import SalesManagerSalesServicersApprovalFunctions from '../DataTables/SalesMana
 export default class SalesServicersApproveList extends Component {
   render() {
 
-    const{companyName} = this.props;
+    const{companyName,usersList,loggedUserDetails} = this.props;
     return (
       <div>
-        <DashbordCardPanel/>
+        <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} itemsList={this.props.itemsList}/>
         <SalesManagerSalesServicersApprovalFunctions companyName={companyName}/>
       </div>
     );

@@ -5,7 +5,7 @@ import ReviewReplyTableRow from './ReviewReplyRow';
 import './ReviewReply.css'
 import swal from 'sweetalert';
 import JwtDecode from 'jwt-decode';
-
+import Spinner from '../../Spinner/Spinner';
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -25,7 +25,8 @@ class ReviewReplyTable extends Component {
             reviweAdminImage: "",
             reviewAdminPosition: "",
             reviewAdminCompany: "",
-            reviewAdminMail: ""
+            reviewAdminMail: "",
+            isLoading:true
         }
     } componentDidMount = () => {
         this.getReviewReplys();
@@ -47,7 +48,8 @@ class ReviewReplyTable extends Component {
                 this.setState({
                     Reviews: res.data,
                     MarkedCount,
-                    EmailedCount
+                    EmailedCount,
+                    isLoading:false
                 });
             })
         }).catch(err => {
@@ -121,6 +123,9 @@ class ReviewReplyTable extends Component {
     }
     render() {
         return (
+            this.state.isLoading===true?
+            <Spinner></Spinner>
+            :
             <div>
                 <div className="row">
                     <div className="col-lg-3 col-6">
@@ -284,7 +289,7 @@ class ReviewReplyTable extends Component {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" onClick={() => this.sendEmailToAdmin()} class="btn btn-secondary" data-dismiss="modal">Send Email</button>
-                                <button type="button" class="btn btn-primary">Close</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

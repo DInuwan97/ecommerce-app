@@ -3,11 +3,11 @@ import DashbordCardPanel from '../DashbordCardPannel/DashobordCardPanel'
 import ActiveSalesManagersList from '../ActiveSalesManagers/ActiveSalesManagers';
 export default class ActiveSalesManagers extends Component {
     render() {
-        const{companyName} = this.props;
+        const{companyName,usersList,loggedUserDetails} = this.props;
         return (
             <div>
-                 <DashbordCardPanel/>
-                 <ActiveSalesManagersList/>
+                 <DashbordCardPanel usersList={usersList} loggedUserDetails={loggedUserDetails} itemsList={this.props.itemsList} />
+                 <ActiveSalesManagersList usersList={usersList}/>
             </div>
         )
     }

@@ -233,7 +233,11 @@ router.post("/login", (req, res) => {
                 'secureKeyVerifyStatus':user.secureKeyVerifyStatus,
                 'email':user.email,
                 'firstName':user.firstName,
-                'lastName':user.lastName});
+                'lastName':user.lastName,
+                'isSalesManager':user.isSalesManager,
+                'isSalesServicer':user.isSalesServicer,
+                'isAdmin':user.isAdmin,
+                'isCustomer':user.isCustomer });
               }
             );
           } else {
@@ -350,6 +354,10 @@ router.get("/profile", authenticateUser, (req, res) => {
 
 //have to authorixation middleweare
 router.get('/viewusers', authenticateUser,async (req,res)=>{
+
+  console.log('User lITS : ');
+
+
   try {
     const users = await User.find();
     if (!users) {
@@ -585,7 +593,22 @@ router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
 })
 
 
+router.delete("/deleteSalesManager/:email", async (req, res) => {
+  //check if user exist
 
+  console.log('Sales Manager Deleteing : ',req.params)
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) 
+       return res.status(400).json({ msg: "User does not exist" });
+    
+    res.status(200).json(user);
+    await user.remove();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
 
 
 

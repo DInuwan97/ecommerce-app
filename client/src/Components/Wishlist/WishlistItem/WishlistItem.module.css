@@ -22,6 +22,7 @@
 .imageFig img {
   width: 100%;
   scale: 1;
+  cursor: pointer;
 }
 
 /********************************* description ***************************/

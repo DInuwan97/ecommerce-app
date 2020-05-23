@@ -1,28 +1,39 @@
 import React, { Component } from "react";
 import TableRow from "./CategoryTableRow";
-export default class CategoryTable extends Component {
 
-  getRow(){
-    return this.props.categories.map(({ _id, categoryName, code, genderType }) => {
-      return  <TableRow
-      id={_id}
-      categoryName={categoryName}
-      code={code}
-      genderType={genderType}
-      deleteCategory={this.props.deleteCategory}
-      updateCategory = {this.props.updateCategory}
-    />
-    })
+const $ = require("jquery");
+$.DataTable = require("datatables.net");
+
+export default class CategoryTable extends Component {
+  getRow() {
+    return this.props.categories.map(
+      ({ _id, categoryName, code, genderType }) => {
+        return (
+          <TableRow
+            id={_id}
+            categoryName={categoryName}
+            code={code}
+            genderType={genderType}
+            deleteCategory={this.props.deleteCategory}
+            updateCategory={this.props.updateCategory}
+          />
+        );
+      }
+    );
   }
 
+  componentDidUpdate = () => {
+    $("#category-table").DataTable();
+  };
+
   render() {
-
-    const {deleteCategory,updateCategory} = this.props
-
     return (
       <div className="card">
         <div className="card-body">
-          <table id="example1" className="table table-bordered table-striped">
+          <table
+            id="category-table"
+            className="table table-bordered table-striped"
+          >
             <thead>
               <tr>
                 <th>Category Name</th>
@@ -32,10 +43,7 @@ export default class CategoryTable extends Component {
                 <th>Delete</th>
               </tr>
             </thead>
-            <tbody>
-                {this.getRow()}
-             
-            </tbody>
+            <tbody>{this.getRow()}</tbody>
           </table>
         </div>
       </div>

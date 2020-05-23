@@ -4,15 +4,7 @@ import classes from "./Summary.module.css";
 import spinnerClasses from './Spinner.module.css';
 
 const Summary = props => {
-  // console.log(props.summary);
-  const [spinner, setSpinner] = useState(false);
-
-  const order = () => {
-    if (!props.orderError) {
-      setSpinner(true);
-    }
-    props.order();
-  };
+  console.log(props.summary);
 
   return (
     <div className={classes.container}>
@@ -37,14 +29,14 @@ const Summary = props => {
       </div>
 
       <div className={classes.button}>
-        {spinner ? <div className={spinnerClasses.loader}>Loading...</div> :
-          <button className={classes.button_buy} onClick={order} >ORDER</button>
+        {props.isSpinnerActive ? <div className={spinnerClasses.loader}>Loading...</div> :
+          <button className={classes.button_buy} onClick={props.order} >ORDER</button>
         }
       </div>
 
       {props.orderError ?
         <div className={classes.error}>
-          Please fill all selected details.
+          Required details invalid or empty.
       </div> : null}
 
     </div>

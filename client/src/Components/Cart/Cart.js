@@ -1,77 +1,125 @@
 import React, { Component } from 'react';
-import $ from "jquery";
+import jwt_decode from 'jwt-decode';
+import { connect } from 'react-redux';
 
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
 import Summary from './Summary/Summary';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
+import * as actionTypes from '../../Store/Actions';
+import WindowLoadingSpinner from '../WindowLoadingSpinner/WindowLoadingSpinner';
 
 import classes from "./Cart.module.css";
 
+import axios from 'axios';
+const $ = require('jquery');
+
+
 class Cart extends Component {
-  state = {
-    totalItems: 3,
-    isAllItemsSelected: false,
-    items: [
-      {
-        id: 1,
-        itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        stockQuantity: 10,
-        color: 'red',
-        size: 'XL',
-        price: 1200.30,
-        discount: 10,
-        itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        totalPrice: 0,
-        quantity: 1,
-        isSelected: false
+
+  constructor(props) {
+    super(props);
+    this.state = {
+
+      addedUserFirstName: '',
+      addedUserLastName: '',
+      addedUserEmail: '',
+      totalItems: '',
+      isAllItemsSelected: false,
+      isCartLoading: true,
+
+      buyerDetails: {
+        firstName: 'Dinuan',
+        lastName: 'kakakd',
+        mobile: '76273',
+        email: 'sjhsud'
       },
-      {
-        id: 2,
-        itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        stockQuantity: 20,
-        color: 'red',
-        size: 'XL',
-        price: 1200.30,
-        discount: 7,
-        itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        totalPrice: 0,
-        quantity: 1,
-        isSelected: false
-      },
-    ],
-    cartSummary: {
-      subtotal: 0,
-      totalDiscount: 0,
-      total: 0,
-      isDisabled: true
+
+      diliverAddress: '',
+      subPrice: '',
+      totalPrice: '',
+      totalDiscount: ''
+
     }
-  };
+  }
 
   /////////////////////////////////////////// functions ///////////////////////////////////////////////////////
   // select all items in the cart
+  componentDidMount = () => {
+    const token = localStorage.userLoginToken;
+    const decoded = jwt_decode(token);
+
+    if (localStorage.getItem("userLoginToken") !== null) {
+
+      const userBuyer = {
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+        mobile: decoded.mobile,
+        email: decoded.email
+      }
+
+      this.setState({
+        addedUserFirstName: decoded.firstName,
+        addedUserLastName: decoded.lastName,
+        addedUserEmail: decoded.email,
+        buyerDetails: userBuyer
+      })
+      console.log('Decoded Email in Cart : ', decoded.email);
+    }
+
+    // check if cart item already have
+    if (this.props.theItems.length == 0) {
+      console.log("reloaded cart");
+      this.getCartItems(decoded.email);
+    }
+
+  }
+
+  // USED REDUX
+  getCartItems = (email) => {
+    axios({
+      method: 'get',
+      url: `/api/cart/view/${email}`
+    })
+      .then(res => {
+        let cartProducts = res.data;
+        cartProducts.forEach((product, index) => {
+          console.log(product);
+        });
+        this.props.updateItems(res.data);
+        this.setState({ isCartLoading: false });
+        // this.setState({
+        //   items: res.data
+        // })
+        console.log('Items details : ', this.props.theItems);
+      })
+  }
+
+
   selectAllHandler = () => {
-    let tempItems = [...this.state.items];
+    let tempItems = [...this.props.theItems];
 
     tempItems.forEach(item => {
-      item.isSelected = !this.state.isAllItemsSelected;
+      item.isSelectedItem = !this.props.isAllItemsSelected;
     });
+    console.log(tempItems);
 
     // set summary
     let summary = this.setSummary(tempItems);
 
-    this.setState({ items: tempItems, isAllItemsSelected: !this.state.isAllItemsSelected, cartSummary: summary });
+    this.props.select(tempItems, !this.props.isAllItemsSelected, summary);
+    //this.setState({ items: tempItems, isAllItemsSelected: !this.state.isAllItemsSelected, cartSummary: summary });
   };
 
-  // select single item in the cart
+  // select single item in the cart - USED REDUX
   itemSelectHandler = (id) => {
     console.log(id);
-    let tempItems = [...this.state.items];
+    let tempItems = [...this.props.theItems];
     let allItemsSelected = true;
     tempItems.forEach(item => {
-      if (item.id === id) {
-        item.isSelected = !item.isSelected;
-        if (!item.isSelected) {
+      if (item._id === id) {
+        item.isSelectedItem = !item.isSelectedItem;
+        if (!item.isSelectedItem) {
           allItemsSelected = false;
         }
       }
@@ -79,42 +127,53 @@ class Cart extends Component {
 
     // set summary
     let summary = this.setSummary(tempItems);
+    console.log("change " + summary);
 
     if (!allItemsSelected) {
-      this.setState({ items: tempItems, isAllItemsSelected: false, cartSummary: summary });
+      this.props.select(tempItems, false, summary);
+      // this.setState({ items: tempItems, isAllItemsSelected: false, cartSummary: summary });
       return;
     }
 
-    console.log(this.state.items);
-    this.setState({ items: tempItems, cartSummary: summary });
+    console.log(this.props.theItems);
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
   };
 
-  // remove an item from the cart
+
+  // remove an item from the cart - REDUX
   removeItem = (id) => {
     console.log(id);
     let tempItems;
-    tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+
+    axios({
+      method: 'delete',
+      url: `/api/cart/remove/${id}`,
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    tempItems = this.props.theItems.filter(item => {
+      if (item._id !== id) {
         return item;
       }
     });
-
-    // remove the item from cartItems schema in database
-    //
-    //
-
-    // set summary
     let summary = this.setSummary(tempItems);
-    this.setState({ items: tempItems, cartSummary: summary });
+    this.props.updateItemSummary(tempItems, summary);
+
   };
 
-  // add an item to wishlist
+  // add an item to wishlist - REDUX
   moveToWishList = (id) => {
     console.log(id);
     let tempItems;
     let moveItem;
-    tempItems = this.state.items.filter(item => {
-      if (item.id !== id) {
+    tempItems = this.props.theItems.filter(item => {
+      if (item._id !== id) {
         return item;
       } else {
         moveItem = item;
@@ -127,28 +186,29 @@ class Cart extends Component {
 
     // set summary
     let summary = this.setSummary(tempItems);
-    this.setState({ items: tempItems, cartSummary: summary });
-    this.setState({ items: tempItems, cartSummary: summary });
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
+
   };
 
-  // change quantity of an item
+  // change quantity of an item - REDUX
   changeQuantity = (id, quantity) => {
-    console.log(id + ' ' + quantity);
-    let tempItems = [...this.state.items];
+    let tempItems = [...this.props.theItems];
     let subAmount = 0;
     let discount = 0;
     let isDisabled = true;
+    let summary = {};
 
     tempItems.forEach(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item.quantity = quantity;
         item.totalPrice = item.price * quantity;
-        if (item.isSelected) {
+        if (item.isSelectedItem) {
           subAmount += item.price * quantity;
           discount += (item.price * quantity) * (item.discount / 100.0);
         }
       } else {
-        if (item.isSelected) {
+        if (item.isSelectedItem) {
           subAmount += item.price * item.quantity;
           discount += (item.price * item.quantity) * (item.discount / 100.0);
         }
@@ -158,14 +218,16 @@ class Cart extends Component {
     if (subAmount > 0) {
       isDisabled = false;
     }
-    let summary = {
+
+    summary = {
       subtotal: subAmount,
       totalDiscount: discount,
       total: subAmount - discount,
       isDisabled: isDisabled
     };
+    this.props.updateItemSummary(tempItems, summary);
+    // this.setState({ items: tempItems, cartSummary: summary });
 
-    this.setState({ items: tempItems, cartSummary: summary });
   };
 
   setSummary = (tempItems) => {
@@ -175,7 +237,7 @@ class Cart extends Component {
     let isDisabled = true;
 
     tempItems.forEach(item => {
-      if (item.isSelected) {
+      if (item.isSelectedItem) {
         subAmount += item.price * item.quantity;
         discount += (item.price * item.quantity) * (item.discount / 100.0);
       }
@@ -189,23 +251,18 @@ class Cart extends Component {
       total: subAmount - discount,
       isDisabled: isDisabled
     };
+
     return summary;
   };
 
   // when user clicked buy
   buy = () => {
     // selected items move to the checkout component
-    console.log('buy');
 
     setTimeout(() => {
-      if (this.state.cartSummary.subtotal > 0) {
-        let object = {
-          items: this.state.items,
-          summary: this.state.cartSummary
-        };
+      if (this.props.summary.subtotal > 0) {
         this.props.history.push({
           pathname: '/checkout',
-          state: object
         });
       }
     }, 3000);
@@ -213,23 +270,30 @@ class Cart extends Component {
   };
 
   render() {
+    const body = document.body;
+    if (this.state.isCartLoading) {
+      body.style.overflow = "hidden";
+    } else {
+      body.style.overflow = "visible";
+    }
+
+
     let content = (
-      <div className={classes.container}>
+      <div className={classes.subContainer}>
         <div className={classes.leftPanel}>
           <div className={classes.selectAll}>
             <SelectAll
-              totalItems={this.totalItems}
               clicked={this.selectAllHandler}
-              selected={this.state.isAllItemsSelected}
-              totalItems={this.state.items.length} />
+              selected={this.props.isAllItemsSelected}
+              totalItems={this.props.theItems.length} />
           </div>
 
           <div className={classes.cartItems}>
-            {this.state.items.map(item =>
+            {this.props.theItems.map(item =>
               <CartItem
-                key={item.id}
+                key={item._id}
                 item={item}
-                allSelected={this.state.isAllItemsSelected}
+                allSelected={this.props.isAllItemsSelected}
                 select={this.itemSelectHandler}
                 move={this.moveToWishList}
                 remove={this.removeItem}
@@ -240,18 +304,18 @@ class Cart extends Component {
           <div className={classes.paymentDetail}>
             <PaymentDetail />
           </div>
-
-          <div className={classes.moreItems}>more items</div>
         </div>
 
         <div id="rightPanel" className={classes.rightPanel} >
-          <Summary details={this.state.cartSummary} buy={this.buy} />
+          <Summary buy={this.buy} />
         </div>
+
+
       </div>
     );
 
     // check cart is empty
-    if (this.state.items.length == 0) {
+    if (this.props.theItems.length == 0 && !this.state.isCartLoading) {
       content = (
         <div className={classes.emptyCart}>
           <img src={require('./assets/images/emptyCart.jpeg')} alt="Empty cart" />
@@ -262,7 +326,16 @@ class Cart extends Component {
     }
 
     return (
-      content
+      <div className={classes.container}>
+        {this.state.isCartLoading ?
+          <div className={classes.cartLoading}>
+            <WindowLoadingSpinner />
+          </div>
+          : null
+        }
+        {content}
+      </div>
+
     );
   }
 }
@@ -276,6 +349,24 @@ $(document).ready(function () {
   $(this).scrollTop(0);
 });
 
-export default Cart;
+// $(window).scroll(function () {
+//   $('#rightPanel').css('top', Math.max(15, 169 - $(this).scrollTop()))
+// });
 
+const mapStateToProps = state => {
+  return {
+    theItems: state.items,
+    summary: state.cartSummary,
+    isAllItemsSelected: state.isAllItemsSelected,
+  };
+}
 
+const mapDispatchToProps = dispatch => {
+  return {
+    updateItems: (newItems) => dispatch({ type: actionTypes.UPDATE_ITEMS, newItems: newItems }),
+    select: (items, isAllItemsSelected, summary) => dispatch({ type: actionTypes.SELECT, items: items, isAllItemsSelected: isAllItemsSelected, summary: summary }),
+    updateItemSummary: (items, summary) => dispatch({ type: actionTypes.UPDATE_ITEMS_SUMMARY, items: items, summary: summary })
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

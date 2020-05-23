@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 
+import classes from "./Header.module.css";
 import Minicart from "../MiniCart/Minicart";
 import jwt_decode from "jwt-decode";
 //import { decode } from 'punycode';
+import Avatar from "react-avatar";
+import PasswordChangePopup from "../PopupWindows/PasswordChangePopup/PasswordChangePopup";
 
 export class Header extends Component {
   constructor(props) {
@@ -18,6 +21,10 @@ export class Header extends Component {
       isSalesManager: false,
       isSalesServicer: false,
       isMinicartActive: false,
+      search: "",
+      path: "/",
+      userImageUrl:'',
+      isPasswordPopupActive: false,
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -48,10 +55,47 @@ export class Header extends Component {
         isCustomer: decoded.isCustomer,
         isSalesManager: decoded.isSalesManager,
         isSalesServicer: decoded.isSalesServicer,
+        userImageUrl: decoded.userImageUrl,
       });
       console.log("Decoded token is : ", decoded);
     }
-
+    if (this.props.location.pathname) {
+      let path = "/";
+      switch (this.props.location.pathname) {
+        case "/":
+          path = "/"
+          break;
+        case "/contactus":
+          path = "contactus"
+          break;
+        case "/women":
+        case "/men":
+        case "/kids":
+        case "/formals":
+        case "/party":
+        case "/casuals":
+        case "/night":
+        case "/inner":
+          path = "clothing"
+          break;
+        case "/jewellery":
+        case "/watches":
+        case "/cosmetics":
+        case "/deos":
+        case "/haircare":
+        case "/shoes":
+        case "/handbags":
+        case "/skincare":
+          path = "personal"
+          break;
+        default:
+          path = ""
+          break;
+      }
+      this.setState({
+        path: path
+      })
+    }
     // code for open close minicart
   }
 
@@ -69,7 +113,106 @@ export class Header extends Component {
     this.setState({ isMinicartActive: false });
   };
 
+
+  searchOnChange = (e) => {
+    if (e.key === 'Enter') {
+      this.SearchItem();
+    }
+
+    this.setState({
+      search: e.target.value
+    });
+
+  }
+
+  SearchItem = () => {
+    this.props.history.push(`/${this.state.search}`);
+    window.location.reload(true);
+  }
+
+  componentWillReceiveProps = (props) => {
+    if (this.props.location.pathname !== props.location.pathname) {
+      let path = "/";
+      switch (props.location.pathname) {
+        case "/":
+          path = "/"
+          break;
+        case "/contactus":
+          path = "contactus"
+          break;
+        case "/women":
+        case "/men":
+        case "/kids":
+        case "/formals":
+        case "/party":
+        case "/casuals":
+        case "/night":
+        case "/inner":
+          path = "clothing"
+          break;
+        case "/jewellery":
+        case "/watches":
+        case "/cosmetics":
+        case "/deos":
+        case "/haircare":
+        case "/shoes":
+        case "/handbags":
+        case "/skincare":
+          path = "personal"
+          break;
+        default:
+          path = ""
+          break;
+      }
+      this.setState({
+        path: path
+      })
+    }
+  }
+
+  openChangePassword = () => {};
+
+
+
+
+  // open password chage popup
+  openChangePassword = () => {
+    if (!this.state.isPasswordPopupActive) {
+    }
+      this.setState({ isPasswordPopupActive: true });
+  };
+
+  closeChangePassword = () => {
+  // close password chage popup
+    if (this.state.isPasswordPopupActive) {
+      this.setState({ isPasswordPopupActive: false });
+    }
+  };
+
   render() {
+    let imgPreviewMainMenu;
+    if (this.state.userImageUrl != "") {
+      imgPreviewMainMenu = (
+        <img
+          src={this.state.userImageUrl}
+          alt="Product Image"
+          className={classes.image}
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "100px",
+          }}
+        />
+      );
+    } else {
+      imgPreviewMainMenu = (
+        <Avatar
+          name={this.state.firstName + " " + this.state.lastName}
+          className={classes.avatarimg}
+        />
+      );
+    }
+
     const loginRegLink = (
       <div
         className="collapse navbar-collapse"
@@ -96,56 +239,54 @@ export class Header extends Component {
     );
 
     const userLink = (
-      <div
-        className="collapse navbar-collapse"
-        id="bs-megadropdown-tabs"
-        style={{ float: "right" }}
-      >
-        <ul className="nav navbar-nav ">
-          <div class="dropdown">
-            <button
-              style={{
-                backgroundColor: "0",
-                textDecoration: "none",
-                marginTop: 8,
-                fontSize: 16,
-              }}
-              className="btn btn-link dropdown-toggle"
-              type="button"
-              id="dropdownMenu1"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="true"
-            >
-              <i
-                className="fa fa-user"
-                aria-hidden="true"
-                style={{ marginRight: 5 }}
-              ></i>
-              Hello {this.state.firstName}
-              <span style={{ marginLeft: 5 }} className="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li>
-                <Link to="/editMyProfile" className="hyper">
-                  <span>My Profile</span>
-                </Link>
-              </li>
-              <li>
-                <a href="#">Security Policies</a>
-              </li>
-              <li>
-                <a href="#">Privacy Change</a>
-              </li>
-              <li role="separator" class="divider"></li>
-              <li>
-                <a onClick={this.logOut.bind(this)} href="#">
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
-        </ul>
+      <div className={classes.usernav}>
+        <div className={classes.userimage}>
+          <figure className={classes.imageFig}>{imgPreviewMainMenu}</figure>
+        </div>
+
+        <div className={classes.username}>
+          <span>Hello {this.state.firstName}</span>
+        </div>
+
+        <div className={classes.icon}>
+          <span>&#94;</span>
+        </div>
+
+        <div id="links" className={classes.links}>
+          <ul className={classes.linksList}>
+            <li className={classes.link}>
+              <Link to="/editMyProfile">
+                <span>My Profile</span>
+              </Link>
+            </li>
+            <li className={classes.link}>
+              <Link to="/purchasedOrders">
+                <span>My Orders</span>
+              </Link>
+            </li>
+            <li className={classes.link}>
+              <Link to="/wishlist" className="hyper">
+                <span>Wishlist</span>
+              </Link>
+            </li>
+            <li className={classes.link}>
+              <a href="#">Security Policies</a>
+            </li>
+            <li className={classes.link}>
+              <a href="#">Privacy Change</a>
+            </li>
+            <li className={classes.link}>
+              <a href="#" onClick={this.openChangePassword}>
+                Change Password
+              </a>
+            </li>
+            <li className={classes.link}>
+              <a onClick={this.logOut.bind(this)} href="#">
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     );
 
@@ -161,35 +302,35 @@ export class Header extends Component {
         <div className="header-top-w3layouts">
           <div className="container">
             <div className="col-md-6 logo-w3">
-              <a href="/">
+              <Link to="/">
                 <img src="/images/logo2.png" alt=" " />
                 <h1>
                   FASHION<span>CLUB</span>
                 </h1>
-              </a>
+              </Link>
             </div>
 
             <div
               className="col-md-4 search-agileinfo"
               style={{ float: "right" }}
             >
-              <form action="#" method="post">
-                <input
-                  type="search"
-                  name="Search"
-                  placeholder="Search for a Product..."
-                  required=""
-                />
-                <button
-                  type="submit"
-                  className="btn btn-default search"
-                  aria-label="Left Align"
-                >
-                  <i className="fa fa-search" aria-hidden="true">
-                    {" "}
-                  </i>
-                </button>
-              </form>
+
+              <input onKeyUp={(e) => this.searchOnChange(e)}
+                type="search"
+                name="Search"
+                placeholder="Search for a Product..."
+                required=""
+              />
+              <button onClick={() => this.SearchItem()}
+                type="submit"
+                className="btn btn-default search"
+                aria-label="Left Align"
+              >
+                <i className="fa fa-search" aria-hidden="true">
+                  {" "}
+                </i>
+              </button>
+
             </div>
 
             <div className="col-md-1 cart-wthree" style={{ float: "right" }}>
@@ -243,63 +384,63 @@ export class Header extends Component {
                   id="bs-megadropdown-tabs"
                 >
                   <ul className="nav navbar-nav ">
-                    <li className=" active">
-                      <a href="index.html" className="hyper ">
+                    <li className={this.state.path === "/" ? " active" : ""}>
+                      <Link to="/" className="hyper ">
                         <span>Home</span>
-                      </a>
+                      </Link>
                     </li>
 
-                    <li className="dropdown ">
-                      <a
-                        href="#"
+                    <li className={this.state.path === "clothing" ? "dropdown active":"dropdown"}>
+                      <Link
+                        to="#"
                         className="dropdown-toggle  hyper"
                         data-toggle="dropdown"
                       >
                         <span>
                           Clothing<b className="caret"></b>
                         </span>
-                      </a>
+                      </Link>
 
                       <ul className="dropdown-menu multi">
                         <div className="row">
                           <div className="col-sm-4">
                             <ul className="multi-column-dropdown">
                               <li>
-                                <a href="women.html">
+                                <Link to="/women">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Women's Clothing
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="men.html">
+                                <Link to="/men">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Men's Clothing
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="kids.html">
+                                <Link to="/kids">
                                   {" "}
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Kid's Wear
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="party.html">
+                                <Link to="/party">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Party Wear
-                                </a>
+                                </Link>
                               </li>
                             </ul>
                           </div>
@@ -307,52 +448,52 @@ export class Header extends Component {
                           <div className="col-sm-4">
                             <ul className="multi-column-dropdown">
                               <li>
-                                <a href="casuals.html">
+                                <Link to="/casuals">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Casuals
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="night.html">
+                                <Link to="/night">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Night Wear
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="formals.html">
+                                <Link to="/formals">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Formals
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="inner.html">
+                                <Link to="/inner">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Inner Wear
-                                </a>
+                                </Link>
                               </li>
                             </ul>
                           </div>
 
                           <div className="col-sm-4 w3l">
-                            <a href="women.html">
+                            <Link to="/women">
                               <img
                                 src={require("./assets/images/menu1.jpg")}
                                 className="img-responsive"
                                 alt=""
                               />
-                            </a>
+                            </Link>
                           </div>
 
                           <div className="clearfix"></div>
@@ -360,9 +501,9 @@ export class Header extends Component {
                       </ul>
                     </li>
 
-                    <li className="dropdown ">
-                      <a
-                        href="#"
+                    <li className={this.state.path === "personal" ? "dropdown active":"dropdown"}>
+                      <Link
+                        to="#"
                         className="dropdown-toggle hyper"
                         data-toggle="dropdown"
                       >
@@ -370,47 +511,47 @@ export class Header extends Component {
                           {" "}
                           Personal Care <b className="caret"></b>
                         </span>
-                      </a>
+                      </Link>
 
                       <ul className="dropdown-menu multi multi1">
                         <div className="row">
                           <div className="col-sm-4">
                             <ul className="multi-column-dropdown">
                               <li>
-                                <a href="jewellery.html">
+                                <Link to="/jewellery">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Jewellery{" "}
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="watches.html">
+                                <Link to="/watches">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Watches
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="cosmetics.html">
+                                <Link to="/cosmetics">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Cosmetics
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="deos.html">
+                                <Link to="/deos">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Deo & Perfumes
-                                </a>
+                                </Link>
                               </li>
                             </ul>
                           </div>
@@ -418,53 +559,53 @@ export class Header extends Component {
                           <div className="col-sm-4">
                             <ul className="multi-column-dropdown">
                               <li>
-                                <a href="haircare.html">
+                                <Link to="/haircare">
                                   {" "}
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Hair Care{" "}
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="shoes.html">
+                                <Link to="/shoes">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Shoes
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="handbags.html">
+                                <Link to="/handbags">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Handbags
-                                </a>
+                                </Link>
                               </li>
                               <li>
-                                <a href="skincare.html">
+                                <Link to="/skincare">
                                   <i
                                     className="fa fa-angle-right"
                                     aria-hidden="true"
                                   ></i>
                                   Skin care
-                                </a>
+                                </Link>
                               </li>
                             </ul>
                           </div>
 
                           <div className="col-sm-4 w3l">
-                            <a href="jewellery.html">
+                            <Link to="/jewellery">
                               <img
                                 src={require("./assets/images/menu2.jpg")}
                                 className="img-responsive"
                                 alt=""
                               />
-                            </a>
+                            </Link>
                           </div>
 
                           <div className="clearfix"></div>
@@ -472,15 +613,15 @@ export class Header extends Component {
                       </ul>
                     </li>
 
-                    <li>
-                      <a href="/about.html" className="hyper">
+                    <li className={this.state.path === "about" ? " active":""}>
+                      <Link to="/about" className="hyper">
                         <span>About</span>
-                      </a>
+                      </Link>
                     </li>
-                    <li>
-                      <a href="/contact.html" className="hyper">
+                    <li className={this.state.path === "contactus" ? " active":""}>
+                      <Link to="/contactus" className="hyper">
                         <span>Contact Us</span>
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -493,7 +634,11 @@ export class Header extends Component {
           </div>
         </div>
 
-        <script src="js/minicart.js"></script>
+        {/*******  password change popup ***********/}
+        {this.state.isPasswordPopupActive ? (
+          <PasswordChangePopup close={this.closeChangePassword} />
+        ) : null}
+        {/* <script src="js/minicart.js"></script> */}
       </div>
     );
   }

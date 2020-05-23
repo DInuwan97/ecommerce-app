@@ -24,11 +24,13 @@ import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';
 import Cart from './Components/Cart/Cart';
 import Checkout from './Components/Checkout/Checkout';
 import Wishlist from './Components/Wishlist/Wishlist';
+import PurchasedOrders from './Components/PurchasedOrders/PurchasedOrders';
 
 import ContactUs from './Components/Contacts/Contacts';
+import Faq from './Components/Contacts/Faq';
 import UserProfile from './Components/UserProfile/UserProfile';
 
-
+import About from './Components/About/about';
 
 class App extends Component {
 
@@ -85,39 +87,44 @@ class App extends Component {
     console.log('Client Token : ', localStorage.userLoginToken)
     return (
       <Router>
+
         <div className="App">
 
-     
-        <Header />
-        <Route path="/" exact component={Home} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route exact path='/testImage' component={TestImage} />
-        <Route path="/verifysecurecode" component={VerifySecureCode} />
+
+          <Header />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <Route exact path='/testImage' component={TestImage} />
+            <Route path="/verifysecurecode" component={VerifySecureCode} />
 
 
-          <Route path="/:type/:id" component={SingleProduct} />
-          <Route path="/salesManager" component={SalesManager} />
-          <Route path="/itemApprove" component={itemApprove} />
-          <Route path="/category" component={Category} />
+            <Route path="/:type/:id" component={SingleProduct} />
+            <Route path="/salesManager" component={SalesManager} />
+            <Route path="/itemApprove" component={itemApprove} />
+            <Route path="/category" component={Category} />
+            <Route path="/testb" component={TestB} />
+            <Route path="/ResendEmail" component={ResendEmail} />
 
-          <Route path="/testb" component={TestB} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/wishlist" component={Wishlist} />
+            <Route path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />
 
-          <Route path="/ProductCardList" component={ProductCardList} />
-
-          <Route path="/ResendEmail" component={ResendEmail} />
-
-          <Route path="/cart" component={Cart} />
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/wishlist" component={Wishlist} />
-
-          <Route path="/contactus" component={ContactUs} />
-          <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
-
+            <Route path="/contactus" component={ContactUs} />
+            <Route path='/faq' component={Faq} />
+            <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+            
+            <Route path="/about" component={About} />
+            
+            <Route path="/:type" component={ProductCardList} />
+          </Switch>
           <Newsletter />
           <Footer />
 
         </div>
+
       </Router>
     );
 
