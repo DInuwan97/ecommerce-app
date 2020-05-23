@@ -58,7 +58,6 @@ export default class HeaderSideMenuFooter extends Component {
       paramEmail: ''
     }
 
-    console.log('localstorage login token :', localStorage.userLoginToken);
 
     ///window.location.reload(true); 
 
@@ -102,8 +101,6 @@ export default class HeaderSideMenuFooter extends Component {
           userImageUrl: decoded.userImageUrl
         })
       }
-      console.log('Decoded token is : ', decoded)
-      console.log('Decoded Company is : ', this.state.company)
 
       axios({
         method: 'get',
@@ -114,12 +111,10 @@ export default class HeaderSideMenuFooter extends Component {
       })
         .then((res) => {
           const users = res.data;
-          console.log(users);
           this.setState({
             usersList: users,
           });
         });
-      console.log(this.state.user);
     }
 
 
@@ -134,12 +129,10 @@ export default class HeaderSideMenuFooter extends Component {
         })
       })
       .catch(err => {
-        console.log(err);
       })
 
 
     this.getReviewsOnCompany();
-    console.log('Lngth of revies: ', this.state.reviewList.length)
     if (this.state.isCustomer === true) {
       //window.location.replace('/login');
     }

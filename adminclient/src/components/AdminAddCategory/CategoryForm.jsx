@@ -22,13 +22,11 @@ export default class CategoryForm extends Component {
     this.setState({
       updatedCategoryName: this.props.updatingCategory.categoryName,
     });
-    console.log(this.state.updatedCategoryName);
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.addCategory(this.state);
-    console.log(this.state);
   };
 
   render() {

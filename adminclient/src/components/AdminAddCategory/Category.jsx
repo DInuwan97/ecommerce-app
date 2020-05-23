@@ -16,12 +16,10 @@ export default class Category extends Component {
   componentDidMount() {
     axios.get(`/api/category`).then((res) => {
       const items = res.data;
-      console.log(items);
       this.setState({
         category: items,
       });
     });
-    console.log(this.state.category);
   }
 
   //adding a new category
@@ -60,8 +58,6 @@ export default class Category extends Component {
       category: [...this.state.category.filter((cat) => cat._id !== id)],
     });
     axios.delete(`/api/category/${id}`).then((res) => {
-      console.log(res);
-      console.log(res.data);
     });
   };
 

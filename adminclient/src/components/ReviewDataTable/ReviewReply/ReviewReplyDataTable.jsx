@@ -39,7 +39,6 @@ class ReviewReplyDataTable extends Component {
                     isLoading:false
                 });
             }).catch(err=>{
-                console.log(err);
                 
             })
         }

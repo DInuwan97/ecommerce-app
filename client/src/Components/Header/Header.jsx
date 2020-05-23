@@ -23,7 +23,7 @@ export class Header extends Component {
       isMinicartActive: false,
       search: "",
       path: "/",
-      userImageUrl:'',
+      userImageUrl: '',
       isPasswordPopupActive: false,
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
@@ -73,6 +73,9 @@ export class Header extends Component {
         case "/contactus":
           path = "contactus"
           break;
+        case "/about":
+          path = "about"
+          break
         case "/women":
         case "/men":
         case "/kids":
@@ -145,6 +148,9 @@ export class Header extends Component {
         case "/contactus":
           path = "contactus"
           break;
+        case "/about":
+          path = "about"
+          break
         case "/women":
         case "/men":
         case "/kids":
@@ -175,7 +181,7 @@ export class Header extends Component {
     }
   }
 
-  openChangePassword = () => {};
+  openChangePassword = () => { };
 
 
 
@@ -184,11 +190,11 @@ export class Header extends Component {
   openChangePassword = () => {
     if (!this.state.isPasswordPopupActive) {
     }
-      this.setState({ isPasswordPopupActive: true });
+    this.setState({ isPasswordPopupActive: true });
   };
 
   closeChangePassword = () => {
-  // close password chage popup
+    // close password chage popup
     if (this.state.isPasswordPopupActive) {
       this.setState({ isPasswordPopupActive: false });
     }
@@ -395,7 +401,7 @@ export class Header extends Component {
                       </Link>
                     </li>
 
-                    <li className={this.state.path === "clothing" ? "dropdown active":"dropdown"}>
+                    <li className={this.state.path === "clothing" ? "dropdown active" : "dropdown"}>
                       <Link
                         to="#"
                         className="dropdown-toggle  hyper"
@@ -506,7 +512,7 @@ export class Header extends Component {
                       </ul>
                     </li>
 
-                    <li className={this.state.path === "personal" ? "dropdown active":"dropdown"}>
+                    <li className={this.state.path === "personal" ? "dropdown active" : "dropdown"}>
                       <Link
                         to="#"
                         className="dropdown-toggle hyper"
@@ -618,12 +624,12 @@ export class Header extends Component {
                       </ul>
                     </li>
 
-                    <li className={this.state.path === "about" ? " active":""}>
+                    <li className={this.state.path === "about" ? " active" : ""}>
                       <Link to="/about" className="hyper">
                         <span>About</span>
                       </Link>
                     </li>
-                    <li className={this.state.path === "contactus" ? " active":""}>
+                    <li className={this.state.path === "contactus" ? " active" : ""}>
                       <Link to="/contactus" className="hyper">
                         <span>Contact Us</span>
                       </Link>

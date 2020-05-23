@@ -526,7 +526,8 @@ class SingleProduct extends Component {
                     </div>
                   </div>
                   <div className="col-md-6 single-top-right">
-                    <h3 className="item_name"> {this.state.itemName}</h3>
+                    <h3 className="item_name"> {this.state.itemName} <span style={{backgroundColor:"#00E58B"}} className="badge">{this.state.company}</span></h3>
+                    
                     <p>
                       Processing Time: Item will be shipped out within 2-3 working
                 days.{" "}

@@ -16,7 +16,6 @@ export const ProtectedRoutesAdmin = ({
     <Route
       {...rest}
       render={props => {
-        console.log('Protected Info : ', decoded.isAdmin);
         if (decoded.isAdmin) {
           return <Component {...props} />;
         } else {
@@ -51,7 +50,6 @@ export const ProtectedRoutesIsSalesManager = ({
     <Route
       {...rest}
       render={props => {
-        console.log('Protected Info : ', decoded.isSalesManager);
         if (decoded.isSalesManager) {
           return <Component {...props} />;
         } else {
@@ -85,7 +83,6 @@ export const ProtectedRoutesIsCurrentSalaseManager = ({
     <Route
       {...rest}
       render={props => {
-      console.log('Protected Info 2 : ', props.match.params.email);
         if (decoded.email !== props.match.params.email) {
           return <Component {...props} />;
         } else {
