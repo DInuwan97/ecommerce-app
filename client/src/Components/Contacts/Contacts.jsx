@@ -93,9 +93,7 @@ export default class Contacts extends Component {
         break;
 
       default:
-        this.setState({
-          [e.target.name]: value,
-        });
+        console.log("no field match");
     }
 
     if (

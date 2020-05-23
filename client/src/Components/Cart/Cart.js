@@ -145,30 +145,25 @@ class Cart extends Component {
   removeItem = (id) => {
     console.log(id);
     let tempItems;
+
+    axios({
+      method: 'delete',
+      url: `/api/cart/remove/${id}`,
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
     tempItems = this.props.theItems.filter(item => {
       if (item._id !== id) {
-        axios({
-          method: 'delete',
-          url: `/api/cart/remove/${id}`,
-        })
-        // .then(res=>{
-        //   return item;
-        // })
-        // .catch(err=>{
-        //   console.log(err);
-        // })
         return item;
       }
     });
-
-    // remove the item from cartItems schema in database
-    //
-    //
-
-    // set summary
     let summary = this.setSummary(tempItems);
     this.props.updateItemSummary(tempItems, summary);
-    // this.setState({ items: tempItems, cartSummary: summary });
 
   };
 
