@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import SingleItemRow from './SingleItemReviewRow';
 import swal from 'sweetalert';
-
+import Spinner from '../Spinner/Spinner';
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
-let dtable;
 class SingleItemReview extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +13,8 @@ class SingleItemReview extends Component {
             reviews: [],
             UnansweredCount: 0,
             MarkedAsCheckedCount: 0,
-            RepliedCount: 0
+            RepliedCount: 0,
+            isLoading:true
         }
     }
 
@@ -32,7 +32,7 @@ class SingleItemReview extends Component {
             await this.setState({
                 reviews: res.data.CommentDocuments
             })
-            dtable = $('#review-table-2').DataTable(
+            $('#review-table-2').DataTable(
                 //     {
                 //     "order": [[ 5, "desc" ]]
                 // }
@@ -55,6 +55,7 @@ class SingleItemReview extends Component {
                 UnansweredCount,
                 MarkedAsCheckedCount,
                 RepliedCount,
+                isLoading:false
             })
 
 
@@ -179,6 +180,9 @@ class SingleItemReview extends Component {
 
     render() {
         return (
+            this.state.isLoading===true?
+            <Spinner/>
+            :
             <div>
                 <div className="row">
                     <div className="col-lg-3 col-6">

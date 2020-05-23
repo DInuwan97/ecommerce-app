@@ -37,7 +37,7 @@ export default class ViewSingleItem extends Component {
             <div class="row">
               <div class="col-12 col-sm-6">
                
-                <div class="col-12">
+                <div class="col-12" style ={style.image}>
                   <img
                     src={
                       this.state.isLoading
@@ -50,10 +50,10 @@ export default class ViewSingleItem extends Component {
                 </div>
               </div>
               <div class="col-12 col-sm-6">
-                <h3 class="my-3">Company : <small>{company}</small></h3>
-                <h3>Item Name : <small>{itemName}</small></h3>
+                <h4 class="my-3">Company : <small>{company}</small></h4>
+                <h4>Item Name : <small>{itemName}</small></h4>
                 <br />
-                <h3>Added By : <small>{addedBy}</small></h3>
+                <h4>Added By : <small>{addedBy}</small></h4>
                 <hr />
                 <h4>Available Colors</h4>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -126,12 +126,12 @@ export default class ViewSingleItem extends Component {
                       id="color_option1"
                       autocomplete="off"
                     />
-                    <span class="text-xl">{size}</span>
+                    <span class="text-xl" style = {style.size}>{size}</span>
                   </label>
                 </div>
 
                 <div class="bg-gray py-2 px-3 mt-4">
-                  <h2 class="mb-0">Rs.{price}</h2>
+                  <h4 class="mb-0">Rs.{price}</h4>
                 </div>
 
                 <div class="mt-4">
@@ -258,5 +258,21 @@ export default class ViewSingleItem extends Component {
         </div>
       </section>
     );
+  }
+}
+
+
+const style = {
+  image : {
+    width :'80%',
+    height : '80%',
+    paddingLeft :"40px",
+    paddingTop : "35px"
+  },
+  price : {
+    
+  },
+  size : {
+    textSize : '10px'
   }
 }

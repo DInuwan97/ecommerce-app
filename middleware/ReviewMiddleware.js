@@ -106,30 +106,30 @@ module.exports = {
     // If not it stops the pipeline and sends the response
     // This method can be by passed by providing the bypass variable in the request body
     verifyUserIsTheReviewPoster: (req, res, next) => {
-        authenticateUser(req, res, () => {
-            jwt.verify(req.token, "secretkey", (err, authData) => {
-                if (err) {
-                    return res.status(400).send({ msg: err });
-                } else {
-                    if (!req.body.adminAccess) {
-                        ReviewComments.findOne({ _id: req.body.reviewID }, (err, data) => {
-                            if (err) {
-                                return res.status(400).send({ msg: err });
+
+        jwt.verify(req.token, "secretkey", (err, authData) => {
+            if (err) {
+                return res.status(400).send({ msg: err });
+            } else {
+                if (!req.body.adminAccess) {
+                    ReviewComments.findOne({ _id: req.body.reviewID }, (err, data) => {
+                        if (err) {
+                            return res.status(400).send({ msg: err });
+                        } else {
+                            if (authData._id == data.reviewedUser) {
+                                console.log("posted");
+                                next();
                             } else {
-                                if (authData._id == data.reviewedUser) {
-                                    console.log("posted");
-                                    next();
-                                } else {
-                                    return res.status(400).send({ msg: "This client didn't posted the review" });
-                                }
+                                return res.status(400).send({ msg: "This client didn't posted the review" });
                             }
-                        });
-                    } else {
-                        console.log("ByPassed");
-                        next()
-                    }
+                        }
+                    });
+                } else {
+                    console.log("ByPassed");
+                    next()
                 }
-            });
-        })
+            }
+        });
+
     }
 }

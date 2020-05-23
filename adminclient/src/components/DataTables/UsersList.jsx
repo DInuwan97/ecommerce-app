@@ -14,7 +14,7 @@ componentDidUpdate = () => {
 
 
     render() {
-      const { approveSalesManagerRequest,companyName } = this.props;
+      const { approveSalesManagerRequest,companyName,deleteSalesManager } = this.props;
         return (
             <div className="card">
             <div className="card-header">
@@ -74,6 +74,7 @@ componentDidUpdate = () => {
                       company = {company}
                       packageName = {packageName}
                       approveSalesManagerRequest = {approveSalesManagerRequest}
+                      deleteSalesManager = {deleteSalesManager}
                     />
                    )
                             //}

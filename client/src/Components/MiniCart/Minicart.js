@@ -7,6 +7,7 @@ import axios from 'axios';
 import classes from './Minicart.module.css';
 import MiniCartItem from './MiniCartItem/MiniCartItem';
 import * as actionTypes from '../../Store/Actions';
+import WindowLoadingSpinner from '../WindowLoadingSpinner/WindowLoadingSpinner';
 
 class Minicart extends Component {
 
@@ -17,6 +18,7 @@ class Minicart extends Component {
       addedUserLastName: '',
       addedUserEmail: '',
       totalItems: '',
+      isLoading: true
 
     };
   }
@@ -75,10 +77,7 @@ class Minicart extends Component {
     })
       .then(res => {
         let cartProducts = res.data;
-        cartProducts.forEach((product, index) => {
-          console.log(product);
-
-        });
+        this.setState({ isLoading: false });
         this.props.updateItems(res.data);
         // this.setState({
         //   items: res.data
@@ -145,6 +144,23 @@ class Minicart extends Component {
     // remove the item from cartItems schema in database
     //
     //
+
+    //change minicart quatity
+    const changeQuantity = (cartItemId,quantity) => {
+      if (quantity <= 1) {
+        return;
+      }
+      let number = quantity - 1;
+     
+  
+      axios({
+        method:'patch',
+        url:`/api/cart/setQuantity/${cartItemId}`,
+        data:{
+          quantity:quantity
+        }
+      })
+    };
 
     // set summary
     let summary = this.setSummary(tempItems);
@@ -217,15 +233,23 @@ class Minicart extends Component {
 
     return (
       <div id="minicart" className={classes.container}>
-        <div className={classes.closeBtn} onClick={() => this.props.close()}>
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-            <title>close</title>
-            <path d="M10 8.586l-7.071-7.071-1.414 1.414 7.071 7.071-7.071 7.071 1.414 1.414 7.071-7.071 7.071 7.071 1.414-1.414-7.071-7.071 7.071-7.071-1.414-1.414-7.071 7.071z"></path>
-          </svg>
+        <div className={classes.subContainer}>
+          <div className={classes.closeBtn} onClick={() => this.props.close()}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+              <title>close</title>
+              <path d="M10 8.586l-7.071-7.071-1.414 1.414 7.071 7.071-7.071 7.071 1.414 1.414 7.071-7.071 7.071 7.071 1.414-1.414-7.071-7.071 7.071-7.071-1.414-1.414-7.071 7.071z"></path>
+            </svg>
+          </div>
+
+          {content}
+
+          {this.state.isLoading && this.props.theItems.length == 0 ?
+            <div className={classes.loading}>
+              <WindowLoadingSpinner />
+            </div>
+
+            : null}
         </div>
-
-        {content}
-
       </div>
     );
   }

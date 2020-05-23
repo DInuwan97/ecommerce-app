@@ -32,10 +32,18 @@ export default class CategoryForm extends Component {
   };
 
   render() {
-    const { edit, categoryName } = this.props.updatingCategory;
+   
     return (
       <div className="container">
-        <h1 className="text-center">ADD NEW CATEGORY</h1>
+       <div className="card card-primary">
+            <div className="card-header">
+              <h3 className="card-title">Add New Category</h3>
+
+              <div className="card-tools">
+                <button type="button" className="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i className="fas fa-minus"></i></button>
+              </div>
+            </div>
         <form role="form" onSubmit={this.handleSubmit}>
           <div className="card-body">
             <div className="form-group">
@@ -83,6 +91,7 @@ export default class CategoryForm extends Component {
             </button>
           </div>
         </form>
+      </div>
       </div>
     );
   }

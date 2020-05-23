@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 import classes from "./CartItem.module.css";
 import PopupMessage from '../../PopupWindows/CartItemPopup/CartItemPopup';
 
@@ -29,6 +29,7 @@ const CartItem = props => {
   //console.log(props.item.isSelected + ' ' + props.item.id);
   //console.log(props.item);
   console.log('rendered cartitem');
+  console.log(props.item);
 
   let isChecked = props.item.isSelectedItem;
 
@@ -80,6 +81,13 @@ const CartItem = props => {
     }
     let number = quantity + 1;
     props.changeQuantity(props.item._id, number);
+    axios({
+      method:'patch',
+      url:`/api/cart/setQuantity/${props.item._id}`,
+      data:{
+        quantity:quantity
+      }
+    })
   };
 
   // decrease quantity of a item
@@ -89,6 +97,14 @@ const CartItem = props => {
     }
     let number = quantity - 1;
     props.changeQuantity(props.item._id, number);
+
+    axios({
+      method:'patch',
+      url:`/api/cart/setQuantity/${props.item._id}`,
+      data:{
+        quantity:quantity
+      }
+    })
   };
 
   // change item quantity using input field
@@ -177,7 +193,7 @@ const CartItem = props => {
               {props.item.quantity < 1 ? 1 : props.item.quantity}
             </span> */}
           </div>
-          <button className={classes.plus} onClick={increaseQuantity} disabled={props.item.quantity === props.item.stockQuantity}>
+          <button className={classes.plus} onClick={increaseQuantity} disabled={props.item.quantity >= props.item.stockQuantity}>
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className={classes[plusBtnStyle]}>
               <path d="M18.984 12.984h-6v6h-1.969v-6h-6v-1.969h6v-6h1.969v6h6v1.969z"></path>
             </svg>

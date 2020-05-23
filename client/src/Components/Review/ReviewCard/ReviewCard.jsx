@@ -50,9 +50,15 @@ class ReviewCard extends Component {
     componentWillReceiveProps = (props) => {
         this.setState({
             MyLiked: props.MyLiked,
-            MyDisliked: props.MyDisliked
-        });
+            MyDisliked: props.MyDisliked,
 
+            to: props.commentDocument.reviewerEmail,
+            subject: `Regarding the Review on our item`,
+            cc: "",
+            bcc: "",
+            msg: `Your Review : ${props.commentDocument.reviewMessage}`,
+            reviewId: props.commentDocument._id
+        });
 
     }
 
@@ -130,7 +136,8 @@ class ReviewCard extends Component {
 
     DeleteComment = (byPass) => {
         if (this.props.MyComment || byPass) {
-            swal("Are you sure?", {
+            swal( {
+                title:"Are you sure?",
                 dangerMode: true,
                 buttons: true,
             }).then(res => {

@@ -8,7 +8,7 @@ const initialState = {
     total: 0,
     isDisabled: true
   },
-  isAllItemsSelected: false
+  isAllItemsSelected: false,
 };
 
 const reducer = (state = initialState, action) => {
