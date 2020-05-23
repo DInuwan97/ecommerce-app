@@ -8,6 +8,8 @@ export class AddDiscount extends Component {
     this.state = {
       items: [],
     };
+
+    this.addDiscount = this.addDiscount.bind(this);
   }
 
   getItems() {
@@ -31,12 +33,21 @@ export class AddDiscount extends Component {
         console.log(res);
       })
       .catch((err) => console.error(err));
+
+    this.setState({
+      items: this.state.items.map((item) => {
+        if (item._id === id) {
+          item.discount = discount;
+        }
+        return item;
+      }),
+    });
   }
 
   render() {
     return (
-      <div className='container'>
-        <CardList items={this.state.items}/>
+      <div className="container">
+        <CardList items={this.state.items} />
         <Table items={this.state.items} addDiscount={this.addDiscount} />
       </div>
     );
