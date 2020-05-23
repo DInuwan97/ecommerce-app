@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import {Link} from 'react-router-dom';
 import classes from './WishlistItem.module.css';
 
 const WishlistItem = props => {
@@ -9,7 +9,9 @@ const WishlistItem = props => {
     <div className={classes.container}>
       <div className={classes.image}>
         <figure className={classes.imageFig}>
+          <Link to={props.item.category+ '/' +props.item.itemId}>
           <img src={props.item.itemImage} alt="Product Image" onClick={() => props.goto(props.item)} />
+          </Link>
         </figure>
       </div>
 
