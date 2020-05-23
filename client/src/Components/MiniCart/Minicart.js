@@ -146,6 +146,23 @@ class Minicart extends Component {
     //
     //
 
+    //change minicart quatity
+    const changeQuantity = (cartItemId,quantity) => {
+      if (quantity <= 1) {
+        return;
+      }
+      let number = quantity - 1;
+     
+  
+      axios({
+        method:'patch',
+        url:`/api/cart/setQuantity/${cartItemId}`,
+        data:{
+          quantity:quantity
+        }
+      })
+    };
+
     // set summary
     let summary = this.setSummary(tempItems);
     this.props.updateItemSummary(tempItems, summary);

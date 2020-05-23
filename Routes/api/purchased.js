@@ -71,4 +71,20 @@ router.get('/viewByUser/:email', async (req, res) => {
   }
 });
 
+
+router.patch('/hideOrder/:id',async(req,res)=>{
+  try{
+    let TrackOrder = await  PuchasedItem.find({ _id:req.params.id})
+    if(!TrackOrder)
+      res.status(404).json({msg:'Order Not Found'})
+    else{
+      TrackOrder.isHide = req.body.isHide;
+      res.status(200).json(TrackOrder);
+      await TrackOrder.save();
+    }
+  }catch(err){
+    console.log(err);
+  }
+})
+
 module.exports = router;
