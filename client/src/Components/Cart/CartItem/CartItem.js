@@ -60,7 +60,7 @@ const CartItem = props => {
   const moveOrRemove = () => {
     if (popupModal.activeModal == 'wishlist') {
       closePopup();
-      props.move(props.item._id);
+      props.move(props.item);
     } else {
       closePopup();
       props.remove(props.item._id);
