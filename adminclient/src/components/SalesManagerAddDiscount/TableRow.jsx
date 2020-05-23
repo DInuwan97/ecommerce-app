@@ -20,13 +20,14 @@ export default function ItemTableRow({
       <td>{Brand}</td>
       <td>{size}</td>
       <td>{discount}%</td>
-      <td>Rs. {(1 - discount*0.01) * price}</td>
+      <td>Rs. {((1 - discount*0.01) * price).toFixed(2)}</td>
 
       <td>
         <button
           className="btn btn-primary btn-md font-weight-bold"
           onClick={() =>
             swal("Please Enter the Discount:", {
+              closeOnClickOutside: false,
               content: "input",
             }).then((value) => {
               parseFloat(value);
