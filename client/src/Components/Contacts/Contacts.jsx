@@ -265,7 +265,7 @@ export default class Contacts extends Component {
                 type="text"
                 value={this.state.phoneNumber}
                 name="phoneNumber"
-                placeholder="Phone number ex-:0771234567"
+                placeholder="Phone number ex-: 07********"
                 required=" "
                 maxLength="10"
                 onChange={(e) => this.changeInput(e)}
