@@ -26,7 +26,16 @@ class Checkout extends Component {
       },
 
       orderError: false,
-      isSpinnerActive: false
+      isSpinnerActive: false,
+
+      buyerDetails:{
+        firstName:'',
+        lastName:'',
+        mobile:'',
+        address:''
+      },
+
+      addedUserEmail:''
     }
 
   }
@@ -71,6 +80,17 @@ class Checkout extends Component {
           buyer: userBuyer
         });
 
+        let buyerDetailsInfo = {
+          firstName:res.data.firstName,
+          lastName:res.data.lastName,
+          mobile:res.data.address,
+          address:res.data.mobile
+        }
+
+        this.setState({
+          buyerDetails:buyerDetailsInfo
+        })
+
       })
 
   }
@@ -100,7 +120,7 @@ class Checkout extends Component {
         method: 'post',
         url: `/api/pruchase/add`,
         data: {
-          purchasedUserEmail: this.state.buyerDetails.email,
+          purchasedUserEmail: this.state.addedUserEmail,
           buyerDetails: this.state.buyerDetails,
           items: this.props.theItems,
           summary: this.props.summary
@@ -120,7 +140,7 @@ class Checkout extends Component {
 
       axios({
         method: 'delete',
-        url: `/api/cart/removeAllMyItemsFromCart/${this.state.buyerDetails.email}`
+        url: `/api/cart/removeAllMyItemsFromCart/${this.state.addedUserEmail}`
       })
         .then({
 

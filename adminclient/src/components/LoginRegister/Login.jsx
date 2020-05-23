@@ -66,7 +66,8 @@ export default class Login extends Component {
             <div className="hold-transition login-page">
             <div className="login-box">
   <div className="login-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+   
+    <a href=""><b>Fashion</b> CLUB</a> <span className="badge badge-warning" style={{fontFamily:'Comic Sans MS'}}>ADMIN</span>
   </div>
 
   <div className="card">
