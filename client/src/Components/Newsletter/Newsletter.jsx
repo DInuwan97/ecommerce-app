@@ -28,7 +28,7 @@ export default class Newsletter extends Component{
 
 			    <div className="col-md-6 w3agile_newsletter_left">
 				    <h3>Newsletter</h3>
-				    <p>Excepteur sint occaecat cupidatat non proident, sunt.</p>
+				    <p>Subscribe to our newsletter today to receive updates on the latest products.</p>
                 </div>
 			
 			    <div className="col-md-6 w3agile_newsletter_right">

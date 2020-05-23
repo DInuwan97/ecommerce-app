@@ -92,8 +92,8 @@ class SingleProduct extends Component {
       })
 
     }).catch(err => {
-      window.location.href="/404.html"
-     
+      window.location.href = "/404.html"
+
     })
   }
 
@@ -450,12 +450,12 @@ class SingleProduct extends Component {
   }
 
 
-  addToWishList = () =>{
+  addToWishList = () => {
 
     Axios({
-      method:'post',
-      url:`/api/wishlist/add`,
-      data:{
+      method: 'post',
+      url: `/api/wishlist/add`,
+      data: {
         itemName: this.state.itemName,
         price: this.state.price,
         category: this.state.category,
@@ -471,19 +471,19 @@ class SingleProduct extends Component {
         company: this.state.company,
         isSelectedItem: false,
         totalPrice: 0,
-        itemId:this.props.match.params.id
+        itemId: this.props.match.params.id
       }
     })
-    .then(() => {
-      swal({
-        title: "Status",
-        text: "Done",
-        icon: 'success'
-      });
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .then(() => {
+        swal({
+          title: "Status",
+          text: "Done",
+          icon: 'success'
+        });
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {
@@ -493,8 +493,8 @@ class SingleProduct extends Component {
         <div>
           <div className="container">
             <div className="row">
-              <div className="col-md-12" style={{margin:"10% auto"}}>
-                <Spinner/>
+              <div className="col-md-12" style={{ margin: "10% auto" }}>
+                <Spinner />
                 {/* <div class="loader"></div> */}
                 {/* <img src={require('./assets/images/loading2.gif')} type="image/gif" style={{ width: "50%", height: "25%", textAlign: "center" }} /> */}
               </div>
@@ -524,8 +524,8 @@ class SingleProduct extends Component {
                     </div>
                   </div>
                   <div className="col-md-6 single-top-right">
-                    <h3 className="item_name"> {this.state.itemName} <span style={{backgroundColor:"#00E58B"}} className="badge">{this.state.company}</span></h3>
-                    
+                    <h3 className="item_name"> {this.state.itemName} <span style={{ backgroundColor: "#00E58B" }} className="badge">{this.state.company}</span></h3>
+
                     <p>
                       Processing Time: Item will be shipped out within 2-3 working
                 days.{" "}
@@ -542,7 +542,7 @@ class SingleProduct extends Component {
 
                         <li className="rating">{this.state.AverageRating}</li>
                         <li className="rating"><a href="#headingThree">Reviews</a></li>
-                        <li className="rating add-rating" data-toggle="modal" data-target="#myModal" > 
+                        <li className="rating add-rating" data-toggle="modal" data-target="#myModal" >
                           <a>Rate Item</a>
                         </li>
                         <li>
@@ -727,17 +727,14 @@ class SingleProduct extends Component {
                       aria-labelledby="headingFour"
                     >
                       <div className="panel-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life
-                        accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                        non cupidatat skateboard dolor brunch. Food truck quinoa
-                        nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                        aliqua put a bird on it squid single-origin coffee nulla
-                        assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                        beer labore wes anderson cred nesciunt sapiente ea proident.
-                        Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                        beer farm-to-table, raw denim aesthetic synth nesciunt you
-                        probably haven't heard of them accusamus labore sustainable
-                        VHS.
+                        Phasellus mauris lorem, efficitur ac lectus vel, convallis scelerisque
+                        sapien. Proin dictum fermentum leo, ut ultricies risus rhoncus non.
+                        Praesent mauris turpis, tempor elementum consectetur vel, luctus a metus.
+                        Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras ornare congue
+                        rhoncus. Nunc quis cursus nisl. Suspendisse pulvinar lectus lacus, sit amet maximus
+                        metus sollicitudin ut. In faucibus risus a lectus vulputate, vel ultrices lacus
+                        porttitor. Duis et malesuada mi, ut laoreet quam. Sed ultrices interdum sem at
+                        elementum. Sed quis arcu ac tortor gravida eleifend.
                 </div>
                     </div>
                   </div>
@@ -747,11 +744,11 @@ class SingleProduct extends Component {
             <div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div className="modal-dialog">
                 <div className="modal-content">
-                  <div className="modal-header" style={{textAlign:"right"}}> 
-                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true" style={{float:"initial"}}>&times;</button>
+                  <div className="modal-header" style={{ textAlign: "right" }}>
+                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true" style={{ float: "initial" }}>&times;</button>
 
                     {/* <h2 className="modal-title" id="myModalLabel">Please rate:</h2> */}
-                    <div class="swal-title" style={{paddingTop:"0"}} >Please rate</div>
+                    <div class="swal-title" style={{ paddingTop: "0" }} >Please rate</div>
                   </div>
                   <div className="modal-body">
                     <fieldset className="rating-stars">

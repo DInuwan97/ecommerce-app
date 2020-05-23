@@ -14,16 +14,16 @@ export default class Footer extends Component {
               </h3>
             </Link>
             <ul>
-              <li>1234k Avenue, 4th block,</li>
-              <li>Colombo.</li>
+              <li>100 Kaduwela road,</li>
+              <li>Malabe. Sri Lanka.</li>
               <li>
                 <a href="mailto:FashionStoreBionics@gmail.com">FashionStoreBionics@gmail.com</a>
               </li>
               <a href="https://www.twitter.com">
                 <i className="fa fa-twitter" aria-hidden="true"></i>
               </a>
-              <a href="https://www.dribble.com">
-                <i className="fa fa-dribbble" aria-hidden="true"></i>
+              <a href="https://www.instagram.com">
+                <i className="fa fa-instagram" aria-hidden="true"></i>
               </a>
               <a href="https://www.facebook.com">
                 <i className="fa fa-facebook" aria-hidden="true"></i>
@@ -78,7 +78,7 @@ export default class Footer extends Component {
           <div className="clearfix"></div>
           <p className="copy-right">
             © 2020 Fashion Club . All rights reserved | Design by{" "}
-            <Link to=""> Bionics.</Link>
+            <Link to="/about"> Bionics.</Link>
           </p>
         </div>
       </div>

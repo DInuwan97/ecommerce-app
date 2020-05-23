@@ -21,7 +21,6 @@ export default class ProductListCard extends Component {
       url = `/api/items/ItemList/${type}`;
     }
     axios.get(url).then((res) => {
-      console.log(res.data, url);
 
       const items = res.data;
       this.setState({ items, isLoading: false });
@@ -29,7 +28,6 @@ export default class ProductListCard extends Component {
 
 
     }).catch(err => {
-      console.log(err);
 
     })
 

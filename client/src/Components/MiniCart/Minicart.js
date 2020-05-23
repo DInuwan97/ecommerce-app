@@ -42,10 +42,10 @@ class Minicart extends Component {
 
     // get details from daatabase
     const token = localStorage.userLoginToken;
-    const decoded = jwt_decode(token);
+
 
     if (localStorage.getItem("userLoginToken") !== null) {
-
+      const decoded = jwt_decode(token);
       const userBuyer = {
         firstName: decoded.firstName,
         lastName: decoded.lastName,
@@ -60,12 +60,15 @@ class Minicart extends Component {
         buyerDetails: userBuyer
       })
       console.log('Decoded Email in Cart : ', decoded.email);
+      // check if cart item already have
+      if (this.props.theItems.length == 0) {
+        this.getCartItems(decoded.email);
+      }
+    }else{
+      window.location.href='/login';
     }
 
-    // check if cart item already have
-    if (this.props.theItems.length == 0) {
-      this.getCartItems(decoded.email);
-    }
+
 
   }
 
@@ -146,18 +149,18 @@ class Minicart extends Component {
     //
 
     //change minicart quatity
-    const changeQuantity = (cartItemId,quantity) => {
+    const changeQuantity = (cartItemId, quantity) => {
       if (quantity <= 1) {
         return;
       }
       let number = quantity - 1;
-     
-  
+
+
       axios({
-        method:'patch',
-        url:`/api/cart/setQuantity/${cartItemId}`,
-        data:{
-          quantity:quantity
+        method: 'patch',
+        url: `/api/cart/setQuantity/${cartItemId}`,
+        data: {
+          quantity: quantity
         }
       })
     };
@@ -197,7 +200,7 @@ class Minicart extends Component {
   toCart = () => {
     let finalItems = this.props.theItems;
     console.log(finalItems);
-   // this.props.history.push("/cart");
+    // this.props.history.push("/cart");
     // save to database and navigate to cart
     //
     //

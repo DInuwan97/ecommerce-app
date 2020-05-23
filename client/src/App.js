@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 
 import Header from './Components/Header/Header';
@@ -107,17 +107,22 @@ class App extends Component {
             <Route path="/testb" component={TestB} />
             <Route path="/ResendEmail" component={ResendEmail} />
 
-            <Route path="/cart" component={Cart} />
+            {
+              localStorage.getItem("userLoginToken") &&
+                <Route path="/cart" component={Cart} />
+                
+            }
+
             <Route path="/checkout" component={Checkout} />
-            <Route path="/wishlist" component={()=> <Wishlist loggedEmail={this.state.email}/>} />
-            <Route path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />
+            <Route path="/wishlist" component={() => <Wishlist loggedEmail={this.state.email} />} />
+            <Route path="/purchasedOrders" component={() => <PurchasedOrders loggedEmail={this.state.email} />} />
 
             <Route path="/contactus" component={ContactUs} />
             <Route path='/faq' component={Faq} />
             <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
-            
+
             <Route path="/about" component={About} />
-            
+
             <Route path="/:type" component={ProductCardList} />
           </Switch>
           <Newsletter />
