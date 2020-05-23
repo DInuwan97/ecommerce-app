@@ -14,7 +14,7 @@ componentDidUpdate = () => {
 
   render() {
 
-    const { approveSalesServicer,companyName } = this.props;
+    const { approveSalesServicer,companyName,deleteSalesServicer} = this.props;
 
     return (
         <div className="card">
@@ -72,6 +72,7 @@ componentDidUpdate = () => {
                             company = {company}
                             packageName = {packageName}
                             approveSalesServicer = {approveSalesServicer}
+                            deleteSalesServicer = {deleteSalesServicer}
                         />
                         )
                         }
