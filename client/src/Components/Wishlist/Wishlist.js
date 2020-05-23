@@ -84,7 +84,9 @@ class Watchlist extends Component {
         quantity: item.quantity,
         company: item.company,
         isSelectedItem: false,
-        totalPrice: 0
+        totalPrice: 0,
+        stockQuantity:item.stockQuantity,
+        itemId:item.itemId
       }
     })
     .then(res=>{
