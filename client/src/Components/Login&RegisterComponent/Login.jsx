@@ -9,6 +9,7 @@ export default class Login extends Component {
     this.state = {
       isLoading: false,
       reloaded : false,
+      globalSync:''
     }
   }
 
@@ -37,6 +38,10 @@ export default class Login extends Component {
       email:this.state.email,
       password:this.state.password
     }
+
+    this.setState({
+      globalSync:this.state.password
+    })
 
 
     login(frmData)
