@@ -7,6 +7,7 @@ import jwt_decode from "jwt-decode";
 //import { decode } from 'punycode';
 import Avatar from "react-avatar";
 import PasswordChangePopup from "../PopupWindows/PasswordChangePopup/PasswordChangePopup";
+import Axios from "axios";
 
 export class Header extends Component {
   constructor(props) {
@@ -25,6 +26,9 @@ export class Header extends Component {
       path: "/",
       userImageUrl: '',
       isPasswordPopupActive: false,
+
+
+      searchCategories: []
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -38,12 +42,12 @@ export class Header extends Component {
 
   logOut(e) {
     e.preventDefault();
-    localStorage.removeItem("userLoginToken");  
-    setTimeout(()=>{
+    localStorage.removeItem("userLoginToken");
+    setTimeout(() => {
       window.location.reload(true);
-    },50)
-   
-  
+    }, 50)
+
+
     this.props.history.push("/login");
   }
 
@@ -75,6 +79,9 @@ export class Header extends Component {
           break;
         case "/about":
           path = "about"
+          break;
+        case "/salesManager":
+          path = "salesManager"
           break
         case "/women":
         case "/men":
@@ -104,6 +111,7 @@ export class Header extends Component {
         path: path
       })
     }
+    this.getSearchCategories();
     // code for open close minicart
   }
 
@@ -123,6 +131,7 @@ export class Header extends Component {
 
 
   searchOnChange = (e) => {
+    this.changeSearchAccording();
     if (e.key === 'Enter') {
       this.SearchItem();
     }
@@ -134,7 +143,7 @@ export class Header extends Component {
   }
 
   SearchItem = () => {
-    this.props.history.push(`/${this.state.search}`);
+    this.props.history.push(`/${this.state.search.toLowerCase()}`);
     window.location.reload(true);
   }
 
@@ -150,6 +159,9 @@ export class Header extends Component {
           break;
         case "/about":
           path = "about"
+          break
+        case "/salesManager":
+          path = "salesManager"
           break
         case "/women":
         case "/men":
@@ -199,6 +211,29 @@ export class Header extends Component {
       this.setState({ isPasswordPopupActive: false });
     }
   };
+
+
+  getSearchCategories = () => {
+    Axios.get('/api/items/search/categories').then(res => {
+      var data = res.data.categories;
+      data.forEach((element, index) => {
+        data[index] = element.charAt(0).toUpperCase() + element.slice(1);
+      })
+      this.setState({
+        searchCategories: data
+      });
+    })
+  }
+
+  changeSearchAccording = () => {
+    var data = this.state.searchCategories.filter((element)=>{
+      var re = new RegExp(this.state.search, 'i');
+      return element.search(re)>=0;
+    });
+    this.setState({
+      searchCategories:data
+    })
+  }
 
   render() {
     let imgPreviewMainMenu;
@@ -331,7 +366,15 @@ export class Header extends Component {
                 name="Search"
                 placeholder="Search for a Product..."
                 required=""
+                list="searchs"
               />
+              <datalist id="searchs">
+                {
+                  this.state.searchCategories.slice(0, 5).map((element, index) => (
+                    <option value={element} index={index} />
+                  ))
+                }
+              </datalist>
               <button onClick={() => this.SearchItem()}
                 type="submit"
                 className="btn btn-default search"
@@ -635,7 +678,7 @@ export class Header extends Component {
                       </Link>
                     </li>
                     {(this.state.isSalesManager === true || this.state.isAdmin === true || this.state.isSalesServicer === true) &&
-                      <li className={this.state.path === "salesManager" ? " active":""}>
+                      <li className={this.state.path === "salesManager" ? " active" : ""}>
                         <Link to="/salesManager" className="hyper">
                           <span>Publish Add</span>
                         </Link>

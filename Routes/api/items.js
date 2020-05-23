@@ -396,4 +396,40 @@ router.patch("/:id", async (req, res) => {
   } catch (error) {}
 });
 
+
+// Method : GET
+// Params : None
+// Body   : None
+// Authentication : None
+// Return : categories
+router.get('/search/categories',(req,res)=>{
+  Item.find({},{_id:1,category:1},(err,data)=>{
+    if(err){
+      return res.status(400).send({err});
+    }else{
+      data.sort((a,b)=>{
+        var x = a.category.toString();
+        var y = b.category.toString();
+        if(x<y){
+          return -1;
+        }
+        if(x==y){
+          return 0;
+        }
+        if(x>y){
+          return 1;
+        }
+      });
+      var unique=[],previous;
+      for(var i=0;i<data.length;i++){
+        if(data[i].category!==previous){
+          unique.push(data[i].category);
+        }
+        previous = data[i].category;
+      }
+      res.status(200).send({categories:unique})
+    }
+  })
+})
+
 module.exports = router;
