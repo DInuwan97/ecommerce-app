@@ -316,6 +316,9 @@ export default class MyProfileUserFunctions extends Component {
               </div>
             </div>
 
+
+
+
             <div className="col-md-9">
               <div className="card">
                 <div className="card-header p-2">
@@ -508,6 +511,7 @@ export default class MyProfileUserFunctions extends Component {
                     </div>
                   </ul>
                 </div>
+                
                 <div className="card-body">
                   <div className="tab-content">
                     <div className="active tab-pane" id="activity">
@@ -911,6 +915,12 @@ export default class MyProfileUserFunctions extends Component {
                 </div>
               </div>
             </div>
+
+
+
+
+
+
           </div>
         </div>
       </div>

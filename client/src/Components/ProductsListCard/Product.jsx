@@ -21,7 +21,8 @@ export default class Product extends Component {
 
     return (
       <div
-        className="col-md-4 women-grids wp1 animated wow slideInUp"
+        className="col-md-3 women-grids wp1 animated wow slideInUp"
+        // className="col-md-4 women-grids wp1 animated wow slideInUp"
         data-wow-delay=".5s"
       >
         <Link to={`/${this.props.category}/${this.props.id}`}>

@@ -593,7 +593,22 @@ router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
 })
 
 
+router.delete("/deleteSalesManager/:email", async (req, res) => {
+  //check if user exist
 
+  console.log('Sales Manager Deleteing : ',req.params)
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) 
+       return res.status(400).json({ msg: "User does not exist" });
+    
+    res.status(200).json(user);
+    await user.remove();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
 
 
 

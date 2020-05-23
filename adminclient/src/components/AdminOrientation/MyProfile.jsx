@@ -17,7 +17,7 @@ export default class MyProfile extends Component {
         return (
             <div>
                  <DashbordCardPanel loggedUserDetails={loggedUserDetails} usersList={usersList} itemsList={this.props.itemsList}/>
-                 <MyProfileFunctions loggedEmail={loggedEmail} companyName = {companyName}/>/>
+                 <MyProfileFunctions loggedEmail={loggedEmail} companyName = {companyName}/>
             </div>
         )
     }

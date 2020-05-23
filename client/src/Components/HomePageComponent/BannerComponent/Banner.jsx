@@ -8,7 +8,7 @@ export default function Banner() {
                 <h2>WELCOME TO</h2>
                 <h3>FASHION <span>CLUB</span></h3>
                 <p>STAY HOME AND SHOP ONLINE</p>
-                <Link to="/">Read More</Link>
+                <Link to="/about">About Us</Link>
             </div>
         </div>
     )

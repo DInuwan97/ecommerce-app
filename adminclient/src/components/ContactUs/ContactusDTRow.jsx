@@ -33,7 +33,7 @@ class ContactusDTRow extends Component {
 
     goToReply = () => {
         this.props.history.push({
-            pathname: '/compose',
+            pathname: '/Compose',
             state: {
                 to: this.props.message.email,
                 subject: `Regarding the Message on ${this.props.message.subject}`,

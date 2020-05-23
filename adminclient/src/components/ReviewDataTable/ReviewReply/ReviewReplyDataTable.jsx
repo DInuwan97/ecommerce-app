@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import ReviewReplyDataTableRow from './ReviewReplyTableRow';
 import {withRouter} from 'react-router-dom';
+import Spinner from '../../Spinner/Spinner';
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
@@ -10,7 +11,8 @@ class ReviewReplyDataTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: []
+            items: [],
+            isLoading:true
         }
     }
 
@@ -33,7 +35,8 @@ class ReviewReplyDataTable extends Component {
                 }
             }).then(async res => {
                 await this.setState({
-                    items: res.data.data
+                    items: res.data.data,
+                    isLoading:false
                 });
             }).catch(err=>{
                 console.log(err);
@@ -50,6 +53,9 @@ class ReviewReplyDataTable extends Component {
 
     render() {
         return (
+            this.state.isLoading===true?
+            <Spinner/>
+            :
             <div>
                 <div className="card">
                     <div className="card-header">

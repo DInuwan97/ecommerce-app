@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 import classes from "./CartItem.module.css";
 import PopupMessage from '../../PopupWindows/CartItemPopup/CartItemPopup';
 
@@ -81,6 +81,13 @@ const CartItem = props => {
     }
     let number = quantity + 1;
     props.changeQuantity(props.item._id, number);
+    axios({
+      method:'patch',
+      url:`/api/cart/setQuantity/${props.item._id}`,
+      data:{
+        quantity:quantity
+      }
+    })
   };
 
   // decrease quantity of a item
@@ -90,6 +97,14 @@ const CartItem = props => {
     }
     let number = quantity - 1;
     props.changeQuantity(props.item._id, number);
+
+    axios({
+      method:'patch',
+      url:`/api/cart/setQuantity/${props.item._id}`,
+      data:{
+        quantity:quantity
+      }
+    })
   };
 
   // change item quantity using input field

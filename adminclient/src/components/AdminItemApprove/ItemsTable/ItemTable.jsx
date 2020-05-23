@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ItemTableRow from "./ItemTableRow";
+const $ = require("jquery");
+$.DataTable = require("datatables.net");
 
 export default class ItemTable extends Component {
   getRow() {
@@ -31,6 +33,10 @@ export default class ItemTable extends Component {
     });
   }
 
+  componentDidMount = () => {
+    $("#itemApprove-table").DataTable();
+  };
+
   render() {
    
     return (
@@ -40,7 +46,7 @@ export default class ItemTable extends Component {
         </div>
 
         <div className="card-body">
-          <table id="example1" className="table table-bordered table-striped">
+          <table id="itemApprove-table" className="table table-bordered table-striped">
             <thead>
               <tr>
                 <th>Added By</th>

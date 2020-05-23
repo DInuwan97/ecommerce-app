@@ -77,6 +77,7 @@ router.delete('/remove/:id', async (req, res) => {
       if (!cartItemExists) {
         return res.status(400).json({ msg: "CartItem does not exist" });
       }
+     
       res.status(200).json(cartItemExists);
       await cartItemExists.remove();
 
@@ -91,10 +92,19 @@ router.delete('/remove/:id', async (req, res) => {
 //////////////////////////////////////////// update items in the cartItemsSchema /////////////////////////////////////////////////
 /* user can change the number of quantity of items in the shopping cart
 if user increase or decrease the number of quantity of a item, automatically update the necessary record in the database */
-router.patch('/setQuantity', async (req, res) => {
+router.patch('/setQuantity/:id', async (req, res) => {
+
+  console.log('Set Quatity is calling : ' , req.params);
   try {
-    console.log("set item quantity");
-    console.log(req.body);
+    const cartItemExists = await CartItem.findOne({ _id: req.params.id });
+    if (!cartItemExists) {
+      return res.status(400).json({ msg: "CartItem does not exist" });
+    }
+    else{
+      cartItemExists.quantity = req.body.quantity;
+      res.status(200).json(cartItemExists);
+      await cartItemExists.save();
+    }
     // rest
   } catch (err) {
     console.log(err);

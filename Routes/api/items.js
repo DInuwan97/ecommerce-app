@@ -348,6 +348,11 @@ router.patch(
   }
 );
 
+
+const email = require('../../config/mailCredentials').email;
+const password = require('../../config/mailCredentials').password;
+
+
 router.patch("/:id", async (req, res) => {
   try {
     const checkItemExits = await Item.findOne({ _id: req.params.id });
@@ -360,21 +365,19 @@ router.patch("/:id", async (req, res) => {
 
     //sending email to the client
     let transporter = nodemailer.createTransport({
-      host: "smtp.mailtrap.io",
-      port: 2525,
+      service: "Gmail",
       auth: {
-        user: "cd1d2b8d863288",
-        pass: "41ff48f6db0ffa",
-      },
+          user: email,
+          pass: password
+      }
     });
 
     console.log(req.body.addedBy);
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: "dinuka@gmail.com", // sender address
       to: req.body.addedBy, // list of receivers
       subject: "Item Approved", // Subject line
-      text: "Hello world?", // plain text body
+      text: "ITEM APPROVED", // plain text body
       html: `
               <h2>Thank You</h2><br/>
               <span>The Item ${req.body.itemName}</span> has been Approved  
