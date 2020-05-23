@@ -23,7 +23,7 @@ export class Header extends Component {
       isMinicartActive: false,
       search: "",
       path: "/",
-      userImageUrl:'',
+      userImageUrl: "",
       isPasswordPopupActive: false,
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
@@ -63,10 +63,10 @@ export class Header extends Component {
       let path = "/";
       switch (this.props.location.pathname) {
         case "/":
-          path = "/"
+          path = "/";
           break;
         case "/contactus":
-          path = "contactus"
+          path = "contactus";
           break;
         case "/women":
         case "/men":
@@ -76,7 +76,7 @@ export class Header extends Component {
         case "/casuals":
         case "/night":
         case "/inner":
-          path = "clothing"
+          path = "clothing";
           break;
         case "/jewellery":
         case "/watches":
@@ -86,25 +86,29 @@ export class Header extends Component {
         case "/shoes":
         case "/handbags":
         case "/skincare":
-          path = "personal"
+          path = "personal";
           break;
         default:
-          path = ""
+          path = "";
           break;
       }
       this.setState({
-        path: path
-      })
+        path: path,
+      });
     }
     // code for open close minicart
   }
 
   openMinicart = () => {
-    console.log("open");
-    if (!this.state.isMinicartActive) {
-      this.setState({ isMinicartActive: true });
-    } else {
-      this.setState({ isMinicartActive: false });
+    if (
+      localStorage.userLoginToken ||
+      localStorage.userLoginToken != undefined
+    ) {
+      if (!this.state.isMinicartActive) {
+        this.setState({ isMinicartActive: true });
+      } else {
+        this.setState({ isMinicartActive: false });
+      }
     }
   };
 
@@ -113,32 +117,30 @@ export class Header extends Component {
     this.setState({ isMinicartActive: false });
   };
 
-
   searchOnChange = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       this.SearchItem();
     }
 
     this.setState({
-      search: e.target.value
+      search: e.target.value,
     });
-
-  }
+  };
 
   SearchItem = () => {
     this.props.history.push(`/${this.state.search}`);
     window.location.reload(true);
-  }
+  };
 
   componentWillReceiveProps = (props) => {
     if (this.props.location.pathname !== props.location.pathname) {
       let path = "/";
       switch (props.location.pathname) {
         case "/":
-          path = "/"
+          path = "/";
           break;
         case "/contactus":
-          path = "contactus"
+          path = "contactus";
           break;
         case "/women":
         case "/men":
@@ -148,7 +150,7 @@ export class Header extends Component {
         case "/casuals":
         case "/night":
         case "/inner":
-          path = "clothing"
+          path = "clothing";
           break;
         case "/jewellery":
         case "/watches":
@@ -158,32 +160,29 @@ export class Header extends Component {
         case "/shoes":
         case "/handbags":
         case "/skincare":
-          path = "personal"
+          path = "personal";
           break;
         default:
-          path = ""
+          path = "";
           break;
       }
       this.setState({
-        path: path
-      })
+        path: path,
+      });
     }
-  }
+  };
 
   openChangePassword = () => {};
-
-
-
 
   // open password chage popup
   openChangePassword = () => {
     if (!this.state.isPasswordPopupActive) {
     }
-      this.setState({ isPasswordPopupActive: true });
+    this.setState({ isPasswordPopupActive: true });
   };
 
   closeChangePassword = () => {
-  // close password chage popup
+    // close password chage popup
     if (this.state.isPasswordPopupActive) {
       this.setState({ isPasswordPopupActive: false });
     }
@@ -314,14 +313,15 @@ export class Header extends Component {
               className="col-md-4 search-agileinfo"
               style={{ float: "right" }}
             >
-
-              <input onKeyUp={(e) => this.searchOnChange(e)}
+              <input
+                onKeyUp={(e) => this.searchOnChange(e)}
                 type="search"
                 name="Search"
                 placeholder="Search for a Product..."
                 required=""
               />
-              <button onClick={() => this.SearchItem()}
+              <button
+                onClick={() => this.SearchItem()}
                 type="submit"
                 className="btn btn-default search"
                 aria-label="Left Align"
@@ -330,7 +330,6 @@ export class Header extends Component {
                   {" "}
                 </i>
               </button>
-
             </div>
 
             <div className="col-md-1 cart-wthree" style={{ float: "right" }}>
@@ -390,7 +389,13 @@ export class Header extends Component {
                       </Link>
                     </li>
 
-                    <li className={this.state.path === "clothing" ? "dropdown active":"dropdown"}>
+                    <li
+                      className={
+                        this.state.path === "clothing"
+                          ? "dropdown active"
+                          : "dropdown"
+                      }
+                    >
                       <Link
                         to="#"
                         className="dropdown-toggle  hyper"
@@ -501,7 +506,13 @@ export class Header extends Component {
                       </ul>
                     </li>
 
-                    <li className={this.state.path === "personal" ? "dropdown active":"dropdown"}>
+                    <li
+                      className={
+                        this.state.path === "personal"
+                          ? "dropdown active"
+                          : "dropdown"
+                      }
+                    >
                       <Link
                         to="#"
                         className="dropdown-toggle hyper"
@@ -613,12 +624,18 @@ export class Header extends Component {
                       </ul>
                     </li>
 
-                    <li className={this.state.path === "about" ? " active":""}>
+                    <li
+                      className={this.state.path === "about" ? " active" : ""}
+                    >
                       <Link to="/about" className="hyper">
                         <span>About</span>
                       </Link>
                     </li>
-                    <li className={this.state.path === "contactus" ? " active":""}>
+                    <li
+                      className={
+                        this.state.path === "contactus" ? " active" : ""
+                      }
+                    >
                       <Link to="/contactus" className="hyper">
                         <span>Contact Us</span>
                       </Link>
