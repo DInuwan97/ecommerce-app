@@ -101,8 +101,8 @@ class Watchlist extends Component {
     })
     .then(() => {
       swal({
-        title: "Status",
-        text: "Done",
+        title: "Done",
+        text: "Move to Cart",
         icon: 'success'
       });
     })
