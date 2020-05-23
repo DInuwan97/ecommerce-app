@@ -549,6 +549,7 @@ export default class HeaderSideMenuFooter extends Component {
 
 
                   <ProtectedRoutesAdmin isAdmin={this.state.isAdmin} path='/AdminPackage' component={() => <AdminPackage companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList} />} />
+                  <Redirect to="/404NotFound"/>
                 </Switch>
               </Router>
 
