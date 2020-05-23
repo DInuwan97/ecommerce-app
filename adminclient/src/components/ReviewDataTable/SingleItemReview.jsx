@@ -60,7 +60,6 @@ class SingleItemReview extends Component {
 
 
         }).catch(err => {
-            console.log(err);
         })
     }
 

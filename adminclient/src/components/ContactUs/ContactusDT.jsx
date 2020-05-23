@@ -49,7 +49,6 @@ class ContactusDT extends Component {
                 })
                 $('#message-table').DataTable();
             }).catch(err => {
-                console.log(err);
 
             })
         }
@@ -64,7 +63,6 @@ class ContactusDT extends Component {
     // }
 
     showReply = (index) => {
-        // console.log(index);
 
         this.setState({
             showReply: this.state.messages[index].reply

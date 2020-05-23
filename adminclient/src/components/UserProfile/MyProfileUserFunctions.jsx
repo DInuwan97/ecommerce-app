@@ -50,7 +50,6 @@ export default class MyProfileUserFunctions extends Component {
     })
       .then((res) => {
         const user = res.data;
-        console.log("User data are : ", user.isSalesManager);
 
         this.setState({
           firstName: user.firstName,
@@ -86,7 +85,6 @@ export default class MyProfileUserFunctions extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -114,12 +112,11 @@ export default class MyProfileUserFunctions extends Component {
       data: formData,
     })
       //.patch(`/api/users/updateImage/:${this.props.loggedEmail}`, formData)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+      .then((res) => {})
+      .catch((err) => {});
   };
 
   updateMyProfile = (email) => {
-    console.log("Sales Servicer Email : ", email);
     axios({
       method: "patch",
       url: `/api/users/updatemyProfile/${email}`,
@@ -134,10 +131,8 @@ export default class MyProfileUserFunctions extends Component {
       },
     })
       .then((res) => {
-        console.log(res);
       })
       .catch((err) => {
-        console.log(err);
       });
 
     let formData = new FormData();
@@ -147,16 +142,16 @@ export default class MyProfileUserFunctions extends Component {
       url: `/api/users/updateImage/${this.props.loggedEmail}`,
       data: formData,
     })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+      .then((res) => {})
+      .catch((err) => {});
 
 
     axios({
       method:'',
       url:'/api/review/admin/changeUserData'
     })
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));
+    .then((res) => {})
+    .catch((err) => {});
 
   };
 
@@ -172,7 +167,6 @@ export default class MyProfileUserFunctions extends Component {
 
   upload(e) {
     e.preventDefault();
-    console.log(this.state.file);
   }
 
   getItemstoYourCompany = () => {
@@ -189,7 +183,6 @@ export default class MyProfileUserFunctions extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -226,10 +219,8 @@ export default class MyProfileUserFunctions extends Component {
           reviewMessage: review.reviewMessage,
         });
 
-        console.log("review data", review[0].userImageUrl);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 

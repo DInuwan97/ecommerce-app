@@ -13,7 +13,6 @@ function App({location}) {
     
   // }
 
-  console.log('Admin Token : ' ,localStorage.userLoginToken)
   return (
     
     

@@ -39,7 +39,6 @@ class SendEmail extends Component {
         this.setState({
             msg: content
         })
-        console.log(editor);
 
     }
 
@@ -78,13 +77,11 @@ class SendEmail extends Component {
                             Authorization: `bearer ${token}`
                         }
                     }).then(res => {
-                        console.log(res.data.msg);
                         this.setState({
                             contactUsMsg: false,
                             contactUsId: ""
                         })
                     }).catch(err => {
-                        console.log(err);
 
                     })
                     

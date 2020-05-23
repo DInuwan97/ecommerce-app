@@ -31,7 +31,6 @@ export default class AdminPackages extends Component {
       }
     })
     .then((res) => {
-      console.log(res)
       swal({
         title: "Done",
         text: "Inserted Successfully",

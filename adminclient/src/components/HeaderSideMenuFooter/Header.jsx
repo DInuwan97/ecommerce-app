@@ -22,7 +22,6 @@ export default class Header extends Component {
                  isSalesServicer:false
             }
     
-        console.log('localstorage login token :' ,localStorage.userLoginToken);
 
         
         }
@@ -48,7 +47,6 @@ export default class Header extends Component {
                     isSalesManager:decoded.isSalesManager,
                     isSalesServicer:decoded.isSalesServicer
                })
-               console.log('Decoded token is : ' ,decoded)
         }
      
             

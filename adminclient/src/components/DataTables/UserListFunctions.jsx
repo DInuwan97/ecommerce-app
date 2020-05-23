@@ -24,17 +24,14 @@ export default class UserListFunctions extends Component {
         })
         .then((res) => {
           const users = res.data;
-          console.log(users);
           this.setState({
             userList: users,
           });
         });
-        console.log(this.state.user);
       }
 
 
       approveSalesManagerRequest = (email) => {
-        console.log('approveSalesManagerRequest is',email);
          this.setState({
             userList: [...this.state.userList.filter((user) => user.email !== email)],
          });
@@ -49,7 +46,6 @@ export default class UserListFunctions extends Component {
             }
         })
           .then((res) => {
-            console.log(res) 
           })
           .catch((err) =>{
             
@@ -58,7 +54,6 @@ export default class UserListFunctions extends Component {
 
 
     deleteSalesManager = (email) =>{
-      console.log('Sales Manager Deleteing : ',email)
        this.setState({
         userList: [...this.state.userList.filter((user) => user.email !== email)],
        })
@@ -70,16 +65,13 @@ export default class UserListFunctions extends Component {
         // }
       })
       .then((res) => {
-        console.log(res) 
       })
       .catch((err) =>{
-        console.log(err);
       });
     }
       
     render() {
         const { companyName } = this.props;
-        console.log('Logged user Company is : ',companyName);
         return (
            <UserList users={this.state.userList} deleteSalesManager = {this.deleteSalesManager} approveSalesManagerRequest = {this.approveSalesManagerRequest} companyName={companyName}/>
         )

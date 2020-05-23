@@ -48,7 +48,6 @@ export default class SalesManagerProfile extends Component {
         })
           .then((res) => {
             const user = res.data;
-            console.log("User data are : ", user.isSalesManager);
     
             this.setState({
               firstName: user.firstName,
@@ -85,7 +84,6 @@ export default class SalesManagerProfile extends Component {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       };
     
@@ -122,7 +120,6 @@ export default class SalesManagerProfile extends Component {
             });
           })
           .catch((err) => {
-            console.log(err);
           });
       };
     
@@ -146,10 +143,8 @@ export default class SalesManagerProfile extends Component {
               reviewMessage: review.reviewMessage,
             });
     
-            console.log("review data", review[0].userImageUrl);
           })
           .catch((err) => {
-            console.log(err);
           });
       };
     render() {
