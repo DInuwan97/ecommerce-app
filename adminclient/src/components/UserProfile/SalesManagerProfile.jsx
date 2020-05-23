@@ -3,7 +3,7 @@ import "./assets/css/imageUploadPreview.css";
 import swal from "sweetalert";
 import axios from "axios";
 import Avatar from "react-avatar";
-
+import { Link, withRouter } from "react-router-dom";
 export default class SalesManagerProfile extends Component {
 
     constructor(props) {
@@ -212,7 +212,7 @@ export default class SalesManagerProfile extends Component {
                       <i class="fas fa-envelope-open-text"></i>
                       <b> Email</b>{" "}
                       <b>
-                        <a className="float-right">{this.props.salesManagerEmail}</a>
+                        <a className="float-right" href={"mailto:" +this.props.salesManagerEmail}>{this.props.salesManagerEmail}</a>
                       </b>
                     </li>
                     <li className="list-group-item">
@@ -223,13 +223,14 @@ export default class SalesManagerProfile extends Component {
                       </b>
                     </li>
                   </ul>
-
-                  <a href="#" className="btn btn-success btn-block">
-                    <b>Voice</b>
+                 
+                  <a href={"skype:" +this.state.mobile+ "?call"} className="btn btn-success btn-block">
+                    <b> Voice</b>
                   </a>
                   <a href="/compose" className="btn btn-dark btn-block">
                     <b>Mail</b>
                   </a>
+
                 </div>
               </div>
 
