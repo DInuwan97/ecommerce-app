@@ -27,17 +27,14 @@ export default class SalesManagerFunctions extends Component {
         })
         .then((res) => {
           const users = res.data;
-          console.log(users);
           this.setState({
             salesServicersList: users,
           });
           $('#salesServicersList-table').DataTable()
         });
-        //console.log(this.state.user);
       }
 
       approveSalesServicer = (email) => {
-        console.log('Sales Servicer Email : ',email);
         this.setState({
             salesServicersList: [...this.state.salesServicersList.filter((user) => user.email !== email)],
          });
@@ -49,16 +46,13 @@ export default class SalesManagerFunctions extends Component {
              }
          })
          .then(res=>{
-             console.log(res);
          })
          .catch(err=>{
-            console.log(err)
          });
       }
 
 
       deleteSalesServicer = (email) =>{
-        console.log('Sales Servicer Deleteing : ',email)
          this.setState({
           salesServicersList: [...this.state.salesServicersList.filter((user) => user.email !== email)]
          })
@@ -70,17 +64,14 @@ export default class SalesManagerFunctions extends Component {
           }
         })
         .then((res) => {
-          console.log(res) 
         })
         .catch((err) =>{
-          console.log(err);
         });
       }
         
 
   render() {
     const { companyName } = this.props;
-    console.log('Logged user Company is : ',companyName);
     return (
         <SalesServicersList users={this.state.salesServicersList} deleteSalesServicer={this.deleteSalesServicer} approveSalesServicer = {this.approveSalesServicer} companyName={companyName}/>
     );

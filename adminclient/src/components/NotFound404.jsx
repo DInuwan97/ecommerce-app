@@ -16,7 +16,7 @@ export default class NotFound404 extends Component {
           </div>
           <div className="col-sm-6">
             <ol className="breadcrumb float-sm-right">
-              <li className="breadcrumb-item"><a href="#">Home</a></li>
+              <li className="breadcrumb-item"><a href="/">Home</a></li>
               <li className="breadcrumb-item active">404 Error Page</li>
             </ol>
           </div>
@@ -34,10 +34,10 @@ export default class NotFound404 extends Component {
 
           <p>
             We could not find the page you were looking for.
-            Meanwhile, you may <a href="../../index.html">return to dashboard</a> or try using the search form.
+            Meanwhile, you may return to dashboard or try using the search form.
           </p>
 
-          <form className="search-form">
+          <form className="search-form" action="#">
             <div className="input-group">
               <input type="text" name="search" className="form-control" placeholder="Search"/>
 

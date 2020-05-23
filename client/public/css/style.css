@@ -1766,7 +1766,9 @@ p.single-price-text {
 .key {
     background: #fff;
     border: 1px solid #999;
-    margin-bottom: 2em;
+}
+.key:not(:first-child) {
+    margin-top: 2em;
 }
 .key i {
     float: left;
@@ -1774,7 +1776,7 @@ p.single-price-text {
     font-size: 1.1em;
     padding: 13px;
 }
-.key input[type="text"], .key input[type="password"] {
+.key input[type="text"], .key input[type="password"]{
     width: 89%;
     padding: 10px 10px;
     font-size: 1em;

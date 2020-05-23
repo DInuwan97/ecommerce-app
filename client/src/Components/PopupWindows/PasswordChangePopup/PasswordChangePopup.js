@@ -166,7 +166,6 @@ class PopupMessage extends Component {
   checkFieldEmpty = (value, field, errorList) => {
     if (value.length == 0) {
       field.style.border = "1px solid red";
-      console.log("fucked");
 
       let hasNode = false;
       errorList.querySelectorAll('*').forEach(n => {

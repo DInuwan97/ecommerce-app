@@ -445,10 +445,46 @@ class SingleProduct extends Component {
         });
       })
       .catch(err => {
+        console.log(err)
       })
   }
 
 
+  addToWishList = () =>{
+
+    Axios({
+      method:'post',
+      url:`/api/wishlist/add`,
+      data:{
+        itemName: this.state.itemName,
+        price: this.state.price,
+        category: this.state.category,
+        itemImage: this.state.itemImage,
+        size: this.state.size,
+        brand: this.state.brand,
+        discount: this.state.discount,
+        addedUserFirstName: this.state.addedUserFirstName,
+        addedUserLastName: this.state.addedUserLastName,
+        addedUserEmail: this.state.addedUserEmail,
+        rating: this.state.rating,
+        quantity: this.state.quantity,
+        company: this.state.company,
+        isSelectedItem: false,
+        totalPrice: 0,
+        itemId:this.props.match.params.id
+      }
+    })
+    .then(() => {
+      swal({
+        title: "Status",
+        text: "Done",
+        icon: 'success'
+      });
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
 
   render() {
     return (
@@ -488,7 +524,8 @@ class SingleProduct extends Component {
                     </div>
                   </div>
                   <div className="col-md-6 single-top-right">
-                    <h3 className="item_name"> {this.state.itemName}</h3>
+                    <h3 className="item_name"> {this.state.itemName} <span style={{backgroundColor:"#00E58B"}} className="badge">{this.state.company}</span></h3>
+                    
                     <p>
                       Processing Time: Item will be shipped out within 2-3 working
                 days.{" "}
@@ -547,7 +584,7 @@ class SingleProduct extends Component {
                 cart
               </button>
 
-                    <button className="w3ls-cart w3ls-cart-like">
+                    <button className="w3ls-cart w3ls-cart-like" onClick={this.addToWishList}>
                       <i className="fa fa-heart-o" aria-hidden="true"></i> Add to
                 Wishlist
               </button>

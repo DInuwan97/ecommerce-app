@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import jwt_decode from 'jwt-decode';
 import { connect } from 'react-redux';
-
+import swal from 'sweetalert';
 import SelectAll from './Selectall/SelectAll';
 import CartItem from './CartItem/CartItem';
 import Summary from './Summary/Summary';
@@ -145,40 +145,84 @@ class Cart extends Component {
   removeItem = (id) => {
     console.log(id);
     let tempItems;
+
+    axios({
+      method: 'delete',
+      url: `/api/cart/remove/${id}`,
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
     tempItems = this.props.theItems.filter(item => {
       if (item._id !== id) {
-        axios({
-          method: 'delete',
-          url: `/api/cart/remove/${id}`,
-        })
-        // .then(res=>{
-        //   return item;
-        // })
-        // .catch(err=>{
-        //   console.log(err);
-        // })
         return item;
       }
     });
-
-    // remove the item from cartItems schema in database
-    //
-    //
-
-    // set summary
     let summary = this.setSummary(tempItems);
     this.props.updateItemSummary(tempItems, summary);
-    // this.setState({ items: tempItems, cartSummary: summary });
 
   };
 
   // add an item to wishlist - REDUX
-  moveToWishList = (id) => {
-    console.log(id);
+  moveToWishList = (item) => {
+    console.log('move to wishlist' ,item);
     let tempItems;
     let moveItem;
+
+    let itemId = item._id;
+
+    axios({
+      method:'post',
+      url:`/api/wishlist/add`,
+      data:{
+        itemName: item.itemName,
+        price: item.price,
+        category: item.category,
+        itemImage: item.itemImage,
+        size: item.size,
+        brand: item.brand,
+        discount: item.discount,
+        addedUserFirstName: item.addedUserFirstName,
+        addedUserLastName: item.addedUserLastName,
+        addedUserEmail: item.addedUserEmail,
+        rating: item.rating,
+        quantity: item.quantity,
+        company: item.company,
+        isSelectedItem: false,
+        totalPrice: 0,
+        itemId:itemId
+      }
+    })
+    .then(res=>{
+      axios({
+        method: 'delete',
+        url: `/api/cart/remove/${itemId}`,
+      })
+      .then(res=>{
+        console.log('Deleting Done')
+      })
+      .catch(err=>{
+        console.log('Deleting err')
+      })
+    })
+    .then(() => {
+      swal({
+        title: "Done",
+        text: "Moved to WishList",
+        icon: 'success'
+      });
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+
     tempItems = this.props.theItems.filter(item => {
-      if (item._id !== id) {
+      if (item._id !== itemId) {
         return item;
       } else {
         moveItem = item;

@@ -190,7 +190,7 @@ class ReviewReplyTable extends Component {
                                 <span className="info-box-text">Reply Rate</span>
                                 <span className="info-box-number">{this.state.EmailedCount + " /" + this.state.Reviews.length}</span>
                                 <div className="progress">
-                                    <div className="progress-bar" style={{ width: this.state.Reviews.length != 0 ? ((this.state.EmailedCount / this.state.Reviews.length) * 100).toFixed(2) : '100%' }} />
+                                    <div className="progress-bar" style={{ width: this.state.Reviews.length != 0 ? ((this.state.EmailedCount / this.state.Reviews.length) * 100).toFixed(2)+"%" : '100%' }} />
                                 </div>
                                 <span className="progress-description">
                                     {this.state.Reviews.length != 0 ? ((this.state.EmailedCount / this.state.Reviews.length) * 100).toFixed(2) : "100"}% Reply Rate

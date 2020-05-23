@@ -50,7 +50,6 @@ export default class MyProfileUserFunctions extends Component {
     })
       .then((res) => {
         const user = res.data;
-        console.log("User data are : ", user.isSalesManager);
 
         this.setState({
           firstName: user.firstName,
@@ -86,7 +85,6 @@ export default class MyProfileUserFunctions extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -114,12 +112,11 @@ export default class MyProfileUserFunctions extends Component {
       data: formData,
     })
       //.patch(`/api/users/updateImage/:${this.props.loggedEmail}`, formData)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+      .then((res) => {})
+      .catch((err) => {});
   };
 
   updateMyProfile = (email) => {
-    console.log("Sales Servicer Email : ", email);
     axios({
       method: "patch",
       url: `/api/users/updatemyProfile/${email}`,
@@ -134,10 +131,8 @@ export default class MyProfileUserFunctions extends Component {
       },
     })
       .then((res) => {
-        console.log(res);
       })
       .catch((err) => {
-        console.log(err);
       });
 
     let formData = new FormData();
@@ -147,8 +142,17 @@ export default class MyProfileUserFunctions extends Component {
       url: `/api/users/updateImage/${this.props.loggedEmail}`,
       data: formData,
     })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+      .then((res) => {})
+      .catch((err) => {});
+
+
+    axios({
+      method:'',
+      url:'/api/review/admin/changeUserData'
+    })
+    .then((res) => {})
+    .catch((err) => {});
+
   };
 
   uploadSingleFile(e) {
@@ -163,7 +167,6 @@ export default class MyProfileUserFunctions extends Component {
 
   upload(e) {
     e.preventDefault();
-    console.log(this.state.file);
   }
 
   getItemstoYourCompany = () => {
@@ -180,7 +183,6 @@ export default class MyProfileUserFunctions extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -217,10 +219,8 @@ export default class MyProfileUserFunctions extends Component {
           reviewMessage: review.reviewMessage,
         });
 
-        console.log("review data", review[0].userImageUrl);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -290,12 +290,7 @@ export default class MyProfileUserFunctions extends Component {
                     </li>
                   </ul>
 
-                  <a href="#" className="btn btn-success btn-block">
-                    <b>Voice</b>
-                  </a>
-                  <a href="/compose" className="btn btn-dark btn-block">
-                    <b>Mail</b>
-                  </a>
+           
                 </div>
               </div>
 
@@ -375,7 +370,7 @@ export default class MyProfileUserFunctions extends Component {
                         <div className="modal-content">
                           <div className="modal-header">
                             <h5 className="modal-title" id="exampleModalLabel">
-                              Modal title
+                              Change Passwords
                             </h5>
                             <button
                               type="button"
@@ -515,7 +510,7 @@ export default class MyProfileUserFunctions extends Component {
                 <div className="card-body">
                   <div className="tab-content">
                     <div className="active tab-pane" id="activity">
-                      {this.state.reviewList.slice(0, 9).map((rev) => (
+                      {this.state.reviewList.slice(0, 3).map((rev) => (
                         <div className="post">
                           <div className="user-block">
                             {rev.userImageUrl == "" && (
@@ -579,68 +574,7 @@ export default class MyProfileUserFunctions extends Component {
                         </div>
                       ))}
 
-                      <div className="post">
-                        <div className="row mb-3">
-                          <div className="col-sm-6">
-                            <img
-                              className="img-fluid"
-                              src="../../dist/img/photo1.png"
-                              alt="Photo"
-                            />
-                          </div>
-
-                          <div className="col-sm-6">
-                            <div className="row">
-                              <div className="col-sm-6">
-                                <img
-                                  className="img-fluid mb-3"
-                                  src="../../dist/img/photo2.png"
-                                  alt="Photo"
-                                />
-                                <img
-                                  className="img-fluid"
-                                  src="../../dist/img/photo3.jpg"
-                                  alt="Photo"
-                                />
-                              </div>
-
-                              <div className="col-sm-6">
-                                <img
-                                  className="img-fluid mb-3"
-                                  src="../../dist/img/photo4.jpg"
-                                  alt="Photo"
-                                />
-                                <img
-                                  className="img-fluid"
-                                  src="../../dist/img/photo1.png"
-                                  alt="Photo"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <p>
-                          <a href="#" className="link-black text-sm mr-2">
-                            <i className="fas fa-share mr-1"></i> Share
-                          </a>
-                          <a href="#" className="link-black text-sm">
-                            <i className="far fa-thumbs-up mr-1"></i> Like
-                          </a>
-                          <span className="float-right">
-                            <a href="#" className="link-black text-sm">
-                              <i className="far fa-comments mr-1"></i> Comments
-                              (5)
-                            </a>
-                          </span>
-                        </p>
-
-                        <input
-                          className="form-control form-control-sm"
-                          type="text"
-                          placeholder="Type a comment"
-                        />
-                      </div>
+                  
                     </div>
 
                     <div className="tab-pane" id="timeline">
@@ -741,7 +675,7 @@ export default class MyProfileUserFunctions extends Component {
 
                             <div className="timeline-body">
                               {this.state.itemList
-                                .slice(0, 5)
+                                .slice(0, 6)
                                 .map(({ itemImage }) => {
                                   return (
                                     <img

@@ -26,7 +26,7 @@ import ContactUsDT from '../ContactUs/ContactusDT';
 import MyProfile from '../AdminOrientation/MyProfile';
 
 import AdminPackage from '../AdminOrientation/AdminPackage';
-import { ProtectedRoutesAdmin, ProtectedRoutesIsSalesManager } from '../ProtectedRoutes/ProtectedRoutes';
+import { ProtectedRoutesAdmin, ProtectedRoutesIsSalesManager,ProtectedRoutesIsCurrentSalaseManager} from '../ProtectedRoutes/ProtectedRoutes';
 export default class HeaderSideMenuFooter extends Component {
 
   constructor(props, location) {
@@ -58,7 +58,6 @@ export default class HeaderSideMenuFooter extends Component {
       paramEmail: ''
     }
 
-    console.log('localstorage login token :', localStorage.userLoginToken);
 
     ///window.location.reload(true); 
 
@@ -102,8 +101,6 @@ export default class HeaderSideMenuFooter extends Component {
           userImageUrl: decoded.userImageUrl
         })
       }
-      console.log('Decoded token is : ', decoded)
-      console.log('Decoded Company is : ', this.state.company)
 
       axios({
         method: 'get',
@@ -114,12 +111,10 @@ export default class HeaderSideMenuFooter extends Component {
       })
         .then((res) => {
           const users = res.data;
-          console.log(users);
           this.setState({
             usersList: users,
           });
         });
-      console.log(this.state.user);
     }
 
 
@@ -134,12 +129,10 @@ export default class HeaderSideMenuFooter extends Component {
         })
       })
       .catch(err => {
-        console.log(err);
       })
 
 
     this.getReviewsOnCompany();
-    console.log('Lngth of revies: ', this.state.reviewList.length)
     if (this.state.isCustomer === true) {
       //window.location.replace('/login');
     }
@@ -254,12 +247,7 @@ export default class HeaderSideMenuFooter extends Component {
             <li className="nav-item">
               <a className="nav-link" data-widget="pushmenu" href="#"><i className="fas fa-bars"></i></a>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
-              <a href="" className="nav-link">Home</a>
-            </li>
-            <li className="nav-item d-none d-sm-inline-block">
-              <a href="#" className="nav-link">Contact</a>
-            </li>
+         
           </ul>
 
 
@@ -333,9 +321,7 @@ export default class HeaderSideMenuFooter extends Component {
               </div>
             </li>
             <li className="nav-item">
-              <a className="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
-                <i className="fas fa-th-large"></i>
-              </a>
+          
             </li>
           </ul>
         </nav>
@@ -390,12 +376,12 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
                 }
 
-                {(this.state.isSalesManager === true) &&
+                {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/salesServicersList" className={this.props.location && this.props.location === "/salesservicerslist" ? "nav-link active" : "nav-link"}>
-                      <i className="nav-icon fas fa-copy"></i>
+                      <i className="nav-icon fas fa-users" aria-hidden="true" ></i>
                       <p>
-                        Sales Servicers
+                         Sales Servicers
                                 {(this.getNoOfSalesServicersToBeApproveInCompany() > 0) &&
                           <span className="right badge badge-info">New {this.getNoOfSalesServicersToBeApproveInCompany()}</span>
                         }
@@ -406,9 +392,9 @@ export default class HeaderSideMenuFooter extends Component {
 
                 <li className="nav-item has-treeview">
                   <a href="/ActiveSalesManagers" className={this.props.location && this.props.location === "/activesalesmanagers" ? "nav-link active" : "nav-link"}>
-                    <i className="nav-icon fas fa-user"></i>
+                  <i className="nav-icon fas fa-building"></i>
                     <p>
-                      ActiveSalesManagers
+                      Active Companies
                       </p>
                   </a>
                 </li>
@@ -416,7 +402,8 @@ export default class HeaderSideMenuFooter extends Component {
                 {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/itemApprove" className={this.props.location && this.props.location === "/itemapprove" ? "nav-link active" : "nav-link"}>
-                      <i className="nav-icon fas fa-copy"></i>
+                      <i className="nav-icon fab fa-expeditedssl"></i>
+              
                       <p>
                         Item Approvals
                         {(this.getnoOfItemsToBeApproved() > 0) &&
@@ -430,7 +417,7 @@ export default class HeaderSideMenuFooter extends Component {
                 {(this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/addCategory" className={this.props.location && this.props.location === "/addcategory" ? "nav-link active" : "nav-link"}>
-                      <i className="nav-icon fas fa-copy"></i>
+                      <i className="nav-icon fas fa-puzzle-piece"></i>
                       <p>
                         Product Categories
                       </p>
@@ -539,7 +526,7 @@ export default class HeaderSideMenuFooter extends Component {
                   <Route exact path='/ReviewReplies' component={() => <ReviewReplyData company={this.state.company} />} />
                   <Route exact path='/ReviewReplies/:id' component={() => <ReviewReplyTable company={this.state.company} />} />
 
-                  <Route path='/SalesManagerProfile/:email' component={() => <SalesMAnagerUserProfile loggedEmail={this.state.email} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList} />} />
+                  <ProtectedRoutesIsCurrentSalaseManager token={localStorage.getItem("userLoginToken")} path='/SalesManagerProfile/:email' component={() => <SalesMAnagerUserProfile loggedEmail={this.state.email} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList} />} />
 
                   <Route exact path='/contactUs' component={ContactUsDT} />
 
