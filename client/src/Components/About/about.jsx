@@ -23,7 +23,7 @@ class about extends Component {
                         </div>
                         <div className="col-md-3 team-grid">
                             <div className="team-img">
-                                <img src="https://res.cloudinary.com/dsuhs6bf5/image/upload/v1589621741/zehopwq1wkhq1fjfctza.png" className="img-responsive" alt=" " />
+                                <img src="https://res.cloudinary.com/dsuhs6bf5/image/upload/v1590227576/c22qebkw8aaniotzwxki.jpg" className="img-responsive" alt=" " />
                                 
                                 <h4>Pawan Ariyathilake</h4>
                             </div>

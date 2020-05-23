@@ -54,6 +54,46 @@ class SendEmail extends Component {
                 msg: this.state.msg,
                 reviewId: this.state.reviewId
             }
+            if(data.to!=="" && data.to){
+                var ToEmails =data.to.split(",");
+                for(var i=0;i<ToEmails.length;i++){
+                    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(ToEmails[i]))){
+                        swal({
+                            text:`Invalid Email -${ToEmails[i]} in to field`,
+                            title:"Error!",
+                            icon:'error'
+                        })
+                        return;
+                    }
+                }
+            }
+            if(data.cc!=="" && data.cc){
+                var CcEmails =data.cc.split(",");
+                for(var i=0;i<CcEmails.length;i++){
+                    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(CcEmails[i]))){
+                        swal({
+                            text:`Invalid Email -${CcEmails[i]} in cc field`,
+                            title:"Error!",
+                            icon:'error'
+                        })
+                        return;
+                    }
+                }
+            }
+            if(data.bcc!=="" && data.bcc){
+                var BccEmails =data.bcc.split(",");
+                for(var i=0;i<BccEmails.length;i++){
+                    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(BccEmails[i]))){
+                        swal({
+                            text:`Invalid Email -${BccEmails[i]} in bcc field`,
+                            title:"Error!",
+                            icon:'error'
+                        })
+                        return;
+                    }
+                }
+            }
+            
             const url = "/api/review/admin/sendMail"
             swal({
                 title: "Sending...",
