@@ -50,7 +50,8 @@ console.log('Add req body : ',req.body);
       quantity:req.body.quantity,
       company:req.body.company,
       isSelectedItem:req.body.isSelectedItem,
-      totalPrice:req.body.totalPrice
+      totalPrice:req.body.totalPrice,
+      itemId:req.body.itemId
   }
 
   CartItem.create(cartItem ,(err)=>{

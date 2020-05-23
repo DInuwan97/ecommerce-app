@@ -32,6 +32,8 @@ import UserProfile from './Components/UserProfile/UserProfile';
 
 import About from './Components/About/about';
 
+
+import {ProtectedUpperSalesServicers,ProtectedRoutesCheckedLoggedUser} from './Components/ProtectedRoutes/ProtectedRoutes';
 class App extends Component {
 
   constructor(props) {
@@ -101,20 +103,19 @@ class App extends Component {
 
 
             <Route path="/:type/:id" component={SingleProduct} />
-            <Route path="/salesManager" component={SalesManager} />
-            <Route path="/itemApprove" component={itemApprove} />
-            <Route path="/category" component={Category} />
-            <Route path="/testb" component={TestB} />
+            <ProtectedUpperSalesServicers token={localStorage.getItem("userLoginToken")} path="/salesManager" component={SalesManager} />
+
+
             <Route path="/ResendEmail" component={ResendEmail} />
 
             <Route path="/cart" component={Cart} />
-            <Route path="/checkout" component={Checkout} />
-            <Route path="/wishlist" component={()=> <Wishlist loggedEmail={this.state.email}/>} />
-            <Route path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/checkout" component={Checkout} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/wishlist" component={()=> <Wishlist loggedEmail={this.state.email}/>} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />
 
             <Route path="/contactus" component={ContactUs} />
             <Route path='/faq' component={Faq} />
-            <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
             
             <Route path="/about" component={About} />
             

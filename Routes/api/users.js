@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-
 const mongoose = require("mongoose");
 
 //getting the auth middlewears
@@ -609,6 +608,9 @@ router.delete("/deleteSalesManager/:email", async (req, res) => {
     res.status(500).json({ msg: "Server Error" });
   }
 });
+
+
+
 
 
 
