@@ -22,7 +22,7 @@ function App({location}) {
 
   <Route path = "/login" component={Login} />
     {((location.pathname !=='/login') &&  (localStorage.getItem("userLoginToken") !== null) )&&
-     <HeaderSideMenuFooter location={location.pathname}/> 
+     <HeaderSideMenuFooter location={location.pathname.toLowerCase()}/> 
     }
 
     {((location.pathname !=='/login') &&  (localStorage.getItem("userLoginToken") === null) )&&
