@@ -110,7 +110,7 @@ class App extends Component {
             <Route path="/cart" component={Cart} />
             <Route path="/checkout" component={Checkout} />
             <Route path="/wishlist" component={Wishlist} />
-            <Route path="/purchasedOrders" component={PurchasedOrders} />
+            <Route path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />
 
             <Route path="/contactus" component={ContactUs} />
             <Route path='/faq' component={Faq} />
