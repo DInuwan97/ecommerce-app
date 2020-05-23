@@ -1,47 +1,33 @@
 import React, { Component } from 'react';
-
+import swal from 'sweetalert';
 import classes from './Wishlist.module.css';
 import WishlistItem from './WishlistItem/WishlistItem';
-
+import axios from 'axios';
 import $ from 'jquery';
 
 class Watchlist extends Component {
 
-  state = {
-    items: [
-      {
-        id: 1,
-        itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        stockQuantity: 10,
-        color: 'red',
-        size: 'XL',
-        price: 1200.30,
-        discount: 10,
-        itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        totalPrice: 0,
-        quantity: 1,
-        isSelected: false,
-        addedDate: '16 May 2020'
-      },
-      {
-        id: 2,
-        itemName: 'MISSFOX Women Watches Luxury Watch Women Fashion 2020 Fake Chronograph Roman Numerals 18K Gold Ladies Watches Quartz Wristwatch',
-        stockQuantity: 20,
-        color: 'red',
-        size: 'XL',
-        price: 1200.30,
-        discount: 7,
-        itemImage: 'https://res.cloudinary.com/dsuhs6bf5/image/upload/v1587477911/nkifilujjictrq5aof2u.jpg',
-        totalPrice: 0,
-        quantity: 1,
-        isSelected: false,
-        addedDate: '16 May 2020'
-      },
-    ]
-  };
+
+  constructor(props){
+    super(props);
+    this.state = {
+      items: []
+    };
+  }
+
+ 
 
   componentDidMount() {
     // get items form db
+    axios({
+      method:'get',
+      url:`/api/wishlist/view/${this.props.loggedEmail}`
+    })
+    .then(res=>{
+      this.setState({
+        items:res.data
+      })
+    })
 
   }
 
@@ -51,9 +37,24 @@ class Watchlist extends Component {
     console.log(item);
     // remove from database
     //
+
+    axios({
+      method:'delete',
+      url:`/api/wishlist/remove/${item._id}`
+    })
+    .then(res=>{
+      swal({
+        icon:"success",
+        title:"Done",
+        text:"Successfully Removed"
+      })
+    })
+    .catch(err=>{
+      console.log(err)
+    })
     let tempItems = [...this.state.items];
     tempItems = tempItems.filter(i => {
-      if (i.id !== item.id) {
+      if (i._id !== item._id) {
         return i;
       }
     });
@@ -64,10 +65,55 @@ class Watchlist extends Component {
   addToCart = (item) => {
     console.log(item);
     // add to cart schema in database
-    //
+    
+    axios({
+      method: 'post',
+      url: `/api/cart/add`,
+      data: {
+        itemName: item.itemName,
+        price: item.price,
+        category: item.category,
+        itemImage: item.itemImage,
+        size: item.size,
+        brand: item.brand,
+        discount: this.state.items.discount,
+        addedUserFirstName: item.addedUserFirstName,
+        addedUserLastName: item.addedUserLastName,
+        addedUserEmail: item.addedUserEmail,
+        rating: item.rating,
+        quantity: item.quantity,
+        company: item.company,
+        isSelectedItem: false,
+        totalPrice: 0
+      }
+    })
+    .then(res=>{
+      axios({
+        method:'delete',
+        url:`/api/wishlist/remove/${item._id}`
+      })
+      .then(res=>{
+        console.log('Deleting Done')
+      })
+      .catch(err=>{
+        console.log('Deleting err')
+      })
+    })
+    .then(() => {
+      swal({
+        title: "Status",
+        text: "Done",
+        icon: 'success'
+      });
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+
     let tempItems = [...this.state.items];
     tempItems = tempItems.filter(i => {
-      if (i.id !== item.id) {
+      if (i._id !== item._id) {
         return i;
       }
     });
