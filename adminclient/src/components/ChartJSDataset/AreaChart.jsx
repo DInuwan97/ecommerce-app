@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Line } from "react-chartjs-2";
+import Spinner from "../Spinner/Spinner";
 export default class AreaChart extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +41,11 @@ export default class AreaChart extends Component {
           },
         ],
       },
+      isLoading: true,
     };
+    setTimeout(() => {
+      this.setState({ isLoading: false });
+    }, 3000);
   }
   render() {
     return (
@@ -66,18 +71,22 @@ export default class AreaChart extends Component {
           </div>
         </div>
         <div className="card-body">
-          <div className="chart">
-            <Line
-              data={this.state.chartData}
-              options={{
-                title: {
-                  display: true,
-                  text: "sachin",
-                  fontSize: 25,
-                },
-              }}
-            />
-          </div>
+          {this.state.isLoading ? (
+            <Spinner />
+          ) : (
+            <div className="chart">
+              <Line
+                data={this.state.chartData}
+                options={{
+                  title: {
+                    display: false,
+                    text: "sachin",
+                    fontSize: 25,
+                  },
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     );
