@@ -8,17 +8,17 @@ export default class BarChart extends Component {
       nyName: "dinuwan",
       chartData: {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
         ],
         datasets: [
           {
-            label: "Digital Goods",
+            label: "With discount",
             backgroundColor: "rgba(60,141,188,0.9)",
             borderColor: "rgba(60,141,188,0.8)",
             pointRadius: false,
@@ -26,10 +26,10 @@ export default class BarChart extends Component {
             pointStrokeColor: "rgba(60,141,188,1)",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(60,141,188,1)",
-            data: [28, 48, 40, 19, 86, 27, 90],
+            data: [65, 59, 80, 81, 56, 88, 91],
           },
           {
-            label: "Electronics",
+            label: "No discount",
             backgroundColor: "rgba(210, 214, 222, 1)",
             borderColor: "rgba(210, 214, 222, 1)",
             pointRadius: false,
@@ -37,7 +37,7 @@ export default class BarChart extends Component {
             pointStrokeColor: "#c1c7d1",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40],
+            data: [28, 48, 40, 19, 60, 78, 80],
           },
         ],
       },
@@ -46,14 +46,14 @@ export default class BarChart extends Component {
 
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 3000);
+    }, 300);
   }
 
   render() {
     return (
       <div className="card card-success">
         <div className="card-header">
-          <h3 className="card-title">Stacked Bar Chart</h3>
+          <h3 className="card-title">Purchasings in Last Week</h3>
 
           <div class="card-tools">
             <button

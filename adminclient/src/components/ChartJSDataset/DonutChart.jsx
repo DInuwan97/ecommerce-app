@@ -6,7 +6,14 @@ export default class DonutChart extends Component {
     super(props);
     this.state = {
       donutData: {
-        labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
+        labels: [
+          "Women's clothing",
+          "Men's clothing",
+          "Kid's wear",
+          "Casuals",
+          "Formals",
+          "Inner wear",
+        ],
         datasets: [
           {
             data: [700, 500, 400, 600, 300, 100],
@@ -25,14 +32,14 @@ export default class DonutChart extends Component {
     };
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 3000);
+    }, 300);
   }
 
   render() {
     return (
       <div className="card card-danger">
         <div className="card-header">
-          <h3 className="card-title">Donut Chart</h3>
+          <h3 className="card-title">Categories in Stock</h3>
 
           <div className="card-tools">
             <button

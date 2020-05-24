@@ -9,18 +9,11 @@ export default class LineGraph extends Component {
     this.state = {
       nyName: "dinuwan",
       chartData: {
-        labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
+        labels: [],
         datasets: [
           {
-            data: [700, 500, 400, 600, 300, 100],
-            backgroundColor: [
-              "#f56954",
-              "#00a65a",
-              "#f39c12",
-              "#00c0ef",
-              "#3c8dbc",
-              "#d2d6de",
-            ],
+            data: [],
+            backgroundColor: [],
           },
         ],
       },
@@ -52,23 +45,73 @@ export default class LineGraph extends Component {
   }
 
   prepareData = (data) => {
+    // console.log("renderes data : " + data.length);
     let dataArray = [];
-    dataArray = data;
-    console.log("renderes data : " + data.length);
+    let itemsArray = [];
     let companies = [];
+    let filteredCompanies = [];
+
+    dataArray = data;
 
     dataArray.forEach((el) => {
       el.items.forEach((item) => {
-        console.log(item);
+        companies.push(item.company);
+        itemsArray.push(item);
       });
     });
+
+    // remove duplicates
+    filteredCompanies = companies.filter((com, index) => {
+      return companies.indexOf(com) === index;
+    });
+
+    // assign value 1 for all companies
+    let quantitiies = new Array(filteredCompanies.length);
+    let backgroundColors = new Array(filteredCompanies.length);
+
+    for (let i = 0; i < quantitiies.length; i++) {
+      quantitiies[i] = 1;
+      backgroundColors[i] = this.getRandomColors();
+    }
+
+    // set company purchased amounts to a array
+    itemsArray.forEach((item, index) => {
+      for (let i = 0; i < filteredCompanies.length; i++) {
+        if (item.company == filteredCompanies[i]) {
+          quantitiies[i] += 1;
+        }
+      }
+    });
+
+    console.log(quantitiies);
+
+    this.setState({
+      chartData: {
+        labels: filteredCompanies,
+        datasets: [
+          {
+            data: quantitiies,
+            backgroundColor: backgroundColors,
+          },
+        ],
+      },
+    });
+  };
+
+  getRandomColors = () => {
+    let letters = "0123456789ABCDEF";
+    let color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   };
 
   render() {
     return (
       <div className="card card-info">
         <div className="card-header">
-          <h3 className="card-title">Pie Chart</h3>
+          <h3 className="card-title">Purchasings by Companies</h3>
 
           <div className="card-tools">
             <button
