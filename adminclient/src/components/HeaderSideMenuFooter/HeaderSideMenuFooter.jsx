@@ -380,7 +380,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </li>
                 }
 
-                {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
+                {(this.state.isSalesManager === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/salesServicersList" className={this.props.location && this.props.location === "/salesservicerslist" ? "nav-link active" : "nav-link"}>
                       <i className="nav-icon fas fa-users" aria-hidden="true" ></i>
@@ -403,7 +403,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </a>
                 </li>
 
-                {(this.state.isSalesManager === true) &&
+                {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/itemApprove" className={this.props.location && this.props.location === "/itemapprove" ? "nav-link active" : "nav-link"}>
                       <i className="nav-icon fab fa-expeditedssl"></i>

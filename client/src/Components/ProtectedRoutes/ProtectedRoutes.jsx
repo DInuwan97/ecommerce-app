@@ -17,7 +17,7 @@ export const ProtectedUpperSalesServicers = ({
       {...rest}
       render={props => {
         console.log('Protected Info : ', decoded);
-        if ((decoded.isSalesManager === true && decoded.adminVerification === true) || (decoded.isSalesServicer === true && decoded.salasManagerVerification === true)) {
+        if ((decoded.isSalesManager === true && decoded.adminVerification === true) || (decoded.isSalesServicer === true && decoded.salasManagerVerification === true) || decoded.isAdmin === true) {
           if(decoded.isCustomer === false){
             return <Component {...props} />;
           }

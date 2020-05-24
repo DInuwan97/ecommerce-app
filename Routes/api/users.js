@@ -731,7 +731,16 @@ router.post('/admin/sendMail/',authUserSecureCode,async (req, res) => {
 
 });
 
-
+// Method       : Post
+// Headers      : Authorization - 'Bearer token'
+// Params       : None
+// Body         : to, cc, bcc, subject, msg, reviewId - Optional 
+// Validation   : User Validation
+// Return       : msg , +data - if success
+// Description  : This Method sends an Email if the user haves the permission 
+//                  and the valid details are provided
+// Optional     : If the ReviedId is provided the method updates the review tables relavent id as Admin Replied
+//                  and sets the replied message, and time
 router.post('/forgotPassword',(req,res)=>{
 
   console.log('Fog pwd : ',req.body)
@@ -799,7 +808,7 @@ router.post('/enterSecureCode/:email',(req,res)=>{
 
 
 
-// Method         : GET
+// Method         : PATCH
 // Header         : Authorization - 'bearer token'
 // Body           : username and password
 // Return         : HTTP Standard status codes (200 || 404)

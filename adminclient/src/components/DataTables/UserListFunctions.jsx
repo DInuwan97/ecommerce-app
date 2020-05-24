@@ -45,6 +45,8 @@ export default class UserListFunctions extends Component {
     })
       .then((res) => {})
       .catch((err) => {});
+
+      this.sendEmailToSalesManager(email);
   };
 
   deleteSalesManager = (email) => {
@@ -53,14 +55,32 @@ export default class UserListFunctions extends Component {
     });
     axios({
       method: "delete",
-      url: `/api/users/deleteSalesManager/${email}`,
-      // headers: {
-      //     "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
-      // }
+      url: `/api/users/deleteSalesManager/${email}`
     })
       .then((res) => {})
       .catch((err) => {});
   };
+
+  sendEmailToSalesManager = (email) => {
+    axios({
+     method:'post',
+     url:'/api/users/admin/sendMail/',
+     headers: {
+      "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+     },
+     data:{
+       msg:"CONGRATULATIONS!!! Admin has been approved the Your Connetion Request on  joining with Fashion Club.",
+       to:email,
+       subject:"Fashion Club - Salas Manager Approval Statement"
+     }
+    })
+    .then(res=>{
+      console.log(res);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
 
   render() {
     const { companyName } = this.props;
