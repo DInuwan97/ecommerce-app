@@ -16,20 +16,15 @@ export const ProtectedUpperSalesServicers = ({
     <Route
       {...rest}
       render={props => {
-        console.log('Protected Info : ', decoded.isCustomer);
-        if (!(decoded.isCustomer) && (token !== null)) {
-          return <Component {...props} />;
+        console.log('Protected Info : ', decoded);
+        if ((decoded.isSalesManager === true && decoded.adminVerification === true) || (decoded.isSalesServicer === true && decoded.salasManagerVerification === true)) {
+          if(decoded.isCustomer === false){
+            return <Component {...props} />;
+          }
+          
         } else {
-          return (
-            <Redirect
-              to={{
-                pathname: "/404.html",
-                state: {
-                  from: props.location
-                }
-              }}
-            />
-          );
+            window.location.href = '/404.html';
+            return;
         }
       }}
     />

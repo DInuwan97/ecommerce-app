@@ -154,6 +154,7 @@ class SingleProduct extends Component {
   }
 
   addRate = (value) => {
+    if(localStorage.userLoginToken !== null){
     const MyRating = [];
     for (let index = 0; index < 5; index++) {
       if (value == index + 1) {
@@ -169,7 +170,14 @@ class SingleProduct extends Component {
       });
     }
   }
+  else{
+    window.location.href = '/login'
+  }
+  }
   confirmRate = () => {
+
+    if(localStorage.userLoginToken !== null){
+
     const { id } = this.props.match.params;
     const url = `/api/review/newRating/${id}`;
     const token = localStorage.getItem('userLoginToken');
@@ -216,6 +224,11 @@ class SingleProduct extends Component {
       });
     }
   }
+
+  else{
+    window.location.href = '/login'
+  }
+}
   getCommentData = () => {
     const { id } = this.props.match.params;
     const url = `/api/review/${id}`;
@@ -287,6 +300,7 @@ class SingleProduct extends Component {
 
 
   addReview = () => {
+    if(localStorage.userLoginToken !== null){
     const { id } = this.props.match.params;
     const url = `/api/Review/newReviewComment/${id}`;
     const token = localStorage.getItem('userLoginToken');
@@ -333,7 +347,10 @@ class SingleProduct extends Component {
         icon: "error"
       });
     }
+  }else{
+    window.location.href='/login'
   }
+}
 
   EditComment = async (id, editreview) => {
     const itemId = this.props.match.params.id;
@@ -451,8 +468,9 @@ class SingleProduct extends Component {
   }
 
 
-  addToWishList = () => {
 
+  addToWishList = () =>{
+ 
     Axios({
       method: 'post',
       url: `/api/wishlist/add`,
@@ -476,16 +494,17 @@ class SingleProduct extends Component {
         stockQuantity:this.state.stockQuantity
       }
     })
-      .then(() => {
-        swal({
-          title: "Status",
-          text: "Done",
-          icon: 'success'
-        });
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    .then(() => {
+      swal({
+        title: "Status",
+        text: "Done",
+        icon: 'success'
+      });
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
   }
 
   render() {
@@ -579,17 +598,38 @@ class SingleProduct extends Component {
                     </form>
 
 
+{(localStorage.getItem("userLoginToken") !== null) &&
                     <button onClick={this.addProductintoCart}
                       className="w3ls-cart"
                     >
-                      <i className="fa fa-cart-plus" aria-hidden="true"></i> Add to
-                cart
+                      <i className="fa fa-cart-plus" aria-hidden="true"></i>
+                       Add to cart
               </button>
+}
 
+
+{(localStorage.getItem("userLoginToken") === null) &&
+  <button disabled onClick={this.addProductintoCart}
+    className="w3ls-cart"
+  >
+    <i className="fa fa-cart-plus" aria-hidden="true"></i>
+     Add to cart
+</button>
+}
+
+{(localStorage.getItem("userLoginToken") !== null) &&
                     <button className="w3ls-cart w3ls-cart-like" onClick={this.addToWishList}>
                       <i className="fa fa-heart-o" aria-hidden="true"></i> Add to
                 Wishlist
               </button>
+}
+
+{(localStorage.getItem("userLoginToken") === null) &&
+<button disabled className="w3ls-cart w3ls-cart-like" onClick={this.addToWishList}>
+  <i className="fa fa-heart-o" aria-hidden="true"></i> Add to
+Wishlist
+</button>
+}
                   </div>
                   <div className="clearfix"> </div>
                 </div>
