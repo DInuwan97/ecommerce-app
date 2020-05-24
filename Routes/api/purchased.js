@@ -87,4 +87,19 @@ router.patch('/hideOrder/:id',async(req,res)=>{
   }
 })
 
+
+
+router.get('/viewPurchasedItems/',async(req,res)=>{
+  try{
+    let TrackOrder = await  PuchasedItem.find()
+    if(!TrackOrder)
+      res.status(404).json({msg:'Orders Empty'})
+    else{
+      res.status(200).json(TrackOrder);
+    }
+  }catch(err){
+    console.log(err);
+  }
+})
+
 module.exports = router;

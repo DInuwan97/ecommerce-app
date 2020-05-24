@@ -242,7 +242,7 @@ router.post("/resendEmail", (req, res) => {
 // Body           : username and password
 // Validation     : User Input Field Validations, Secure Key Verification,Chekc valid email or not,chek  passwords are incorect or not
 // Return         : HTTP Standard status codes (200 || 404)
-// Description    : Add a  new user into system
+// Description    : Login to the SYSTEM
 // Multi Factor Auth : SMS Gatway
 
 router.post("/login", (req, res) => {
@@ -305,9 +305,12 @@ router.post("/login", (req, res) => {
     });
 });
 
-////////////////////////////////////User Login//////////////////////////////////////////////////////////////////
-
-///////////////////////////admin confirms the Sales Manager/////////////////////////////////////
+// Method         : POST
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.post(
   "/confirmSalesManager",
   authenticateUser,
@@ -379,8 +382,13 @@ router.post(
     });
   }
 );
-///////////////////////////admin confirms the Sales Manager/////////////////////////////////////
 
+// Method         : GET
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.get("/profile", authenticateUser, (req, res) => {
   jwt.verify(req.token, "secretkey", (err, authData) => {
     if (err) {
@@ -402,7 +410,12 @@ router.get("/profile", authenticateUser, (req, res) => {
 });
 
 
-//have to authorixation middleweare
+// Method         : GET
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.get('/viewusers', authenticateUser,async (req,res)=>{
 
   console.log('User lITS : ');
@@ -421,8 +434,12 @@ router.get('/viewusers', authenticateUser,async (req,res)=>{
   }
 })
 
-
-//sales servicer verification
+// Method         : PATCH
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>{
   try{
     let user = await User.findOne({email:req.params.email})
@@ -447,7 +464,12 @@ router.patch('/confirmSalesServicer/:email',authUserSecureCode,async (req,res)=>
 
 
 
-//update logged user profile
+// Method         : GET
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
 
   console.log('Request Body of updateMyProfile : ', req.params);
@@ -464,10 +486,8 @@ router.patch('/updatemyProfile/:email',authUserSecureCode,async (req,res)=>{
       if(req.params.email == authData.email){
         user.firstName = req.body.firstName,
         user.lastName = req.body.lastName,
-        //user.email = req.body.email,
         user.mobile = req.body.mobile,
         user.address = req.body.address
-       // user.userImageUrl = req.body.userImageUrl
 
         await user.save();
         res.status(200).json(user);
@@ -505,11 +525,18 @@ cloudinary.config({
   api_secret: require("../../config/keys").CLOUDINARY_API_SECRET, // ALSO COMING FROM CLOUDINARY WHICH WE SAVED EARLIER
 });
 
-//update user profile image
+
+
+// Method         : PATCH
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.patch('/updateImage/:email',upload.single("image"),async (req,res)=>{
 
   console.log('image uploading route call : ');
-  //setTimeout(async function(){
+
     try {
       console.log('lOgged email : ', req.params.email);
       let user = await User.findOne({email:req.params.email})
@@ -521,7 +548,7 @@ router.patch('/updateImage/:email',upload.single("image"),async (req,res)=>{
           res.json(err.message);
           console.log('Err msg')
         }
-        //req.body.image = result.secure_url;
+
         try {
           user.userImageUrl = result.secure_url;
           user.userImageUrlId = result.public_id;
@@ -539,7 +566,7 @@ router.patch('/updateImage/:email',upload.single("image"),async (req,res)=>{
     } catch (error) {
       console.log(error);
     }
-  //},3000);
+
 })
 
 
@@ -560,13 +587,16 @@ router.get('/singleUser/:email',async (req,res)=>{
 })
 
 
-//get all registered companies 
+// Method         : GET
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.get('/getCompnayNames',async(req,res)=>{
   try{
 
     
-    //let companies = await User
-
 
   }catch(err){
     console.log(err);
@@ -574,7 +604,12 @@ router.get('/getCompnayNames',async(req,res)=>{
   }
 })
 
-//change passwords
+// Method         : GET
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
 
   console.log('Changing password : ' ,req.body,req.params);
@@ -592,9 +627,7 @@ router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
 
         if(req.params.email == authData.email){
 
-       
-          //bcrypt.compareSync(req.body.oldPasswrod, authData.password)
-         // .then(res=>{
+      
 
             try{
               if(req.body.newPassword == req.body.confirmPassword){
@@ -613,20 +646,6 @@ router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
               res.json('Bcrypt error is : ', err)
             }
            
-         // })
-        //  .catch(err=>{
-         //   res.json('Bcrypt error is : ', err)
-         // })
-
-            
-
-          // }else{
-          //   res.status(403).json({'msg':'Current Password is incoreect'})
-          // }
-
-
-
-
 
         }else{
           res.status(400).json('email blongs to another person');
@@ -642,7 +661,12 @@ router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
 
 })
 
-
+// Method         : DELETE
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.delete("/deleteSalesManager/:email", async (req, res) => {
   //check if user exist
 
@@ -687,7 +711,7 @@ router.post('/admin/sendMail/',authUserSecureCode,async (req, res) => {
               pass: password
           }
       });
-      //Sending the Email
+
       await transporter.sendMail({
           to: to,
           subject: subject,
@@ -723,10 +747,10 @@ router.post('/forgotPassword',(req,res)=>{
           res.status(400).json({ message: "User Mobile is invalid" });
         }
  
-        // axios({
-        //   method: "get",
-        //   url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
-        // });
+        axios({
+          method: "get",
+          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
+        });
 
         jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
           res.json({ 
@@ -747,9 +771,14 @@ router.post('/forgotPassword',(req,res)=>{
 })
 
 
+// Method         : POST
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.post('/enterSecureCode/:email',(req,res)=>{
 
- 
   User.findOne({
     email: req.params.email
   })
@@ -770,7 +799,12 @@ router.post('/enterSecureCode/:email',(req,res)=>{
 
 
 
-//change passwords
+// Method         : GET
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Admin should confirm the Sales Manager
+// Multi Factor Auth : Email Sending
 router.patch('/changePasswordForgot/:email',async (req,res)=>{
 
   console.log('Changing password : ' ,req.body,req.params);
