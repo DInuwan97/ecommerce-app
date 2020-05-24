@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Pie } from "react-chartjs-2";
 import Spinner from "../Spinner/Spinner";
+import axios from "axios";
 
 export default class LineGraph extends Component {
   constructor(props) {
@@ -24,11 +25,44 @@ export default class LineGraph extends Component {
         ],
       },
       isLoading: true,
+
+      data: [],
     };
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-    }, 3000);
   }
+
+  componentDidMount() {
+    axios({
+      method: "get",
+      url: "/api/pruchase/viewPurchasedItems",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("userLoginToken"),
+      },
+    })
+      .then((res) => {
+        this.prepareData(res.data);
+        this.setState({
+          data: res.data,
+          isLoading: false,
+          firstTimeRendered: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  prepareData = (data) => {
+    let dataArray = [];
+    dataArray = data;
+    console.log("renderes data : " + data.length);
+    let companies = [];
+
+    dataArray.forEach((el) => {
+      el.items.forEach((item) => {
+        console.log(item);
+      });
+    });
+  };
 
   render() {
     return (
