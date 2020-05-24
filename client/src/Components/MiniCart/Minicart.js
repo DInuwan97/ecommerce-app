@@ -18,7 +18,8 @@ class Minicart extends Component {
       addedUserLastName: '',
       addedUserEmail: '',
       totalItems: '',
-      isLoading: true
+      isLoading: true,
+      isAllRemmoved: false
 
     };
   }
@@ -116,6 +117,14 @@ class Minicart extends Component {
       isDisabled: isDisabled
     };
 
+    axios({
+      method: 'patch',
+      url: `/api/cart/setQuantity/${id}`,
+      data: {
+        quantity: quantity
+      }
+    })
+
     this.props.updateItemSummary(tempItems, summary);
     // this.setState({ items: tempItems, cartSummary: summary });
 
@@ -124,48 +133,31 @@ class Minicart extends Component {
   // remove an item from the cart - REDUX
   removeItem = (id) => {
     console.log(id);
+
+    axios({
+      method: 'delete',
+      url: `/api/cart/remove/${id}`,
+    })
+    // .then(res=>{
+    //   return item;
+    // })
+    // .catch(err=>{
+    //   console.log(err);
+    // })
+
     let tempItems;
     tempItems = this.props.theItems.filter(item => {
       if (item._id !== id) {
-        axios({
-          method: 'delete',
-          url: `/api/cart/remove/${id}`,
-        })
-        // .then(res=>{
-        //   return item;
-        // })
-        // .catch(err=>{
-        //   console.log(err);
-        // })
         return item;
       }
     });
-
-    // remove the item from cartItems schema in database
-    //
-    //
-
-    //change minicart quatity
-    const changeQuantity = (cartItemId,quantity) => {
-      if (quantity <= 1) {
-        return;
-      }
-      let number = quantity - 1;
-     
-  
-      axios({
-        method:'patch',
-        url:`/api/cart/setQuantity/${cartItemId}`,
-        data:{
-          quantity:quantity
-        }
-      })
-    };
+    if (tempItems.length == 0) {
+      this.setState({ isLoading: false, isAllRemmoved: true });
+    }
 
     // set summary
     let summary = this.setSummary(tempItems);
     this.props.updateItemSummary(tempItems, summary);
-    // this.setState({ items: tempItems, cartSummary: summary });
 
   };
 
@@ -192,15 +184,6 @@ class Minicart extends Component {
     };
 
     return summary;
-  };
-
-  toCart = () => {
-    let finalItems = this.props.theItems;
-    console.log(finalItems);
-   // this.props.history.push("/cart");
-    // save to database and navigate to cart
-    //
-    //
   };
 
   render() {
@@ -244,7 +227,7 @@ class Minicart extends Component {
 
           {content}
 
-          {this.state.isLoading && this.props.theItems.length == 0 ?
+          {this.state.isLoading && this.props.theItems.length == 0 && !this.state.isAllRemmoved ?
             <div className={classes.loading}>
               <WindowLoadingSpinner />
             </div>

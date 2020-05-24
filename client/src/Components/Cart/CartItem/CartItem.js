@@ -160,7 +160,7 @@ const CartItem = props => {
           <span className={classes.details__discount_1}>Discount:</span>
           <span className={classes.details__discount_2}>{props.item.discount}%</span>
         </div>
-        <div className={classes.details__price}>LKR {price.toFixed(2)}</div>
+        <div className={classes.details__price}>LKR {props.item.price.toFixed(2) * props.item.quantity}</div>
       </div>
 
       <div className={classes.actions}>
