@@ -46,6 +46,7 @@ export default class UserListFunctions extends Component {
             }
         })
           .then((res) => {
+            this.sendEmailToSalesManager(email);
           })
           .catch((err) =>{
             
@@ -68,6 +69,28 @@ export default class UserListFunctions extends Component {
       })
       .catch((err) =>{
       });
+    }
+
+
+    sendEmailToSalesManager = (email) => {
+      axios({
+       method:'post',
+       url:'/api/users/admin/sendMail/',
+       headers: {
+        "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+       },
+       data:{
+         msg:"CONGRATULATIONS!!! Admin has been approved the Your Connetion Request on  joining with Fashion Club.",
+         to:email,
+         subject:"Fashion Club - Salas Manager Approval Statement"
+       }
+      })
+      .then(res=>{
+        console.log(res);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
     }
       
     render() {

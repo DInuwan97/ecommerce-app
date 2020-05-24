@@ -125,6 +125,8 @@ export default class VerifySecureCode extends Component {
                 />
                 <div className="clearfix"></div>
             </div>
+
+            <br/>
   
             <input type="submit" value="Verifty" onClick={this.onSubmitHandler}/>
 
