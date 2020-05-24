@@ -31,7 +31,8 @@ import Faq from './Components/Contacts/Faq';
 import UserProfile from './Components/UserProfile/UserProfile';
 
 import About from './Components/About/about';
-
+import ForgotPassword from './Components/Login&RegisterComponent/ForgotPassword';
+import SecureCode from './Components/Login&RegisterComponent/SecureCode';
 
 import {ProtectedUpperSalesServicers,ProtectedRoutesCheckedLoggedUser} from './Components/ProtectedRoutes/ProtectedRoutes';
 class App extends Component {
@@ -98,7 +99,6 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
-            <Route exact path='/testImage' component={TestImage} />
             <Route path="/verifysecurecode" component={VerifySecureCode} />
 
 
@@ -120,6 +120,9 @@ class App extends Component {
             <Route path="/about" component={About} />
             
             <Route path="/:type" component={ProductCardList} />
+
+            <Route path="/forgotpassword" component={ForgotPassword} />
+            <Route path="/securekey" component={SecureCode} />
           </Switch>
           <Newsletter />
           <Footer />

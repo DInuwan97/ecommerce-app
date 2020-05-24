@@ -131,6 +131,37 @@ export const resendEmail = resendEmail =>{
     })
 }
 
+
+export const forgotPassword = forgotPwd =>{
+    return axios
+    .post('api/users/forgotPassword',{
+        email:forgotPwd.email,
+        mobile:forgotPwd.mobile
+    })
+    .then(res =>{
+
+            localStorage.setItem('forgotPwd',res.data.token); 
+            return res.data.token
+
+    })
+    .catch(err=>{
+        if(err.response.status === 404){
+            swal({
+                title: "Oops!!!",
+                text: "Invalid Email",
+                icon: "error",
+                button: "Back to Login",
+            })
+        }
+     
+    }) 
+}
+
+
+export const enterSecureKey = secureKey =>{
+
+}
+
 // export const verify = userVerification =>{
 //     return axios
 //     .post('/api/users/verify',{
