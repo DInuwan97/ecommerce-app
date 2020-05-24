@@ -4,7 +4,7 @@ import classes from "./Summary.module.css";
 import spinnerClasses from './Spinner.module.css';
 
 const Summary = props => {
-  console.log(props.summary);
+  console.log("summary props : " + props.summary);
 
   return (
     <div className={classes.container}>

@@ -88,7 +88,7 @@ class Cart extends Component {
         });
         this.props.updateItems(res.data);
         this.setState({ isCartLoading: false });
-        console.log('Item Data : ',res.data)
+        console.log('Item Data : ', res.data)
         // this.setState({
         //   items: res.data
         // })
@@ -170,16 +170,16 @@ class Cart extends Component {
 
   // add an item to wishlist - REDUX
   moveToWishList = (item) => {
-    console.log('move to wishlist' ,item);
+    console.log('move to wishlist', item);
     let tempItems;
     let moveItem;
 
     let itemId = item._id;
 
     axios({
-      method:'post',
-      url:`/api/wishlist/add`,
-      data:{
+      method: 'post',
+      url: `/api/wishlist/add`,
+      data: {
         itemName: item.itemName,
         price: item.price,
         category: item.category,
@@ -195,33 +195,33 @@ class Cart extends Component {
         company: item.company,
         isSelectedItem: false,
         totalPrice: 0,
-        itemId:item.itemId,
-        stockQuantity:item.stockQuantity
+        itemId: item.itemId,
+        stockQuantity: item.stockQuantity
 
       }
     })
-    .then(res=>{
-      axios({
-        method: 'delete',
-        url: `/api/cart/remove/${itemId}`,
+      .then(res => {
+        axios({
+          method: 'delete',
+          url: `/api/cart/remove/${itemId}`,
+        })
+          .then(res => {
+            console.log('Deleting Done')
+          })
+          .catch(err => {
+            console.log('Deleting err')
+          })
       })
-      .then(res=>{
-        console.log('Deleting Done')
+      .then(() => {
+        swal({
+          title: "Done",
+          text: "Moved to WishList",
+          icon: 'success'
+        });
       })
-      .catch(err=>{
-        console.log('Deleting err')
+      .catch(err => {
+        console.log(err)
       })
-    })
-    .then(() => {
-      swal({
-        title: "Done",
-        text: "Moved to WishList",
-        icon: 'success'
-      });
-    })
-    .catch(err => {
-      console.log(err)
-    })
 
 
     tempItems = this.props.theItems.filter(item => {
@@ -379,7 +379,7 @@ class Cart extends Component {
 
     return (
       <div className={classes.container}>
-        {this.state.isCartLoading ?
+        {this.state.isCartLoading && this.props.theItems.length == 0 ?
           <div className={classes.cartLoading}>
             <WindowLoadingSpinner />
           </div>
