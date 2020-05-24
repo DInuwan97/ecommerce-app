@@ -5,6 +5,8 @@ const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 const nodemailer = require('nodemailer');
+const axios = require('axios');
+
 //getting the auth middlewears
 const authUserSecureCode = require("../../middleware/Usesr").authenticateUserSecureCode;
 const authenticateUser = require("../../middleware/Usesr").authenticateUser;
@@ -90,6 +92,13 @@ router.post("/register", (req, res) => {
   })
     .then(user => {
       if (!user) {
+
+        axios({
+          method: "get",
+          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${userData.firstName}. Your Verification code is ${userData.secureKey}&to=94${userData.mobile}&usr=0766061689&pw=4873`,
+        });
+      
+
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash;
           User.create(userData)
@@ -99,6 +108,7 @@ router.post("/register", (req, res) => {
                 "secretkey",
                 { expiresIn: "1000s" },
                 (err, token) => {
+
                   res.json({
                     status:
                       user.firstName +
@@ -190,8 +200,18 @@ router.post("/resendEmail", (req, res) => {
       if (!user) {
         res.status(404).json({ message: "User Email is invalid" });
       } else {
+        axios({
+          method: "get",
+          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
+        });
+        
         jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
-          res.json({ token });
+          res.json({ 
+            'token' :token,
+            'securekey':user.secureKey,
+            'fistName':user.firstName,
+            'mobile':user.mobile
+        });
           //res.json({token});
         });
       }

@@ -20,6 +20,8 @@ export const register = newUser =>{
 
             localStorage.setItem('usertoken',res.data.token); //create the session
             console.log("Data :" +res.data.token);
+
+
             return res.data.token
         }
     })
@@ -83,11 +85,14 @@ export const login = loggedUser =>{
             })
         }
         else if(err.response.status === 403){
+            const el = document.createElement('div')
+            el.innerHTML = "<a href='http://localhost:3000/ResendEmail'>Click Here to Resend Eamil </a>"
             swal({
                 title: "Oops!!!",
                 text: "Verify your Security Key First",
                 icon: "error",
                 button: "Back to Login",
+                content:el
             })
         }
         else if(err.response.status === 404){

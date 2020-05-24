@@ -314,7 +314,7 @@ export default class addNewItemComponent extends Component {
       this.addWarning(imageWarningList, "Please select a image");
     }
 
-    if (
+  /*  if (
       this.state.itemName.trim().length != 0 &&
       this.state.price.length != 0 &&
       this.state.category.length != 0 &&
@@ -328,8 +328,8 @@ export default class addNewItemComponent extends Component {
       brand.border.style != "1px solid red" &&
       image.border.style != "1px solid red" &&
       stockQuantity.border.style != "1px solid red" &&
-      description.border.style != "1px solid red"
-    ) {
+      description.border.style != "1px solid red")*/
+     {
       const token = localStorage.userLoginToken;
       const decoded = jwt_decode(token);
       e.preventDefault();
@@ -377,9 +377,9 @@ export default class addNewItemComponent extends Component {
         size: "",
         stockQuantity: 0,
       });
-    } else {
-      return;
-    }
+    } //else {
+    //   return;
+    // }
   };
 
   render() {
