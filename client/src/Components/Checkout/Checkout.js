@@ -28,14 +28,14 @@ class Checkout extends Component {
       orderError: false,
       isSpinnerActive: false,
 
-      buyerDetails:{
-        firstName:'',
-        lastName:'',
-        mobile:'',
-        address:''
+      buyerDetails: {
+        firstName: '',
+        lastName: '',
+        mobile: '',
+        address: ''
       },
 
-      addedUserEmail:''
+      addedUserEmail: ''
     }
 
   }
@@ -81,14 +81,14 @@ class Checkout extends Component {
         });
 
         let buyerDetailsInfo = {
-          firstName:res.data.firstName,
-          lastName:res.data.lastName,
-          mobile:res.data.address,
-          address:res.data.mobile
+          firstName: res.data.firstName,
+          lastName: res.data.lastName,
+          mobile: res.data.address,
+          address: res.data.mobile
         }
 
         this.setState({
-          buyerDetails:buyerDetailsInfo
+          buyerDetails: buyerDetailsInfo
         })
 
       })
@@ -113,7 +113,7 @@ class Checkout extends Component {
       cwField.value.trim() == 0 || cwField.style.border == "1px solid red") {
       this.setState({ orderError: true, isSpinnerActive: false });
     } else {
-      this.setState({ orderError: true, isSpinnerActive: true });
+      this.setState({ orderError: false, isSpinnerActive: true });
       // place order, calling payment gateway and other fucking stuffy
 
       axios({
@@ -127,7 +127,7 @@ class Checkout extends Component {
         }
       })
         .then(res => {
-          this.setState({ orderError: true, isSpinnerActive: false });
+          this.setState({ isSpinnerActive: false });
           swal({
             icon: "success",
             title: "Done",

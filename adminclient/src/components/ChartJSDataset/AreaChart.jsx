@@ -71,7 +71,7 @@ export default class AreaChart extends Component {
               data={this.state.chartData}
               options={{
                 title: {
-                  display: "",
+                  display: true,
                   text: "sachin",
                   fontSize: 25,
                 },
