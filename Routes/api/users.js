@@ -204,7 +204,7 @@ router.post("/resendEmail", (req, res) => {
           method: "get",
           url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
         });
-        
+
         jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
           res.json({ 
             'token' :token,
@@ -682,8 +682,58 @@ router.post('/admin/sendMail/',authUserSecureCode,async (req, res) => {
 });
 
 
+router.post('/forgotPassword',(req,res)=>{
+  User.findOne({
+    email: req.body.email
+  })
+    .then(user => {
+      if (!user) {
+        res.status(404).json({ message: "User Email is invalid" });
+      } else {
+
+        if(user.mobile !== req.body.mobile){
+          res.status(400).json({ message: "User Mobile is invalid" });
+        }
+ 
+        // axios({
+        //   method: "get",
+        //   url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
+        // });
+
+        jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
+          res.json({ 
+            'token' :token,
+            'securekey':user.secureKey,
+            'fistName':user.firstName,
+            'mobile':user.mobile,
+            'email':user.email
+        });
 
 
+        });
+      }
+    })
+    .catch(err => {
+      res.json({ error: err });
+    });
+})
 
+
+router.post('/enterSecureCode/:email',(req,res)=>{
+  User.findOne({
+    email: req.params.email
+  })
+  .then(user=>{
+    if (!user) {
+      res.status(404).json({ message: "User Not Found" });
+    }else{
+      if(user.secureKey !== req.body.secureKey){
+        res.status(400).json({message:'Secure Keys not Match'})
+      }else{
+        res.json({message:'Process OK'})
+      }
+    }
+  })
+})
 
 module.exports = router;
