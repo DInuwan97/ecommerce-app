@@ -167,9 +167,7 @@ export const forgotPassword = forgotPwd =>{
 }
 
 
-export const enterSecureKey = secureKey =>{
 
-}
 
 // export const verify = userVerification =>{
 //     return axios

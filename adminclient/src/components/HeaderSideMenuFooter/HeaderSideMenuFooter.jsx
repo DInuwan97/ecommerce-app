@@ -403,7 +403,7 @@ export default class HeaderSideMenuFooter extends Component {
                   </a>
                 </li>
 
-                {(this.state.isSalesManager === true || this.state.isAdmin === true) &&
+                {(this.state.isSalesManager === true) &&
                   <li className="nav-item has-treeview">
                     <a href="/itemApprove" className={this.props.location && this.props.location === "/itemapprove" ? "nav-link active" : "nav-link"}>
                       <i className="nav-icon fab fa-expeditedssl"></i>
@@ -519,7 +519,7 @@ export default class HeaderSideMenuFooter extends Component {
                   <Route exact path='/' component={() => <HomePage usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList} />} />
 
 
-                  <Route path='/itemApprove' component={() => <AdminItemApprove loggedUserDetails={this.state.loggedUserDetails} />} />
+                  <Route path='/itemApprove' component={() => <AdminItemApprove loggedUserDetails={this.state.loggedUserDetails} companyName={this.state.company} />} />
                   <Route path='/addCategory' component={Category} />
                   <ProtectedRoutesIsSalesManager path='/salesServicersList' component={() => <SalesServicersList companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList} />} />
                   <Route path='/ActiveSalesManagers' component={() => <ActiveSalesManagers companyName={this.state.company} usersList={this.state.usersList} loggedUserDetails={this.state.loggedUserDetails} itemsList={this.state.itemsList} />} />
