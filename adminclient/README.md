@@ -11,7 +11,11 @@ Execute the following command in the command line.
 ```npm run deploy```
 
 This command will run the following commands,
+
 a.	‘npm install’
+
 b.	‘npm run build’
+
 c.	‘npm run start-server’
+
 d.	‘node index.js’

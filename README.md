@@ -9,9 +9,15 @@ npm run deploy
 This command runs the following commands.
 
 a.	‘cd client’
+
 b.	‘npm install’
+
 c.	‘npm run build’
+
 d.	‘cd ..’
+
 e.	‘npm install’
+
 f.	‘npm start’
+
 g.	‘node server.js’
