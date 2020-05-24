@@ -46,6 +46,8 @@ export default class HeaderSideMenuFooter extends Component {
       isSalesServicer: false,
       company: '',
       userImageUrl: '',
+      salasManagerVerification:'',
+      adminVerification:'',
 
 
       usersList: [],
@@ -88,7 +90,9 @@ export default class HeaderSideMenuFooter extends Component {
         isSalesManager: decoded.isSalesManager,
         isSalesServicer: decoded.isSalesServicer,
         company: decoded.company,
-        userImageUrl: decoded.userImageUrl
+        userImageUrl: decoded.userImageUrl,
+        salasManagerVerification:decoded.salasManagerVerification,
+        adminVerification:decoded.adminVerification
       })
 
       //  this.setState({
