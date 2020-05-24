@@ -40,18 +40,18 @@ export default class ForgotPassword extends Component {
                  <div className="login">
         <div className="main-agileits">
           <div className="form-w3agile">
-            <h3>Enter Details</h3>
+            <h3>Forgot Password</h3>
   
   
           
   
             <div className="key">
-                <i className="fa fa-shield" aria-hidden="true"></i>
+     
                 <input
                   type="text"
                   name="email"
                   required=""
-                  placeholder="Secureity Code"
+                  placeholder="Enter Email"
                   onChange={this.onChangeHandler}
                 />
                 <div className="clearfix"></div>
@@ -59,12 +59,12 @@ export default class ForgotPassword extends Component {
 
             
             <div className="key">
-                <i className="fa fa-shield" aria-hidden="true"></i>
+     
                 <input
                   type="text"
                   name="mobile"
                   required=""
-                  placeholder="Secureity Code"
+                  placeholder="Enter Mobile"
                   onChange={this.onChangeHandler}
                 />
                 <div className="clearfix"></div>
@@ -75,7 +75,7 @@ export default class ForgotPassword extends Component {
             <input type="submit" value="Confirm" onClick={this.onSubmitHandler}/>
 
   
-            <input type="submit" style={{float:'right'}}value="Login" onClick='/login'/>
+
  
      
             <div className="forg">

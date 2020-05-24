@@ -551,7 +551,7 @@ router.get('/getCompnayNames',async(req,res)=>{
 //change passwords
 router.patch('/changePassword/:email',authUserSecureCode,async (req,res)=>{
 
-  console.log('Changing password : ' ,req.body);
+  console.log('Changing password : ' ,req.body,req.params);
   jwt.verify(req.token, "secretkey",  async (err, authData) => {
 
     try{
@@ -683,6 +683,8 @@ router.post('/admin/sendMail/',authUserSecureCode,async (req, res) => {
 
 
 router.post('/forgotPassword',(req,res)=>{
+
+  console.log('Fog pwd : ',req.body)
   User.findOne({
     email: req.body.email
   })
@@ -720,6 +722,8 @@ router.post('/forgotPassword',(req,res)=>{
 
 
 router.post('/enterSecureCode/:email',(req,res)=>{
+
+ 
   User.findOne({
     email: req.params.email
   })
@@ -727,13 +731,44 @@ router.post('/enterSecureCode/:email',(req,res)=>{
     if (!user) {
       res.status(404).json({ message: "User Not Found" });
     }else{
-      if(user.secureKey !== req.body.secureKey){
+      if(user.secureKey !== parseInt(req.body.secureKey)){
+        console.log('User Key :',user.secureKey)
+        console.log('Secure cODE DETAILS : ' ,req.body.secureKey)
         res.status(400).json({message:'Secure Keys not Match'})
       }else{
         res.json({message:'Process OK'})
       }
     }
   })
+})
+
+
+
+//change passwords
+router.patch('/changePasswordForgot/:email',async (req,res)=>{
+
+  console.log('Changing password : ' ,req.body,req.params);
+
+        let user = await User.findOne({email:req.params.email});
+        if(!user) res.status(404).json({msg:'No user Found'})
+
+            try{
+              if(req.body.newPassword == req.body.confirmPassword){
+
+                bcrypt.hash(req.body.newPassword, 10, async (err, hash) => {
+                  user.password = hash;
+                  
+                  await user.save();
+                  res.status(200).json({'user new data' : user});
+                })
+  
+              }else{
+                res.status(403).json({'msg':'Passwords does not match'})
+              }
+            }catch(err){
+              res.json('Bcrypt error is : ', err)
+            }
+
 })
 
 module.exports = router;

@@ -20,16 +20,8 @@ export const ProtectedUpperSalesServicers = ({
         if (!(decoded.isCustomer) && (token !== null)) {
           return <Component {...props} />;
         } else {
-          return (
-            <Redirect
-              to={{
-                pathname: "/404.html",
-                state: {
-                  from: props.location
-                }
-              }}
-            />
-          );
+            window.location.href = '/404.html';
+            return;
         }
       }}
     />

@@ -141,6 +141,7 @@ export const forgotPassword = forgotPwd =>{
     .then(res =>{
 
             localStorage.setItem('forgotPwd',res.data.token); 
+            console.log('Forgot token : ',localStorage.getItem("forgotPwd"));
             return res.data.token
 
     })
@@ -150,7 +151,15 @@ export const forgotPassword = forgotPwd =>{
                 title: "Oops!!!",
                 text: "Invalid Email",
                 icon: "error",
-                button: "Back to Login",
+                button: "Back",
+            })
+        }
+        else if(err.response.status === 400){
+            swal({
+                title: "Oops!!!",
+                text: "It's Not Your Mobile",
+                icon: "error",
+                button: "Back",
             })
         }
      

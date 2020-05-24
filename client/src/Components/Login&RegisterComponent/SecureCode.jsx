@@ -11,6 +11,7 @@ export default class SecureCode extends Component {
             isLoading: false,
             reloaded : false,
             email:'',
+            secureCode:''
         }
 
         const redirectForm = this.props.location.redirectForm;
@@ -22,15 +23,19 @@ export default class SecureCode extends Component {
     }
 
     componentDidMount(){
-        
-    if (localStorage.getItem("forgotPwd") !== null) {
-        const token = localStorage.getItem("forgotPwd");
-        const decoded = jwt_decode(token);
-        this.setState({
-          email: decoded.email,
-        })
-  
-    }
+
+
+
+        if (localStorage.getItem("forgotPwd") !== null) {
+            const token = localStorage.getItem("forgotPwd");
+            const decoded = jwt_decode(token);
+            this.setState({
+              email:decoded.user.email
+            })
+      
+        }
+   
+   
 
     }
 
@@ -45,9 +50,7 @@ export default class SecureCode extends Component {
       
         e.preventDefault()
 
-        const frmData = {
-            secureCode : this.state.secureCode
-        }
+   
 
 
      
@@ -78,7 +81,7 @@ export default class SecureCode extends Component {
             })
         })
         .catch(err=>{
-          if(err.response.status === 404){
+          if(err.response.status === 400){
                 swal({
                     icon: 'error',
                     title: 'Oops...',
@@ -106,9 +109,9 @@ export default class SecureCode extends Component {
                     <i className="fa fa-shield" aria-hidden="true"></i>
                     <input
                       type="text"
-                      name="secureKey"
+                      name="secureCode"
                       required=""
-                      placeholder="Secureity Code"
+                      placeholder="Security Code"
                       onChange={this.onChangeHandler}
                     />
                     <div className="clearfix"></div>
