@@ -108,7 +108,7 @@ class App extends Component {
 
             <Route path="/ResendEmail" component={ResendEmail} />
 
-            <Route path="/cart" component={Cart} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/cart" component={Cart} />
             <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/checkout" component={Checkout} />
             <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/wishlist" component={()=> <Wishlist loggedEmail={this.state.email}/>} />
             <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />

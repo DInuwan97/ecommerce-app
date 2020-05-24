@@ -46,6 +46,7 @@ export default class SalesManagerFunctions extends Component {
              }
          })
          .then(res=>{
+            this.sendEmailToSalesServicer(email)
          })
          .catch(err=>{
          });
@@ -67,7 +68,28 @@ export default class SalesManagerFunctions extends Component {
         })
         .catch((err) =>{
         });
-      }
+    }
+
+    sendEmailToSalesServicer = (email) => {
+      axios({
+       method:'post',
+       url:'/api/users/admin/sendMail/',
+       headers: {
+        "Authorization" : "Bearer "+localStorage.getItem('userLoginToken')
+       },
+       data:{
+         msg:"CONGRATULATIONS!!! Ypur Sales Manager has been approved the Your Connetion Request on  joining with Fashion Club as a Sales Servicer.",
+         to:email,
+         subject:"Fashion Club - Salas Servicer Approval Statement"
+       }
+      })
+      .then(res=>{
+        console.log(res);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
         
 
   render() {
