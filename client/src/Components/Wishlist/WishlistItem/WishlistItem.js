@@ -3,9 +3,16 @@ import {Link} from 'react-router-dom';
 import classes from './WishlistItem.module.css';
 
 const WishlistItem = props => {
-
+  const options = {
+    month: "long", day: "numeric", year: "numeric",
+    hour: 'numeric', minute: 'numeric', second: 'numeric',
+    hour12: true,
+};
+const date = new Date(Date.parse(props.item.addedDate));
+const AddedDate = new Intl.DateTimeFormat("en-US", options).format(date);
 
   return (
+    
     <div className={classes.container}>
       <div className={classes.image}>
         <figure className={classes.imageFig}>
@@ -23,7 +30,7 @@ const WishlistItem = props => {
           <span>LKR {props.item.price}</span>
         </div>
         <div className={classes.description__date}>
-          <span>Added {props.item.addedDate}</span>
+          <span>Added {AddedDate}</span>
         </div>
       </div>
 

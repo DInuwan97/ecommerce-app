@@ -457,8 +457,6 @@ router.delete("/deleteReviewComment/:id", authenticateUser, verifyItem, verifyRe
 //              : Then it takes all the unique item ids and take a count of unique ids and duplicates
 //              : Simply it takes the count of reviews for an item.
 router.get('/admin/itemsReviews/', authenticateUser, verifyAdmin, (req, res) => {
-
-    console.log('This is executing');
     ReviewComments.find({ itemCompany: req.authData.company }, { item: 1, _id: 0, didAdminReplied: 1 }, async (err, data) => {
         if (err) {
             return res.status(400).send({ msg: err });
@@ -654,11 +652,15 @@ router.patch('/admin/markAsRead/:id', authenticateUser, verifyAdmin, (req, res) 
 //                  item name and the reply count for each item and also the total review count for each item
 router.get('/admin/getAdminReplyItems/', authenticateUser, verifyAdmin, (req, res) => {
     const company = req.authData.company;
+    
     ReviewComments.find({ didAdminReplied: true, itemCompany: company }, (err, data) => {
         if (err) {
             res.status(400).send({ msg: err });
         } else {
             if (data) {
+                if(data.length==0){
+                   return res.status(200).send({data:[]});
+                }
                 const itemIds = [];
                 data.sort((a, b) => {
                     var x = a.item.toString();

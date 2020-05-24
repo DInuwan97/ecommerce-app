@@ -155,6 +155,7 @@ class Minicart extends Component {
       this.setState({ isLoading: false, isAllRemmoved: true });
     }
 
+
     // set summary
     let summary = this.setSummary(tempItems);
     this.props.updateItemSummary(tempItems, summary);
@@ -185,6 +186,7 @@ class Minicart extends Component {
 
     return summary;
   };
+
 
   render() {
     // console.log("rendered");
