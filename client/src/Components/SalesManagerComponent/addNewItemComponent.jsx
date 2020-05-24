@@ -47,7 +47,7 @@ export default class addNewItemComponent extends Component {
           "Item name is required"
         );
         this.setState({
-          [e.target.name]: value,
+          itemName: value,
         });
         break;
 
@@ -314,22 +314,22 @@ export default class addNewItemComponent extends Component {
       this.addWarning(imageWarningList, "Please select a image");
     }
 
-  /*  if (
-      this.state.itemName.trim().length != 0 &&
+    if (
+      (this.state.itemName != "" || this.state.itemName.length != 0) &&
       this.state.price.length != 0 &&
       this.state.category.length != 0 &&
       this.state.size.length != 0 &&
-      this.state.Brand.trim().length != 0 &&
-      this.state.itemImage.trim().length != 0 &&
-      this.state.description.trim().length != 0 &&
-      itemName.border.style != "1px solid red" &&
-      price.border.style != "1px solid red" &&
-      size.border.style != "1px solid red" &&
-      brand.border.style != "1px solid red" &&
-      image.border.style != "1px solid red" &&
-      stockQuantity.border.style != "1px solid red" &&
-      description.border.style != "1px solid red")*/
-     {
+      (this.state.Brand != "" || this.state.Brand.length != 0) &&
+      (this.state.itemImage != "" || this.state.itemImage.length != 0) &&
+      (this.state.description != "" || this.state.description.length != 0) &&
+      itemName.style.border != "1px solid red" &&
+      price.style.border != "1px solid red" &&
+      size.style.border != "1px solid red" &&
+      brand.style.border != "1px solid red" &&
+      image.style.border != "1px solid red" &&
+      stockQuantity.style.border != "1px solid red" &&
+      description.style.border != "1px solid red"
+    ) {
       const token = localStorage.userLoginToken;
       const decoded = jwt_decode(token);
       e.preventDefault();
@@ -362,24 +362,16 @@ export default class addNewItemComponent extends Component {
           console.log(error.response);
           swal({
             title: "Oops!!!",
-            text: "Fields are Empty",
+            text: "Something went wrong",
             icon: "error",
             button: "Please Enter the Again",
           });
         });
 
       this.onImageHandle();
-
-      this.setState({
-        itemName: "",
-        price: 0,
-        Brand: "",
-        size: "",
-        stockQuantity: 0,
-      });
-    } //else {
-    //   return;
-    // }
+    } else {
+      return;
+    }
   };
 
   render() {
