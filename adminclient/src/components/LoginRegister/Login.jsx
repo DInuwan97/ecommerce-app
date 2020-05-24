@@ -38,9 +38,9 @@ export default class Login extends Component {
     
         login(frmData)
         .then(res =>{
-
+          console.log('Admin Verified : ' ,res );
             if(res){
-              if(res.isSalesManager === true || res.isAdmin === true){
+              if((res.isSalesManager === true && res.adminVerification === true) || res.isAdmin === true){
                 window.location.replace('/');
               }else{
                 swal({

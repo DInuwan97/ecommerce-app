@@ -33,7 +33,7 @@ import UserProfile from './Components/UserProfile/UserProfile';
 import About from './Components/About/about';
 import ForgotPassword from './Components/Login&RegisterComponent/ForgotPassword';
 import SecureCode from './Components/Login&RegisterComponent/SecureCode';
-
+import ChangePassword from './Components/Login&RegisterComponent/ChangePasswords';
 import {ProtectedUpperSalesServicers,ProtectedRoutesCheckedLoggedUser} from './Components/ProtectedRoutes/ProtectedRoutes';
 class App extends Component {
 
@@ -119,10 +119,13 @@ class App extends Component {
             
             <Route path="/about" component={About} />
             
-            <Route path="/:type" component={ProductCardList} />
-
             <Route path="/forgotpassword" component={ForgotPassword} />
             <Route path="/securekey" component={SecureCode} />
+            <Route path="/changePasswords" component={ChangePassword} />
+            <Route path="/:type" component={ProductCardList} />
+
+            
+
           </Switch>
           <Newsletter />
           <Footer />
