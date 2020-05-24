@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
+import swal from 'sweetalert';
 import classes from './PasswordChangePopup.module.css';
 
 class PopupMessage extends Component {
@@ -18,7 +19,7 @@ class PopupMessage extends Component {
     let value = event.target.value.trim();
     const oldPwdField = document.getElementById("oldPwd");
     const newPwdField = document.getElementById("newPwd");
-    const newCPwdField = document.getElementById("cNewPwd");
+    const newCPwdField = document.getElementById("cnewPwd");
     const errorList_oldPwd = document.getElementById("errorList-1");
     const errorList_newPwd = document.getElementById("errorList-2");
     const errorList_newCPwd = document.getElementById("errorList-3");
@@ -99,7 +100,7 @@ class PopupMessage extends Component {
         break;
 
       // conform new password field
-      case "cNewPwd":
+      case "cnewPwd":
         this.checkFieldEmpty(value, newCPwdField, errorList_newCPwd);
 
         if (newPwdField.value.length != 0 && value != newPwdField.value) {
@@ -160,6 +161,10 @@ class PopupMessage extends Component {
       changeBtn.disabled = true;
     }
 
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+
 
   }
 
@@ -200,7 +205,7 @@ class PopupMessage extends Component {
   onPwdView = (field) => {
     const oldPwdField = document.getElementById("oldPwd");
     const newPwdField = document.getElementById("newPwd");
-    const newCPwdField = document.getElementById("cNewPwd");
+    const newCPwdField = document.getElementById("cnewPwd");
 
     switch (field) {
       case "oldPwd_show":
@@ -229,8 +234,30 @@ class PopupMessage extends Component {
 
   }
 
+ 
   changePassword = () => {
-
+    axios({
+      method: "patch",
+      url: `/api/users/changePassword/${this.props.loggedEmail}`,
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("userLoginToken"),
+      },
+      data: {
+        oldPassword: this.state.oldPwd,
+        newPassword: this.state.newPwd,
+        confirmPassword: this.state.cnewPwd,
+      },
+    }).then(res=>{
+      swal({
+        icons:"success",
+        text:"Successfully Updated",
+        title:"Done",
+        button:true
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    });
   };
 
   render() {
@@ -246,7 +273,7 @@ class PopupMessage extends Component {
             <div className={classes.formItem}>
               <label for="oldPwd">Old Password</label>
               <div className={classes.formItem_input}>
-                <input id="oldPwd" type="password" onChange={this.onChangePwd} />
+                <input id="oldPwd" type="password" name="oldPwd" onChange={this.onChangePwd} />
                 <span>
                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                     onMouseDown={() => this.onPwdView("oldPwd_show")}
@@ -263,7 +290,7 @@ class PopupMessage extends Component {
             <div className={classes.formItem}>
               <label for="newPwd">New Password</label>
               <div className={classes.formItem_input}>
-                <input id="newPwd" type="password" onChange={this.onChangePwd} disabled />
+                <input id="newPwd" type="password" name="newPwd" onChange={this.onChangePwd} disabled />
                 <span>
                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                     onMouseDown={() => this.onPwdView("newPwd_show")}
@@ -278,9 +305,9 @@ class PopupMessage extends Component {
             </div>
 
             <div className={classes.formItem}>
-              <label for="cNewPwd">Confirm New Password</label>
+              <label for="cnewPwd">Confirm New Password</label>
               <div className={classes.formItem_input}>
-                <input id="cNewPwd" type="password" onChange={this.onChangePwd} disabled />
+                <input id="cnewPwd" type="password"  name="cnewPwd" onChange={this.onChangePwd} disabled />
                 <span>
                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                     onMouseDown={() => this.onPwdView("newCPwd_show")}
