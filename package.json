@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "deploy":"cd client && npm install && npm run build && cd .. && npm install && npm start"
+    "deploy": "cd client && npm install && npm run build && cd .. && npm install && npm start"
   },
   "repository": {
     "type": "git",

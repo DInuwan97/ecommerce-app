@@ -15,8 +15,6 @@ import Home from './Components/HomePageComponent/HomePage';
 
 import SingleProduct from './Components/SingleProductComponent/SingleProduct';
 
-import TestB from './Components/testRes/TestB';
-import TestImage from './Components/testRes/ImageTestPage'
 import ProductCardList from './Components/ProductsListCard/ProductListCard';
 
 import ResendEmail from './Components/Login&RegisterComponent/ResendEmail';

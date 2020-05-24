@@ -516,8 +516,6 @@ class SingleProduct extends Component {
             <div className="row">
               <div className="col-md-12" style={{ margin: "10% auto" }}>
                 <Spinner />
-                {/* <div class="loader"></div> */}
-                {/* <img src={require('./assets/images/loading2.gif')} type="image/gif" style={{ width: "50%", height: "25%", textAlign: "center" }} /> */}
               </div>
             </div>
           </div>
@@ -530,11 +528,11 @@ class SingleProduct extends Component {
                   <div className="col-md-6 single-top-left">
                     <div className="flexslider">
                       <ul className="slides">
-                        <li data-thumb={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}>
+                        <li data-thumb={this.state.itemImage}>
                           <div className="thumb-image detail_images">
                             {" "}
                             <img
-                              src={this.state.itemImage ? this.state.itemImage : require("./assets/images/s1.jpg")}
+                              src={this.state.itemImage}
                               data-imagezoom="true"
                               className="img-responsive"
                               alt=""
