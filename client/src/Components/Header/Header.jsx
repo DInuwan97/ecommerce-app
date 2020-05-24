@@ -27,7 +27,7 @@ export class Header extends Component {
       userImageUrl: '',
       isPasswordPopupActive: false,
 
-      searchCategories: []
+      searchCategories: [],
 
       salasManagerVerification:false,
       adminVerification:false
