@@ -18,7 +18,8 @@ class Minicart extends Component {
       addedUserLastName: '',
       addedUserEmail: '',
       totalItems: '',
-      isLoading: true
+      isLoading: true,
+      isAllRemmoved: false
 
     };
   }
@@ -42,10 +43,10 @@ class Minicart extends Component {
 
     // get details from daatabase
     const token = localStorage.userLoginToken;
-
+    const decoded = jwt_decode(token);
 
     if (localStorage.getItem("userLoginToken") !== null) {
-      const decoded = jwt_decode(token);
+
       const userBuyer = {
         firstName: decoded.firstName,
         lastName: decoded.lastName,
@@ -60,15 +61,12 @@ class Minicart extends Component {
         buyerDetails: userBuyer
       })
       console.log('Decoded Email in Cart : ', decoded.email);
-      // check if cart item already have
-      if (this.props.theItems.length == 0) {
-        this.getCartItems(decoded.email);
-      }
-    }else{
-      window.location.href='/login';
     }
 
-
+    // check if cart item already have
+    if (this.props.theItems.length == 0) {
+      this.getCartItems(decoded.email);
+    }
 
   }
 
@@ -119,6 +117,14 @@ class Minicart extends Component {
       isDisabled: isDisabled
     };
 
+    axios({
+      method: 'patch',
+      url: `/api/cart/setQuantity/${id}`,
+      data: {
+        quantity: quantity
+      }
+    })
+
     this.props.updateItemSummary(tempItems, summary);
     // this.setState({ items: tempItems, cartSummary: summary });
 
@@ -127,48 +133,32 @@ class Minicart extends Component {
   // remove an item from the cart - REDUX
   removeItem = (id) => {
     console.log(id);
+
+    axios({
+      method: 'delete',
+      url: `/api/cart/remove/${id}`,
+    })
+    // .then(res=>{
+    //   return item;
+    // })
+    // .catch(err=>{
+    //   console.log(err);
+    // })
+
     let tempItems;
     tempItems = this.props.theItems.filter(item => {
       if (item._id !== id) {
-        axios({
-          method: 'delete',
-          url: `/api/cart/remove/${id}`,
-        })
-        // .then(res=>{
-        //   return item;
-        // })
-        // .catch(err=>{
-        //   console.log(err);
-        // })
         return item;
       }
     });
+    if (tempItems.length == 0) {
+      this.setState({ isLoading: false, isAllRemmoved: true });
+    }
 
-    // remove the item from cartItems schema in database
-    //
-    //
-
-    //change minicart quatity
-    const changeQuantity = (cartItemId, quantity) => {
-      if (quantity <= 1) {
-        return;
-      }
-      let number = quantity - 1;
-
-
-      axios({
-        method: 'patch',
-        url: `/api/cart/setQuantity/${cartItemId}`,
-        data: {
-          quantity: quantity
-        }
-      })
-    };
 
     // set summary
     let summary = this.setSummary(tempItems);
     this.props.updateItemSummary(tempItems, summary);
-    // this.setState({ items: tempItems, cartSummary: summary });
 
   };
 
@@ -197,14 +187,6 @@ class Minicart extends Component {
     return summary;
   };
 
-  toCart = () => {
-    let finalItems = this.props.theItems;
-    console.log(finalItems);
-    // this.props.history.push("/cart");
-    // save to database and navigate to cart
-    //
-    //
-  };
 
   render() {
     // console.log("rendered");
@@ -247,7 +229,7 @@ class Minicart extends Component {
 
           {content}
 
-          {this.state.isLoading && this.props.theItems.length == 0 ?
+          {this.state.isLoading && this.props.theItems.length == 0 && !this.state.isAllRemmoved ?
             <div className={classes.loading}>
               <WindowLoadingSpinner />
             </div>

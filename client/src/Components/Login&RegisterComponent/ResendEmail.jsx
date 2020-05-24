@@ -53,6 +53,7 @@ export default class ResendEmail extends Component {
                 <div className="clearfix"></div>
             </div>
   
+            <br/>
             <input type="submit" value="Resned" onClick={this.onSubmitHandler} />
 
             <div className="forg">

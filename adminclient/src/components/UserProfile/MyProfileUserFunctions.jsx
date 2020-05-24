@@ -3,6 +3,7 @@ import "./assets/css/imageUploadPreview.css";
 import swal from "sweetalert";
 import axios from "axios";
 import Avatar from "react-avatar";
+import Spinner from "../Spinner/Spinner";
 
 export default class MyProfileUserFunctions extends Component {
   constructor(props) {
@@ -34,6 +35,8 @@ export default class MyProfileUserFunctions extends Component {
       AddedTime: "",
       userImageUrlReview: "",
       reviewMessage: "",
+
+      isLoading: true,
     };
 
     this.uploadSingleFile = this.uploadSingleFile.bind(this);
@@ -84,8 +87,7 @@ export default class MyProfileUserFunctions extends Component {
           });
         }
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   onChangeHandler = (e) => {
@@ -130,10 +132,8 @@ export default class MyProfileUserFunctions extends Component {
         address: this.state.address,
       },
     })
-      .then((res) => {
-      })
-      .catch((err) => {
-      });
+      .then((res) => {})
+      .catch((err) => {});
 
     let formData = new FormData();
     formData.append("image", this.state.userImageUrl);
@@ -145,14 +145,12 @@ export default class MyProfileUserFunctions extends Component {
       .then((res) => {})
       .catch((err) => {});
 
-
     axios({
-      method:'',
-      url:'/api/review/admin/changeUserData'
+      method: "",
+      url: "/api/review/admin/changeUserData",
     })
-    .then((res) => {})
-    .catch((err) => {});
-
+      .then((res) => {})
+      .catch((err) => {});
   };
 
   uploadSingleFile(e) {
@@ -182,8 +180,7 @@ export default class MyProfileUserFunctions extends Component {
           itemImage: item.itemImage,
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   changeUserPassword = () => {
@@ -217,11 +214,10 @@ export default class MyProfileUserFunctions extends Component {
           AddedTime: review.AddedTime,
           userImageUrlReview: review.userImageUrl,
           reviewMessage: review.reviewMessage,
+          isLoading: false,
         });
-
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   render() {
@@ -289,8 +285,6 @@ export default class MyProfileUserFunctions extends Component {
                       </b>
                     </li>
                   </ul>
-
-           
                 </div>
               </div>
 
@@ -310,9 +304,6 @@ export default class MyProfileUserFunctions extends Component {
                 </div>
               </div>
             </div>
-
-
-
 
             <div className="col-md-9">
               <div className="card">
@@ -506,76 +497,78 @@ export default class MyProfileUserFunctions extends Component {
                     </div>
                   </ul>
                 </div>
-                
+
                 <div className="card-body">
                   <div className="tab-content">
-                    <div className="active tab-pane" id="activity">
-                      {this.state.reviewList.slice(0, 3).map((rev) => (
-                        <div className="post">
-                          <div className="user-block">
-                            {rev.userImageUrl == "" && (
-                              <Avatar
-                                name={
-                                  rev.reviewUserFirstName +
-                                  " " +
-                                  rev.reviewUserLastName
-                                }
-                                round="50%"
-                                size="40"
-                                style={{
-                                  float: "left",
-                                  width: "40px",
-                                  height: "40px",
-                                }}
-                              />
-                            )}
-
-                            {rev.userImageUrl != "" && (
-                              <img
-                                className="img-circle img-bordered-sm"
-                                src={rev.userImageUrl}
-                              />
-                            )}
-
-                            <span className="username">
-                              <a href="#">
-                                {rev.reviewUserFirstName}{" "}
-                                {rev.reviewUserLastName}
-                              </a>
-                              <a href="#" className="float-right btn-tool">
-                                <i className="fas fa-times"></i>
-                              </a>
-                            </span>
-                            <span className="description">
-                              Shared publicly -{" "}
-                              {new Intl.DateTimeFormat("en-US", options).format(
-                                new Date(Date.parse(rev.AddedTime))
+                    {this.state.isLoading ? (
+                      <Spinner />
+                    ) : (
+                      <div className="active tab-pane" id="activity">
+                        {this.state.reviewList.slice(0, 3).map((rev) => (
+                          <div className="post">
+                            <div className="user-block">
+                              {rev.userImageUrl == "" && (
+                                <Avatar
+                                  name={
+                                    rev.reviewUserFirstName +
+                                    " " +
+                                    rev.reviewUserLastName
+                                  }
+                                  round="50%"
+                                  size="40"
+                                  style={{
+                                    float: "left",
+                                    width: "40px",
+                                    height: "40px",
+                                  }}
+                                />
                               )}
-                            </span>
-                          </div>
 
-                          <p>{rev.reviewMessage}</p>
+                              {rev.userImageUrl != "" && (
+                                <img
+                                  className="img-circle img-bordered-sm"
+                                  src={rev.userImageUrl}
+                                />
+                              )}
 
-                          <p>
-                            <a href="#" className="link-black text-sm mr-2">
-                              <i className="fas fa-share mr-1" ></i> Share
+                              <span className="username">
+                                <a href="#">
+                                  {rev.reviewUserFirstName}{" "}
+                                  {rev.reviewUserLastName}
+                                </a>
+                                <a href="#" className="float-right btn-tool">
+                                  <i className="fas fa-times"></i>
+                                </a>
+                              </span>
+                              <span className="description">
+                                Shared publicly -{" "}
+                                {new Intl.DateTimeFormat(
+                                  "en-US",
+                                  options
+                                ).format(new Date(Date.parse(rev.AddedTime)))}
+                              </span>
+                            </div>
 
-                            </a>
-                            <a href="#" className="link-black text-sm">
-                              <i className="far fa-thumbs-up mr-1"></i> Like
-                            </a>
-                            <span className="float-right">
-                              <a href="#" className="link-black text-sm">
-                                <i className="far fa-comments mr-1"></i>{" "}
-                                {rev.itemName}
+                            <p>{rev.reviewMessage}</p>
+
+                            <p>
+                              <a href="#" className="link-black text-sm mr-2">
+                                <i className="fas fa-share mr-1"></i> Share
                               </a>
-                            </span>
-                          </p>
-                        </div>
-                      ))}
-
-                  
-                    </div>
+                              <a href="#" className="link-black text-sm">
+                                <i className="far fa-thumbs-up mr-1"></i> Like
+                              </a>
+                              <span className="float-right">
+                                <a href="#" className="link-black text-sm">
+                                  <i className="far fa-comments mr-1"></i>{" "}
+                                  {rev.itemName}
+                                </a>
+                              </span>
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                     <div className="tab-pane" id="timeline">
                       <div className="timeline timeline-inverse">
@@ -849,12 +842,6 @@ export default class MyProfileUserFunctions extends Component {
                 </div>
               </div>
             </div>
-
-
-
-
-
-
           </div>
         </div>
       </div>

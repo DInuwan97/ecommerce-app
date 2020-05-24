@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-
-const mongoose = require("mongoose");
+const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 //getting the auth middlewears
 const authUserSecureCode = require("../../middleware/Usesr").authenticateUserSecureCode;
@@ -13,6 +13,12 @@ const authenticateUser = require("../../middleware/Usesr").authenticateUser;
 //const checkSalesManager = require('../../middleware/Usesr').checkSalesManager;
 const onlyAdminAccess = require("../../middleware/Usesr").onlyAdminAccess;
 const isSecurityKeyVerifiedUser = require("../../middleware/Usesr").isSecurityKeyVerifiedUser;
+
+
+//-------------------------------NodeMailer Credentials Imports--------------------------------------
+const email = require('../../config/mailCredentials').email;
+const password = require('../../config/mailCredentials').password;
+
 
 /////////////adding a user////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.post("/register", (req, res) => {
@@ -86,6 +92,13 @@ router.post("/register", (req, res) => {
   })
     .then(user => {
       if (!user) {
+
+        axios({
+          method: "get",
+          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${userData.firstName}. Your Verification code is ${userData.secureKey}&to=94${userData.mobile}&usr=0766061689&pw=4873`,
+        });
+      
+
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash;
           User.create(userData)
@@ -95,6 +108,7 @@ router.post("/register", (req, res) => {
                 "secretkey",
                 { expiresIn: "1000s" },
                 (err, token) => {
+
                   res.json({
                     status:
                       user.firstName +
@@ -186,8 +200,18 @@ router.post("/resendEmail", (req, res) => {
       if (!user) {
         res.status(404).json({ message: "User Email is invalid" });
       } else {
+        axios({
+          method: "get",
+          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
+        });
+
         jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
-          res.json({ token });
+          res.json({ 
+            'token' :token,
+            'securekey':user.secureKey,
+            'fistName':user.firstName,
+            'mobile':user.mobile
+        });
           //res.json({token});
         });
       }
@@ -611,5 +635,105 @@ router.delete("/deleteSalesManager/:email", async (req, res) => {
 });
 
 
+
+
+// Method       : Post
+// Headers      : Authorization - 'Bearer token'
+// Params       : None
+// Body         : to, cc, bcc, subject, msg, reviewId - Optional 
+// Validation   : User Validation
+// Return       : msg , +data - if success
+// Description  : This Method sends an Email if the user haves the permission 
+//                  and the valid details are provided
+// Optional     : If the ReviedId is provided the method updates the review tables relavent id as Admin Replied
+//                  and sets the replied message, and time
+router.post('/admin/sendMail/',authUserSecureCode,async (req, res) => {
+  const msg = req.body.msg;
+  const to = req.body.to;
+  const subject = req.body.subject;
+
+
+  if (msg && subject && (to)) {
+      const transporter = await nodemailer.createTransport({
+          service: "Gmail",
+          auth: {
+              user: email,
+              pass: password
+          }
+      });
+      //Sending the Email
+      await transporter.sendMail({
+          to: to,
+          subject: subject,
+          html: msg
+
+      }).then(async done => {
+          return res.status(200).send({ msg: "Email Sent", data: done });
+
+      }).catch(err => {
+          res.status(400).send({ msg: err });
+      });
+
+
+  } else {
+      res.status(400).send({ msg: "Mandory fields are missing. To/CC/BCC or Subject or message" })
+  }
+
+});
+
+
+router.post('/forgotPassword',(req,res)=>{
+  User.findOne({
+    email: req.body.email
+  })
+    .then(user => {
+      if (!user) {
+        res.status(404).json({ message: "User Email is invalid" });
+      } else {
+
+        if(user.mobile !== req.body.mobile){
+          res.status(400).json({ message: "User Mobile is invalid" });
+        }
+ 
+        // axios({
+        //   method: "get",
+        //   url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
+        // });
+
+        jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
+          res.json({ 
+            'token' :token,
+            'securekey':user.secureKey,
+            'fistName':user.firstName,
+            'mobile':user.mobile,
+            'email':user.email
+        });
+
+
+        });
+      }
+    })
+    .catch(err => {
+      res.json({ error: err });
+    });
+})
+
+
+router.post('/enterSecureCode/:email',(req,res)=>{
+  User.findOne({
+    email: req.params.email
+  })
+  .then(user=>{
+    if (!user) {
+      res.status(404).json({ message: "User Not Found" });
+    }else{
+      if(user.secureKey !== req.body.secureKey){
+        res.status(400).json({message:'Secure Keys not Match'})
+      }else{
+        res.json({message:'Process OK'})
+      }
+    }
+  })
+})
 
 module.exports = router;

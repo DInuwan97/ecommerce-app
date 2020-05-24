@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 
 import Header from './Components/Header/Header';
@@ -31,7 +31,10 @@ import Faq from './Components/Contacts/Faq';
 import UserProfile from './Components/UserProfile/UserProfile';
 
 import About from './Components/About/about';
+import ForgotPassword from './Components/Login&RegisterComponent/ForgotPassword';
+import SecureCode from './Components/Login&RegisterComponent/SecureCode';
 
+import {ProtectedUpperSalesServicers,ProtectedRoutesCheckedLoggedUser} from './Components/ProtectedRoutes/ProtectedRoutes';
 class App extends Component {
 
   constructor(props) {
@@ -96,34 +99,30 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
-            <Route exact path='/testImage' component={TestImage} />
             <Route path="/verifysecurecode" component={VerifySecureCode} />
 
 
             <Route path="/:type/:id" component={SingleProduct} />
-            <Route path="/salesManager" component={SalesManager} />
-            <Route path="/itemApprove" component={itemApprove} />
-            <Route path="/category" component={Category} />
-            <Route path="/testb" component={TestB} />
+            <ProtectedUpperSalesServicers token={localStorage.getItem("userLoginToken")} path="/salesManager" component={SalesManager} />
+
+
             <Route path="/ResendEmail" component={ResendEmail} />
 
-            {
-              localStorage.getItem("userLoginToken") &&
-                <Route path="/cart" component={Cart} />
-                
-            }
-
-            <Route path="/checkout" component={Checkout} />
-            <Route path="/wishlist" component={() => <Wishlist loggedEmail={this.state.email} />} />
-            <Route path="/purchasedOrders" component={() => <PurchasedOrders loggedEmail={this.state.email} />} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/cart" component={Cart} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/checkout" component={Checkout} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/wishlist" component={()=> <Wishlist loggedEmail={this.state.email}/>} />
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/purchasedOrders" component={()=> <PurchasedOrders loggedEmail={this.state.email}/>} />
 
             <Route path="/contactus" component={ContactUs} />
             <Route path='/faq' component={Faq} />
-            <Route path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
-
+            <ProtectedRoutesCheckedLoggedUser token={localStorage.getItem("userLoginToken")} path="/editMyprofile" component={() => <UserProfile loggedEmail={this.state.email} companyName={this.state.company} />} />
+            
             <Route path="/about" component={About} />
-
+            
             <Route path="/:type" component={ProductCardList} />
+
+            <Route path="/forgotpassword" component={ForgotPassword} />
+            <Route path="/securekey" component={SecureCode} />
           </Switch>
           <Newsletter />
           <Footer />

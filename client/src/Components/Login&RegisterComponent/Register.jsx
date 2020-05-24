@@ -8,11 +8,19 @@ export default class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userType: "",
-      company: "",
       companyList: [],
       packageName: "",
       packageList: [],
+
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      userType: "",
+      company: "",
+      packageName: "",
+      password: "",
+      cPassword: "",
     };
   }
 
@@ -58,6 +66,9 @@ export default class Register extends Component {
           fnameWL,
           "First name is required"
         );
+        this.setState({
+          firstName: value,
+        });
         break;
 
       case "lastName":
@@ -67,6 +78,9 @@ export default class Register extends Component {
           lnameWL,
           "Last name is required"
         );
+        this.setState({
+          lastName: value,
+        });
         break;
 
       case "email":
@@ -81,6 +95,9 @@ export default class Register extends Component {
           emailField.style.border = "1px solid red";
           this.addWarning(emailWL, "Invalid email");
         }
+        this.setState({
+          email: value,
+        });
         break;
 
       case "mobile":
@@ -91,19 +108,106 @@ export default class Register extends Component {
           "Mobile number is required"
         );
 
+        if (value[0] == "0") {
+          value = "";
+        }
+
+        if (value.length < 9) {
+          mobileField.style.border = "1px solid red";
+          this.addWarning(mobileWL, "Please follow the format-: 7********");
+        } else {
+          if (mobileField.style.border != "1px solid red") {
+            mobileField.style.border = "1px solid #ccc";
+          }
+          this.removeWarning(mobileWL, "Please follow the format-: 7********");
+        }
+
+        if (!isNaN(value)) {
+          this.setState({
+            mobile: value,
+          });
+        }
+
         break;
 
       case "userType":
+        this.checkFieldEmpty(
+          userTypeField,
+          value,
+          userTypeWL,
+          "Please select a user type"
+        );
+
+        if (
+          (this.state.userType == "SalesManager" && value == "Admin") ||
+          (this.state.userType == "Admin" && value == "SalesManager")
+        ) {
+          this.setState({
+            userType: value,
+          });
+        } else {
+          this.setState({
+            userType: value,
+            packageName: undefined,
+            company: "",
+          });
+        }
+
         break;
 
-      case "company":
+      case "company_SA":
+        this.checkFieldEmpty(
+          companySAField,
+          value,
+          companySAWL,
+          "Please select a company"
+        );
+
+        this.setState({
+          company: value,
+        });
+        break;
+
+      case "packageName":
+        this.checkFieldEmpty(
+          packageNameField,
+          value,
+          packageNameWL,
+          "Please select a package"
+        );
+        this.setState({
+          packageName: value,
+        });
         break;
 
       case "company_S":
+        this.checkFieldEmpty(
+          companySField,
+          value,
+          companySWL,
+          "Company name is required"
+        );
+        this.setState({
+          company: value,
+        });
         break;
 
       case "password":
+        console.log(cPwdField.value);
+        console.log(value);
         this.checkFieldEmpty(pwdField, value, pwdWL, "Password is required");
+
+        if (value == this.state.cPassword) {
+          cPwdField.style.border = "1px solid #ccc";
+          this.removeWarning(cPwdWL, "Passwords do not match");
+        } else {
+          cPwdField.style.border = "1px solid red";
+          this.addWarning(cPwdWL, "Passwords do not match");
+        }
+
+        this.setState({
+          password: value,
+        });
         break;
 
       case "Confirm Password":
@@ -113,25 +217,166 @@ export default class Register extends Component {
           cPwdWL,
           "Password confirmation is required"
         );
+
+        if (value != this.state.password) {
+          cPwdField.style.border = "1px solid red";
+          this.addWarning(cPwdWL, "Passwords do not match");
+        } else {
+          if (cPwdField.style.border != "1px solid red") {
+            cPwdField.style.border = "1px solid #ccc";
+          }
+          this.removeWarning(cPwdWL, "Passwords do not match");
+        }
+
+        this.setState({ cPassword: value });
         break;
 
       default:
         console.log("no field match");
     }
-
-    this.setState({
-      [e.target.name]: value,
-    });
   };
 
   checkFieldEmpty = (field, value, warningList, warning) => {
-    if (value.length == 0 || value == undefined) {
+    if (value == undefined || value == "" || value.length == 0) {
       field.style.border = "1px solid red";
       this.addWarning(warningList, warning);
     } else {
       field.style.border = "1px solid #ccc";
       this.removeWarning(warningList, warning);
     }
+  };
+
+  checkAllFiedsEmpty = () => {
+    const fnameField = document.getElementById("fname");
+    const lnameField = document.getElementById("lname");
+    const emailField = document.getElementById("email");
+    const mobileField = document.getElementById("mobile");
+    const userTypeField = document.getElementById("userType");
+    const companySAField = document.getElementById("company_SA");
+    const packageNameField = document.getElementById("packageName");
+    const companySField = document.getElementById("company_S");
+    const pwdField = document.getElementById("pwd");
+    const cPwdField = document.getElementById("cPwd");
+
+    const fnameWL = document.getElementById("fnameWL");
+    const lnameWL = document.getElementById("lnameWL");
+    const emailWL = document.getElementById("emailWL");
+    const mobileWL = document.getElementById("mobileWL");
+    const userTypeWL = document.getElementById("userTypeWL");
+    const companySAWL = document.getElementById("companySAWL");
+    const packageNameWL = document.getElementById("packageNameWL");
+    const companySWL = document.getElementById("companySWL");
+    const pwdWL = document.getElementById("pwdWL");
+    const cPwdWL = document.getElementById("cPwdWL");
+
+    this.checkFieldEmpty(
+      fnameField,
+      this.state.firstName,
+      fnameWL,
+      "First name is required"
+    );
+    this.checkFieldEmpty(
+      lnameField,
+      this.state.lastName,
+      lnameWL,
+      "Last name is required"
+    );
+    this.checkFieldEmpty(
+      emailField,
+      this.state.email,
+      emailWL,
+      "Email is required"
+    );
+    this.checkFieldEmpty(
+      mobileField,
+      this.state.mobile,
+      mobileWL,
+      "Mobile number is required"
+    );
+    this.checkFieldEmpty(
+      userTypeField,
+      this.state.userType,
+      userTypeWL,
+      "Please select a user type"
+    );
+    this.checkFieldEmpty(
+      pwdField,
+      this.state.password,
+      pwdWL,
+      "Password is required"
+    );
+    this.checkFieldEmpty(
+      cPwdField,
+      this.state.cPassword,
+      cPwdWL,
+      "Password confirmation is required"
+    );
+
+    if (
+      this.state.userType == "SalesManager" ||
+      this.state.userType == "Admin"
+    ) {
+      this.checkFieldEmpty(
+        companySAField,
+        this.state.company,
+        companySAWL,
+        "Please select a company"
+      );
+      this.checkFieldEmpty(
+        packageNameField,
+        this.state.packageName,
+        packageNameWL,
+        "Please select a package"
+      );
+    }
+    if (this.state.userType == "SalesServicer") {
+      this.checkFieldEmpty(
+        companySField,
+        this.state.company,
+        companySWL,
+        "Company name is required"
+      );
+    }
+
+    let isValid = true;
+
+    if (
+      this.state.firstName.trim().length == 0 ||
+      this.state.lastName.trim().length == 0 ||
+      this.state.email.trim().length == 0 ||
+      this.state.mobile.length == 0 ||
+      this.state.userType == "" ||
+      this.state.userType == undefined ||
+      this.state.password.trim().length == 0 ||
+      this.state.cPassword.trim().length == 0 ||
+      emailField.style.border == "1px solid red" ||
+      mobileField.style.border == "1px solid red" ||
+      pwdField.style.border == "1px solid red" ||
+      cPwdField.style.border == "1px solid red"
+    ) {
+      isValid = false;
+    }
+
+    if (
+      this.state.userType == "SalesManager" ||
+      this.state.userType == "Admin"
+    ) {
+      if (
+        companySAField.style.border == "1px solid red" ||
+        packageNameField.style.border == "1px solid red" ||
+        this.state.packageName == undefined ||
+        this.state.company.trim().length == 0
+      ) {
+        isValid = false;
+      }
+    }
+    if (this.state.userType == "SalesServicer") {
+      if (companySField.style.border == "1px solid red") {
+        isValid = false;
+      }
+    }
+
+    return isValid;
   };
 
   addWarning = (warningList, warning) => {
@@ -163,23 +408,28 @@ export default class Register extends Component {
   onSubmitHandler = (e) => {
     e.preventDefault();
 
-    const frmData = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      email: this.state.email,
-      mobile: this.state.mobile,
-      userType: this.state.userType,
-      company: this.state.company,
-      packageName: this.state.packageName,
-      password: this.state.password,
-    };
-    const token = register(frmData).then((res) => {
-      if (res) {
-        this.props.history.push(`/verifysecurecode`);
-      }
-    });
-
-    const resultCompanyRegistation = addCompany(frmData);
+    // check all fields
+    if (this.checkAllFiedsEmpty()) {
+      const frmData = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        email: this.state.email,
+        mobile: this.state.mobile,
+        userType: this.state.userType,
+        company: this.state.company,
+        packageName: this.state.packageName,
+        password: this.state.password,
+      };
+      console.log("submited");
+      const token = register(frmData).then((res) => {
+        if (res) {
+          this.props.history.push(`/verifysecurecode`);
+        }
+      });
+      const resultCompanyRegistation = addCompany(frmData);
+    } else {
+      return;
+    }
   };
 
   getCompanies = () => {
@@ -255,6 +505,7 @@ export default class Register extends Component {
                   name="lastName"
                   required=""
                   placeholder="Last Name"
+                  value={this.state.lastName}
                   onChange={this.onChangeHandler}
                 />
                 <div className="clearfix"></div>
@@ -280,6 +531,7 @@ export default class Register extends Component {
                   name="email"
                   required=""
                   placeholder="Email"
+                  value={this.state.email}
                   onChange={this.onChangeHandler}
                 />
                 <div className="clearfix"></div>
@@ -299,8 +551,10 @@ export default class Register extends Component {
                 <input
                   type="text"
                   name="mobile"
+                  maxLength="9"
                   required=""
-                  placeholder="Mobile"
+                  value={this.state.mobile}
+                  placeholder="Mobile ex-: 7********"
                   onChange={this.onChangeHandler}
                 />
                 <div className="clearfix"></div>
@@ -351,31 +605,31 @@ export default class Register extends Component {
               {(this.state.userType === "SalesManager" ||
                 this.state.userType === "Admin") && (
                 <div style={{ marginTop: "2.8rem" }}>
-                  <div className="key">
+                  <div id="company_SA" className="key">
                     <i
                       className="fa fa-university"
                       style={{ paddingLeft: 8 }}
                       aria-hidden="true"
                     ></i>
                     <input
-                      id="company_SA"
                       type="text"
-                      name="company"
+                      name="company_SA"
                       required=""
                       placeholder="Company"
+                      value={this.state.company}
                       onChange={this.onChangeHandler}
                     />
-                    <ul
-                      id="companySAWL"
-                      style={{
-                        listStyle: "none",
-                        color: "red",
-                        paddingLeft: "1rem",
-                        fontSize: "1.2rem",
-                      }}
-                    ></ul>
                     <div className="clearfix"></div>
                   </div>
+                  <ul
+                    id="companySAWL"
+                    style={{
+                      listStyle: "none",
+                      color: "red",
+                      paddingLeft: "1rem",
+                      fontSize: "1.2rem",
+                    }}
+                  ></ul>
 
                   <select
                     id="packageName"
@@ -386,8 +640,8 @@ export default class Register extends Component {
                     onChange={this.onChangeHandler}
                   >
                     <option value="">Select the Package</option>
-                    {this.state.packageList.map((pack) => (
-                      <option value={pack.packageName}>
+                    {this.state.packageList.map((pack, index) => (
+                      <option key={index} value={pack.packageName}>
                         {pack.packageName}
                       </option>
                     ))}
@@ -410,14 +664,16 @@ export default class Register extends Component {
                     id="company_S"
                     className="form-control form-control-lg"
                     style={{ height: 40, marginTop: "2.8rem" }}
-                    name="company"
+                    name="company_S"
                     required=""
                     onChange={this.onChangeHandler}
                   >
                     <option value="">Select the Company</option>
 
-                    {this.state.companyList.map((com) => (
-                      <option value={com.companyName}>{com.companyName}</option>
+                    {this.state.companyList.map((com, index) => (
+                      <option key={index} value={com.companyName}>
+                        {com.companyName}
+                      </option>
                     ))}
                   </select>
                   <ul
@@ -439,6 +695,7 @@ export default class Register extends Component {
                   name="password"
                   required=""
                   placeholder="Password"
+                  value={this.state.password}
                   onChange={this.onChangeHandler}
                 />
                 <div className="clearfix"></div>
@@ -459,6 +716,7 @@ export default class Register extends Component {
                   type="password"
                   name="Confirm Password"
                   required=""
+                  value={this.state.cPassword}
                   placeholder="Confirm Password"
                   onChange={this.onChangeHandler}
                 />
