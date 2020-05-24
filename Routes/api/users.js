@@ -3,28 +3,35 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 
-//getting the auth middlewears
+//-------------------------------Mongoose Schema Imports--------------------------------------
+const User = require("../../models/User");
+
+//-------------------------------Middleware Imports---------------------------------------------
 const authUserSecureCode = require("../../middleware/Usesr").authenticateUserSecureCode;
 const authenticateUser = require("../../middleware/Usesr").authenticateUser;
-//const checkSalesManager = require('../../middleware/Usesr').checkSalesManager;
-const onlyAdminAccess = require("../../middleware/Usesr").onlyAdminAccess;
-const isSecurityKeyVerifiedUser = require("../../middleware/Usesr").isSecurityKeyVerifiedUser;
-
 
 //-------------------------------NodeMailer Credentials Imports--------------------------------------
 const email = require('../../config/mailCredentials').email;
 const password = require('../../config/mailCredentials').password;
 
 
-/////////////adding a user////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.post("/register", (req, res) => {
-  let userType = req.body.userType; //UI ask the type of user
+//-------------------------------User Actions--------------------------------------------------------
 
-  //bacjend configure,above user type as bellow
+// Method         : POST
+// Header         : None
+// Params         : None
+// Body           : userData
+// Validation     : User Input Field Validations, Email Validation, two same emails dows not allow
+// Return         : Adde user's object (HTTP Standard status codes (200 || 400))
+// Description    : Add a  new user into system
+// Multi Factor Auth : SMS Gatway
+router.post("/register", (req, res) => {
+  let userType = req.body.userType; 
+
+  
   let isCustomer = false;
   let isSalesMaager = false;
   let isAdmin = false;
@@ -84,9 +91,6 @@ router.post("/register", (req, res) => {
     userData.company = req.body.company;
   }
 
-  //for testing
-  console.log(userData);
-
   User.findOne({
     email: req.body.email
   })
@@ -118,7 +122,7 @@ router.post("/register", (req, res) => {
                       secureKey,
                     token: token
                   });
-                  //res.json({token});
+               
                 }
               );
             })
@@ -134,9 +138,16 @@ router.post("/register", (req, res) => {
       res.json({ error: err });
     });
 });
-/////////////adding a user////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////Secure code verification when registering///////////////////////////////////////////////////////////////////
+
+// Method         : POST
+// Header         : Authorization - 'bearer token'
+// Params         : None
+// Body           : userData
+// Validation     : User Input Field Validations, Secure Key Validation, Token Timeout Validation
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Verify a  new user into system
+
 router.post("/verify", authUserSecureCode, (req, res) => {
 
   jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -180,9 +191,14 @@ router.post("/verify", authUserSecureCode, (req, res) => {
   });
 });
 
-//////////////////////////////Secure code verification when registering///////////////////////////////////////////////////////////////////
+// Method         : POST
+// Params         : None
+// Body           : userData
+// Validation     : User Input Field Validations
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Reactivate secure code
+// Multi Factor Auth : SMS Gatway
 
-//////////////// if user late to verify use email within 100 seconds, the user will ask to enter his email ////////////////////////////////
 router.post("/resendEmail", (req, res) => {
   //update query in mongodb
   async function updateUserSecureCode(id) {
@@ -221,9 +237,14 @@ router.post("/resendEmail", (req, res) => {
     });
 });
 
-//////////////// if user late to verify use email within 100 seconds, the user will ask to enter his email ////////////////////////////////
+// Method         : POST
+// Header         : Authorization - 'bearer token'
+// Body           : username and password
+// Validation     : User Input Field Validations, Secure Key Verification,Chekc valid email or not,chek  passwords are incorect or not
+// Return         : HTTP Standard status codes (200 || 404)
+// Description    : Add a  new user into system
+// Multi Factor Auth : SMS Gatway
 
-////////////////////////////////////User Login//////////////////////////////////////////////////////////////////
 router.post("/login", (req, res) => {
   console.log(req.body.email+ ' : ' +req.body.password);
   User.findOne({
@@ -244,7 +265,10 @@ router.post("/login", (req, res) => {
               isSalesManager:user.isSalesManager,
               isSalesServicer:user.isSalesServicer,
               company:user.company,
-              userImageUrl:user.userImageUrl
+              userImageUrl:user.userImageUrl,
+              salasManagerVerification:user.salasManagerVerification,
+              adminVerification:user.adminVerification
+            
           }
 
             jwt.sign(
@@ -261,7 +285,9 @@ router.post("/login", (req, res) => {
                 'isSalesManager':user.isSalesManager,
                 'isSalesServicer':user.isSalesServicer,
                 'isAdmin':user.isAdmin,
-                'isCustomer':user.isCustomer });
+                'isCustomer':user.isCustomer,
+                'adminVerification':user.adminVerification,
+                'salasManagerVerification':user.salasManagerVerification});
               }
             );
           } else {

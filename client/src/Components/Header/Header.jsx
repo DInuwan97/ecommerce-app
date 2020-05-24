@@ -25,6 +25,8 @@ export class Header extends Component {
       path: "/",
       userImageUrl: '',
       isPasswordPopupActive: false,
+      salasManagerVerification:false,
+      adminVerification:false
     };
     console.log("localstorage login token :", localStorage.userLoginToken);
 
@@ -61,6 +63,8 @@ export class Header extends Component {
         isSalesManager: decoded.isSalesManager,
         isSalesServicer: decoded.isSalesServicer,
         userImageUrl: decoded.userImageUrl,
+        salasManagerVerification:decoded.salasManagerVerification,
+        adminVerification:decoded.adminVerification
       });
       console.log("Decoded token is : ", decoded);
     }
@@ -103,6 +107,8 @@ export class Header extends Component {
       this.setState({
         path: path
       })
+
+     
     }
     // code for open close minicart
   }
@@ -634,7 +640,7 @@ export class Header extends Component {
                         <span>Contact Us</span>
                       </Link>
                     </li>
-                    {(this.state.isSalesManager === true || this.state.isAdmin === true || this.state.isSalesServicer === true) &&
+                    {((this.state.isSalesManager === true && this.state.adminVerification === true)|| (this.state.isAdmin === true) || (this.state.isSalesServicer === true && this.state.salasManagerVerification === true)) &&
                       <li className={this.state.path === "salesManager" ? " active":""}>
                         <Link to="/salesManager" className="hyper">
                           <span>Publish Add</span>
