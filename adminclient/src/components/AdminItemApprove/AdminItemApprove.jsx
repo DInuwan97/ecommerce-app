@@ -15,7 +15,15 @@ export default class AdminItemApprove extends Component {
 
   componentDidMount() {
     axios.get(`/api/items`).then((res) => {
-      const items = res.data;
+      const allitems = res.data;
+      let items = []
+      for (let index = 0; index < allitems.length; index++) {
+        if(allitems[index].company == this.props.companyName){
+            items.push(allitems[index])
+        }
+        
+      }
+
 
       this.setState({ items });
     });

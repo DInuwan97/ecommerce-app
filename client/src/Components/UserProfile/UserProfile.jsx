@@ -338,6 +338,7 @@ export default class UserProfile extends Component {
                   type="text"
                   name="email"
                   placeholder="Email"
+                  disabled
                   required=" "
                   value={this.props.loggedEmail}
                   onChange={this.onChangeHandler}
@@ -362,7 +363,7 @@ export default class UserProfile extends Component {
                 <input
                   type="text"
                   name="Joined Date"
-                  placeholder="Joined Date"
+                  placeholder="20th May 2020 02:33PM"
                   required=" "
                 />
 
