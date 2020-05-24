@@ -89,17 +89,18 @@ router.patch('/hideOrder/:id',async(req,res)=>{
 
 
 
-router.get('/viewPurchasedItems/',async(req,res)=>{
-  try{
-    let TrackOrder = await  PuchasedItem.find()
-    if(!TrackOrder)
-      res.status(404).json({msg:'Orders Empty'})
-    else{
-      res.status(200).json(TrackOrder);
+router.get("/viewPurchasedItems", async (req, res) => {
+  try {
+    const PurchasedItems = await PurchasedItem.find();
+    if (!PurchasedItems) {
+      return res.status(400).json({ msg: "No Purchase Items Found" });
     }
-  }catch(err){
-    console.log(err);
+
+    res.json(PurchasedItems);
+  } catch (error) {
+
+    res.status(500).json({ msg: "Server Error" });
   }
-})
+});
 
 module.exports = router;
