@@ -17,7 +17,7 @@ export const ProtectedUpperSalesServicers = ({
       {...rest}
       render={props => {
         console.log('Protected Info : ', decoded.isCustomer);
-        if (!(decoded.isCustomer)) {
+        if (!(decoded.isCustomer) && (token !== null)) {
           return <Component {...props} />;
         } else {
           return (
