@@ -99,7 +99,7 @@ router.post("/register", (req, res) => {
 
         axios({
           method: "get",
-          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${userData.firstName}. Your Verification code is ${userData.secureKey}&to=94${userData.mobile}&usr=0766061689&pw=4873`,
+          url: //sms edpoint,
         });
       
 
@@ -218,7 +218,7 @@ router.post("/resendEmail", (req, res) => {
       } else {
         axios({
           method: "get",
-          url: `http://api.liyanagegroup.com/sms_api.php?sms=Hello ${user.firstName}. Your Verification code is ${user.secureKey}&to=94${user.mobile}&usr=0766061689&pw=4873`,
+          url: //sms endpoint,
         });
 
         jwt.sign({ user }, "secretkey", { expiresIn: "100s" }, (err, token) => {
